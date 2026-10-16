@@ -1,0 +1,31 @@
+# ── OS junk ─────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Editor / IDE ────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ── Secrets (never commit these) ────────────────────
+.env
+.env.*
+!.env.example
+*.key
+secrets.json
+
+# ── Node ────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# ── Build output ────────────────────────────────────
+dist/
+build/
+.cache/
+
+# ── Netlify local dev ───────────────────────────────
+.netlify/

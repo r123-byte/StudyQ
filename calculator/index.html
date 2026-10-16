@@ -1,0 +1,2012 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cijfercalculator – Bereken je gemiddelde | StudyStack</title>
+  <meta name="description" content="Bereken eenvoudig je gemiddelde, gewogen gemiddelde en welk cijfer je nodig hebt voor je gewenste gemiddelde. Gratis cijfercalculator voor het voortgezet onderwijs.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* ---------- KEYFRAMES ---------- */
+    @keyframes headlineRise {
+      0% { opacity: 0; transform: translateY(30px) scale(0.98); filter: blur(5px); }
+      60% { opacity: 1; filter: blur(0); }
+      100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+    }
+    @keyframes textGlowPulse {
+      0%, 100% { text-shadow: 0 0 12px rgba(140, 190, 245, 0.12), 0 0 4px rgba(30, 95, 167, 0.04); }
+      50% { text-shadow: 0 0 24px rgba(120, 180, 255, 0.35), 0 0 10px rgba(30, 95, 167, 0.12); }
+    }
+    @keyframes borderGlowPulse {
+      0%, 100% {
+        box-shadow: 0 0 0 2px rgba(190, 220, 255, 0.12), 0 0 0 6px rgba(140, 190, 245, 0.03), 0 0 28px -10px rgba(140, 190, 255, 0.18);
+      }
+      50% {
+        box-shadow: 0 0 0 2px rgba(190, 220, 255, 0.3), 0 0 0 8px rgba(140, 190, 245, 0.08), 0 0 46px -8px rgba(120, 180, 255, 0.4);
+      }
+    }
+    @keyframes softFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+    @keyframes fadeUp {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes bgBreath {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 0.75; transform: scale(1.02); }
+    }
+    @keyframes resultPop {
+      0% { transform: scale(0.92); opacity: 0; }
+      60% { transform: scale(1.03); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    /* Subtle pop-out removal animation */
+    @keyframes popOutRemove {
+      0% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(0.85);
+      }
+    }
+
+    /* ---------- BASE ---------- */
+    body {
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      background-color: #eef4fc;
+      background-image: 
+        radial-gradient(circle at 15% 20%, rgba(190, 220, 255, 0.4) 0%, transparent 45%),
+        radial-gradient(circle at 85% 80%, rgba(200, 225, 255, 0.35) 0%, transparent 50%);
+      color: #0d1b2a;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      padding: 3rem 1.5rem;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 25% 30%, rgba(180, 215, 255, 0.22) 0%, transparent 40%),
+        radial-gradient(circle at 75% 70%, rgba(200, 225, 255, 0.18) 0%, transparent 45%);
+      pointer-events: none;
+      z-index: 0;
+      animation: bgBreath 14s ease-in-out infinite;
+    }
+
+    .wrapper {
+      max-width: 960px;
+      width: 100%;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ---------- PAGE CONTAINER ---------- */
+    .page {
+      background: #ffffff;
+      border-radius: 3rem;
+      box-shadow: 
+        0 0 0 2px rgba(140, 190, 245, 0.22),
+        0 0 0 8px rgba(180, 215, 255, 0.1),
+        0 36px 80px -28px rgba(15, 45, 80, 0.24),
+        0 0 110px -30px rgba(120, 180, 255, 0.38);
+      padding: 4rem 4rem 3rem;
+      border: 1px solid rgba(170, 205, 245, 0.4);
+      margin-bottom: 2rem;
+      animation: borderGlowPulse 8s ease-in-out infinite;
+    }
+
+    /* ---------- HEADER ---------- */
+    .top-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 3.5rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid rgba(190, 218, 248, 0.5);
+      box-shadow: 0 10px 20px -18px rgba(30, 95, 167, 0.15);
+      animation: fadeUp 0.6s ease both;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 800;
+      font-size: 1.4rem;
+      letter-spacing: -0.03em;
+      color: #0d1b2a;
+      text-decoration: none;
+      animation: textGlowPulse 8s ease-in-out infinite;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .brand:hover { transform: scale(1.05); }
+    .brand-icon {
+      background: #1e5fa7;
+      color: white;
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 13px;
+      font-size: 1.3rem;
+      box-shadow: 
+        0 0 0 2px rgba(190, 220, 255, 0.4),
+        0 0 0 5px rgba(140, 190, 245, 0.12),
+        0 10px 18px -8px rgba(30, 95, 167, 0.45),
+        0 0 26px -4px rgba(120, 180, 255, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      animation: borderGlowPulse 6s ease-in-out infinite;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .brand-icon svg { width: 26px; height: 26px; stroke-width: 2.2; }
+    .badge svg { width: 16px; height: 16px; stroke-width: 2.2; }
+    .tab-btn svg { width: 20px; height: 20px; stroke-width: 2.4; }
+    .btn svg { width: 20px; height: 20px; stroke-width: 2.4; }
+    .back-link svg { width: 16px; height: 16px; stroke-width: 2.2; }
+    .privacy-note svg { width: 16px; height: 16px; stroke-width: 2.4; }
+    .feedback svg { width: 18px; height: 18px; stroke-width: 2.4; }
+    .remove-btn svg { width: 18px; height: 18px; stroke-width: 2.4; }
+    .feedback { align-items: center; gap: 0.5rem; }
+    .feedback.show { display: flex; }
+    .brand span { color: #1e5fa7; }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #1e5fa7;
+      text-decoration: none;
+      padding: 0.6rem 1.3rem;
+      border-radius: 50px;
+      background: #f0f7ff;
+      border: 1.5px solid rgba(160, 200, 245, 0.7);
+      box-shadow: 
+        0 0 0 2px rgba(190, 220, 255, 0.2),
+        0 0 0 5px rgba(140, 190, 245, 0.06),
+        0 6px 14px -10px rgba(30, 95, 167, 0.25),
+        0 0 22px -6px rgba(150, 200, 255, 0.4);
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .back-link:hover {
+      transform: scale(1.08) translateX(-3px);
+      box-shadow: 
+        0 0 0 2px rgba(190, 220, 255, 0.4),
+        0 0 0 8px rgba(140, 190, 245, 0.12),
+        0 12px 22px -10px rgba(30, 95, 167, 0.4),
+        0 0 34px -4px rgba(150, 200, 255, 0.6);
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .language-switcher {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      background: #ffffff;
+      border: 1.5px solid rgba(160, 200, 245, 0.8);
+      border-radius: 40px;
+      padding: 0.7rem 1rem;
+      color: #1e5fa7;
+      cursor: pointer;
+      box-shadow: 0 0 0 2px rgba(190, 220, 255, 0.2), 0 0 0 5px rgba(140, 190, 245, 0.06), 0 6px 14px -10px rgba(30, 95, 167, 0.25), 0 0 22px -6px rgba(150, 200, 255, 0.4);
+      animation: borderGlowPulse 8s ease-in-out infinite;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+    }
+    .language-switcher svg {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .language-switcher .language-chevron {
+      width: 16px;
+      height: 16px;
+      margin-left: -0.25rem;
+      pointer-events: none;
+    }
+    .language-switcher span {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #4a6a86;
+      pointer-events: none;
+    }
+    .language-switcher select {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: transparent;
+      font: inherit;
+      cursor: pointer;
+      outline: none;
+    }
+    .language-switcher:hover,
+    .language-switcher:focus-within {
+      transform: translateY(-2px) scale(1.04);
+      border-color: rgba(30, 95, 167, 0.7);
+      box-shadow: 0 0 0 2px rgba(190, 220, 255, 0.4), 0 0 0 8px rgba(140, 190, 245, 0.12), 0 12px 22px -10px rgba(30, 95, 167, 0.4), 0 0 34px -4px rgba(150, 200, 255, 0.6);
+    }
+
+    /* ---------- HERO ---------- */
+    .hero {
+      margin-bottom: 3rem;
+      animation: fadeUp 0.7s 0.1s ease both;
+    }
+    .badge {
+      display: inline-block;
+      background: #e8f1ff;
+      color: #1e5fa7;
+      font-weight: 700;
+      font-size: 0.75rem;
+      padding: 0.45rem 1.25rem;
+      border-radius: 100px;
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.03em;
+      border: 1px solid rgba(150, 195, 245, 0.6);
+      box-shadow: 
+        0 0 0 2px rgba(190, 220, 255, 0.18),
+        0 0 0 5px rgba(140, 190, 245, 0.05),
+        0 0 20px -4px rgba(120, 170, 240, 0.35),
+        0 5px 12px -7px rgba(30, 95, 167, 0.18);
+      animation: borderGlowPulse 6s ease-in-out infinite;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: default;
+    }
+    .badge:hover { transform: scale(1.08); }
+
+    h1 {
+      font-size: clamp(2.2rem, 5.5vw, 3.4rem);
+      font-weight: 800;
+      line-height: 1.12;
+      letter-spacing: -0.04em;
+      color: #0b1c2c;
+      margin-bottom: 1.25rem;
+      animation: headlineRise 1s cubic-bezier(0.22, 1, 0.36, 1) forwards,
+                 textGlowPulse 7s 0.8s ease-in-out infinite;
+      opacity: 0;
+      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: default;
+    }
+    h1:hover { transform: scale(1.015) translateY(-2px); }
+    h1 .highlight {
+      color: #1e5fa7;
+      background: linear-gradient(120deg, #d4e7ff 0%, #d4e7ff 45%, transparent 85%);
+      background-repeat: no-repeat;
+      background-size: 100% 0.36em;
+      background-position: 0 78%;
+    }
+    .hero-desc {
+      font-size: 1.15rem;
+      color: #2b4259;
+      max-width: 640px;
+      font-weight: 400;
+      line-height: 1.7;
+      animation: textGlowPulse 10s ease-in-out infinite;
+    }
+
+    /* ---------- TABS ---------- */
+    .tabs {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 2.5rem;
+      background: #f4f9ff;
+      padding: 0.5rem;
+      border-radius: 60px;
+      border: 1px solid rgba(190, 218, 248, 0.5);
+      box-shadow: 
+        0 0 0 2px rgba(200, 225, 250, 0.12),
+        0 0 0 5px rgba(170, 205, 245, 0.04),
+        0 10px 24px -16px rgba(20, 70, 120, 0.12),
+        0 0 36px -18px rgba(140, 190, 255, 0.25);
+      animation: fadeUp 0.7s 0.15s ease both, borderGlowPulse 9s ease-in-out infinite;
+    }
+    .tab-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      border-radius: 50px;
+      padding: 0.9rem 1.25rem;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #4a6a86;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      letter-spacing: -0.01em;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .tab-btn:hover { color: #1e5fa7; transform: scale(1.03); }
+    .tab-btn.active {
+      background: #1e5fa7;
+      color: white;
+      box-shadow: 
+        0 0 0 2px rgba(190, 220, 255, 0.4),
+        0 0 0 6px rgba(140, 190, 245, 0.14),
+        0 10px 20px -8px rgba(30, 95, 167, 0.5),
+        0 0 30px -4px rgba(120, 180, 255, 0.55);
+      animation: borderGlowPulse 6s ease-in-out infinite;
+    }
+    .tab-panel { display: none; animation: fadeUp 0.5s ease both; }
+    .tab-panel.active { display: block; }
+
+    /* ---------- EQUAL WEIGHT TOGGLE ---------- */
+    .equal-weight-toggle {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.7rem;
+      margin-bottom: 1.25rem;
+      padding: 0.7rem 1.1rem;
+      background: #f4f9ff;
+      border: 1.5px solid rgba(190, 218, 248, 0.65);
+      border-radius: 1.25rem;
+      user-select: none;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 
+        0 0 0 2px rgba(200, 225, 250, 0.08),
+        0 0 0 5px rgba(170, 205, 245, 0.03),
+        0 6px 16px -12px rgba(20, 70, 120, 0.1),
+        0 0 24px -14px rgba(140, 190, 255, 0.2);
+      animation: fadeUp 0.4s ease both;
+    }
+    .equal-weight-toggle:hover {
+      transform: scale(1.01) translateY(-1px);
+      border-color: rgba(140, 185, 235, 0.8);
+      box-shadow: 
+        0 0 0 2px rgba(160, 205, 250, 0.25),
+        0 0 0 7px rgba(140, 190, 245, 0.09),
+        0 12px 24px -14px rgba(30, 95, 167, 0.2),
+        0 0 36px -10px rgba(130, 180, 255, 0.35);
+    }
+    .equal-weight-toggle input[type="checkbox"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+      pointer-events: none;
+    }
+    .equal-weight-toggle .toggle-switch {
+      position: relative;
+      width: 40px;
+      height: 22px;
+      background: #d1e3fa;
+      border-radius: 40px;
+      flex-shrink: 0;
+      transition: background 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: inset 0 0 0 1.5px rgba(160, 200, 245, 0.6);
+      order: 4;
+      cursor: pointer;
+    }
+    .equal-weight-toggle .toggle-switch::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 16px;
+      height: 16px;
+      background: #ffffff;
+      border-radius: 50%;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 2px 5px -1px rgba(30, 95, 167, 0.3);
+    }
+    .equal-weight-toggle input[type="checkbox"]:checked ~ .toggle-switch {
+      background: #1e5fa7;
+      box-shadow: 
+        inset 0 0 0 1.5px rgba(30, 95, 167, 0.5),
+        0 0 0 2px rgba(190, 220, 255, 0.3),
+        0 0 16px -4px rgba(120, 180, 255, 0.5);
+    }
+    .equal-weight-toggle input[type="checkbox"]:checked ~ .toggle-switch::after {
+      transform: translateX(18px);
+    }
+    .equal-weight-toggle input[type="checkbox"]:focus-visible ~ .toggle-switch {
+      box-shadow: 
+        inset 0 0 0 1.5px rgba(160, 200, 245, 0.6),
+        0 0 0 2px rgba(160, 205, 250, 0.5),
+        0 0 0 7px rgba(140, 190, 245, 0.2);
+    }
+    .equal-weight-toggle .toggle-label {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: #39566b;
+      letter-spacing: -0.01em;
+    }
+    /* Shared weight input */
+    .equal-weight-toggle .shared-weight-input {
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #0b1c2c;
+      background: #ffffff;
+      border: 1.5px solid rgba(180, 210, 245, 0.7);
+      border-radius: 0.7rem;
+      padding: 0.35rem 0.6rem;
+      width: 64px;
+      text-align: center;
+      outline: none;
+      -moz-appearance: textfield;
+      box-shadow: 
+        0 0 0 2px rgba(200, 225, 250, 0.08),
+        0 0 0 5px rgba(170, 205, 245, 0.02),
+        0 4px 10px -8px rgba(20, 70, 120, 0.08);
+      transition: all 0.25s ease;
+      order: 3;
+    }
+    .equal-weight-toggle .shared-weight-input::-webkit-outer-spin-button,
+    .equal-weight-toggle .shared-weight-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .equal-weight-toggle .shared-weight-input:focus {
+      border-color: #1e5fa7;
+      box-shadow: 
+        0 0 0 2px rgba(160, 205, 250, 0.3),
+        0 0 0 6px rgba(140, 190, 245, 0.1),
+        0 6px 16px -10px rgba(30, 95, 167, 0.25);
+    }
+
+    /* ---------- GRADE ROWS ---------- */
+    .grade-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+    .grade-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: #f8fbff;
+      border: 1.5px solid rgba(190, 218, 248, 0.65);
+      border-radius: 1.25rem;
+      padding: 0.85rem 1rem;
+      box-shadow: 
+        0 0 0 2px rgba(200, 225, 250, 0.1),
+        0 0 0 5px rgba(170, 205, 245, 0.03),
+        0 6px 16px -12px rgba(20, 70, 120, 0.1),
+        0 0 24px -14px rgba(140, 190, 255, 0.2);
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      animation: fadeUp 0.4s ease both;
+    }
+    .grade-row:hover {
+      transform: scale(1.02) translateY(-2px);
+      border-color: rgba(140, 185, 235, 0.8);
+      box-shadow: 
+        0 0 0 2px rgba(160, 205, 250, 0.25),
+        0 0 0 7px rgba(140, 190, 245, 0.09),
+        0 14px 28px -14px rgba(30, 95, 167, 0.2),
+        0 0 40px -10px rgba(130, 180, 255, 0.4);
+    }
+    /* Subtle pop-out removal */
+    .grade-row.removing {
+      animation: popOutRemove 0.22s ease forwards;
+      pointer-events: none;
+      transform-origin: center center;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      flex: 1;
+      min-width: 0;
+    }
+    .field-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #6b8aa8;
+      padding-left: 0.35rem;
+    }
+    .field-input {
+      font-family: inherit;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #0b1c2c;
+      background: #ffffff;
+      border: 1.5px solid rgba(180, 210, 245, 0.7);
+      border-radius: 0.85rem;
+      padding: 0.7rem 0.9rem;
+      width: 100%;
+      transition: all 0.25s ease;
+      outline: none;
+      -moz-appearance: textfield;
+      box-shadow: 
+        0 0 0 2px rgba(200, 225, 250, 0.08),
+        0 0 0 5px rgba(170, 205, 245, 0.02),
+        0 4px 10px -8px rgba(20, 70, 120, 0.08);
+    }
+    .field-input::-webkit-outer-spin-button,
+    .field-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .field-input:focus {
+      border-color: #1e5fa7;
+      box-shadow: 
+        0 0 0 2px rgba(160, 205, 250, 0.3),
+        0 0 0 7px rgba(140, 190, 245, 0.1),
+        0 8px 20px -10px rgba(30, 95, 167, 0.25),
+        0 0 34px -8px rgba(120, 180, 255, 0.45);
+    }
+    .field-input::placeholder { color: #a8bfd4; font-weight: 500; }
+    .field-input:disabled {
+      background: #f0f4f9;
+      color: #8aa2b8;
+      cursor: not-allowed;
+      box-shadow: none;
+      border-color: rgba(200, 215, 230, 0.6);
+    }
+
+    .remove-btn {
+      background: #fff0f0;
+      border: 1.5px solid rgba(240, 180, 180, 0.5);
+      color: #c0392b;
+      width: 40px;
+      height: 40px;
+      border-radius: 0.85rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 
+        0 0 0 2px rgba(255, 200, 200, 0.15),
+        0 0 14px -6px rgba(240, 120, 120, 0.3);
+      line-height: 1;
+    }
+    .remove-btn:hover {
+      background: #ffe0e0;
+      transform: scale(1.15) rotate(8deg);
+      box-shadow: 
+        0 0 0 2px rgba(255, 180, 180, 0.35),
+        0 0 0 6px rgba(255, 160, 160, 0.12),
+        0 6px 16px -6px rgba(200, 60, 60, 0.35),
+        0 0 26px -4px rgba(255, 130, 130, 0.5);
+    }
+    .remove-btn:active { transform: scale(0.95); }
+
+    /* ---------- ACTION BUTTONS ---------- */
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+      margin-bottom: 2rem;
+    }
+    .btn {
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 0.85rem 1.6rem;
+      border-radius: 50px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      letter-spacing: -0.01em;
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      border: 1.5px solid transparent;
+    }
+    .btn-add {
+      background: #eef5fe;
+      color: #1e5fa7;
+      border-color: rgba(160, 200, 245, 0.7);
+      box-shadow: 
+        0 0 0 2px rgba(190, 220, 255, 0.18),
+        0 0 0 5px rgba(140, 190, 245, 0.05),
+        0 8px 18px -12px rgba(30, 95, 167, 0.22),
+        0 0 24px -10px rgba(150, 200, 255, 0.35);
+      animation: borderGlowPulse 8s ease-in-out infinite;
+    }
+    .btn-add:hover {
+      background: #e0edff;
+      transform: scale(1.07) translateY(-2px);
+      box-shadow: 
+        0 0 0 2px rgba(190, 220, 255, 0.35),
+        0 0 0 8px rgba(140, 190, 245, 0.12),
+        0 14px 26px -12px rgba(30, 95, 167, 0.35),
+        0 0 40px -6px rgba(150, 200, 255, 0.55);
+    }
+    .btn-clear {
+      background: #ffffff;
+      color: #6b7d8f;
+      border-color: rgba(200, 215, 230, 0.8);
+      box-shadow: 
+        0 0 0 2px rgba(210, 225, 240, 0.12),
+        0 0 0 5px rgba(190, 210, 230, 0.04),
+        0 6px 14px -10px rgba(60, 90, 120, 0.12),
+        0 0 20px -10px rgba(170, 200, 230, 0.25);
+    }
+    .btn-clear:hover {
+      background: #f8fafc;
+      color: #c0392b;
+      border-color: rgba(230, 170, 170, 0.7);
+      transform: scale(1.07) translateY(-2px);
+      box-shadow: 
+        0 0 0 2px rgba(255, 190, 190, 0.25),
+        0 0 0 7px rgba(255, 170, 170, 0.08),
+        0 12px 24px -12px rgba(200, 60, 60, 0.25),
+        0 0 34px -8px rgba(255, 140, 140, 0.4);
+    }
+    .btn-calculate {
+      background: #1e5fa7;
+      color: white;
+      border-color: rgba(30, 95, 167, 0.3);
+      box-shadow: 
+        0 0 0 2px rgba(190, 220, 255, 0.4),
+        0 0 0 7px rgba(140, 190, 245, 0.12),
+        0 16px 30px -12px rgba(30, 95, 167, 0.55),
+        0 0 40px -6px rgba(120, 180, 255, 0.6);
+      animation: borderGlowPulse 8s ease-in-out infinite;
+    }
+    .btn-calculate:hover {
+      background: #17508e;
+      transform: scale(1.07) translateY(-2px);
+      box-shadow: 
+        0 0 0 2px rgba(190, 220, 255, 0.6),
+        0 0 0 10px rgba(140, 190, 245, 0.2),
+        0 26px 44px -14px rgba(30, 95, 167, 0.7),
+        0 0 62px -4px rgba(120, 180, 255, 0.8);
+    }
+    .btn:active { transform: scale(0.97); }
+
+    /* ---------- RESULT CARD ---------- */
+    .result-card {
+      background: linear-gradient(145deg, #f4f9ff 0%, #eaf3fe 100%);
+      border: 2px solid rgba(160, 205, 250, 0.7);
+      border-radius: 2rem;
+      padding: 2rem 2rem 1.75rem;
+      text-align: center;
+      box-shadow: 
+        0 0 0 2px rgba(190, 220, 255, 0.25),
+        0 0 0 8px rgba(150, 200, 250, 0.08),
+        0 16px 36px -18px rgba(20, 70, 120, 0.18),
+        0 0 56px -16px rgba(140, 190, 255, 0.4);
+      animation: borderGlowPulse 7s ease-in-out infinite;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .result-card:hover { transform: scale(1.015); }
+    .result-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #4a7aa8;
+      margin-bottom: 0.5rem;
+      animation: textGlowPulse 9s ease-in-out infinite;
+    }
+    .result-value {
+      font-size: clamp(3rem, 9vw, 4.5rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      color: #1e5fa7;
+      animation: resultPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+                 textGlowPulse 6s ease-in-out infinite;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: default;
+    }
+    .result-value:hover { transform: scale(1.06); }
+    .result-meta {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-top: 1.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid rgba(170, 210, 250, 0.5);
+    }
+    .meta-item {
+      font-size: 0.9rem;
+      color: #4a6a86;
+      font-weight: 600;
+      animation: textGlowPulse 11s ease-in-out infinite;
+    }
+    .meta-item strong { color: #1e5fa7; font-weight: 800; }
+
+    /* ---------- FEEDBACK ---------- */
+    .feedback {
+      margin-top: 1.25rem;
+      padding: 1rem 1.25rem;
+      border-radius: 1.25rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      line-height: 1.55;
+      display: none;
+      animation: fadeUp 0.4s ease both;
+    }
+    .feedback.show { display: block; }
+    .feedback.info {
+      background: #eef5fe;
+      color: #1a5390;
+      border: 1.5px solid rgba(160, 200, 245, 0.6);
+      box-shadow: 0 0 24px -10px rgba(120, 180, 255, 0.35);
+    }
+    .feedback.warning {
+      background: #fff8ec;
+      color: #a35c00;
+      border: 1.5px solid rgba(250, 210, 150, 0.7);
+      box-shadow: 0 0 24px -10px rgba(250, 190, 100, 0.4);
+    }
+    .feedback.error {
+      background: #fff0f0;
+      color: #b03030;
+      border: 1.5px solid rgba(240, 170, 170, 0.7);
+      box-shadow: 0 0 24px -10px rgba(240, 120, 120, 0.4);
+    }
+    .feedback.success {
+      background: #edfaf1;
+      color: #1a7a44;
+      border: 1.5px solid rgba(150, 220, 175, 0.7);
+      box-shadow: 0 0 24px -10px rgba(100, 210, 140, 0.4);
+    }
+
+    /* ---------- PRIVACY NOTE ---------- */
+    .privacy-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+      padding: 0.75rem 1.25rem;
+      background: #f4faf6;
+      border: 1px solid rgba(170, 220, 190, 0.5);
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #3a7055;
+      box-shadow: 
+        0 0 0 2px rgba(180, 230, 200, 0.12),
+        0 0 20px -8px rgba(120, 210, 150, 0.3);
+      animation: borderGlowPulse 10s ease-in-out infinite;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: default;
+    }
+    .privacy-note:hover { transform: scale(1.03); }
+
+    /* ---------- EXPLANATION SECTION ---------- */
+    .explanation {
+      background: #ffffff;
+      border-radius: 3rem;
+      padding: 3.5rem 4rem;
+      border: 1px solid rgba(170, 205, 245, 0.4);
+      box-shadow: 
+        0 0 0 2px rgba(140, 190, 245, 0.18),
+        0 0 0 6px rgba(180, 215, 255, 0.07),
+        0 24px 56px -24px rgba(15, 45, 80, 0.18),
+        0 0 80px -30px rgba(120, 180, 255, 0.3);
+      margin-bottom: 2rem;
+      animation: borderGlowPulse 9s ease-in-out infinite;
+    }
+    .explanation h2 {
+      font-size: 1.9rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #0b1c2c;
+      margin-bottom: 1.25rem;
+      animation: textGlowPulse 9s ease-in-out infinite;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: default;
+    }
+    .explanation h2:hover { transform: scale(1.02) translateX(4px); }
+    .explanation h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1e5fa7;
+      margin: 2rem 0 0.85rem;
+      letter-spacing: -0.02em;
+      animation: textGlowPulse 10s ease-in-out infinite;
+    }
+    .explanation p {
+      font-size: 1.05rem;
+      color: #39566b;
+      line-height: 1.75;
+      margin-bottom: 1rem;
+      animation: textGlowPulse 12s ease-in-out infinite;
+    }
+    .example-box {
+      background: #f4f9ff;
+      border: 1.5px solid rgba(170, 210, 250, 0.6);
+      border-radius: 1.5rem;
+      padding: 1.75rem 2rem;
+      margin: 1.5rem 0;
+      box-shadow: 
+        0 0 0 2px rgba(190, 220, 255, 0.15),
+        0 0 0 6px rgba(150, 200, 250, 0.05),
+        0 10px 24px -16px rgba(20, 70, 120, 0.12),
+        0 0 36px -18px rgba(140, 190, 255, 0.25);
+      animation: borderGlowPulse 10s ease-in-out infinite;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .example-box:hover { transform: scale(1.02); }
+    .example-box .formula {
+      font-family: 'Inter', monospace;
+      font-weight: 700;
+      color: #1e5fa7;
+      font-size: 1.05rem;
+      line-height: 1.9;
+      word-break: break-word;
+    }
+    .comparison {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-top: 1.75rem;
+    }
+    .comparison-card {
+      flex: 1 1 260px;
+      background: #f8fbff;
+      border: 1.5px solid rgba(190, 218, 248, 0.65);
+      border-radius: 1.75rem;
+      padding: 1.75rem;
+      box-shadow: 
+        0 0 0 2px rgba(200, 225, 250, 0.1),
+        0 0 0 5px rgba(170, 205, 245, 0.03),
+        0 8px 20px -14px rgba(20, 70, 120, 0.1),
+        0 0 28px -14px rgba(140, 190, 255, 0.2);
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .comparison-card:hover {
+      transform: scale(1.04) translateY(-4px);
+      box-shadow: 
+        0 0 0 2px rgba(160, 205, 250, 0.3),
+        0 0 0 8px rgba(140, 190, 245, 0.1),
+        0 18px 36px -16px rgba(30, 95, 167, 0.18),
+        0 0 48px -12px rgba(130, 180, 255, 0.4);
+    }
+    .comparison-card h4 {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #1e5fa7;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.02em;
+    }
+    .comparison-card p {
+      font-size: 0.98rem;
+      color: #46627a;
+      line-height: 1.7;
+      margin-bottom: 0;
+    }
+
+    /* ---------- FOOTER ---------- */
+    .footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: #718da8;
+      font-size: 0.85rem;
+      animation: fadeUp 0.8s 0.4s ease both;
+    }
+    .footer a {
+      color: #1e5fa7;
+      font-weight: 600;
+      text-decoration: none;
+      border-bottom: 1px dotted rgba(30, 95, 167, 0.5);
+      transition: all 0.3s ease;
+    }
+    .footer a:hover {
+      border-bottom-style: solid;
+      transform: scale(1.05);
+      display: inline-block;
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 800px) {
+      body { padding: 2rem 1rem; }
+      .page { padding: 3rem 2.5rem 2.5rem; border-radius: 2.5rem; }
+      .explanation { padding: 2.5rem 2rem; border-radius: 2.5rem; }
+    }
+    @media (max-width: 650px) {
+      body { padding: 1.25rem 0.75rem; }
+      .page { padding: 2rem 1.35rem 1.75rem; border-radius: 2rem; }
+      .explanation { padding: 2rem 1.5rem; border-radius: 2rem; }
+      .top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 2.5rem;
+        padding-bottom: 1.5rem;
+      }
+      .header-actions { width: 100%; justify-content: space-between; }
+      .hero { margin-bottom: 2rem; }
+      .tabs { flex-direction: column; border-radius: 1.5rem; padding: 0.5rem; }
+      .tab-btn { border-radius: 1rem; padding: 0.85rem 1rem; }
+      .grade-row { flex-wrap: wrap; padding: 0.9rem; }
+      .field-group { flex: 1 1 100px; }
+      .remove-btn { width: 100%; height: 38px; border-radius: 0.75rem; }
+      .actions { flex-direction: column; }
+      .btn { justify-content: center; width: 100%; }
+      .result-card { padding: 1.75rem 1.25rem 1.5rem; border-radius: 1.75rem; }
+      .result-value { font-size: 3.2rem; }
+      .result-meta { flex-direction: column; gap: 0.75rem; }
+      .explanation h2 { font-size: 1.45rem; }
+      .explanation h3 { font-size: 1.1rem; }
+      .comparison { flex-direction: column; }
+      .equal-weight-toggle { gap: 0.55rem; padding: 0.65rem 0.9rem; }
+      .equal-weight-toggle .toggle-label { font-size: 0.88rem; }
+      .equal-weight-toggle .shared-weight-input { width: 56px; }
+    }
+    @media (max-width: 400px) {
+      .result-value { font-size: 2.8rem; }
+      h1 { font-size: 1.9rem; }
+    }
+  </style>
+  <link rel="stylesheet" href="../theme.css">
+  <link rel="stylesheet" href="../animations.css">
+  <!-- Page-local animation layer tuning -->
+  <style>
+    /* ============================================================
+       Page-local performance layer for the calculator.
+       Loaded after animations.css so it wins the cascade.
+       ============================================================ */
+
+    /* Neutralise the blanket will-change that animations.css applies. */
+    *,
+    *::before,
+    *::after {
+      will-change: auto !important;
+    }
+
+    /* Promote only elements that actually transform on hover. */
+    .btn,
+    .btn-primary,
+    .btn-secondary,
+    .btn-ghost,
+    .btn-add,
+    .btn-clear,
+    .btn-calculate,
+    .btn-skip,
+    .preset-btn,
+    .tab-btn,
+    .back-link,
+    .language-switcher,
+    .remove-btn,
+    .timer-card,
+    .timer-card-fullscreen,
+    .utility-sound,
+    .utility-float,
+    .ambient-selector,
+    .grade-row,
+    .result-card,
+    .field-input,
+    .equal-weight-toggle {
+      transform: translate3d(0, 0, 0);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+
+    .page {
+      contain: layout style;
+    }
+
+    /* Flatten card hover shadows to reduce repaint work. */
+    .timer-card:hover,
+    .result-card:hover,
+    .grade-row:hover {
+      box-shadow:
+        0 14px 28px -12px rgba(37, 99, 235, 0.22),
+        0 0 0 1px rgba(147, 197, 253, 0.55) !important;
+    }
+
+    /* Flatten nested input shadows repainted with their grade row. */
+    .field-input {
+      box-shadow: 0 0 0 1.5px rgba(200, 225, 250, 0.55) !important;
+    }
+    .field-input:focus {
+      box-shadow:
+        0 0 0 3px rgba(160, 205, 250, 0.35),
+        0 0 0 1.5px #1e5fa7 !important;
+    }
+    .equal-weight-toggle .shared-weight-input {
+      box-shadow: 0 0 0 1.5px rgba(200, 225, 250, 0.55) !important;
+    }
+    .equal-weight-toggle .shared-weight-input:focus {
+      box-shadow:
+        0 0 0 3px rgba(160, 205, 250, 0.35),
+        0 0 0 1.5px #1e5fa7 !important;
+    }
+
+    /* Replace text scaling hovers with colour and text-shadow changes. */
+    h1,
+    h1:hover,
+    .brand,
+    .brand:hover,
+    .result-value,
+    .result-value:hover,
+    .explanation h2,
+    .explanation h2:hover {
+      transform: none !important;
+    }
+
+    h1,
+    .brand,
+    .result-value,
+    .explanation h2 {
+      transition:
+        color 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+        text-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    h1:hover {
+      color: #1e5fa7 !important;
+      text-shadow: 0 0 18px rgba(30, 95, 167, 0.28) !important;
+    }
+    .brand:hover {
+      color: #1e5fa7 !important;
+    }
+    .brand:hover span {
+      text-shadow: 0 0 14px rgba(30, 95, 167, 0.3) !important;
+    }
+    .result-value:hover {
+      color: #17508e !important;
+      text-shadow: 0 0 22px rgba(30, 95, 167, 0.35) !important;
+    }
+    .explanation h2:hover {
+      color: #1e5fa7 !important;
+      text-shadow: 0 0 16px rgba(30, 95, 167, 0.25) !important;
+    }
+
+    /* Avoid scaling boxes and re-rasterizing their contents on hover. */
+    .example-box:hover,
+    .comparison-card:hover,
+    .equal-weight-toggle:hover,
+    .privacy-note:hover,
+    .badge:hover {
+      transform: none !important;
+    }
+    .example-box:hover,
+    .comparison-card:hover {
+      border-color: #93c5fd !important;
+      box-shadow:
+        0 14px 30px -10px rgba(30, 95, 167, 0.18),
+        0 0 0 1px rgba(147, 197, 253, 0.55) !important;
+    }
+    .equal-weight-toggle:hover,
+    .privacy-note:hover,
+    .badge:hover {
+      border-color: #93c5fd !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <main class="page">
+      <!-- HEADER -->
+      <header class="top-bar">
+        <a href="../index.html" class="brand">
+          <div class="brand-icon" aria-hidden="true">
+            <img src="../logo/logo.png" alt="">
+          </div>
+          Study<span>Stack</span>
+        </a>
+        <div class="header-actions">
+        <a href="../index.html" class="back-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
+          <span data-i18n="calc.backHome">Terug naar home</span>
+        </a>
+        <label class="language-switcher">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c2.5 2.5 3.5 5.5 3.5 9s-1 6.5-3.5 9c-2.5-2.5-3.5-5.5-3.5-9S9.5 5.5 12 3Z"></path></svg>
+          <span data-i18n="language.label">Taal</span>
+          <select id="language-select" aria-label="Language">
+            <option value="en">English</option>
+            <option value="nl">Nederlands</option>
+          </select>
+          <svg class="language-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+        </label>
+        </div>
+      </header>
+
+      <!-- HERO -->
+      <section class="hero">
+        <div class="badge">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path>
+            <path d="M20 3v4"></path>
+            <path d="M22 5h-4"></path>
+          </svg>
+          <span data-i18n="calc.badge">gratis &amp; zonder account</span>
+        </div>
+        <h1 data-i18n="calc.title">Cijfercalculator</h1>
+        <p class="hero-desc" data-i18n="calc.heroText">Bereken eenvoudig je gemiddelde, gewogen gemiddelde en welk cijfer je nodig hebt voor je gewenste gemiddelde. Speciaal voor scholieren.</p>
+      </section>
+
+      <!-- TABS -->
+      <div class="tabs" role="tablist">
+        <button class="tab-btn active" role="tab" aria-selected="true" data-tab="average" id="tab-average">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path></svg>
+          <span data-i18n="calc.averageTab">Gemiddelde berekenen</span>
+        </button>
+        <button class="tab-btn" role="tab" aria-selected="false" data-tab="required" id="tab-required">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+          <span data-i18n="calc.requiredTab">Welk cijfer heb ik nodig?</span>
+        </button>
+      </div>
+
+      <!-- ================= TAB 1: GEMIDDELDE ================= -->
+      <section class="tab-panel active" id="panel-average" role="tabpanel" aria-labelledby="tab-average">
+        <!-- Equal weight toggle -->
+        <label class="equal-weight-toggle" for="equal-weight-average">
+          <span class="toggle-label" data-i18n="calc.equalWeightLabel">Alle toetsen hebben het gewicht van:</span>
+          <input class="shared-weight-input" type="text" inputmode="decimal" id="shared-weight-average" value="1" aria-label="Shared weight" data-i18n-aria="calc.sharedWeightAria">
+          <input type="checkbox" id="equal-weight-average">
+          <span class="toggle-switch" aria-hidden="true"></span>
+        </label>
+
+        <div class="grade-list" id="grade-list"></div>
+
+        <div class="actions">
+          <button class="btn btn-add" id="add-grade"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg> <span data-i18n="calc.addGrade">Cijfer toevoegen</span></button>
+          <button class="btn btn-clear" id="clear-all"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 6 12 12"></path><path d="m18 6-12 12"></path></svg> <span data-i18n="calc.clearAll">Alles wissen</span></button>
+        </div>
+
+        <div class="result-card" id="result-card">
+          <div class="result-label" data-i18n="calc.weightedAverage">Gewogen gemiddelde</div>
+          <div class="result-value" id="average-result">—</div>
+          <div class="result-meta">
+            <div class="meta-item"><span data-i18n="calc.totalWeight">Totaal gewicht:</span> <strong id="total-weight">0</strong></div>
+            <div class="meta-item"><span data-i18n="calc.gradeCount">Aantal cijfers:</span> <strong id="grade-count">0</strong></div>
+          </div>
+        </div>
+        <div class="feedback" id="average-feedback"></div>
+      </section>
+
+      <!-- ================= TAB 2: WELK CIJFER NODIG ================= -->
+      <section class="tab-panel" id="panel-required" role="tabpanel" aria-labelledby="tab-required">
+        <p style="font-size:0.95rem; color:#4a6a86; margin-bottom:1.25rem; font-weight:500;" data-i18n="calc.requiredIntro">Vul hieronder je huidige cijfers en gewichten in, plus het gewicht van de aankomende toets.</p>
+
+        <!-- Equal weight toggle -->
+        <label class="equal-weight-toggle" for="equal-weight-required">
+          <span class="toggle-label" data-i18n="calc.equalWeightLabel">Alle toetsen hebben het gewicht van:</span>
+          <input class="shared-weight-input" type="text" inputmode="decimal" id="shared-weight-required" value="1" aria-label="Shared weight" data-i18n-aria="calc.sharedWeightAria">
+          <input type="checkbox" id="equal-weight-required">
+          <span class="toggle-switch" aria-hidden="true"></span>
+        </label>
+
+        <div class="grade-list" id="required-grade-list"></div>
+
+        <div class="actions">
+          <button class="btn btn-add" id="add-required-grade"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg> <span data-i18n="calc.addGrade">Cijfer toevoegen</span></button>
+        </div>
+
+        <div style="display:flex; flex-wrap:wrap; gap:1rem; margin-bottom:2rem;">
+          <div class="field-group" style="flex:1 1 180px;">
+            <label class="field-label" for="upcoming-weight" data-i18n="calc.upcomingWeight">Gewicht aankomende toets</label>
+            <input class="field-input" type="text" inputmode="decimal" id="upcoming-weight" placeholder="bijv. 2" value="2" data-i18n-placeholder="calc.weightPlaceholder">
+          </div>
+          <div class="field-group" style="flex:1 1 180px;">
+            <label class="field-label" for="desired-average" data-i18n="calc.desiredAverage">Gewenst eindgemiddelde</label>
+            <input class="field-input" type="text" inputmode="decimal" id="desired-average" placeholder="bijv. 8.5" value="8.5" data-i18n-placeholder="calc.gradePlaceholder">
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-calculate" id="calculate-required">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+            <span data-i18n="calc.calculateRequired">Bereken welk cijfer ik nodig heb</span>
+          </button>
+          <button class="btn btn-clear" id="clear-required"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 6 12 12"></path><path d="m18 6-12 12"></path></svg> <span data-i18n="calc.clear">Wissen</span></button>
+        </div>
+
+        <div class="result-card" id="required-result-card" style="display:none;">
+          <div class="result-label" data-i18n="calc.requiredResult">Je hebt nodig op de aankomende toets</div>
+          <div class="result-value" id="required-result">—</div>
+          <div class="result-meta">
+            <div class="meta-item"><span data-i18n="calc.currentAverage">Huidig gewogen gemiddelde:</span> <strong id="current-avg">—</strong></div>
+            <div class="meta-item"><span data-i18n="calc.currentWeight">Huidig totaal gewicht:</span> <strong id="current-weight">—</strong></div>
+          </div>
+        </div>
+        <div class="feedback" id="required-feedback"></div>
+      </section>
+
+      <!-- PRIVACY NOTE -->
+      <div class="privacy-note">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
+        <span data-i18n="calc.privacy">Je cijfers worden niet opgeslagen — alles blijft in je browser.</span>
+      </div>
+    </main>
+
+    <!-- ================= EXPLANATION ================= -->
+    <section class="explanation">
+      <h2 data-i18n="calc.explanationTitle">Hoe bereken je een gewogen gemiddelde?</h2>
+      <p data-i18n="calc.explanationText">Op de middelbare school tellen niet alle cijfers even zwaar mee. Een toets die zwaarder meetelt (bijvoorbeeld een proefwerk met gewicht 3) heeft meer invloed op je eindcijfer dan een kleine overhoring met gewicht 1. Daarom gebruiken we een gewogen gemiddelde.</p>
+
+      <div class="example-box">
+        <div class="formula">
+          <span data-i18n="calc.exampleIntro">Stel: je hebt een 8,5 (gewicht 2), een 7,0 (gewicht 1) en een 9,0 (gewicht 3).</span>
+        </div>
+        <div class="formula" style="margin-top:0.75rem;">
+          (8,5 × 2 + 7,0 × 1 + 9,0 × 3) ÷ (2 + 1 + 3)
+        </div>
+        <div class="formula" style="margin-top:0.5rem;">
+          = (17 + 7 + 27) ÷ 6 = 51 ÷ 6 = <strong>8,50</strong>
+        </div>
+      </div>
+
+      <h3 data-i18n="calc.comparisonTitle">Wat is het verschil tussen een gewoon gemiddelde en een gewogen gemiddelde?</h3>
+
+      <div class="comparison">
+        <div class="comparison-card">
+          <h4 data-i18n="calc.unweightedTitle">Gemiddelde zonder weging</h4>
+          <p data-i18n="calc.unweightedText">Je telt alle cijfers op en deelt door het aantal cijfers. Elke toets telt even zwaar mee, ongeacht hoe belangrijk die was. Voorbeeld: (8,5 + 7,0 + 9,0) ÷ 3 = 8,17.</p>
+        </div>
+        <div class="comparison-card">
+          <h4 data-i18n="calc.weightedTitle">Gewogen gemiddelde</h4>
+          <p data-i18n="calc.weightedText">Elk cijfer krijgt een gewicht. Zwaardere toetsen tellen meer mee. Dit gebruik je op school, omdat een proefwerk nu eenmaal belangrijker is dan een kleine overhoring.</p>
+        </div>
+      </div>
+
+      <h3 data-i18n="calc.requiredExplanationTitle">Welk cijfer heb ik nodig?</h3>
+      <p data-i18n="calc.requiredExplanationText">Wil je weten welk cijfer je moet halen om een bepaald gemiddelde te staan? Gebruik dan de tweede tab. De calculator kijkt naar je huidige gewogen gemiddelde, het gewicht van de aankomende toets en je gewenste eindgemiddelde.</p>
+      <p data-i18n="calc.limitText">Als er een cijfer boven de 10 uitkomt, dan is het doel wiskundig gezien niet haalbaar met een maximaal cijfer van 10. De calculator legt dat dan duidelijk uit.</p>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <p data-i18n="calc.footerLine">StudyStack · gemaakt door studenten, voor studenten</p>
+      <p style="margin-top:0.5rem;" data-i18n="calc.footerNote">Geen account nodig · Alle berekeningen lokaal in je browser</p>
+    </footer>
+  </div>
+
+  <script>
+    (function() {
+      "use strict";
+
+      const translations = {
+        en: {
+          "language.label": "Language",
+          "calc.title": "Grade calculator",
+          "calc.backHome": "Back to home",
+          "calc.badge": "free & no account",
+          "calc.heroText": "Easily calculate your average, weighted average, and the grade you need for your desired average. Made for secondary school students.",
+          "calc.averageTab": "Calculate average",
+          "calc.requiredTab": "What grade do I need?",
+          "calc.addGrade": "Add grade",
+          "calc.clearAll": "Clear all",
+          "calc.weightedAverage": "Weighted average",
+          "calc.totalWeight": "Total weight:",
+          "calc.gradeCount": "Number of grades:",
+          "calc.requiredIntro": "Enter your current grades and weights below, plus the weight of the upcoming test.",
+          "calc.upcomingWeight": "Weight of upcoming test",
+          "calc.desiredAverage": "Desired final average",
+          "calc.weightPlaceholder": "e.g. 2",
+          "calc.gradePlaceholder": "e.g. 8.5",
+          "calc.calculateRequired": "Calculate the grade I need",
+          "calc.clear": "Clear",
+          "calc.requiredResult": "You need on the upcoming test",
+          "calc.currentAverage": "Current weighted average:",
+          "calc.currentWeight": "Current total weight:",
+          "calc.privacy": "Your grades are not saved — everything stays in your browser.",
+          "calc.equalWeightLabel": "All tests have the weight of:",
+          "calc.sharedWeightAria": "Shared weight for all tests",
+          "calc.explanationTitle": "How do you calculate a weighted average?",
+          "calc.explanationText": "In secondary school, not all grades count equally. A test with more weight has more influence on your final grade than a small quiz. That is why we use a weighted average.",
+          "calc.exampleIntro": "Suppose you have an 8.5 (weight 2), a 7.0 (weight 1), and a 9.0 (weight 3).",
+          "calc.comparisonTitle": "What is the difference between a regular and a weighted average?",
+          "calc.unweightedTitle": "Average without weighting",
+          "calc.unweightedText": "Add all grades and divide by the number of grades. Every test counts equally, regardless of its importance. Example: (8.5 + 7.0 + 9.0) ÷ 3 = 8.17.",
+          "calc.weightedTitle": "Weighted average",
+          "calc.weightedText": "Each grade gets a weight. Tests with more weight count more. This is used at school because a major test is more important than a small quiz.",
+          "calc.requiredExplanationTitle": "What grade do I need?",
+          "calc.requiredExplanationText": "Want to know which grade you need to reach a certain average? Use the second tab. The calculator looks at your current weighted average, the upcoming test weight, and your desired final average.",
+          "calc.limitText": "If the required grade is above 10, the goal is mathematically impossible with a maximum grade of 10. The calculator explains this clearly.",
+          "calc.footerLine": "StudyStack · made by students, for students",
+          "calc.footerNote": "No account needed · All calculations stay local in your browser",
+          "calc.grade": "Grade",
+          "calc.weight": "Weight",
+          "calc.removeGrade": "Remove grade",
+          "calc.invalidAverage": "Enter valid grades and weights (weight must be greater than 0).",
+          "calc.invalidPartial": "Note: some fields are invalid and have not been counted.",
+          "calc.keepGoing": "Keep going — you can do this!",
+          "calc.greatWork": "Great work! Keep it up.",
+          "calc.looksGood": "Looks good. Keep practising regularly.",
+          "calc.requiredGradeError": "Enter at least one valid current grade with a weight.",
+          "calc.upcomingWeightError": "Enter a valid weight for the upcoming test (greater than 0).",
+          "calc.desiredAverageError": "Enter a valid desired final average.",
+          "calc.notAchievable": "Not achievable.",
+          "calc.requiredGradeAbove10": "You would need a {grade}, but the highest grade is 10. You can no longer reach your desired average of {average} exactly with this weight. Talk to your teacher about possible extra assignments.",
+          "calc.invalidPrefix": "Note: some fields are invalid and have not been counted.<br>",
+          "calc.fbAbove10Lead": "Not achievable.",
+          "calc.fbAbove10Body": "Even with a 10 on the upcoming test you would end at {achievable}. Your desired average of {average} is therefore mathematically impossible with this weight. Talk to your teacher about possible extra assignments.",
+          "calc.fbEasy": "You need a {grade} on the upcoming test. Even if that test goes less well, you will likely still end above 5.5.",
+          "calc.fbBelow55": "You need a {grade} on the upcoming test. Even with a lower grade on this test you will stay at or above 5.5 on average.",
+          "calc.fbAt55": "You need a {grade} on the upcoming test. With a 5.5 on the upcoming test you would land exactly on a sufficient average.",
+          "calc.fbComfortable": "You need a {grade} on the upcoming test. That is comfortably above 5.5 — you are in good shape for a sufficient average.",
+          "calc.fbHigh": "You need a {grade} on the upcoming test to reach your desired average of {average}. That is on the high side — practise extra or ask your teacher for help."
+        },
+        nl: {
+          "language.label": "Taal",
+          "calc.title": "Cijfercalculator",
+          "calc.backHome": "Terug naar home",
+          "calc.badge": "gratis & zonder account",
+          "calc.heroText": "Bereken eenvoudig je gemiddelde, gewogen gemiddelde en welk cijfer je nodig hebt voor je gewenste gemiddelde. Speciaal voor scholieren.",
+          "calc.averageTab": "Gemiddelde berekenen",
+          "calc.requiredTab": "Welk cijfer heb ik nodig?",
+          "calc.addGrade": "Cijfer toevoegen",
+          "calc.clearAll": "Alles wissen",
+          "calc.weightedAverage": "Gewogen gemiddelde",
+          "calc.totalWeight": "Totaal gewicht:",
+          "calc.gradeCount": "Aantal cijfers:",
+          "calc.requiredIntro": "Vul hieronder je huidige cijfers en gewichten in, plus het gewicht van de aankomende toets.",
+          "calc.upcomingWeight": "Gewicht aankomende toets",
+          "calc.desiredAverage": "Gewenst eindgemiddelde",
+          "calc.weightPlaceholder": "bijv. 2",
+          "calc.gradePlaceholder": "bijv. 8,5",
+          "calc.calculateRequired": "Bereken welk cijfer ik nodig heb",
+          "calc.clear": "Wissen",
+          "calc.requiredResult": "Je hebt nodig op de aankomende toets",
+          "calc.currentAverage": "Huidig gewogen gemiddelde:",
+          "calc.currentWeight": "Huidig totaal gewicht:",
+          "calc.privacy": "Je cijfers worden niet opgeslagen — alles blijft in je browser.",
+          "calc.equalWeightLabel": "Alle toetsen hebben het gewicht van:",
+          "calc.sharedWeightAria": "Gedeeld gewicht voor alle toetsen",
+          "calc.explanationTitle": "Hoe bereken je een gewogen gemiddelde?",
+          "calc.explanationText": "Op de middelbare school tellen niet alle cijfers even zwaar mee. Een toets die zwaarder meetelt heeft meer invloed op je eindcijfer dan een kleine overhoring. Daarom gebruiken we een gewogen gemiddelde.",
+          "calc.exampleIntro": "Stel: je hebt een 8,5 (gewicht 2), een 7,0 (gewicht 1) en een 9,0 (gewicht 3).",
+          "calc.comparisonTitle": "Wat is het verschil tussen een gewoon gemiddelde en een gewogen gemiddelde?",
+          "calc.unweightedTitle": "Gemiddelde zonder weging",
+          "calc.unweightedText": "Je telt alle cijfers op en deelt door het aantal cijfers. Elke toets telt even zwaar mee, ongeacht hoe belangrijk die was. Voorbeeld: (8,5 + 7,0 + 9,0) ÷ 3 = 8,17.",
+          "calc.weightedTitle": "Gewogen gemiddelde",
+          "calc.weightedText": "Elk cijfer krijgt een gewicht. Zwaardere toetsen tellen meer mee. Dit gebruik je op school, omdat een proefwerk belangrijker is dan een kleine overhoring.",
+          "calc.requiredExplanationTitle": "Welk cijfer heb ik nodig?",
+          "calc.requiredExplanationText": "Wil je weten welk cijfer je moet halen om een bepaald gemiddelde te staan? Gebruik dan de tweede tab. De calculator kijkt naar je huidige gewogen gemiddelde, het gewicht van de aankomende toets en je gewenste eindgemiddelde.",
+          "calc.limitText": "Als er een cijfer boven de 10 uitkomt, dan is het doel wiskundig gezien niet haalbaar met een maximaal cijfer van 10. De calculator legt dat dan duidelijk uit.",
+          "calc.footerLine": "StudyStack · gemaakt door studenten, voor studenten",
+          "calc.footerNote": "Geen account nodig · Alle berekeningen lokaal in je browser",
+          "calc.grade": "Cijfer",
+          "calc.weight": "Gewicht",
+          "calc.removeGrade": "Cijfer verwijderen",
+          "calc.invalidAverage": "Vul geldige cijfers en gewichten in (gewicht moet groter dan 0 zijn).",
+          "calc.invalidPartial": "Let op: sommige velden zijn ongeldig en worden niet meegeteld.",
+          "calc.keepGoing": "Nog even doorzetten — je kunt dit!",
+          "calc.greatWork": "Netjes bezig! Ga zo door.",
+          "calc.looksGood": "Ziet er goed uit. Blijf regelmatig oefenen.",
+          "calc.requiredGradeError": "Vul minstens één geldig huidig cijfer met gewicht in.",
+          "calc.upcomingWeightError": "Vul een geldig gewicht in voor de aankomende toets (groter dan 0).",
+          "calc.desiredAverageError": "Vul een geldig gewenst eindgemiddelde in.",
+          "calc.notAchievable": "Niet haalbaar.",
+          "calc.requiredGradeAbove10": "Je zou een {grade} moeten halen, maar het hoogste cijfer is een 10. Je kunt je gewenste gemiddelde van {average} dus niet meer precies halen met dit gewicht. Praat met je docent over eventuele extra opdrachten.",
+          "calc.invalidPrefix": "Let op: sommige velden zijn ongeldig en worden niet meegeteld.<br>",
+          "calc.fbAbove10Lead": "Niet haalbaar.",
+          "calc.fbAbove10Body": "Zelfs met een 10 op de aankomende toets kom je uit op {achievable}. Je gewenste gemiddelde van {average} is met dit gewicht wiskundig gezien niet haalbaar. Praat met je docent over eventuele extra opdrachten.",
+          "calc.fbEasy": "Je hebt een {grade} nodig op de aankomende toets. Zelfs als die toets minder goed gaat, blijf je gemiddeld waarschijnlijk boven de 5,5.",
+          "calc.fbBelow55": "Je hebt een {grade} nodig op de aankomende toets. Zelfs met een lager cijfer op deze toets blijf je gemiddeld op of boven de 5,5.",
+          "calc.fbAt55": "Je hebt een {grade} nodig op de aankomende toets. Met een 5,5 op de aankomende toets kom je precies op een voldoende gemiddelde uit.",
+          "calc.fbComfortable": "Je hebt een {grade} nodig op de aankomende toets. Dat is comfortabel boven de 5,5 — je staat er goed voor voor een voldoende gemiddelde.",
+          "calc.fbHigh": "Je hebt een {grade} nodig op de aankomende toets om je gewenste gemiddelde van {average} te halen. Dat is aan de hoge kant — oefen extra of vraag hulp aan je docent."
+        }
+      };
+      let currentLanguage = localStorage.getItem('studystack-language') || 'nl';
+      function t(key) {
+        return (translations[currentLanguage] && translations[currentLanguage][key]) || translations.nl[key] || key;
+      }
+      function formatMessage(key, values) {
+        return t(key).replace(/\{(\w+)\}/g, function(match, name) {
+          return values[name] === undefined ? match : values[name];
+        });
+      }
+
+      /* ============================================================
+         UTILITIES
+      ============================================================ */
+      function parseGrade(str) {
+        if (str === null || str === undefined) return null;
+        const cleaned = String(str).trim().replace(',', '.');
+        if (cleaned === '') return null;
+        const num = parseFloat(cleaned);
+        if (isNaN(num)) return null;
+        return num;
+      }
+      function parseWeight(str) {
+        if (str === null || str === undefined) return null;
+        const cleaned = String(str).trim().replace(',', '.');
+        if (cleaned === '') return null;
+        const num = parseFloat(cleaned);
+        if (isNaN(num) || num <= 0) return null;
+        return num;
+      }
+      function formatGrade(num) {
+        if (num === null || num === undefined || isNaN(num)) return '—';
+        return num.toFixed(2).replace('.', ',');
+      }
+      function formatWeight(num) {
+        if (num === null || num === undefined || isNaN(num)) return '0';
+        if (Number.isInteger(num)) return String(num);
+        return String(num).replace('.', ',');
+      }
+      const iconSvg = {
+        close: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 6 12 12"></path><path d="m18 6-12 12"></path></svg>',
+        muscle: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 18c-2.5 0-4-1.5-4-3.5S5.5 11 8 11h1V7.5A2.5 2.5 0 0 1 11.5 5c1.4 0 2.5 1.1 2.5 2.5V11h1.5V8.5A2.5 2.5 0 0 1 18 6c1.4 0 2.5 1.1 2.5 2.5V13c0 3.3-2.7 6-6 6H8Z"></path><path d="M9 11v4"></path><path d="M14 11v4"></path></svg>',
+        star: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z"></path></svg>',
+        thumb: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 10v10H4V10h3Z"></path><path d="M7 20h9.5a2 2 0 0 0 1.9-1.4l1.4-4.5A2 2 0 0 0 17.9 11H15l.5-3.2A2.3 2.3 0 0 0 13.2 5L9 10v10"></path></svg>'
+      };
+      function setFeedback(feedbackElement, iconName, message) {
+        feedbackElement.innerHTML = iconSvg[iconName] + '<span>' + message + '</span>';
+      }
+
+      /* ============================================================
+         TAB 1: GEWOGEN GEMIDDELDE
+      ============================================================ */
+      const gradeList = document.getElementById('grade-list');
+      const addGradeBtn = document.getElementById('add-grade');
+      const clearAllBtn = document.getElementById('clear-all');
+      const averageResult = document.getElementById('average-result');
+      const totalWeightEl = document.getElementById('total-weight');
+      const gradeCountEl = document.getElementById('grade-count');
+      const averageFeedback = document.getElementById('average-feedback');
+      const equalWeightAverage = document.getElementById('equal-weight-average');
+      const sharedWeightAverage = document.getElementById('shared-weight-average');
+
+      let gradeRowCounter = 0;
+
+      // Read the shared weight as a safe number (fallback to 1 if invalid)
+      function getSharedWeight(inputEl) {
+        const w = parseWeight(inputEl.value);
+        return w === null ? 1 : w;
+      }
+
+      // Normalize the shared weight field's value (never leave it invalid)
+      function normalizeSharedWeightInput(inputEl) {
+        const w = parseWeight(inputEl.value);
+        if (w === null) {
+          inputEl.value = '1';
+        } else {
+          inputEl.value = formatWeight(w);
+        }
+      }
+
+      function createGradeRow(gradeValue, weightValue) {
+        gradeRowCounter++;
+        const row = document.createElement('div');
+        row.className = 'grade-row';
+        row.dataset.id = gradeRowCounter;
+
+        const gradeGroup = document.createElement('div');
+        gradeGroup.className = 'field-group';
+        const gradeLabel = document.createElement('label');
+        gradeLabel.className = 'field-label';
+        gradeLabel.textContent = t('calc.grade');
+        const gradeInput = document.createElement('input');
+        gradeInput.className = 'field-input grade-input';
+        gradeInput.type = 'text';
+        gradeInput.inputMode = 'decimal';
+        gradeInput.placeholder = t('calc.gradePlaceholder');
+        gradeInput.value = gradeValue || '';
+        gradeInput.setAttribute('aria-label', t('calc.grade'));
+        gradeGroup.appendChild(gradeLabel);
+        gradeGroup.appendChild(gradeInput);
+
+        const weightGroup = document.createElement('div');
+        weightGroup.className = 'field-group';
+        weightGroup.style.flex = '0 1 110px';
+        const weightLabel = document.createElement('label');
+        weightLabel.className = 'field-label';
+        weightLabel.textContent = t('calc.weight');
+        const weightInput = document.createElement('input');
+        weightInput.className = 'field-input weight-input';
+        weightInput.type = 'text';
+        weightInput.inputMode = 'decimal';
+        weightInput.placeholder = t('calc.weightPlaceholder');
+        weightInput.value = weightValue || '';
+        weightInput.setAttribute('aria-label', t('calc.weight'));
+        weightGroup.appendChild(weightLabel);
+        weightGroup.appendChild(weightInput);
+
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'remove-btn';
+        removeBtn.type = 'button';
+        removeBtn.innerHTML = iconSvg.close;
+        removeBtn.setAttribute('aria-label', t('calc.removeGrade'));
+        removeBtn.title = t('calc.removeGrade');
+
+        row.appendChild(gradeGroup);
+        row.appendChild(weightGroup);
+        row.appendChild(removeBtn);
+
+        gradeInput.addEventListener('input', calculateAverage);
+
+        // If the user manually edits a weight while the shared-weight toggle
+        // is ON, automatically turn the toggle OFF (other tests keep their values).
+        weightInput.addEventListener('input', function() {
+          if (equalWeightAverage.checked) {
+            equalWeightAverage.checked = false;
+          }
+          calculateAverage();
+        });
+
+        // Pop-out removal
+        removeBtn.addEventListener('click', function() {
+          row.classList.add('removing');
+          setTimeout(function() {
+            row.remove();
+            calculateAverage();
+          }, 220);
+        });
+        return row;
+      }
+
+      function addGradeRow(grade, weight) {
+        const row = createGradeRow(grade, weight);
+        gradeList.appendChild(row);
+        // Only apply the shared weight if the toggle is currently ON
+        if (equalWeightAverage.checked) {
+          applyEqualWeightToRow(row, true, getSharedWeight(sharedWeightAverage));
+        }
+        calculateAverage();
+      }
+
+      // Apply equal-weight state to a single row.
+      // The weight input stays editable — typing in it will flip the toggle off.
+      function applyEqualWeightToRow(row, isEqual, sharedWeight) {
+        const weightInput = row.querySelector('.weight-input');
+        if (!weightInput) return;
+        if (isEqual) {
+          weightInput.value = formatWeight(sharedWeight);
+        }
+      }
+
+      // Apply equal-weight state to all rows in the list
+      function applyEqualWeightToAll(listElement, isEqual, sharedWeight) {
+        listElement.querySelectorAll('.grade-row').forEach(function(row) {
+          applyEqualWeightToRow(row, isEqual, sharedWeight);
+        });
+      }
+
+      function calculateAverage() {
+        const rows = gradeList.querySelectorAll('.grade-row');
+        let weightedSum = 0;
+        let totalWeight = 0;
+        let validGrades = 0;
+        let hasInvalid = false;
+
+        rows.forEach(function(row) {
+          const gradeInput = row.querySelector('.grade-input');
+          const weightInput = row.querySelector('.weight-input');
+          const grade = parseGrade(gradeInput.value);
+          const weight = parseWeight(weightInput.value);
+
+          if (gradeInput.value.trim() !== '' && grade === null) hasInvalid = true;
+          if (weightInput.value.trim() !== '' && weight === null) hasInvalid = true;
+
+          if (grade !== null && weight !== null) {
+            weightedSum += grade * weight;
+            totalWeight += weight;
+            validGrades++;
+          }
+        });
+
+        gradeCountEl.textContent = String(validGrades);
+        totalWeightEl.textContent = formatWeight(totalWeight);
+
+        if (validGrades === 0) {
+          averageResult.textContent = '—';
+          averageFeedback.className = 'feedback';
+          if (hasInvalid) {
+            averageFeedback.className = 'feedback error show';
+            averageFeedback.textContent = t('calc.invalidAverage');
+          }
+          return;
+        }
+
+        const average = weightedSum / totalWeight;
+        averageResult.textContent = formatGrade(average);
+
+        averageFeedback.className = 'feedback show info';
+        if (hasInvalid) {
+          averageFeedback.className = 'feedback warning show';
+          averageFeedback.textContent = t('calc.invalidPartial');
+        } else if (average < 5.5) {
+          setFeedback(averageFeedback, 'muscle', t('calc.keepGoing'));
+        } else if (average >= 8.0) {
+          setFeedback(averageFeedback, 'star', t('calc.greatWork'));
+        } else {
+          setFeedback(averageFeedback, 'thumb', t('calc.looksGood'));
+        }
+      }
+
+      addGradeBtn.addEventListener('click', function() {
+        addGradeRow('', '');
+        const rows = gradeList.querySelectorAll('.grade-row');
+        const lastRow = rows[rows.length - 1];
+        if (lastRow) {
+          const input = lastRow.querySelector('.grade-input');
+          if (input) input.focus();
+        }
+      });
+
+      clearAllBtn.addEventListener('click', function() {
+        gradeList.innerHTML = '';
+        gradeRowCounter = 0;
+        averageResult.textContent = '—';
+        totalWeightEl.textContent = '0';
+        gradeCountEl.textContent = '0';
+        averageFeedback.className = 'feedback';
+        addGradeRow('', '');
+      });
+
+      // Toggle ON → read the CURRENT value of the shared weight input and apply it
+      equalWeightAverage.addEventListener('change', function() {
+        if (equalWeightAverage.checked) {
+          normalizeSharedWeightInput(sharedWeightAverage);
+        }
+        applyEqualWeightToAll(gradeList, equalWeightAverage.checked, getSharedWeight(sharedWeightAverage));
+        calculateAverage();
+      });
+
+      // Typing while toggle is ON → live-update all rows
+      sharedWeightAverage.addEventListener('input', function() {
+        if (!equalWeightAverage.checked) return;
+        applyEqualWeightToAll(gradeList, true, getSharedWeight(sharedWeightAverage));
+        calculateAverage();
+      });
+      // On blur, normalize the field
+      sharedWeightAverage.addEventListener('blur', function() {
+        normalizeSharedWeightInput(sharedWeightAverage);
+        if (equalWeightAverage.checked) {
+          applyEqualWeightToAll(gradeList, true, getSharedWeight(sharedWeightAverage));
+          calculateAverage();
+        }
+      });
+
+      /* ============================================================
+         TAB 2: WELK CIJFER HEB IK NODIG
+      ============================================================ */
+      const requiredGradeList = document.getElementById('required-grade-list');
+      const addRequiredGradeBtn = document.getElementById('add-required-grade');
+      const calculateRequiredBtn = document.getElementById('calculate-required');
+      const clearRequiredBtn = document.getElementById('clear-required');
+      const upcomingWeightInput = document.getElementById('upcoming-weight');
+      const desiredAverageInput = document.getElementById('desired-average');
+      const requiredResultCard = document.getElementById('required-result-card');
+      const requiredResult = document.getElementById('required-result');
+      const currentAvgEl = document.getElementById('current-avg');
+      const currentWeightEl = document.getElementById('current-weight');
+      const requiredFeedback = document.getElementById('required-feedback');
+      const equalWeightRequired = document.getElementById('equal-weight-required');
+      const sharedWeightRequired = document.getElementById('shared-weight-required');
+
+      function createRequiredRow(gradeValue, weightValue) {
+        const row = document.createElement('div');
+        row.className = 'grade-row';
+
+        const gradeGroup = document.createElement('div');
+        gradeGroup.className = 'field-group';
+        const gradeLabel = document.createElement('label');
+        gradeLabel.className = 'field-label';
+        gradeLabel.textContent = t('calc.grade');
+        const gradeInput = document.createElement('input');
+        gradeInput.className = 'field-input grade-input';
+        gradeInput.type = 'text';
+        gradeInput.inputMode = 'decimal';
+        gradeInput.placeholder = t('calc.gradePlaceholder');
+        gradeInput.value = gradeValue || '';
+        gradeGroup.appendChild(gradeLabel);
+        gradeGroup.appendChild(gradeInput);
+
+        const weightGroup = document.createElement('div');
+        weightGroup.className = 'field-group';
+        weightGroup.style.flex = '0 1 110px';
+        const weightLabel = document.createElement('label');
+        weightLabel.className = 'field-label';
+        weightLabel.textContent = t('calc.weight');
+        const weightInput = document.createElement('input');
+        weightInput.className = 'field-input weight-input';
+        weightInput.type = 'text';
+        weightInput.inputMode = 'decimal';
+        weightInput.placeholder = t('calc.weightPlaceholder');
+        weightInput.value = weightValue || '';
+        weightGroup.appendChild(weightLabel);
+        weightGroup.appendChild(weightInput);
+
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'remove-btn';
+        removeBtn.type = 'button';
+        removeBtn.innerHTML = iconSvg.close;
+        removeBtn.setAttribute('aria-label', t('calc.removeGrade'));
+
+        row.appendChild(gradeGroup);
+        row.appendChild(weightGroup);
+        row.appendChild(removeBtn);
+
+        // If the user manually edits a weight while the shared-weight toggle
+        // is ON, automatically turn the toggle OFF (other tests keep their values).
+        weightInput.addEventListener('input', function() {
+          if (equalWeightRequired.checked) {
+            equalWeightRequired.checked = false;
+          }
+        });
+
+        // Pop-out removal
+        removeBtn.addEventListener('click', function() {
+          row.classList.add('removing');
+          setTimeout(function() { row.remove(); }, 220);
+        });
+        return row;
+      }
+
+      function addRequiredRow(grade, weight) {
+        const row = createRequiredRow(grade, weight);
+        requiredGradeList.appendChild(row);
+        // Only apply the shared weight if the toggle is currently ON
+        if (equalWeightRequired.checked) {
+          applyEqualWeightToRow(row, true, getSharedWeight(sharedWeightRequired));
+        }
+      }
+
+      addRequiredGradeBtn.addEventListener('click', function() {
+        addRequiredRow('', '');
+        const rows = requiredGradeList.querySelectorAll('.grade-row');
+        const lastRow = rows[rows.length - 1];
+        if (lastRow) {
+          const input = lastRow.querySelector('.grade-input');
+          if (input) input.focus();
+        }
+      });
+
+      clearRequiredBtn.addEventListener('click', function() {
+        requiredGradeList.innerHTML = '';
+        upcomingWeightInput.value = '2';
+        desiredAverageInput.value = '8.5';
+        requiredResultCard.style.display = 'none';
+        requiredFeedback.className = 'feedback';
+        addRequiredRow('', '');
+        addRequiredRow('', '');
+      });
+
+      // Toggle ON → read the CURRENT value of the shared weight input and apply it
+      equalWeightRequired.addEventListener('change', function() {
+        if (equalWeightRequired.checked) {
+          normalizeSharedWeightInput(sharedWeightRequired);
+        }
+        applyEqualWeightToAll(requiredGradeList, equalWeightRequired.checked, getSharedWeight(sharedWeightRequired));
+      });
+
+      sharedWeightRequired.addEventListener('input', function() {
+        if (!equalWeightRequired.checked) return;
+        applyEqualWeightToAll(requiredGradeList, true, getSharedWeight(sharedWeightRequired));
+      });
+      sharedWeightRequired.addEventListener('blur', function() {
+        normalizeSharedWeightInput(sharedWeightRequired);
+        if (equalWeightRequired.checked) {
+          applyEqualWeightToAll(requiredGradeList, true, getSharedWeight(sharedWeightRequired));
+        }
+      });
+
+      calculateRequiredBtn.addEventListener('click', function() {
+        const rows = requiredGradeList.querySelectorAll('.grade-row');
+        let weightedSum = 0;
+        let currentWeight = 0;
+        let validCount = 0;
+        let hasInvalid = false;
+
+        rows.forEach(function(row) {
+          const gradeInput = row.querySelector('.grade-input');
+          const weightInput = row.querySelector('.weight-input');
+          const grade = parseGrade(gradeInput.value);
+          const weight = parseWeight(weightInput.value);
+
+          if (gradeInput.value.trim() !== '' && grade === null) hasInvalid = true;
+          if (weightInput.value.trim() !== '' && weight === null) hasInvalid = true;
+
+          if (grade !== null && weight !== null) {
+            weightedSum += grade * weight;
+            currentWeight += weight;
+            validCount++;
+          }
+        });
+
+        const upcomingWeight = parseWeight(upcomingWeightInput.value);
+        const desiredAverage = parseGrade(desiredAverageInput.value);
+
+        if (validCount === 0) {
+          requiredFeedback.className = 'feedback error show';
+          requiredFeedback.textContent = t('calc.requiredGradeError');
+          requiredResultCard.style.display = 'none';
+          return;
+        }
+        if (upcomingWeight === null) {
+          requiredFeedback.className = 'feedback error show';
+          requiredFeedback.textContent = t('calc.upcomingWeightError');
+          requiredResultCard.style.display = 'none';
+          return;
+        }
+        if (desiredAverage === null) {
+          requiredFeedback.className = 'feedback error show';
+          requiredFeedback.textContent = t('calc.desiredAverageError');
+          requiredResultCard.style.display = 'none';
+          return;
+        }
+
+        const currentAverage = weightedSum / currentWeight;
+        const totalWeightAfter = currentWeight + upcomingWeight;
+        const requiredGrade = (desiredAverage * totalWeightAfter - weightedSum) / upcomingWeight;
+
+        currentAvgEl.textContent = formatGrade(currentAverage);
+        currentWeightEl.textContent = formatWeight(currentWeight);
+        requiredResultCard.style.display = 'block';
+        requiredFeedback.className = 'feedback show';
+
+        if (hasInvalid) {
+          requiredFeedback.className = 'feedback warning show';
+          requiredFeedback.textContent = t('calc.invalidPartial');
+        }
+
+        // ---------- CONTEXTUAL FEEDBACK ----------
+        if (requiredGrade > 10) {
+          const achievableAverage = (weightedSum + 10 * upcomingWeight) / totalWeightAfter;
+          requiredResult.textContent = '> 10';
+          requiredResult.style.color = '#c0392b';
+          requiredFeedback.className = 'feedback error show';
+          requiredFeedback.innerHTML =
+            '<strong>' + t('calc.fbAbove10Lead') + '</strong> ' +
+            formatMessage('calc.fbAbove10Body', {
+              achievable: formatGrade(achievableAverage),
+              average: formatGrade(desiredAverage)
+            });
+        } else {
+          requiredResult.textContent = formatGrade(requiredGrade);
+          requiredResult.style.color = '#1e5fa7';
+
+          if (requiredGrade < 5.5) {
+            requiredFeedback.className = 'feedback success show';
+            requiredFeedback.innerHTML = formatMessage('calc.fbBelow55', {
+              grade: '<strong>' + formatGrade(requiredGrade) + '</strong>'
+            });
+          } else if (Math.abs(requiredGrade - 5.5) < 0.005) {
+            requiredFeedback.className = 'feedback info show';
+            requiredFeedback.innerHTML = formatMessage('calc.fbAt55', {
+              grade: '<strong>' + formatGrade(requiredGrade) + '</strong>'
+            });
+          } else if (requiredGrade <= 6.5) {
+            requiredFeedback.className = 'feedback success show';
+            requiredFeedback.innerHTML = formatMessage('calc.fbComfortable', {
+              grade: '<strong>' + formatGrade(requiredGrade) + '</strong>'
+            });
+          } else if (requiredGrade <= 8.0) {
+            requiredFeedback.className = 'feedback info show';
+            requiredFeedback.innerHTML = formatMessage('calc.fbEasy', {
+              grade: '<strong>' + formatGrade(requiredGrade) + '</strong>'
+            });
+          } else {
+            requiredFeedback.className = 'feedback warning show';
+            requiredFeedback.innerHTML = formatMessage('calc.fbHigh', {
+              grade: '<strong>' + formatGrade(requiredGrade) + '</strong>',
+              average: formatGrade(desiredAverage)
+            });
+          }
+        }
+
+        if (hasInvalid && requiredGrade >= 1 && requiredGrade <= 10) {
+          requiredFeedback.className = 'feedback warning show';
+          requiredFeedback.innerHTML = t('calc.invalidPrefix') + requiredFeedback.innerHTML;
+        }
+      });
+
+      /* ============================================================
+         TABS SWITCHING
+      ============================================================ */
+      const tabButtons = document.querySelectorAll('.tab-btn');
+      const panels = {
+        average: document.getElementById('panel-average'),
+        required: document.getElementById('panel-required')
+      };
+
+      tabButtons.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          const target = btn.dataset.tab;
+          tabButtons.forEach(function(b) {
+            b.classList.remove('active');
+            b.setAttribute('aria-selected', 'false');
+          });
+          btn.classList.add('active');
+          btn.setAttribute('aria-selected', 'true');
+          Object.keys(panels).forEach(function(key) {
+            if (key === target) {
+              panels[key].classList.add('active');
+            } else {
+              panels[key].classList.remove('active');
+            }
+          });
+        });
+      });
+
+      const languageSelect = document.getElementById('language-select');
+      function refreshGeneratedRows() {
+        document.querySelectorAll('.grade-row').forEach(function(row) {
+          const labels = row.querySelectorAll('.field-label');
+          const inputs = row.querySelectorAll('.field-input');
+          if (labels[0]) labels[0].textContent = t('calc.grade');
+          if (labels[1]) labels[1].textContent = t('calc.weight');
+          if (inputs[0]) {
+            inputs[0].placeholder = t('calc.gradePlaceholder');
+            inputs[0].setAttribute('aria-label', t('calc.grade'));
+          }
+          if (inputs[1]) {
+            inputs[1].placeholder = t('calc.weightPlaceholder');
+            inputs[1].setAttribute('aria-label', t('calc.weight'));
+          }
+          const removeButton = row.querySelector('.remove-btn');
+          if (removeButton) {
+            removeButton.setAttribute('aria-label', t('calc.removeGrade'));
+            removeButton.title = t('calc.removeGrade');
+          }
+        });
+      }
+      function applyLanguage(language) {
+        currentLanguage = translations[language] ? language : 'nl';
+        document.documentElement.lang = currentLanguage;
+        document.title = currentLanguage === 'en' ? 'Grade calculator | StudyStack' : 'Cijfercalculator | StudyStack';
+        document.querySelectorAll('[data-i18n]').forEach(function(element) {
+          element.textContent = t(element.dataset.i18n);
+        });
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(function(element) {
+          element.placeholder = t(element.dataset.i18nPlaceholder);
+        });
+        document.querySelectorAll('[data-i18n-aria]').forEach(function(element) {
+          element.setAttribute('aria-label', t(element.dataset.i18nAria));
+        });
+        languageSelect.value = currentLanguage;
+        languageSelect.setAttribute('aria-label', t('language.label'));
+        refreshGeneratedRows();
+        localStorage.setItem('studystack-language', currentLanguage);
+        calculateAverage();
+        if (requiredResultCard.style.display !== 'none') calculateRequiredBtn.click();
+      }
+      languageSelect.addEventListener('change', function() {
+        applyLanguage(languageSelect.value);
+      });
+
+      /* ============================================================
+         INITIALISATIE
+      ============================================================ */
+      addGradeRow('', '');
+      addGradeRow('', '');
+      addGradeRow('', '');
+
+      addRequiredRow('', '');
+      addRequiredRow('', '');
+
+      calculateAverage();
+      applyLanguage(currentLanguage);
+    })();
+  </script>
+  <script src="../page-intro.js"></script>
+</body>
+</html>

@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyStack · Study smarter, not harder</title>
+  <meta name="description" content="StudyStack — smart study tools built by students, for students. Grade calculator, Pomodoro timer, word trainer and Testweek Planner.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --blue-50:  #EFF6FF;
+      --blue-100: #DBEAFE;
+      --blue-200: #BFDBFE;
+      --blue-500: #3B82F6;
+      --blue-600: #2563EB;
+      --blue-700: #1D4ED8;
+
+      --teal-50:  #ECFDF5;
+      --teal-100: #D1FAE5;
+      --teal-600: #0D9488;
+
+      --purple-50:  #F5F3FF;
+      --purple-100: #EDE9FE;
+      --purple-600: #7C3AED;
+
+      --amber-50:  #FFFBEB;
+      --amber-100: #FEF3C7;
+      --amber-600: #D97706;
+
+      --slate-50:  #F8FAFC;
+      --slate-100: #F1F5F9;
+      --slate-200: #E2E8F0;
+      --slate-300: #CBD5E1;
+      --slate-400: #94A3B8;
+      --slate-500: #64748B;
+      --slate-600: #475569;
+      --slate-700: #334155;
+      --slate-800: #1E293B;
+      --slate-900: #0F172A;
+
+      --r-sm: 10px;
+      --r-md: 14px;
+      --r-lg: 20px;
+      --r-xl: 28px;
+      --r-2xl: 36px;
+      --r-pill: 999px;
+
+      --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.06);
+      --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.06), 0 2px 4px -1px rgba(15, 23, 42, 0.04);
+      --shadow-lg: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 4px 10px -4px rgba(15, 23, 42, 0.04);
+      --shadow-xl: 0 25px 50px -12px rgba(15, 23, 42, 0.12);
+    }
+
+    html { scroll-behavior: smooth; scroll-padding-top: 2rem; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      background: #F5F8FE;
+      color: var(--slate-900);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      font-feature-settings: "cv11", "ss01";
+      min-height: 100vh;
+      padding: 1.25rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .shell {
+      max-width: 1320px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .page {
+      background: #FFFFFF;
+      border: 1px solid var(--slate-200);
+      border-radius: var(--r-2xl);
+      box-shadow: var(--shadow-xl);
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ---------- Header ---------- */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      padding: 1.25rem 2.5rem;
+      border-bottom: 1px solid var(--slate-100);
+      flex-wrap: wrap;
+      position: relative;
+      min-height: 72px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-weight: 800;
+      font-size: 1.35rem;
+      letter-spacing: -0.03em;
+      color: var(--slate-900);
+      text-decoration: none;
+      flex-shrink: 0;
+      min-width: 0;
+      order: 1;
+    }
+    .brand-mark {
+      width: 56px;
+      height: 56px;
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: none;
+      overflow: visible;
+      flex-shrink: 0;
+      transform: none;
+      transition: none;
+      animation: none;
+      margin-right: -10px;
+    }
+    .brand-mark img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      pointer-events: none;
+      user-select: none;
+      transform: scale(2);
+      transform-origin: center center;
+      transition:
+        transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+        filter 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform;
+      backface-visibility: hidden;
+    }
+    .brand:hover .brand-mark img {
+      transform: scale(2.15) rotate(-6deg);
+      filter: drop-shadow(0 6px 14px rgba(37, 99, 235, 0.35));
+    }
+    .brand:active .brand-mark img {
+      transform: scale(2.08) rotate(-3deg);
+      transition-duration: 0.16s;
+    }
+    .brand-name {
+      color: var(--slate-900);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .brand-name span { color: var(--blue-600); }
+
+    .language-switcher {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #fff;
+      border: 1px solid var(--slate-200);
+      border-radius: var(--r-pill);
+      padding: 0.55rem 0.95rem 0.55rem 1.05rem;
+      color: var(--slate-700);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      box-shadow: var(--shadow-sm);
+      transition: border-color 0.25s ease, background 0.25s ease, color 0.25s ease;
+      flex-shrink: 0;
+      order: 3;
+    }
+    .language-switcher svg { width: 16px; height: 16px; stroke-width: 2.2; flex-shrink: 0; }
+    .language-switcher .chevron { width: 14px; height: 14px; }
+    .language-switcher span { pointer-events: none; white-space: nowrap; }
+    .language-switcher select {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      appearance: none;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      font: inherit;
+    }
+    .language-switcher:hover {
+      border-color: var(--blue-200);
+      background: var(--blue-50);
+      color: var(--blue-700);
+    }
+
+    /* Tablet */
+    @media (max-width: 900px) {
+      .top-bar {
+        padding: 1rem 1.5rem;
+      }
+      .brand-mark { width: 50px; height: 50px; }
+      .brand { gap: 0.3rem; }
+      .brand-mark { margin-right: -8px; }
+    }
+
+    /* Phone */
+    @media (max-width: 560px) {
+      .top-bar { padding: 0.9rem 1.1rem; gap: 0.5rem; }
+      .brand { font-size: 1.1rem; gap: 0.25rem; }
+      .brand-mark { width: 44px; height: 44px; margin-right: -6px; }
+      .language-switcher { padding: 0.5rem 0.75rem; font-size: 0.85rem; }
+    }
+
+    .hero {
+      position: relative;
+      padding: 4.5rem 4rem 5rem;
+      overflow: hidden;
+      background: transparent;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .hero-content { max-width: 620px; }
+
+    .hero-annotation-left {
+      font-family: 'Caveat', cursive;
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--blue-600);
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+    }
+    .hero-annotation-left .arrow {
+      width: 28px;
+      height: 28px;
+      stroke: var(--blue-600);
+      stroke-width: 2;
+      fill: none;
+      margin-top: 0.4rem;
+      flex-shrink: 0;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 5.5vw, 4.2rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.045em;
+      color: var(--slate-900);
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 .line { display: block; }
+    .hero h1 .accent { color: var(--blue-600); }
+
+    .hero-subtitle {
+      font-size: 1.1rem;
+      color: var(--slate-500);
+      font-weight: 400;
+      max-width: 480px;
+      margin-bottom: 2rem;
+      line-height: 1.65;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--blue-600);
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 1rem 1.75rem;
+      border-radius: var(--r-pill);
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 14px -2px rgba(37, 99, 235, 0.4);
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+    .hero-cta:hover {
+      background: var(--blue-700);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 22px -4px rgba(37, 99, 235, 0.5);
+    }
+    .hero-cta svg { width: 18px; height: 18px; stroke-width: 2.4; }
+
+    .hero-visual {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 320px;
+    }
+    .hero-visual-svg {
+      width: 100%;
+      max-width: 380px;
+      height: auto;
+      filter: drop-shadow(0 20px 40px rgba(37, 99, 235, 0.12));
+    }
+
+    .hero-annotation-right {
+      position: absolute;
+      top: 6%;
+      right: -4%;
+      font-family: 'Caveat', cursive;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--blue-600);
+      line-height: 1.15;
+      text-align: right;
+      transform: rotate(-3deg);
+      pointer-events: none;
+    }
+    .hero-annotation-right .swipe {
+      display: block;
+      width: 34px;
+      height: 14px;
+      stroke: var(--blue-600);
+      stroke-width: 2;
+      fill: none;
+      margin: 0.2rem 0 0 auto;
+    }
+
+    .tools-section {
+      padding: 3.5rem 4rem 4rem;
+      background: transparent;
+      position: relative;
+    }
+    .tools-section::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--slate-100);
+    }
+
+    .section-head {
+      position: relative;
+      margin-bottom: 2.5rem;
+      max-width: 560px;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--blue-600);
+      margin-bottom: 0.9rem;
+    }
+    .eyebrow::before {
+      content: "";
+      width: 22px;
+      height: 2px;
+      background: var(--blue-600);
+      border-radius: 2px;
+    }
+    .section-head h2 {
+      font-size: clamp(1.9rem, 3.5vw, 2.75rem);
+      font-weight: 800;
+      line-height: 1.12;
+      letter-spacing: -0.035em;
+      color: var(--slate-900);
+    }
+    .section-head .annotation {
+      position: absolute;
+      right: -140px;
+      top: 50%;
+      transform: translateY(-50%) rotate(-4deg);
+      font-family: 'Caveat', cursive;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--blue-600);
+      line-height: 1.15;
+      text-align: right;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .section-head .annotation .arrow {
+      width: 32px;
+      height: 30px;
+      stroke: var(--blue-600);
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+
+    .tool-card {
+      background: #fff;
+      border: 1px solid var(--slate-200);
+      border-radius: var(--r-lg);
+      padding: 1.75rem 1.5rem 1.35rem;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s ease;
+      position: relative;
+      box-shadow: var(--shadow-sm);
+    }
+    .tool-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--slate-300);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .tool-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+    .tool-icon svg {
+      width: 38px;
+      height: 38px;
+      stroke-width: 2.2;
+    }
+
+    .tool-card.blue .tool-icon { background: var(--blue-100); color: var(--blue-600); }
+    .tool-card.teal .tool-icon { background: var(--teal-100); color: var(--teal-600); }
+    .tool-card.purple .tool-icon { background: var(--purple-100); color: var(--purple-600); }
+    .tool-card.amber .tool-icon { background: var(--amber-100); color: var(--amber-600); }
+    .tool-card.rose .tool-icon { background: #FFE4E6; color: #E11D48; }
+
+    .tool-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--slate-900);
+      margin-bottom: 0.6rem;
+    }
+    .tool-card p {
+      font-size: 0.9rem;
+      color: var(--slate-500);
+      line-height: 1.55;
+      flex: 1 1 auto;
+      margin-bottom: 1.5rem;
+    }
+
+    .tool-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+    .tool-tag {
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.35rem 0.8rem;
+      border-radius: var(--r-pill);
+      white-space: nowrap;
+    }
+    .tool-card.blue .tool-tag { background: var(--blue-50); color: var(--blue-700); }
+    .tool-card.teal .tool-tag { background: var(--teal-50); color: var(--teal-700); }
+    .tool-card.purple .tool-tag { background: var(--purple-50); color: var(--purple-700); }
+    .tool-card.amber .tool-tag { background: var(--amber-50); color: var(--amber-700); }
+    .tool-card.rose .tool-tag { background: #FFF1F2; color: #BE123C; }
+
+    .tool-arrow {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--slate-100);
+      color: var(--slate-600);
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+    }
+    .tool-arrow svg { width: 16px; height: 16px; stroke-width: 2.4; }
+    .tool-card:hover .tool-arrow {
+      background: var(--blue-600);
+      color: #fff;
+      transform: translateX(2px);
+    }
+
+    .footer {
+      padding: 1.5rem 2.5rem;
+      border-top: 1px solid var(--slate-100);
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.85rem;
+      color: var(--slate-500);
+    }
+    .footer-left {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .footer-left strong { color: var(--slate-700); font-weight: 700; }
+    .footer-right {
+      display: inline-flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .footer a { color: var(--slate-500); text-decoration: none; }
+    .footer a:hover { color: var(--blue-600); }
+
+    @media (max-width: 1080px) {
+      .tool-grid { grid-template-columns: repeat(2, 1fr); }
+      .tool-grid .tool-card:last-child:nth-child(odd) {
+        grid-column: 1 / -1;
+        max-width: 420px;
+        margin: 0 auto;
+      }
+      .hero-inner { grid-template-columns: 1fr; gap: 2rem; }
+      .hero-visual { min-height: 240px; }
+      .section-head .annotation { position: static; transform: rotate(-4deg); margin-top: 0.5rem; justify-content: flex-start; }
+    }
+    @media (max-width: 720px) {
+      body { padding: 0.75rem; }
+      .page { border-radius: var(--r-xl); }
+      .top-bar { padding: 1rem 1.25rem; gap: 1rem; }
+      .hero { padding: 3rem 1.5rem 3rem; }
+      .hero h1 { font-size: 2.25rem; }
+      .hero-subtitle { font-size: 1rem; }
+      .hero-annotation-left { font-size: 1.15rem; }
+      .hero-annotation-right { display: none; }
+      .tools-section { padding: 2.5rem 1.5rem 3rem; }
+      .tool-grid { grid-template-columns: 1fr; gap: 1rem; }
+      .footer { padding: 1.25rem 1.5rem; flex-direction: column; align-items: flex-start; }
+    }
+
+     /* ============================================================
+       FULL-PAGE BACKGROUND DECORATIONS — extended set
+       ============================================================ */
+    .page {
+      position: relative;
+      overflow: hidden;
+    }
+    .page-decor {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .page > *:not(.page-decor) {
+      position: relative;
+      z-index: 1;
+    }
+
+    .deco {
+      position: absolute;
+      pointer-events: none;
+      display: block;
+      will-change: transform;
+    }
+
+    .deco-circle {
+      top: -240px;
+      left: -180px;
+      width: 520px;
+      height: 520px;
+      border-radius: 50%;
+      background: #EAF2FE;
+    }
+
+    .deco-yellow-top {
+      top: -70px;
+      right: -80px;
+      width: 220px;
+      height: 220px;
+      background: #FEF3C7;
+      border-radius: 60% 0 60% 60% / 60% 0 60% 60%;
+    }
+
+    .deco-blue-left {
+      top: 780px;
+      left: -100px;
+      width: 240px;
+      height: 240px;
+      background: #DBEAFE;
+      border-radius: 0 60% 60% 0 / 0 60% 60% 0;
+    }
+
+    .deco-circle-mid {
+      top: 1100px;
+      right: -140px;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      background: #EEF4FE;
+    }
+
+    .deco-mint {
+      bottom: 200px;
+      left: -100px;
+      width: 180px;
+      height: 180px;
+      background: #D1FAE5;
+      border-radius: 60% 0 60% 60% / 60% 0 60% 60%;
+    }
+
+    .deco-yellow-bottom {
+      bottom: -60px;
+      right: -60px;
+      width: 200px;
+      height: 200px;
+      background: #FEF3C7;
+      border-radius: 60% 0 60% 60% / 60% 0 60% 60%;
+    }
+
+    /* Yellow rotated squares */
+    .deco-dot-yellow {
+      width: 12px;
+      height: 12px;
+      background: #FCD34D;
+      border-radius: 3px;
+      transform: rotate(45deg);
+    }
+    .deco-dot-yellow.one { top: 340px; right: 6%; }
+    .deco-dot-yellow.two { top: 900px; left: 4%; }
+    .deco-dot-yellow.three { bottom: 380px; right: 8%; }
+    .deco-dot-yellow.four { top: 1500px; left: 5%; }
+
+    /* Teal pill shapes */
+    .deco-dot-teal {
+      width: 26px;
+      height: 12px;
+      background: #A7F3D0;
+      border-radius: 999px;
+    }
+    .deco-dot-teal.one { top: 140px; right: 34%; transform: rotate(-30deg); }
+    .deco-dot-teal.two { top: 720px; right: 3%; transform: rotate(30deg); background: #6EE7B7; }
+    .deco-dot-teal.three { bottom: 140px; left: 12%; transform: rotate(-45deg); background: #6EE7B7; }
+
+    /* Small blue dots */
+    .deco-dot-blue {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #BFDBFE;
+    }
+    .deco-dot-blue.one { top: 560px; left: 8%; }
+    .deco-dot-blue.two { bottom: 280px; right: 4%; width: 14px; height: 14px; background: #93C5FD; }
+    .deco-dot-blue.three { top: 1650px; right: 12%; width: 12px; height: 12px; }
+
+    /* Decorative icon outlines */
+    .deco-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: currentColor;
+      opacity: 0.5;
+    }
+    .deco-icon svg { width: 100%; height: 100%; }
+
+    .deco-icon-book {
+      top: 220px;
+      right: 6%;
+      width: 68px;
+      height: 68px;
+      color: #60A5FA;
+      transform: rotate(-8deg);
+      opacity: 0.55;
+    }
+    .deco-icon-pencil {
+      top: 640px;
+      left: 5%;
+      width: 52px;
+      height: 52px;
+      color: #F59E0B;
+      transform: rotate(-15deg);
+      opacity: 0.6;
+    }
+    .deco-icon-bulb {
+      top: 1450px;
+      right: 5%;
+      width: 58px;
+      height: 58px;
+      color: #FCD34D;
+      transform: rotate(10deg);
+      opacity: 0.55;
+    }
+    .deco-icon-cap {
+      bottom: 320px;
+      left: 7%;
+      width: 64px;
+      height: 64px;
+      color: #7C3AED;
+      transform: rotate(-6deg);
+      opacity: 0.45;
+    }
+    .deco-icon-check {
+      bottom: 180px;
+      right: 8%;
+      width: 56px;
+      height: 56px;
+      color: #10B981;
+      transform: rotate(8deg);
+      opacity: 0.55;
+    }
+
+    /* Tiny stars */
+    .deco-star {
+      width: 16px;
+      height: 16px;
+      color: #FCD34D;
+    }
+    .deco-star svg { width: 100%; height: 100%; }
+    .deco-star.one { top: 480px; left: 42%; transform: rotate(15deg); color: #FCD34D; }
+    .deco-star.two { top: 1250px; left: 8%; transform: rotate(-20deg); color: #FBBF24; opacity: 0.7; }
+
+    /* Plus signs */
+    .deco-plus {
+      width: 18px;
+      height: 18px;
+      color: #93C5FD;
+      opacity: 0.6;
+    }
+    .deco-plus svg { width: 100%; height: 100%; }
+    .deco-plus.one { top: 1050px; right: 42%; }
+    .deco-plus.two { bottom: 480px; right: 22%; color: #6EE7B7; }
+
+    /* Squiggly underline */
+    .deco-squiggle {
+      width: 60px;
+      height: 12px;
+      color: #A7F3D0;
+      opacity: 0.7;
+    }
+    .deco-squiggle svg { width: 100%; height: 100%; }
+    .deco-squiggle.one { top: 980px; right: 8%; }
+
+    /* Gentle float animation */
+    @keyframes decoFloat {
+      0%, 100% { transform: translate3d(0, 0, 0) var(--deco-rot, rotate(0deg)); }
+      50% { transform: translate3d(0, -8px, 0) var(--deco-rot, rotate(0deg)); }
+    }
+    @keyframes decoFloatSimple {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      50% { transform: translate3d(0, -6px, 0); }
+    }
+
+    .deco-dot-yellow,
+    .deco-dot-teal,
+    .deco-dot-blue,
+    .deco-star,
+    .deco-plus,
+    .deco-squiggle {
+      animation: decoFloatSimple 6s ease-in-out infinite;
+    }
+    .deco-dot-yellow.two { animation-delay: 1.2s; }
+    .deco-dot-yellow.four { animation-delay: 2.8s; }
+    .deco-dot-teal.two { animation-delay: 2.4s; }
+    .deco-dot-blue.two { animation-delay: 3.6s; }
+    .deco-dot-blue.three { animation-delay: 4.2s; }
+    .deco-star.one { animation-delay: 0.8s; }
+    .deco-star.two { animation-delay: 2s; }
+    .deco-plus.one { animation-delay: 1.6s; }
+    .deco-plus.two { animation-delay: 3.2s; }
+    .deco-squiggle.one { animation-delay: 2.6s; }
+
+    .deco-icon-book { --deco-rot: rotate(-8deg); animation: decoFloat 7s ease-in-out infinite; }
+    .deco-icon-pencil { --deco-rot: rotate(-15deg); animation: decoFloat 8s ease-in-out infinite; animation-delay: 1.4s; }
+    .deco-icon-bulb { --deco-rot: rotate(10deg); animation: decoFloat 7.5s ease-in-out infinite; animation-delay: 2.2s; }
+    .deco-icon-cap { --deco-rot: rotate(-6deg); animation: decoFloat 8.5s ease-in-out infinite; animation-delay: 3s; }
+    .deco-icon-check { --deco-rot: rotate(8deg); animation: decoFloat 7.2s ease-in-out infinite; animation-delay: 4s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .deco-dot-yellow, .deco-dot-teal, .deco-dot-blue,
+      .deco-star, .deco-plus, .deco-squiggle, .deco-icon {
+        animation: none !important;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .deco-circle-mid,
+      .deco-icon-bulb,
+      .deco-squiggle.one { display: none; }
+      .deco-blue-left,
+      .deco-mint { opacity: 0.5; }
+      .deco-icon-book { width: 52px; height: 52px; }
+      .deco-icon-pencil { width: 42px; height: 42px; }
+      .deco-icon-cap { width: 52px; height: 52px; }
+    }
+    @media (max-width: 560px) {
+      .deco-circle,
+      .deco-yellow-top { transform: scale(0.7); transform-origin: top left; }
+      .deco-yellow-top { transform-origin: top right; }
+      .deco-dot-yellow.one,
+      .deco-dot-blue.one,
+      .deco-dot-teal.one,
+      .deco-star.one,
+      .deco-plus.one,
+      .deco-icon-pencil,
+      .deco-icon-cap { display: none; }
+      .deco-blue-left,
+      .deco-mint,
+      .deco-yellow-bottom { opacity: 0.35; }
+      .deco-icon-book { top: 180px; right: 4%; width: 44px; height: 44px; opacity: 0.4; }
+      .deco-icon-check { bottom: 140px; right: 5%; width: 42px; height: 42px; opacity: 0.4; }
+    }
+
+    /* ============================================================
+       SINGLE ORBITING AMBIENT GLOW — travels the container border
+       Uses offset-path: rect() so the blob follows the actual
+       border of .shell, whatever its real size is. No translate()
+       percentages — those are relative to the blob, not the parent.
+       ============================================================ */
+
+    .shell {
+      position: relative;
+      isolation: isolate;
+    }
+
+    .shell::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 85vmin;
+      height: 85vmin;
+      max-width: 900px;
+      max-height: 900px;
+      border-radius: 50%;
+      background: radial-gradient(
+        circle at 50% 50%,
+        rgba(96, 165, 250, 0.32) 0%,
+        rgba(147, 197, 253, 0.22) 20%,
+        rgba(191, 219, 254, 0.14) 40%,
+        rgba(219, 234, 254, 0.07) 60%,
+        rgba(239, 246, 255, 0.03) 80%,
+        transparent 100%
+      );
+      pointer-events: none;
+      z-index: -1;
+      will-change: offset-distance, opacity;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      offset-path: rect(0 100% 100% 0 round 40px);
+      offset-anchor: center;
+      offset-rotate: 0deg;
+      offset-distance: 0%;
+      animation: blobOrbit 30s linear infinite;
+    }
+
+    /* offset-distance runs 0% to 100% around the rectangle. */
+    @keyframes blobOrbit {
+      0% { offset-distance: 0%; opacity: 0.65; }
+      25% { offset-distance: 25%; opacity: 0.85; }
+      50% { offset-distance: 50%; opacity: 0.70; }
+      75% { offset-distance: 75%; opacity: 0.85; }
+      100% { offset-distance: 100%; opacity: 0.65; }
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .shell::before {
+        animation: none;
+        offset-distance: 40%;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .shell::before {
+        width: 70vmin;
+        height: 70vmin;
+        max-width: 340px;
+        max-height: 340px;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="animations.css">
+</head>
+<body>
+  <div class="shell">
+    <div class="page">
+
+      <!-- ============================================================
+           FULL-PAGE BACKGROUND DECORATIONS
+           Extended set — pastel palette matching the site style.
+           ============================================================ -->
+      <div class="page-decor" aria-hidden="true">
+        <!-- Large background shapes -->
+        <span class="deco deco-circle"></span>
+        <span class="deco deco-yellow-top"></span>
+        <span class="deco deco-blue-left"></span>
+        <span class="deco deco-circle-mid"></span>
+        <span class="deco deco-mint"></span>
+        <span class="deco deco-yellow-bottom"></span>
+
+        <!-- Small floating shapes -->
+        <span class="deco deco-dot-yellow one"></span>
+        <span class="deco deco-dot-yellow two"></span>
+        <span class="deco deco-dot-yellow three"></span>
+        <span class="deco deco-dot-yellow four"></span>
+        <span class="deco deco-dot-teal one"></span>
+        <span class="deco deco-dot-teal two"></span>
+        <span class="deco deco-dot-teal three"></span>
+        <span class="deco deco-dot-blue one"></span>
+        <span class="deco deco-dot-blue two"></span>
+        <span class="deco deco-dot-blue three"></span>
+
+        <!-- Decorative icon outlines -->
+        <span class="deco deco-icon deco-icon-book">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z"></path>
+            <path d="M22 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z"></path>
+          </svg>
+        </span>
+        <span class="deco deco-icon deco-icon-pencil">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 20h9"></path>
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+          </svg>
+        </span>
+        <span class="deco deco-icon deco-icon-bulb">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18h6"></path>
+            <path d="M10 22h4"></path>
+            <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1.02.3 2 1.5 3.5.76.76 1.23 1.52 1.41 2.5"></path>
+          </svg>
+        </span>
+        <span class="deco deco-icon deco-icon-cap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 10v6"></path>
+            <path d="M2 10l10-5 10 5-10 5z"></path>
+            <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+          </svg>
+        </span>
+        <span class="deco deco-icon deco-icon-check">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 6 9 17l-5-5"></path>
+          </svg>
+        </span>
+
+        <!-- Tiny stars -->
+        <span class="deco deco-star one">
+          <svg viewBox="0 0 24 24" fill="currentColor" stroke="none">
+            <path d="M12 2l2.4 6.4L21 10l-5.4 4.2L17 21l-5-3.8L7 21l1.4-6.8L3 10l6.6-1.6z"></path>
+          </svg>
+        </span>
+        <span class="deco deco-star two">
+          <svg viewBox="0 0 24 24" fill="currentColor" stroke="none">
+            <path d="M12 2l2.4 6.4L21 10l-5.4 4.2L17 21l-5-3.8L7 21l1.4-6.8L3 10l6.6-1.6z"></path>
+          </svg>
+        </span>
+
+        <!-- Plus signs -->
+        <span class="deco deco-plus one">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+            <path d="M12 5v14M5 12h14"></path>
+          </svg>
+        </span>
+        <span class="deco deco-plus two">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+            <path d="M12 5v14M5 12h14"></path>
+          </svg>
+        </span>
+
+        <!-- Squiggly underline -->
+        <span class="deco deco-squiggle one">
+          <svg viewBox="0 0 60 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <path d="M2 8 Q 10 2, 18 8 T 34 8 T 50 8 T 66 8"></path>
+          </svg>
+        </span>
+      </div>
+
+      <header class="top-bar">
+        <a href="index.html" class="brand">
+          <span class="brand-mark" aria-hidden="true">
+            <img src="logo/logo.png" alt="">
+          </span>
+          <span class="brand-name">Study<span>Stack</span></span>
+        </a>
+
+        <label class="language-switcher">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"></circle>
+            <path d="M3 12h18M12 3c2.5 2.5 3.5 5.5 3.5 9s-1 6.5-3.5 9c-2.5-2.5-3.5-5.5-3.5-9S9.5 5.5 12 3Z"></path>
+          </svg>
+          <span data-i18n="nav.language">Language</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+          <select id="language-select" aria-label="Language">
+            <option value="en">English</option>
+            <option value="nl">Nederlands</option>
+          </select>
+        </label>
+      </header>
+
+      <section class="hero">
+        <div class="hero-inner">
+          <div class="hero-content">
+            <div class="hero-annotation-left">
+              <span data-i18n="hero.note">Better grades,<br>more free time.</span>
+              <svg class="arrow" viewBox="0 0 30 30" aria-hidden="true">
+                <path d="M22 4 C 12 6, 6 14, 10 24" />
+                <path d="M6 20 L 10 24 L 15 22" />
+              </svg>
+            </div>
+
+            <h1>
+              <span class="line" data-i18n="hero.title1">Your study tools,</span>
+              <span class="line accent" data-i18n="hero.title2">all in one place.</span>
+            </h1>
+
+            <p class="hero-subtitle" data-i18n="hero.subtitle">Useful study tools built for secondary school students.</p>
+
+            <a href="#tools" class="hero-cta">
+              <span data-i18n="hero.cta">Scroll to see the tools</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+            </a>
+          </div>
+
+          <div class="hero-visual">
+            <div class="hero-annotation-right">
+              <span data-i18n="hero.note2">Study smarter,<br>not harder.</span>
+              <svg class="swipe" viewBox="0 0 40 16" aria-hidden="true">
+                <path d="M2 12 C 12 4, 26 4, 36 10" />
+              </svg>
+            </div>
+
+            <svg class="hero-visual-svg" viewBox="0 0 400 340" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="200" cy="180" r="140" fill="#EAF2FE"/>
+
+              <rect x="80" y="225" width="240" height="44" rx="6" fill="#fff" stroke="#2563EB" stroke-width="3"/>
+              <line x1="80" y1="245" x2="320" y2="245" stroke="#BFDBFE" stroke-width="2"/>
+              <path d="M300 225 v44" stroke="#2563EB" stroke-width="3"/>
+
+              <rect x="95" y="170" width="210" height="44" rx="6" fill="#fff" stroke="#2563EB" stroke-width="3"/>
+              <line x1="95" y1="190" x2="305" y2="190" stroke="#BFDBFE" stroke-width="2"/>
+              <path d="M285 170 v44" stroke="#2563EB" stroke-width="3"/>
+
+              <rect x="110" y="115" width="180" height="44" rx="6" fill="#fff" stroke="#2563EB" stroke-width="3"/>
+              <line x1="110" y1="135" x2="290" y2="135" stroke="#BFDBFE" stroke-width="2"/>
+              <path d="M270 115 v44" stroke="#2563EB" stroke-width="3"/>
+
+              <line x1="130" y1="127" x2="200" y2="127" stroke="#BFDBFE" stroke-width="2"/>
+              <line x1="130" y1="147" x2="185" y2="147" stroke="#BFDBFE" stroke-width="2"/>
+
+              <path d="M310 100 l 6 -6 M316 100 l 6 6 M316 94 v -8" stroke="#FCD34D" stroke-width="3" stroke-linecap="round"/>
+              <path d="M62 100 l -6 -6 M56 100 l -6 6" stroke="#FCD34D" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="340" cy="160" r="4" fill="#6EE7B7"/>
+              <circle cx="70" cy="180" r="5" fill="#BFDBFE"/>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <section class="tools-section" id="tools">
+        <div class="section-head">
+          <div class="eyebrow" data-i18n="tools.eyebrow">Our Tools</div>
+          <h2>
+            <span data-i18n="tools.heading1">Less hassle.</span><br>
+            <span data-i18n="tools.heading2">Better studying.</span>
+          </h2>
+          <div class="annotation">
+            <span data-i18n="tools.note">Simple tools. Big results.</span>
+            <svg class="arrow" viewBox="0 0 32 30" aria-hidden="true">
+              <path d="M4 6 C 14 4, 22 10, 22 22" />
+              <path d="M18 18 L 22 22 L 26 18" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="tool-grid">
+          <a href="calculator/index.html" class="tool-card blue">
+            <span class="tool-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+                <line x1="8" y1="6" x2="16" y2="6"></line>
+                <line x1="8" y1="11" x2="8" y2="11"></line>
+                <line x1="12" y1="11" x2="12" y2="11"></line>
+                <line x1="16" y1="11" x2="16" y2="11"></line>
+                <line x1="8" y1="15" x2="8" y2="15"></line>
+                <line x1="12" y1="15" x2="12" y2="15"></line>
+                <line x1="16" y1="15" x2="16" y2="15"></line>
+                <line x1="8" y1="19" x2="8" y2="19"></line>
+                <line x1="12" y1="19" x2="12" y2="19"></line>
+                <line x1="16" y1="19" x2="16" y2="19"></line>
+              </svg>
+            </span>
+            <h3 data-i18n="tools.calc">Grade Calculator</h3>
+            <p data-i18n="tools.calcText">Calculate your grades, test averages and see what you need for your goal.</p>
+            <div class="tool-footer">
+              <span class="tool-tag" data-i18n="tools.calcTag">Quick & easy</span>
+              <span class="tool-arrow" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path>
+                </svg>
+              </span>
+            </div>
+          </a>
+
+          <a href="pomodoro/index.html" class="tool-card teal">
+            <span class="tool-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="13" r="8"></circle>
+                <path d="M12 9v4l2 2"></path>
+                <path d="M9 2h6"></path>
+                <path d="M12 2v3"></path>
+                <path d="M19 5l-1.5 1.5"></path>
+                <path d="M5 5l1.5 1.5"></path>
+              </svg>
+            </span>
+            <h3 data-i18n="tools.pomo">Pomodoro Timer</h3>
+            <p data-i18n="tools.pomoText">Stay focused with the Pomodoro technique. Work, take a break, repeat.</p>
+            <div class="tool-footer">
+              <span class="tool-tag" data-i18n="tools.pomoTag">Focus better</span>
+              <span class="tool-arrow" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path>
+                </svg>
+              </span>
+            </div>
+          </a>
+
+          <a href="vocab/index.html" class="tool-card purple">
+            <span class="tool-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 10v6"></path>
+                <path d="M2 10l10-5 10 5-10 5z"></path>
+                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+              </svg>
+            </span>
+            <h3 data-i18n="tools.vocab">Word Trainer</h3>
+            <p data-i18n="tools.vocabText">Learn and practice vocabulary for your tests and improve your language skills.</p>
+            <div class="tool-footer">
+              <span class="tool-tag" data-i18n="tools.vocabTag">Build your vocabulary</span>
+              <span class="tool-arrow" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path>
+                </svg>
+              </span>
+            </div>
+          </a>
+
+          <a href="planner/index.html" class="tool-card amber">
+            <span class="tool-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+                <path d="M16 2v4M8 2v4M3 10h18"></path>
+                <path d="M9 15l2 2 4-4"></path>
+              </svg>
+            </span>
+            <h3 data-i18n="tools.planner">Test Week Planner</h3>
+            <p data-i18n="tools.plannerText">Keep track of your tests, subjects and study plan. Be prepared, not stressed.</p>
+            <div class="tool-footer">
+              <span class="tool-tag" data-i18n="tools.plannerTag">Plan your success</span>
+              <span class="tool-arrow" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path>
+                </svg>
+              </span>
+            </div>
+          </a>
+
+          <a href="flashcards/index.html" class="tool-card rose">
+            <span class="tool-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="6" width="14" height="14" rx="2"></rect>
+                <path d="M7 6V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-2"></path>
+              </svg>
+            </span>
+            <h3 data-i18n="tools.flashcards">Flashcards</h3>
+            <p data-i18n="tools.flashcardsText">Learn vocabulary and facts with a spaced repetition system that adapts to what you already know.</p>
+            <div class="tool-footer">
+              <span class="tool-tag" data-i18n="tools.flashcardsTag">Remember more</span>
+              <span class="tool-arrow" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path>
+                </svg>
+              </span>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <div id="dos"></div>
+      <div id="donts"></div>
+      <div id="about"></div>
+
+      <footer class="footer">
+        <div class="footer-left">
+          <strong data-i18n="footer.made">StudyStack</strong>
+          <span data-i18n="footer.madeBy">· made by students, for students</span>
+        </div>
+        <div class="footer-right">
+          <span data-i18n="footer.note">No account · everything stays in your browser</span>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      "use strict";
+
+      const SCROLL_KEY = 'homepageScrollPos';
+      const FROM_TOOL_KEY = 'homepageReturningFromTool';
+      const MAX_AGE_MS = 30 * 60 * 1000;
+
+      function saveHomeScrollPos() {
+        try {
+          sessionStorage.setItem(SCROLL_KEY, JSON.stringify({
+            pos: window.scrollY || 0,
+            at: Date.now()
+          }));
+        } catch (e) {}
+      }
+      function restoreHomeScrollPos() {
+        try {
+          const raw = sessionStorage.getItem(SCROLL_KEY);
+          if (!raw) return;
+          if (sessionStorage.getItem(FROM_TOOL_KEY) !== '1') {
+            sessionStorage.removeItem(SCROLL_KEY);
+            return;
+          }
+          const payload = JSON.parse(raw);
+          if (!payload || typeof payload.pos !== 'number') return;
+          if (payload.at && (Date.now() - payload.at) > MAX_AGE_MS) return;
+          window.scrollTo({ top: payload.pos, behavior: 'instant' });
+          sessionStorage.removeItem(FROM_TOOL_KEY);
+        } catch (e) {}
+      }
+      document.querySelectorAll('a[href*="index.html"]').forEach(function(link) {
+        if (link.closest('.brand')) return;
+        link.addEventListener('click', function() {
+          saveHomeScrollPos();
+          try { sessionStorage.setItem(FROM_TOOL_KEY, '1'); } catch (e) {}
+        });
+      });
+      window.addEventListener('pagehide', saveHomeScrollPos);
+      if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        setTimeout(restoreHomeScrollPos, 0);
+      } else {
+        window.addEventListener('DOMContentLoaded', function() {
+          setTimeout(restoreHomeScrollPos, 0);
+        });
+      }
+
+      const translations = {
+        en: {
+          "nav.tools": "Tools",
+          "nav.dos": "Do's",
+          "nav.donts": "Don'ts",
+          "nav.about": "About",
+          "nav.language": "Language",
+          "hero.note": "Better grades,<br>more free time.",
+          "hero.title1": "Your study tools,",
+          "hero.title2": "all in one place.",
+          "hero.subtitle": "Useful study tools built for secondary school students.",
+          "hero.cta": "Scroll to see the tools",
+          "hero.note2": "Study smarter,<br>not harder.",
+          "tools.eyebrow": "Our Tools",
+          "tools.heading1": "Less hassle.",
+          "tools.heading2": "Better studying.",
+          "tools.note": "Simple tools. Big results.",
+          "tools.calc": "Grade Calculator",
+          "tools.calcText": "Calculate your grades, test averages and see what you need for your goal.",
+          "tools.calcTag": "Quick & easy",
+          "tools.pomo": "Pomodoro Timer",
+          "tools.pomoText": "Stay focused with the Pomodoro technique. Work, take a break, repeat.",
+          "tools.pomoTag": "Focus better",
+          "tools.vocab": "Word Trainer",
+          "tools.vocabText": "Learn and practice vocabulary for your tests and improve your language skills.",
+          "tools.vocabTag": "Build your vocabulary",
+          "tools.planner": "Test Week Planner",
+          "tools.plannerText": "Keep track of your tests, subjects and study plan. Be prepared, not stressed.",
+          "tools.plannerTag": "Plan your success",
+          "tools.flashcards": "Flashcards",
+          "tools.flashcardsText": "Learn vocabulary and facts with a spaced repetition system that adapts to what you already know.",
+          "tools.flashcardsTag": "Remember more",
+          "footer.made": "StudyStack",
+          "footer.madeBy": "· made by students, for students",
+          "footer.note": "No account · everything stays in your browser"
+        },
+        nl: {
+          "nav.tools": "Tools",
+          "nav.dos": "Do's",
+          "nav.donts": "Don'ts",
+          "nav.about": "Over",
+          "nav.language": "Taal",
+          "hero.note": "Betere cijfers,<br>meer vrije tijd.",
+          "hero.title1": "Al je studiehulpmiddelen,",
+          "hero.title2": "op één plek.",
+          "hero.subtitle": "Handige studied tools voor scholieren.",
+          "hero.cta": "Scroll naar de tools",
+          "hero.note2": "Slimmer leren,<br>niet harder.",
+          "tools.eyebrow": "Onze Tools",
+          "tools.heading1": "Minder gedoe.",
+          "tools.heading2": "Beter leren.",
+          "tools.note": "Eenvoudige tools. Groot resultaat.",
+          "tools.calc": "Cijfercalculator",
+          "tools.calcText": "Bereken je cijfers, gemiddeldes en zie wat je nodig hebt voor je doel.",
+          "tools.calcTag": "Snel & makkelijk",
+          "tools.pomo": "Pomodoro Timer",
+          "tools.pomoText": "Blijf gefocust met de Pomodoro-techniek. Werk, pauzeer, herhaal.",
+          "tools.pomoTag": "Beter focussen",
+          "tools.vocab": "Woordtrainer",
+          "tools.vocabText": "Leer en oefen woordjes voor je toetsen en verbeter je taalvaardigheid.",
+          "tools.vocabTag": "Bouw je woordenschat",
+          "tools.planner": "Testweek Planner",
+          "tools.plannerText": "Houd je toetsen, vakken en studieplan bij. Wees voorbereid, niet gestrest.",
+          "tools.plannerTag": "Plan je succes",
+          "tools.flashcards": "Flashcards",
+          "tools.flashcardsText": "Leer woordjes en feiten met een spaced repetition systeem dat zich aanpast aan wat je al kent.",
+          "tools.flashcardsTag": "Onthoud meer",
+          "footer.made": "StudyStack",
+          "footer.madeBy": "· gemaakt door studenten, voor studenten",
+          "footer.note": "Geen account · alles blijft in je browser"
+        }
+      };
+
+      const languageSelect = document.getElementById('language-select');
+
+      function applyLanguage(language) {
+        const lang = translations[language] ? language : 'en';
+        document.documentElement.lang = lang;
+        document.title = lang === 'en'
+          ? 'StudyStack · Study smarter, not harder'
+          : 'StudyStack · Slimmer leren, niet harder';
+        document.querySelectorAll('[data-i18n]').forEach(function(el) {
+          const key = el.dataset.i18n;
+          if (translations[lang][key] !== undefined) {
+            if (key === 'hero.note' || key === 'hero.note2') {
+              el.innerHTML = translations[lang][key];
+            } else {
+              el.textContent = translations[lang][key];
+            }
+          }
+        });
+        languageSelect.value = lang;
+        try { localStorage.setItem('studystack-language', lang); } catch (e) {}
+      }
+
+      languageSelect.addEventListener('change', function() {
+        applyLanguage(languageSelect.value);
+      });
+      applyLanguage(localStorage.getItem('studystack-language') || 'en');
+    })();
+  </script>
+  <script src="page-intro.js"></script>
+</body>
+</html>

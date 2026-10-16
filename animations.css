@@ -1,0 +1,1330 @@
+/* ============================================================
+   StudyStack — Animation overhaul v4
+   "Soft Pop + Blue Accent"
+   Every interactive element softly pops out on hover with a
+   blue accent glow. Loaded after theme.css and inline styles.
+   ============================================================ */
+
+:root {
+  /* ---- Motion curves ---- */
+  --ease-fluid: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-back:  cubic-bezier(0.34, 1.35, 0.64, 1);
+  --ease-inout: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ---- Durations ---- */
+  --dur-fast:  0.22s;
+  --dur-hover: 0.42s;
+  --dur-slow:  0.60s;
+  --dur-press: 0.16s;
+
+  /* ---- Blue accent palette ---- */
+  --accent:        #2563EB;
+  --accent-hover:  #1D4ED8;
+  --accent-soft:   #3B82F6;
+  --accent-light:  #93C5FD;
+  --accent-pale:   #BFDBFE;
+  --accent-faint:  #DBEAFE;
+  --accent-wash:   #EFF6FF;
+
+  /* ---- Pop-out shadow (blue glow) ---- */
+  --pop-shadow:
+    0 18px 36px -10px rgba(37, 99, 235, 0.22),
+    0 8px 18px -6px rgba(37, 99, 235, 0.12),
+    0 0 0 1px rgba(147, 197, 253, 0.55);
+  --pop-shadow-strong:
+    0 26px 52px -12px rgba(37, 99, 235, 0.32),
+    0 12px 26px -8px rgba(37, 99, 235, 0.18),
+    0 0 0 1px rgba(147, 197, 253, 0.75);
+  --pop-shadow-soft:
+    0 10px 22px -8px rgba(37, 99, 235, 0.16),
+    0 4px 10px -4px rgba(37, 99, 235, 0.08),
+    0 0 0 1px rgba(191, 219, 254, 0.55);
+
+  /* ---- Text glow ---- */
+  --text-glow:
+    0 0 14px rgba(37, 99, 235, 0.28),
+    0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+/* ============================================================
+   1. GLOBAL TRANSITION BASELINE
+   ============================================================ */
+*,
+*::before,
+*::after {
+  transition-property:
+    transform, opacity, box-shadow, border-color,
+    background-color, color, text-shadow, filter !important;
+  transition-duration: var(--dur-hover) !important;
+  transition-timing-function: var(--ease-fluid) !important;
+}
+
+/* Non-visual elements get no transition */
+html, body, head, script, style, meta, link, title,
+audio, video, source, br, hr,
+[hidden],
+input[type="file"] {
+  transition-property: none !important;
+}
+
+/* ============================================================
+   2. GPU PROMOTION
+   ============================================================ */
+.tool-card,
+.test-card,
+.plan-card,
+.study-card,
+.timer-card,
+.done-card,
+.setup-card,
+.quick-add-card,
+.result-card,
+.example-card,
+.comparison-card,
+.example-box,
+.explanation,
+.reco-block,
+.ocr-zone,
+.ocr-preview,
+.import-preview,
+.plan-detail,
+.grade-row,
+.equal-weight-toggle,
+.progress-header,
+.timer-options,
+.custom-panel,
+.deck-card,
+.mode-card,
+.card-row,
+.paste-card,
+.modal,
+.answer-input,
+.field-input,
+.fill-input,
+.quick-add-input,
+.shared-weight-input,
+.ocr-input,
+.setup-textarea,
+.ai-chat-shell,
+.ai-timetable-content,
+.confidence-btn,
+.preset-btn,
+.session-preset,
+.tab-btn,
+.ai-tab,
+.modal-tab,
+.prompt-viewer,
+.prompt-viewer-tab,
+.prompt-viewer-toggle,
+.prompt-viewer-copy,
+.back-link,
+.language-switcher,
+.ambient-selector,
+.session-sound,
+.session-ambient,
+.utility-sound,
+.utility-float,
+.advanced-toggle,
+.quick-add-item,
+.quick-add-btn,
+.quick-add-diff button,
+.study-segmented button,
+.segmented button,
+.ai-toggle button,
+.ocr-add-row,
+.btn,
+.btn-primary,
+.btn-secondary,
+.btn-ghost,
+.btn-add,
+.btn-clear,
+.btn-calculate,
+.btn-continue,
+.btn-practice-mode,
+.btn-plan-start,
+.btn-fill-marker,
+.btn-edit,
+.btn-danger-ghost,
+.btn-danger-reset,
+.btn-skip,
+.btn-long-break,
+.btn-vision,
+.hero-cta,
+.scroll-hint-inner,
+.tool-arrow,
+.tool-icon,
+.remove-btn,
+.quick-add-remove,
+.modal-close,
+.timer-card-fullscreen,
+.session-fullscreen-btn,
+.fullscreen-exit,
+.ai-send-btn,
+.ai-avatar,
+.ai-bridge-icon,
+.reco-icon,
+.done-icon,
+.progress-title-icon,
+.example-card-icon,
+.ocr-zone-icon,
+.test-meta-item,
+.badge,
+.plan-duration,
+.round-chip,
+.done-stat,
+.feedback-strip,
+.session-phase,
+.session-chapter,
+.mode-label,
+.pv-new,
+.reset-toast,
+.ai-context-toast,
+.fill-panel,
+.rating-btn,
+.deck-subject-pill,
+.deck-tag,
+.legend-item,
+.legend-dot,
+.legend-count,
+.card-box-badge,
+.paste-card-icon,
+.fc-face {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  will-change: transform, box-shadow, opacity;
+}
+
+/* ============================================================
+   3. CARDS & TILES — SOFT POP OUT + BLUE ACCENT
+   ============================================================ */
+.tool-card,
+.test-card,
+.plan-card,
+.study-card,
+.timer-card,
+.done-card,
+.setup-card,
+.quick-add-card,
+.result-card,
+.reco-block,
+.ocr-zone,
+.ocr-preview,
+.import-preview,
+.progress-header,
+.timer-options,
+.custom-panel,
+.ai-chat-shell,
+.ai-timetable-content,
+.prompt-viewer,
+.explanation,
+.deck-card,
+.mode-card,
+.paste-card,
+.fc-face {
+  transition:
+    transform var(--dur-hover) var(--ease-back),
+    box-shadow var(--dur-hover) var(--ease-fluid),
+    border-color var(--dur-hover) var(--ease-fluid),
+    background-color var(--dur-hover) var(--ease-fluid) !important;
+}
+
+/* Big soft pop for major cards */
+.tool-card:hover,
+.deck-card:hover,
+.mode-card:hover,
+.example-card:hover,
+.comparison-card:hover,
+.example-box:hover,
+.reco-block:hover,
+.ocr-zone:hover,
+.ocr-preview:hover,
+.import-preview:hover,
+.paste-card:hover,
+.fc-3d:hover {
+  transform: translate3d(0, -6px, 0) scale(1.018) !important;
+  box-shadow: var(--pop-shadow-strong) !important;
+  border-color: var(--accent-light) !important;
+}
+
+/* Medium pop for content cards */
+.plan-card:hover,
+.study-card:hover,
+.timer-card:hover,
+.done-card:hover,
+.setup-card:hover,
+.result-card:hover,
+.progress-header:hover,
+.ai-chat-shell:hover,
+.ai-timetable-content:hover,
+.prompt-viewer:hover,
+.explanation:hover,
+.timer-options:hover,
+.custom-panel:hover,
+.quick-add-card:hover {
+  transform: translate3d(0, -5px, 0) !important;
+  box-shadow: var(--pop-shadow) !important;
+  border-color: var(--accent-pale) !important;
+}
+
+/* Small pop for list rows */
+.plan-detail:hover,
+.grade-row:hover,
+.card-row:hover,
+.quick-add-item:hover,
+.deck-card:hover .deck-tag {
+  transform: translate3d(0, -3px, 0) !important;
+  box-shadow: var(--pop-shadow-soft) !important;
+  border-color: var(--accent-pale) !important;
+}
+
+.equal-weight-toggle:hover {
+  transform: translate3d(0, -2px, 0) !important;
+  box-shadow: var(--pop-shadow-soft) !important;
+  border-color: var(--accent-pale) !important;
+}
+
+/* Test cards keep their urgency stripe but earn the blue glow */
+.test-card:hover {
+  transform: translate3d(0, -6px, 0) scale(1.012) !important;
+  box-shadow: var(--pop-shadow-strong) !important;
+}
+
+/* Meta pills */
+.test-meta-item:hover {
+  transform: translate3d(0, -2px, 0) !important;
+  box-shadow: var(--pop-shadow-soft) !important;
+  border-color: var(--accent-pale) !important;
+  background: var(--accent-wash) !important;
+  color: var(--accent-hover) !important;
+}
+.test-meta-item:hover svg { color: var(--accent) !important; }
+.test-meta-item:hover strong { color: var(--accent-hover) !important; }
+
+/* ============================================================
+   4. HEADINGS & TEXT — BLUE ACCENT ON HOVER
+   ============================================================ */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.hero h1,
+.section-header h2,
+.plan-subject,
+.deck-detail-title,
+.word-prompt,
+.type-prompt-text,
+.fc-face-content,
+.mode-title,
+.quick-add-title,
+.paste-card-title,
+.legend-explain-title,
+.modal-header h3,
+.done-title,
+.session-done h3,
+.reco-title,
+.progress-title,
+.test-subject,
+.test-subject-text,
+.session-subject,
+.ai-content h1,
+.ai-content h2,
+.ai-content h3,
+.ai-content h4,
+.ai-day {
+  transition:
+    color var(--dur-hover) var(--ease-fluid),
+    text-shadow var(--dur-hover) var(--ease-fluid),
+    transform var(--dur-hover) var(--ease-back) !important;
+  cursor: default;
+}
+
+h1:hover,
+h2:hover,
+h3:hover,
+h4:hover,
+h5:hover,
+h6:hover,
+.hero h1:hover,
+.section-header h2:hover,
+.plan-subject:hover,
+.deck-detail-title:hover,
+.word-prompt:hover,
+.type-prompt-text:hover,
+.mode-title:hover,
+.quick-add-title:hover,
+.paste-card-title:hover,
+.legend-explain-title:hover,
+.modal-header h3:hover,
+.done-title:hover,
+.reco-title:hover,
+.progress-title:hover,
+.test-subject:hover,
+.test-subject-text:hover,
+.session-subject:hover {
+  color: var(--accent) !important;
+  text-shadow: var(--text-glow) !important;
+}
+
+/* Body text — subtle blue on hover, no transform */
+.hero-desc:hover,
+.ai-content p:hover,
+.ai-bubble:hover,
+.explanation p:hover,
+.mode-desc:hover,
+.paste-card-hint:hover,
+.legend-explain-text:hover,
+.legend-explain-row:hover,
+.field-hint:hover,
+.setup-desc:hover,
+.done-text:hover,
+.reco-text:hover,
+.session-done p:hover {
+  color: var(--accent-hover) !important;
+  text-shadow: 0 0 10px rgba(37, 99, 235, 0.18) !important;
+}
+
+/* Labels pop subtly */
+.field-label:hover,
+.fill-label:hover,
+.custom-field label:hover,
+.quick-add-label:hover,
+.setup-label:hover,
+.paste-label:hover,
+.fc-face-label:hover,
+.plan-detail-label:hover,
+.done-stat-label:hover,
+.progress-title:hover,
+.deck-meta-item:hover strong,
+.meta-item:hover strong,
+.study-meta-item:hover strong {
+  color: var(--accent) !important;
+}
+
+/* Inline strong inside a hovered card also lights up */
+.deck-card:hover h3,
+.mode-card:hover .mode-title,
+.plan-detail:hover .plan-detail-value,
+.card-row:hover .card-row-front,
+.card-row:hover .card-row-back,
+.done-stat:hover .done-stat-value,
+.reco-block:hover .reco-title,
+.paste-card:hover .paste-card-title,
+.quick-add-item:hover .quick-add-item-title {
+  color: var(--accent-hover) !important;
+  text-shadow: 0 0 12px rgba(37, 99, 235, 0.18) !important;
+}
+
+/* Meta text inside cards */
+.deck-meta-item:hover,
+.study-meta-item:hover,
+.meta-item:hover,
+.test-meta-item:hover,
+.reco-progress-item:hover,
+.session-info-item:hover,
+.legend-item:hover {
+  color: var(--accent) !important;
+}
+
+/* ============================================================
+   5. BUTTONS — SOFT POP + BLUE ACCENT
+   ============================================================ */
+.btn,
+.btn-primary,
+.btn-secondary,
+.btn-ghost,
+.btn-add,
+.btn-clear,
+.btn-calculate,
+.btn-continue,
+.btn-practice-mode,
+.btn-plan-start,
+.btn-fill-marker,
+.btn-edit,
+.btn-danger-ghost,
+.btn-danger-reset,
+.btn-skip,
+.btn-long-break,
+.btn-vision,
+.hero-cta,
+.preset-btn,
+.tab-btn,
+.ai-tab,
+.modal-tab,
+.session-preset,
+.confidence-btn,
+.quick-add-btn,
+.quick-add-diff button,
+.study-segmented button,
+.segmented button,
+.ai-toggle button,
+.prompt-viewer-tab,
+.prompt-viewer-toggle,
+.prompt-viewer-copy,
+.advanced-toggle,
+.ocr-add-row,
+.scroll-hint-inner,
+.back-link,
+.language-switcher,
+.utility-sound,
+.utility-float,
+.ambient-selector,
+.session-sound,
+.session-ambient,
+.rating-btn {
+  transition:
+    transform var(--dur-hover) var(--ease-back),
+    box-shadow var(--dur-hover) var(--ease-fluid),
+    background-color var(--dur-hover) var(--ease-fluid),
+    color var(--dur-hover) var(--ease-fluid),
+    border-color var(--dur-hover) var(--ease-fluid),
+    text-shadow var(--dur-hover) var(--ease-fluid),
+    opacity var(--dur-hover) var(--ease-fluid) !important;
+}
+
+/* Primary pop — bigger scale, blue glow */
+.btn:hover,
+.btn-primary:hover,
+.btn-calculate:hover,
+.btn-plan-start:hover,
+.btn-practice-mode:hover,
+.btn-vision:hover,
+.btn-add:hover,
+.hero-cta:hover,
+.quick-add-btn:hover,
+.btn-continue:hover,
+.btn-long-break:hover {
+  transform: translate3d(0, -3px, 0) scale(1.04) !important;
+  box-shadow:
+    0 18px 34px -10px rgba(37, 99, 235, 0.45),
+    0 8px 18px -4px rgba(37, 99, 235, 0.25) !important;
+}
+
+.btn:active,
+.btn-primary:active,
+.btn-calculate:active,
+.btn-plan-start:active,
+.btn-practice-mode:active,
+.btn-vision:active,
+.btn-add:active,
+.hero-cta:active,
+.quick-add-btn:active,
+.btn-continue:active,
+.btn-long-break:active {
+  transform: translate3d(0, 0, 0) scale(0.98) !important;
+  transition-duration: var(--dur-press) !important;
+  box-shadow:
+    0 4px 10px -2px rgba(37, 99, 235, 0.3) !important;
+}
+
+/* Secondary pop */
+.btn-secondary:hover,
+.btn-ghost:hover,
+.btn-clear:hover,
+.btn-edit:hover,
+.btn-fill-marker:hover,
+.btn-danger-ghost:hover,
+.btn-danger-reset:hover,
+.ocr-add-row:hover {
+  transform: translate3d(0, -3px, 0) scale(1.025) !important;
+  box-shadow: var(--pop-shadow) !important;
+  border-color: var(--accent-light) !important;
+  color: var(--accent-hover) !important;
+}
+
+.btn-secondary:active,
+.btn-ghost:active,
+.btn-clear:active,
+.btn-edit:active,
+.btn-fill-marker:active,
+.btn-danger-ghost:active,
+.btn-danger-reset:active,
+.ocr-add-row:active {
+  transform: translate3d(0, 0, 0) scale(0.98) !important;
+  transition-duration: var(--dur-press) !important;
+}
+
+/* Skip button — horizontal nudge, blue glow */
+.btn-skip:hover {
+  transform: translate3d(3px, -2px, 0) scale(1.02) !important;
+  box-shadow: var(--pop-shadow) !important;
+  border-color: var(--accent-light) !important;
+}
+.btn-skip:active {
+  transform: translate3d(0, 0, 0) scale(0.97) !important;
+  transition-duration: var(--dur-press) !important;
+}
+
+/* Tabs / chips / segments — soft pop */
+.preset-btn:hover,
+.tab-btn:hover,
+.ai-tab:hover,
+.modal-tab:hover,
+.session-preset:hover,
+.confidence-btn:hover,
+.quick-add-diff button:hover,
+.study-segmented button:hover,
+.segmented button:hover,
+.ai-toggle button:hover,
+.prompt-viewer-tab:hover {
+  transform: scale(1.055) translateZ(0) !important;
+  box-shadow: var(--pop-shadow-soft) !important;
+  border-color: var(--accent-pale) !important;
+  color: var(--accent-hover) !important;
+}
+
+.preset-btn:active,
+.tab-btn:active,
+.ai-tab:active,
+.modal-tab:active,
+.session-preset:active,
+.confidence-btn:active,
+.quick-add-diff button:active,
+.study-segmented button:active,
+.segmented button:active,
+.ai-toggle button:active,
+.prompt-viewer-tab:active {
+  transform: scale(0.97) translateZ(0) !important;
+  transition-duration: var(--dur-press) !important;
+}
+
+/* Active tab state — blue solid */
+.preset-btn.active,
+.tab-btn.active,
+.ai-tab.active,
+.modal-tab.active,
+.session-preset.active,
+.prompt-viewer-tab.active,
+.study-segmented button.active,
+.segmented button.active,
+.ai-toggle button.active,
+.quick-add-diff button.active {
+  transform: scale(1) translateZ(0) !important;
+  background: var(--accent) !important;
+  color: #FFFFFF !important;
+  border-color: var(--accent) !important;
+  box-shadow:
+    0 6px 16px -4px rgba(37, 99, 235, 0.4),
+    0 0 0 1px rgba(37, 99, 235, 0.5) !important;
+}
+.preset-btn.active:hover,
+.tab-btn.active:hover,
+.ai-tab.active:hover,
+.modal-tab.active:hover,
+.session-preset.active:hover,
+.prompt-viewer-tab.active:hover,
+.study-segmented button.active:hover,
+.segmented button.active:hover,
+.ai-toggle button.active:hover,
+.quick-add-diff button.active:hover {
+  transform: scale(1.045) translateZ(0) !important;
+  background: var(--accent-hover) !important;
+}
+
+/* Utility pills */
+.language-switcher:hover,
+.utility-sound:hover,
+.utility-float:hover,
+.ambient-selector:hover,
+.session-sound:hover,
+.session-ambient:hover {
+  transform: translate3d(0, -3px, 0) scale(1.025) !important;
+  box-shadow: var(--pop-shadow) !important;
+  border-color: var(--accent-light) !important;
+  color: var(--accent-hover) !important;
+}
+
+.back-link:hover {
+  transform: translate3d(-3px, -1px, 0) !important;
+  box-shadow: var(--pop-shadow) !important;
+  border-color: var(--accent-light) !important;
+  color: var(--accent-hover) !important;
+}
+
+.scroll-hint-inner:hover {
+  transform: translate3d(0, -3px, 0) scale(1.035) !important;
+  box-shadow: var(--pop-shadow) !important;
+}
+
+.prompt-viewer-copy:hover,
+.prompt-viewer-toggle:hover,
+.advanced-toggle:hover {
+  transform: translate3d(0, -3px, 0) scale(1.03) !important;
+  box-shadow: var(--pop-shadow) !important;
+  border-color: var(--accent-light) !important;
+}
+
+/* Press resets */
+.prompt-viewer-copy:active,
+.prompt-viewer-toggle:active,
+.advanced-toggle:active,
+.language-switcher:active,
+.back-link:active,
+.utility-sound:active,
+.utility-float:active,
+.ambient-selector:active,
+.session-sound:active,
+.session-ambient:active,
+.scroll-hint-inner:active {
+  transform: translate3d(0, 0, 0) scale(0.97) !important;
+  transition-duration: var(--dur-press) !important;
+}
+
+/* Rating buttons (flashcards) */
+.rating-btn:hover {
+  transform: translate3d(0, -4px, 0) scale(1.03) !important;
+  box-shadow: var(--pop-shadow) !important;
+}
+.rating-btn:active {
+  transform: translate3d(0, -1px, 0) scale(0.97) !important;
+  transition-duration: var(--dur-press) !important;
+}
+.rating-btn.wrong:hover { box-shadow: 0 18px 34px -10px rgba(190, 18, 60, 0.3) !important; }
+.rating-btn.good:hover  { box-shadow: 0 18px 34px -10px rgba(180, 83, 9, 0.3) !important; }
+.rating-btn.easy:hover  { box-shadow: 0 18px 34px -10px rgba(4, 120, 87, 0.3) !important; }
+
+/* ============================================================
+   6. ICONS — POP OUT WITH BLUE ACCENT
+   ============================================================ */
+.tool-icon,
+.example-card-icon,
+.ocr-zone-icon,
+.progress-title-icon,
+.reco-icon,
+.tool-arrow,
+.ai-avatar,
+.ai-bridge-icon,
+.done-icon,
+.timer-card-fullscreen,
+.session-fullscreen-btn,
+.fullscreen-exit,
+.modal-close,
+.remove-btn,
+.quick-add-remove,
+.badge svg,
+.btn svg,
+.plan-duration svg,
+.session-phase svg,
+.ai-send-btn svg,
+.round-chip svg,
+.paste-card-icon,
+.deck-card svg,
+.mode-icon,
+.card-box-badge,
+.legend-dot {
+  transition:
+    transform var(--dur-hover) var(--ease-back),
+    opacity var(--dur-hover) var(--ease-fluid),
+    background-color var(--dur-hover) var(--ease-fluid),
+    color var(--dur-hover) var(--ease-fluid),
+    border-color var(--dur-hover) var(--ease-fluid),
+    box-shadow var(--dur-hover) var(--ease-fluid) !important;
+}
+
+.tool-card:hover .tool-icon,
+.example-card:hover .example-card-icon,
+.ocr-zone:hover .ocr-zone-icon,
+.paste-card:hover .paste-card-icon,
+.mode-card:hover .mode-icon,
+.deck-card:hover .deck-subject-pill {
+  transform: scale(1.14) translateZ(0) !important;
+  background: var(--accent-wash) !important;
+  color: var(--accent-hover) !important;
+  border-color: var(--accent-pale) !important;
+  box-shadow:
+    0 10px 22px -8px rgba(37, 99, 235, 0.35),
+    0 0 0 1px rgba(147, 197, 253, 0.6) !important;
+}
+
+.tool-card:hover .tool-arrow {
+  transform: translate3d(5px, 0, 0) scale(1.1) !important;
+  color: var(--accent-hover) !important;
+}
+
+.badge:hover svg,
+.btn:hover svg,
+.btn-primary:hover svg,
+.btn-secondary:hover svg,
+.btn-calculate:hover svg,
+.btn-plan-start:hover svg,
+.btn-practice-mode:hover svg,
+.btn-continue:hover svg,
+.hero-cta:hover svg {
+  transform: scale(1.14) translateZ(0) !important;
+}
+
+.ai-send-btn:hover:not(:disabled) svg {
+  transform: scale(1.18) rotate(-10deg) translateZ(0) !important;
+}
+
+.timer-card-fullscreen:hover,
+.session-fullscreen-btn:hover,
+.fullscreen-exit:hover,
+.modal-close:hover {
+  transform: scale(1.12) translateZ(0) !important;
+  color: var(--accent-hover) !important;
+  border-color: var(--accent-light) !important;
+  box-shadow: var(--pop-shadow-soft) !important;
+}
+.timer-card-fullscreen:active,
+.session-fullscreen-btn:active,
+.fullscreen-exit:active,
+.modal-close:active {
+  transform: scale(0.94) translateZ(0) !important;
+  transition-duration: var(--dur-press) !important;
+}
+
+.remove-btn:hover,
+.quick-add-remove:hover {
+  transform: scale(1.14) rotate(8deg) translateZ(0) !important;
+  box-shadow:
+    0 12px 24px -8px rgba(190, 18, 60, 0.35),
+    0 0 0 1px rgba(252, 165, 165, 0.6) !important;
+}
+.remove-btn:active,
+.quick-add-remove:active {
+  transform: scale(0.94) rotate(0deg) translateZ(0) !important;
+  transition-duration: var(--dur-press) !important;
+}
+
+/* Progress title icon */
+.progress-title:hover .progress-title-icon,
+.section-header:hover .progress-title-icon {
+  transform: scale(1.12) rotate(-4deg) !important;
+  box-shadow:
+    0 10px 22px -8px rgba(37, 99, 235, 0.4),
+    0 0 0 1px rgba(147, 197, 253, 0.6) !important;
+}
+
+/* Section header icons */
+.section-header h2 svg {
+  transition: transform var(--dur-hover) var(--ease-back),
+              color var(--dur-hover) var(--ease-fluid) !important;
+}
+.section-header:hover h2 svg {
+  transform: scale(1.12) rotate(-6deg) translateZ(0) !important;
+  color: var(--accent-hover) !important;
+}
+
+/* Badge / chip pills */
+.badge:hover,
+.plan-duration:hover,
+.round-chip:hover,
+.deck-subject-pill:hover,
+.deck-tag:hover {
+  transform: translate3d(0, -2px, 0) scale(1.05) !important;
+  box-shadow: var(--pop-shadow-soft) !important;
+  border-color: var(--accent-pale) !important;
+  background: var(--accent-wash) !important;
+  color: var(--accent-hover) !important;
+}
+
+/* Legend items */
+.legend-item:hover {
+  transform: translate3d(0, -3px, 0) !important;
+  box-shadow: var(--pop-shadow) !important;
+  border-color: var(--accent-light) !important;
+  background: var(--accent-wash) !important;
+  color: var(--accent-hover) !important;
+}
+.legend-item:hover .legend-dot {
+  transform: scale(1.3) !important;
+}
+.legend-item:hover .legend-count {
+  background: var(--accent) !important;
+  color: #FFFFFF !important;
+}
+
+/* ============================================================
+   7. INPUTS — SOFT BLUE FOCUS
+   ============================================================ */
+input,
+textarea,
+select,
+.field-input,
+.fill-input,
+.fill-select,
+.custom-field input,
+.quick-add-input,
+.setup-textarea,
+.answer-input,
+.shared-weight-input,
+.ocr-input,
+.ai-composer textarea,
+.type-input,
+.paste-textarea {
+  transition:
+    border-color var(--dur-hover) var(--ease-fluid),
+    box-shadow var(--dur-hover) var(--ease-fluid),
+    background-color var(--dur-hover) var(--ease-fluid),
+    color var(--dur-hover) var(--ease-fluid),
+    transform var(--dur-hover) var(--ease-back) !important;
+}
+
+input:hover:not(:focus),
+textarea:hover:not(:focus),
+select:hover:not(:focus),
+.field-input:hover:not(:focus),
+.fill-input:hover:not(:focus),
+.quick-add-input:hover:not(:focus),
+.setup-textarea:hover:not(:focus),
+.answer-input:hover:not(:focus),
+.type-input:hover:not(:focus),
+.paste-textarea:hover:not(:focus),
+.ai-composer textarea:hover:not(:focus) {
+  border-color: var(--accent-light) !important;
+  background: #FBFDFF !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus,
+.field-input:focus,
+.fill-input:focus,
+.fill-select:focus,
+.custom-field input:focus,
+.quick-add-input:focus,
+.setup-textarea:focus,
+.answer-input:focus,
+.shared-weight-input:focus,
+.ocr-input:focus,
+.ai-composer textarea:focus,
+.type-input:focus,
+.paste-textarea:focus {
+  border-color: var(--accent-soft) !important;
+  box-shadow:
+    0 0 0 4px rgba(37, 99, 235, 0.14),
+    0 8px 20px -10px rgba(37, 99, 235, 0.22),
+    0 0 0 1px var(--accent-soft) !important;
+  background: #FFFFFF !important;
+  transform: translate3d(0, -1px, 0);
+}
+
+/* ============================================================
+   8. TOGGLES & SLIDERS
+   ============================================================ */
+.toggle-switch {
+  transition:
+    background-color var(--dur-hover) var(--ease-fluid),
+    box-shadow var(--dur-hover) var(--ease-fluid) !important;
+  will-change: background-color, box-shadow !important;
+}
+.toggle-switch::after {
+  transition: transform var(--dur-hover) var(--ease-back) !important;
+  will-change: transform !important;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+.equal-weight-toggle input[type="checkbox"]:checked ~ .toggle-switch::after {
+  transform: translate3d(18px, 0, 0) !important;
+}
+.equal-weight-toggle:hover .toggle-switch {
+  box-shadow:
+    inset 0 0 0 1.5px var(--accent-light),
+    0 0 0 4px rgba(37, 99, 235, 0.15) !important;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 999px;
+  background: #E2E8F0;
+  transition: background-color var(--dur-hover) var(--ease-fluid),
+              box-shadow var(--dur-hover) var(--ease-fluid) !important;
+}
+input[type="range"]:hover::-webkit-slider-runnable-track,
+input[type="range"]:focus::-webkit-slider-runnable-track {
+  background: var(--accent-pale);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  margin-top: -6px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid #FFFFFF;
+  box-shadow:
+    0 2px 6px -1px rgba(37, 99, 235, 0.35),
+    0 0 0 0 rgba(37, 99, 235, 0.25);
+  transition: transform var(--dur-hover) var(--ease-back),
+              box-shadow var(--dur-hover) var(--ease-fluid) !important;
+  will-change: transform, box-shadow;
+  transform: translateZ(0) scale(1);
+}
+input[type="range"]:hover::-webkit-slider-thumb {
+  transform: translateZ(0) scale(1.22) !important;
+  box-shadow:
+    0 4px 12px -2px rgba(37, 99, 235, 0.55),
+    0 0 0 6px rgba(37, 99, 235, 0.18);
+}
+input[type="range"]:active::-webkit-slider-thumb,
+input[type="range"]:focus::-webkit-slider-thumb {
+  transform: translateZ(0) scale(1.32) !important;
+  box-shadow:
+    0 6px 16px -2px rgba(37, 99, 235, 0.65),
+    0 0 0 10px rgba(37, 99, 235, 0.22);
+}
+input[type="range"]::-moz-range-track {
+  height: 6px;
+  border-radius: 999px;
+  background: #E2E8F0;
+  transition: background-color var(--dur-hover) var(--ease-fluid),
+              box-shadow var(--dur-hover) var(--ease-fluid) !important;
+}
+input[type="range"]:hover::-moz-range-track,
+input[type="range"]:focus::-moz-range-track {
+  background: var(--accent-pale);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid #FFFFFF;
+  box-shadow:
+    0 2px 6px -1px rgba(37, 99, 235, 0.35),
+    0 0 0 0 rgba(37, 99, 235, 0.25);
+  transition: transform var(--dur-hover) var(--ease-back),
+              box-shadow var(--dur-hover) var(--ease-fluid) !important;
+  transform: scale(1);
+}
+input[type="range"]:hover::-moz-range-thumb {
+  transform: scale(1.22) !important;
+  box-shadow:
+    0 4px 12px -2px rgba(37, 99, 235, 0.55),
+    0 0 0 6px rgba(37, 99, 235, 0.18);
+}
+input[type="range"]:focus { outline: none; }
+
+/* ============================================================
+   9. TABS & PANEL SWITCHING
+   ============================================================ */
+.tab-panel,
+.ai-tab-panel,
+.modal-panel,
+.prompt-viewer-body,
+.deck-view {
+  transition: opacity var(--dur-hover) var(--ease-fluid),
+              transform var(--dur-hover) var(--ease-fluid) !important;
+  will-change: opacity, transform;
+}
+.tab-panel.active,
+.ai-tab-panel.active,
+.modal-panel.active,
+.deck-view.active {
+  animation: ssFadeSlideIn var(--dur-hover) var(--ease-fluid) both !important;
+}
+@keyframes ssFadeSlideIn {
+  from { opacity: 0; transform: translate3d(0, 10px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+/* ============================================================
+   10. MODALS & OVERLAYS
+   ============================================================ */
+.modal-backdrop {
+  transition: opacity var(--dur-hover) var(--ease-fluid) !important;
+  will-change: opacity;
+}
+.modal {
+  transition:
+    transform var(--dur-slow) var(--ease-back),
+    opacity var(--dur-hover) var(--ease-fluid),
+    box-shadow var(--dur-hover) var(--ease-fluid) !important;
+  will-change: transform, opacity;
+}
+.modal-backdrop.active .modal {
+  animation: ssModalIn var(--dur-slow) var(--ease-back) both !important;
+}
+@keyframes ssModalIn {
+  from { opacity: 0; transform: scale(0.94) translate3d(0, 14px, 0); }
+  to   { opacity: 1; transform: scale(1) translate3d(0, 0, 0); }
+}
+.modal:hover {
+  box-shadow:
+    0 32px 64px -14px rgba(37, 99, 235, 0.25),
+    0 16px 32px -10px rgba(15, 23, 42, 0.15),
+    0 0 0 1px rgba(147, 197, 253, 0.4) !important;
+}
+
+.session-overlay,
+.fullscreen-overlay {
+  transition: opacity var(--dur-hover) var(--ease-fluid),
+              background-color var(--dur-slow) var(--ease-fluid) !important;
+}
+.session-overlay.active .session-content,
+.fullscreen-overlay.active .fullscreen-content {
+  animation: ssOverlayIn var(--dur-slow) var(--ease-fluid) both !important;
+}
+@keyframes ssOverlayIn {
+  from { opacity: 0; transform: translate3d(0, 16px, 0) scale(0.98); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+/* ============================================================
+   11. PROGRESS BARS
+   ============================================================ */
+.progress-segment,
+.fc-progress-segment,
+.ocr-progress-bar > div {
+  transform-origin: left center;
+  transition:
+    transform var(--dur-hover) var(--ease-fluid),
+    background-color var(--dur-hover) var(--ease-fluid),
+    box-shadow var(--dur-hover) var(--ease-fluid) !important;
+}
+.progress-bar:hover,
+.fc-progress-bar:hover {
+  box-shadow:
+    inset 0 0 0 1.5px var(--accent-pale),
+    0 0 0 4px rgba(37, 99, 235, 0.08) !important;
+}
+.fc-progress:hover {
+  box-shadow: var(--pop-shadow-soft) !important;
+  border-color: var(--accent-pale) !important;
+}
+
+/* ============================================================
+   12. FEEDBACK STRIPS & INLINE BLOCKS
+   ============================================================ */
+.feedback-strip,
+.feedback,
+.reco-block,
+.reset-toast,
+.ai-context-toast,
+.quick-add-item,
+.import-preview,
+.fill-panel,
+.type-feedback {
+  transition:
+    opacity var(--dur-hover) var(--ease-fluid),
+    transform var(--dur-hover) var(--ease-back),
+    box-shadow var(--dur-hover) var(--ease-fluid),
+    border-color var(--dur-hover) var(--ease-fluid),
+    background-color var(--dur-hover) var(--ease-fluid) !important;
+}
+
+.feedback-strip.show,
+.feedback.show,
+.quick-add-item,
+.type-feedback.show {
+  animation: ssSlideUpIn var(--dur-hover) var(--ease-fluid) both !important;
+}
+@keyframes ssSlideUpIn {
+  from { opacity: 0; transform: translate3d(0, 12px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+.fill-panel {
+  animation: ssPanelIn var(--dur-hover) var(--ease-fluid) both !important;
+}
+@keyframes ssPanelIn {
+  from { opacity: 0; transform: translate3d(0, -8px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+/* Feedback strips get blue accent on hover too */
+.feedback-strip:hover,
+.feedback:hover,
+.type-feedback:hover {
+  transform: translate3d(0, -2px, 0) !important;
+  box-shadow: var(--pop-shadow-soft) !important;
+}
+
+/* ============================================================
+   13. AI CHAT
+   ============================================================ */
+.ai-msg {
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+  transition: transform var(--dur-hover) var(--ease-back),
+              box-shadow var(--dur-hover) var(--ease-fluid) !important;
+}
+.ai-msg-user {
+  animation: ssMsgInRight var(--dur-hover) var(--ease-fluid) both !important;
+}
+.ai-msg-ai {
+  animation: ssMsgInLeft var(--dur-hover) var(--ease-fluid) both !important;
+}
+@keyframes ssMsgInRight {
+  from { opacity: 0; transform: translate3d(14px, 0, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@keyframes ssMsgInLeft {
+  from { opacity: 0; transform: translate3d(-14px, 0, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+.ai-msg:hover .ai-bubble {
+  transform: translate3d(0, -2px, 0) !important;
+  box-shadow: var(--pop-shadow-soft) !important;
+  border-color: var(--accent-pale) !important;
+}
+.ai-msg-user:hover .ai-bubble {
+  background: var(--accent-hover) !important;
+  box-shadow:
+    0 14px 28px -10px rgba(37, 99, 235, 0.5),
+    0 6px 14px -4px rgba(37, 99, 235, 0.3) !important;
+}
+
+.ai-loading-dots span {
+  animation: ssDotBounce 1.6s var(--ease-inout) infinite !important;
+  will-change: transform, opacity;
+}
+@keyframes ssDotBounce {
+  0%, 60%, 100% { transform: translate3d(0, 0, 0); opacity: 0.35; }
+  30%           { transform: translate3d(0, -5px, 0); opacity: 1; }
+}
+.ai-loading-dots span:nth-child(2) { animation-delay: 0.16s !important; }
+.ai-loading-dots span:nth-child(3) { animation-delay: 0.32s !important; }
+
+.ai-loading-core,
+.ocr-spinner,
+.ai-mic-spinner {
+  will-change: transform;
+  animation: ssSpin 1.1s linear infinite !important;
+}
+@keyframes ssSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.ai-send-btn {
+  transition:
+    transform var(--dur-hover) var(--ease-back),
+    box-shadow var(--dur-hover) var(--ease-fluid),
+    background-color var(--dur-hover) var(--ease-fluid),
+    opacity var(--dur-hover) var(--ease-fluid) !important;
+}
+.ai-send-btn:hover:not(:disabled) {
+  transform: scale(1.08) translateZ(0) !important;
+  box-shadow:
+    0 16px 32px -8px rgba(37, 99, 235, 0.5),
+    0 6px 14px -4px rgba(37, 99, 235, 0.3) !important;
+}
+.ai-send-btn:active:not(:disabled) {
+  transform: scale(0.95) translateZ(0) !important;
+  transition-duration: var(--dur-press) !important;
+}
+
+/* ============================================================
+   14. AMBIENT PLAYING PULSE
+   ============================================================ */
+.ambient-selector.is-playing .ambient-icon::after,
+.session-ambient.is-playing::after {
+  animation: ssDotPulse 2s var(--ease-inout) infinite !important;
+}
+@keyframes ssDotPulse {
+  0%, 100% { transform: scale(1) translateZ(0); opacity: 0.65; }
+  50%      { transform: scale(1.45) translateZ(0); opacity: 1; }
+}
+
+/* ============================================================
+   15. TOASTS
+   ============================================================ */
+.reset-toast,
+.ai-context-toast {
+  animation: ssToastIn var(--dur-hover) var(--ease-back) both !important;
+}
+@keyframes ssToastIn {
+  from { opacity: 0; transform: translate3d(-50%, -16px, 0) scale(0.96); }
+  to   { opacity: 1; transform: translate3d(-50%, 0, 0) scale(1); }
+}
+
+/* ============================================================
+   16. POP-OUT REMOVAL
+   ============================================================ */
+.grade-row.removing {
+  animation: ssPopOut var(--dur-hover) var(--ease-fluid) both !important;
+  pointer-events: none;
+}
+@keyframes ssPopOut {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(0.88); }
+}
+
+/* ============================================================
+   17. FLASHCARD FLIP
+   ============================================================ */
+.fc-inner {
+  transition: transform 1.6s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+.fc-3d:hover .fc-face {
+  border-color: var(--accent-pale) !important;
+}
+
+/* ============================================================
+   18. FOCUS RING — BLUE ACCENT
+   ============================================================ */
+:focus-visible {
+  outline: 2px solid var(--accent) !important;
+  outline-offset: 3px !important;
+  transition: box-shadow 0.25s var(--ease-fluid),
+              outline-color 0.25s var(--ease-fluid) !important;
+}
+
+/* ============================================================
+   19. TABLE ROWS — SOFT BLUE HIGHLIGHT
+   ============================================================ */
+.ai-content tbody tr,
+.ai-timetable-content tbody tr {
+  transition:
+    background-color var(--dur-hover) var(--ease-fluid),
+    box-shadow var(--dur-hover) var(--ease-fluid),
+    transform var(--dur-hover) var(--ease-fluid) !important;
+}
+.ai-content tbody tr:hover,
+.ai-timetable-content tbody tr:hover {
+  background: var(--accent-wash) !important;
+  box-shadow: inset 3px 0 0 var(--accent) !important;
+}
+.ai-content tbody tr:hover td,
+.ai-timetable-content tbody tr:hover td {
+  color: var(--accent-hover) !important;
+}
+.ai-content tbody tr:hover td:first-child,
+.ai-timetable-content tbody tr:hover td:first-child {
+  color: var(--accent-hover) !important;
+  font-weight: 800 !important;
+}
+
+/* ============================================================
+   20. DECORATIVE ENTRANCES
+   ============================================================ */
+.badge,
+.plan-duration,
+.round-chip,
+.session-phase,
+.mode-label,
+.fc-progress-count,
+.progress-counter {
+  transition:
+    transform var(--dur-hover) var(--ease-back),
+    box-shadow var(--dur-hover) var(--ease-fluid),
+    border-color var(--dur-hover) var(--ease-fluid),
+    background-color var(--dur-hover) var(--ease-fluid),
+    color var(--dur-hover) var(--ease-fluid) !important;
+}
+
+/* ============================================================
+   21. REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

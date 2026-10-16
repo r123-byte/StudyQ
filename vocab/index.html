@@ -1,0 +1,1603 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Woordtrainer – Leer begrippen en woordjes | StudyStack</title>
+  <meta name="description" content="Leer snel begrippen en woordjes met een slimme 3-stappen leermethode. Gratis, zonder account.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* ---------- KEYFRAMES ---------- */
+    @keyframes headlineRise {
+      0% { opacity: 0; transform: translateY(30px) scale(0.98); filter: blur(5px); }
+      60% { opacity: 1; filter: blur(0); }
+      100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+    }
+    @keyframes textGlowPulse {
+      0%, 100% { text-shadow: 0 0 12px rgba(140, 190, 245, 0.12), 0 0 4px rgba(30, 95, 167, 0.04); }
+      50% { text-shadow: 0 0 24px rgba(120, 180, 255, 0.35), 0 0 10px rgba(30, 95, 167, 0.12); }
+    }
+    @keyframes borderGlowPulse {
+      0%, 100% { box-shadow: 0 0 0 2px rgba(190, 220, 255, 0.12), 0 0 0 6px rgba(140, 190, 245, 0.03), 0 0 28px -10px rgba(140, 190, 255, 0.18); }
+      50% { box-shadow: 0 0 0 2px rgba(190, 220, 255, 0.3), 0 0 0 8px rgba(140, 190, 245, 0.08), 0 0 46px -8px rgba(120, 180, 255, 0.4); }
+    }
+    @keyframes fadeUp {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes bgBreath {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 0.75; transform: scale(1.02); }
+    }
+    @keyframes resultPop {
+      0% { transform: scale(0.94); opacity: 0; }
+      60% { transform: scale(1.02); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes correctFlash {
+      0% { box-shadow: 0 0 0 2px rgba(150, 220, 175, 0.5), 0 0 0 12px rgba(150, 220, 175, 0.15), 0 20px 44px -20px rgba(20, 90, 60, 0.4), 0 0 80px -12px rgba(100, 210, 140, 0.75); }
+      100% { box-shadow: 0 0 0 2px rgba(160, 205, 250, 0.7), 0 0 0 8px rgba(150, 200, 250, 0.08), 0 20px 44px -20px rgba(20, 70, 120, 0.2), 0 0 60px -16px rgba(140, 190, 255, 0.4); }
+    }
+    @keyframes softRedPulse {
+      0%, 100% {
+        box-shadow:
+          0 0 0 2px rgba(240, 180, 180, 0.45),
+          0 0 0 8px rgba(240, 160, 160, 0.14),
+          0 20px 44px -20px rgba(180, 60, 60, 0.22),
+          0 0 60px -16px rgba(240, 140, 140, 0.45);
+      }
+      50% {
+        box-shadow:
+          0 0 0 2px rgba(240, 170, 170, 0.7),
+          0 0 0 14px rgba(240, 150, 150, 0.22),
+          0 24px 52px -20px rgba(180, 60, 60, 0.3),
+          0 0 84px -12px rgba(240, 130, 130, 0.6);
+      }
+    }
+    @keyframes dotPulse {
+      0%, 100% { opacity: 0.7; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.06); }
+    }
+    /* ---------- BASE ---------- */
+    body {
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      background-color: #eef4fc;
+      background-image:
+        radial-gradient(circle at 15% 20%, rgba(190, 220, 255, 0.4) 0%, transparent 45%),
+        radial-gradient(circle at 85% 80%, rgba(200, 225, 255, 0.35) 0%, transparent 50%);
+      color: #0d1b2a;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      padding: 3rem 1.5rem;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      position: relative;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 25% 30%, rgba(180, 215, 255, 0.22) 0%, transparent 40%),
+        radial-gradient(circle at 75% 70%, rgba(200, 225, 255, 0.18) 0%, transparent 45%);
+      pointer-events: none;
+      z-index: 0;
+      animation: bgBreath 14s ease-in-out infinite;
+    }
+
+    .wrapper { max-width: 900px; width: 100%; margin: 0 auto; position: relative; z-index: 1; }
+
+    .page {
+      background: #ffffff;
+      border-radius: 3rem;
+      box-shadow:
+        0 0 0 2px rgba(140, 190, 245, 0.22),
+        0 0 0 8px rgba(180, 215, 255, 0.1),
+        0 36px 80px -28px rgba(15, 45, 80, 0.24),
+        0 0 110px -30px rgba(120, 180, 255, 0.38);
+      padding: 4rem 4rem 3rem;
+      border: 1px solid rgba(170, 205, 245, 0.4);
+      margin-bottom: 2rem;
+      animation: borderGlowPulse 8s ease-in-out infinite;
+    }
+
+    .top-bar {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      margin-bottom: 3rem; padding-bottom: 2rem;
+      border-bottom: 1px solid rgba(190, 218, 248, 0.5);
+      box-shadow: 0 10px 20px -18px rgba(30, 95, 167, 0.15);
+      animation: fadeUp 0.6s ease both;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 0.75rem;
+      font-weight: 800; font-size: 1.4rem; letter-spacing: -0.03em;
+      color: #0d1b2a; text-decoration: none;
+      animation: textGlowPulse 8s ease-in-out infinite;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .brand:hover { transform: scale(1.05); }
+    .brand-icon {
+      background: #1e5fa7; color: white; width: 42px; height: 42px;
+      display: flex; align-items: center; justify-content: center; border-radius: 13px;
+      box-shadow:
+        0 0 0 2px rgba(190, 220, 255, 0.4),
+        0 0 0 5px rgba(140, 190, 245, 0.12),
+        0 10px 18px -8px rgba(30, 95, 167, 0.45),
+        0 0 26px -4px rgba(120, 180, 255, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      animation: borderGlowPulse 6s ease-in-out infinite;
+    }
+    .brand-icon svg { width: 22px; height: 22px; stroke-width: 2.2; }
+    .brand span { color: #1e5fa7; }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.9rem; font-weight: 700; color: #1e5fa7; text-decoration: none;
+      padding: 0.6rem 1.3rem; border-radius: 50px; background: #f0f7ff;
+      border: 1.5px solid rgba(160, 200, 245, 0.7);
+      box-shadow:
+        0 0 0 2px rgba(190, 220, 255, 0.2),
+        0 0 0 5px rgba(140, 190, 245, 0.06),
+        0 6px 14px -10px rgba(30, 95, 167, 0.25),
+        0 0 22px -6px rgba(150, 200, 255, 0.4);
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .back-link svg { width: 16px; height: 16px; stroke-width: 2.6; }
+    .back-link:hover {
+      transform: scale(1.08) translateX(-3px);
+      box-shadow:
+        0 0 0 2px rgba(190, 220, 255, 0.4),
+        0 0 0 8px rgba(140, 190, 245, 0.12),
+        0 12px 22px -10px rgba(30, 95, 167, 0.4),
+        0 0 34px -4px rgba(150, 200, 255, 0.6);
+    }
+    .header-actions { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; justify-content: flex-end; }
+    .language-switcher {
+      position: relative; display: inline-flex; align-items: center; gap: 0.65rem;
+      background: #ffffff; border: 1.5px solid rgba(160, 200, 245, 0.8);
+      border-radius: 40px; padding: 0.7rem 1rem; color: #1e5fa7; cursor: pointer;
+      box-shadow: 0 0 0 2px rgba(190, 220, 255, 0.2), 0 0 0 5px rgba(140, 190, 245, 0.06), 0 6px 14px -10px rgba(30, 95, 167, 0.25), 0 0 22px -6px rgba(150, 200, 255, 0.4);
+      animation: borderGlowPulse 8s ease-in-out infinite;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+    }
+    .language-switcher svg { width: 20px; height: 20px; flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .language-switcher .language-chevron { width: 16px; height: 16px; margin-left: -0.25rem; pointer-events: none; }
+    .language-switcher span { font-size: 0.9rem; font-weight: 700; color: #4a6a86; pointer-events: none; }
+    .language-switcher select { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; appearance: none; border: 0; background: transparent; color: transparent; font: inherit; cursor: pointer; outline: none; }
+    .language-switcher:hover, .language-switcher:focus-within {
+      transform: translateY(-2px) scale(1.04);
+      border-color: rgba(30, 95, 167, 0.7);
+      box-shadow: 0 0 0 2px rgba(190, 220, 255, 0.4), 0 0 0 8px rgba(140, 190, 245, 0.12), 0 12px 22px -10px rgba(30, 95, 167, 0.4), 0 0 34px -4px rgba(150, 200, 255, 0.6);
+    }
+
+    .hero { margin-bottom: 2rem; animation: fadeUp 0.7s 0.1s ease both; text-align: center; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: #e8f1ff; color: #1e5fa7; font-weight: 700; font-size: 0.75rem;
+      padding: 0.45rem 1.25rem; border-radius: 100px; margin-bottom: 1.5rem; letter-spacing: 0.03em;
+      border: 1px solid rgba(150, 195, 245, 0.6);
+      box-shadow:
+        0 0 0 2px rgba(190, 220, 255, 0.18),
+        0 0 0 5px rgba(140, 190, 245, 0.05),
+        0 0 20px -4px rgba(120, 170, 240, 0.35),
+        0 5px 12px -7px rgba(30, 95, 167, 0.18);
+      animation: borderGlowPulse 6s ease-in-out infinite;
+    }
+    .badge svg { width: 14px; height: 14px; stroke-width: 2.6; }
+    h1 {
+      font-size: clamp(2.2rem, 5vw, 3rem); font-weight: 800; line-height: 1.15;
+      letter-spacing: -0.04em; color: #0b1c2c; margin-bottom: 0.9rem;
+      animation: headlineRise 1s cubic-bezier(0.22, 1, 0.36, 1) forwards,
+                 textGlowPulse 7s 0.8s ease-in-out infinite;
+      opacity: 0;
+    }
+    .hero-desc { font-size: 1.05rem; color: #2b4259; max-width: 620px; margin: 0 auto; font-weight: 400; line-height: 1.7; animation: textGlowPulse 10s ease-in-out infinite; }
+
+    .btn {
+      font-family: inherit; font-weight: 700; font-size: 0.95rem;
+      padding: 0.85rem 1.6rem; border-radius: 50px; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 0.5rem; letter-spacing: -0.01em;
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      border: 1.5px solid transparent; white-space: nowrap;
+    }
+    .btn svg { width: 18px; height: 18px; stroke-width: 2.4; }
+    .btn-primary {
+      background: #1e5fa7; color: white; border-color: rgba(30, 95, 167, 0.3);
+      box-shadow:
+        0 0 0 2px rgba(190, 220, 255, 0.4),
+        0 0 0 7px rgba(140, 190, 245, 0.12),
+        0 16px 30px -12px rgba(30, 95, 167, 0.55),
+        0 0 40px -6px rgba(120, 180, 255, 0.6);
+      animation: borderGlowPulse 8s ease-in-out infinite;
+    }
+    .btn-primary:hover {
+      background: #17508e; transform: translateY(-2px) scale(1.05);
+      box-shadow:
+        0 0 0 2px rgba(190, 220, 255, 0.6),
+        0 0 0 10px rgba(140, 190, 245, 0.2),
+        0 22px 40px -14px rgba(30, 95, 167, 0.65),
+        0 0 56px -4px rgba(120, 180, 255, 0.75);
+    }
+    .btn-secondary {
+      background: #ffffff; color: #4a6a86;
+      border-color: rgba(200, 215, 230, 0.85);
+      box-shadow:
+        0 0 0 2px rgba(210, 225, 240, 0.12),
+        0 0 0 5px rgba(190, 210, 230, 0.04),
+        0 8px 18px -12px rgba(60, 90, 120, 0.15),
+        0 0 22px -10px rgba(170, 200, 230, 0.25);
+    }
+    .btn-secondary:hover {
+      color: #1e5fa7; border-color: rgba(140, 185, 235, 0.9); transform: translateY(-2px) scale(1.05);
+      box-shadow:
+        0 0 0 2px rgba(160, 205, 250, 0.25),
+        0 0 0 7px rgba(140, 190, 245, 0.09),
+        0 14px 26px -12px rgba(30, 95, 167, 0.3),
+        0 0 40px -6px rgba(130, 180, 255, 0.45);
+    }
+    .btn-ghost { background: transparent; color: #6b8aa8; border-color: rgba(200, 215, 230, 0.7); padding: 0.6rem 1.2rem; font-size: 0.85rem; }
+    .btn-ghost:hover { color: #1e5fa7; border-color: rgba(140, 185, 235, 0.85); background: #f6fbff; }
+    .btn:active { transform: translateY(0) scale(0.98); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .btn-continue {
+      background: #1a7a44; color: white; border-color: rgba(26, 122, 68, 0.35);
+      padding: 1rem 2.2rem; font-size: 1rem;
+      box-shadow:
+        0 0 0 2px rgba(180, 235, 200, 0.4),
+        0 0 0 7px rgba(140, 220, 170, 0.12),
+        0 16px 30px -12px rgba(30, 140, 80, 0.5),
+        0 0 40px -6px rgba(100, 210, 140, 0.6);
+      animation: borderGlowPulse 8s ease-in-out infinite;
+    }
+    .btn-continue:hover { background: #156336; transform: translateY(-2px) scale(1.05); }
+    .btn-practice-mode {
+      background: linear-gradient(150deg, #1e5fa7 0%, #2a7fd6 100%);
+      color: white; border-color: rgba(30, 95, 167, 0.4);
+      padding: 1.15rem 2.4rem; font-size: 1.05rem;
+      box-shadow:
+        0 0 0 2px rgba(190, 220, 255, 0.45),
+        0 0 0 8px rgba(140, 190, 245, 0.14),
+        0 18px 34px -12px rgba(30, 95, 167, 0.6),
+        0 0 48px -6px rgba(120, 180, 255, 0.7);
+      animation: borderGlowPulse 8s ease-in-out infinite;
+    }
+    .btn-practice-mode:hover { background: linear-gradient(150deg, #17508e 0%, #1e5fa7 100%); transform: translateY(-2px) scale(1.05); }
+
+    .progress-header {
+      background: linear-gradient(150deg, #f4f9ff 0%, #eaf3fe 100%);
+      border: 1.5px solid rgba(160, 205, 250, 0.65);
+      border-radius: 1.75rem; padding: 1.35rem 1.5rem 1.15rem; margin-bottom: 1.75rem;
+      box-shadow:
+        0 0 0 2px rgba(190, 220, 255, 0.18),
+        0 0 0 6px rgba(150, 200, 250, 0.06),
+        0 12px 28px -18px rgba(20, 70, 120, 0.18),
+        0 0 44px -18px rgba(140, 190, 255, 0.3);
+      animation: fadeUp 0.6s ease both;
+    }
+    .progress-top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 0.9rem; }
+    .progress-title { display: inline-flex; align-items: center; gap: 0.6rem; font-size: 1rem; font-weight: 800; letter-spacing: -0.02em; color: #0b1c2c; }
+    .progress-title-icon {
+      width: 34px; height: 34px; border-radius: 11px; background: #1e5fa7; color: white;
+      display: inline-flex; align-items: center; justify-content: center;
+      box-shadow:
+        0 0 0 2px rgba(190, 220, 255, 0.4),
+        0 0 0 5px rgba(140, 190, 245, 0.12),
+        0 8px 16px -8px rgba(30, 95, 167, 0.45),
+        0 0 22px -4px rgba(120, 180, 255, 0.5);
+    }
+    .progress-title-icon svg { width: 18px; height: 18px; stroke-width: 2.4; }
+    .progress-counter {
+      font-size: 0.9rem; font-weight: 800; color: #1e5fa7;
+      padding: 0.4rem 0.9rem; background: #ffffff;
+      border: 1.5px solid rgba(160, 200, 245, 0.7); border-radius: 40px;
+      box-shadow: 0 0 0 2px rgba(190, 220, 255, 0.15), 0 4px 10px -6px rgba(30, 95, 167, 0.2);
+      font-variant-numeric: tabular-nums;
+    }
+    .progress-counter strong { color: #1a7a44; font-weight: 800; }
+    .progress-bar {
+      display: flex; width: 100%; height: 14px; border-radius: 40px; background: #e6eef8;
+      overflow: hidden; box-shadow: inset 0 0 0 1.5px rgba(160, 200, 245, 0.5);
+      transition: all 0.4s ease;
+    }
+    .progress-segment { height: 100%; transition: width 0.7s cubic-bezier(0.34, 1.56, 0.64, 1); min-width: 0; }
+    .progress-segment.seg-unlearned { background: linear-gradient(180deg, #c8d2dd 0%, #a7b4c3 100%); }
+    .progress-segment.seg-learning { background: linear-gradient(180deg, #ffd980 0%, #f5b73d 100%); }
+    .progress-segment.seg-mastered { background: linear-gradient(180deg, #86e0a8 0%, #35b06a 100%); }
+    .progress-legend { display: flex; flex-wrap: wrap; gap: 0.5rem 1.1rem; margin-top: 0.75rem; font-size: 0.8rem; font-weight: 700; color: #4a6a86; }
+    .legend-item { display: inline-flex; align-items: center; gap: 0.4rem; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .legend-dot.dot-unlearned { background: #a7b4c3; }
+    .legend-dot.dot-learning { background: #f5b73d; }
+    .legend-dot.dot-mastered { background: #35b06a; }
+
+    .setup-card {
+      background: #f8fbff;
+      border: 1.5px dashed rgba(160, 200, 245, 0.75);
+      border-radius: 1.75rem;
+      padding: 2rem 1.75rem;
+      animation: fadeUp 0.5s ease both;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+    .setup-card h2 { display: inline-flex; align-items: center; gap: 0.55rem; font-size: 1.15rem; font-weight: 800; letter-spacing: -0.02em; color: #0b1c2c; margin-bottom: 0.4rem; }
+    .setup-card h2 svg { width: 18px; height: 18px; stroke-width: 2.4; color: #1e5fa7; }
+    .setup-card p.setup-desc { font-size: 0.92rem; color: #4a6a86; margin-bottom: 1.1rem; line-height: 1.6; }
+    .setup-label { display: block; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #6b8aa8; padding-left: 0.35rem; margin-bottom: 0.4rem; }
+    .setup-textarea {
+      font-family: inherit; font-size: 0.95rem; font-weight: 500; color: #0b1c2c;
+      background: #ffffff; border: 1.5px solid rgba(180, 210, 245, 0.75);
+      border-radius: 1rem; padding: 0.85rem 1rem; outline: none; width: 100%;
+      min-height: 140px; resize: vertical; line-height: 1.65;
+      transition: all 0.25s ease;
+      box-shadow:
+        0 0 0 2px rgba(200, 225, 250, 0.08),
+        0 0 0 5px rgba(170, 205, 245, 0.02),
+        0 4px 10px -8px rgba(20, 70, 120, 0.08);
+    }
+    .setup-textarea:focus {
+      border-color: #1e5fa7;
+      box-shadow:
+        0 0 0 2px rgba(160, 205, 250, 0.3),
+        0 0 0 7px rgba(140, 190, 245, 0.1),
+        0 8px 20px -10px rgba(30, 95, 167, 0.25),
+        0 0 34px -8px rgba(120, 180, 255, 0.45);
+    }
+    .setup-textarea::placeholder { color: #a8bfd4; font-weight: 500; }
+    .setup-hint { font-size: 0.8rem; color: #718da8; margin-top: 0.5rem; line-height: 1.55; padding-left: 0.35rem; }
+    .setup-hint strong { color: #1e5fa7; font-weight: 700; }
+    .setup-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.15rem; align-items: center; }
+    .setup-error {
+      background: #fff0f0; color: #b03030;
+      border: 1.5px solid rgba(240, 170, 170, 0.7);
+      padding: 0.7rem 1rem; border-radius: 1rem;
+      font-size: 0.85rem; font-weight: 600;
+      margin-top: 0.9rem; display: none;
+      animation: fadeUp 0.3s ease both;
+    }
+    .setup-error.show { display: block; }
+
+    .example-card {
+      display: inline-flex; align-items: center; gap: 0.85rem;
+      margin-bottom: 1.25rem; padding: 0.9rem 1.15rem 0.9rem 0.9rem;
+      background: linear-gradient(150deg, #eef5ff 0%, #e3effd 100%);
+      border: 1.5px solid rgba(160, 200, 245, 0.85);
+      border-radius: 1.25rem; cursor: pointer; font-family: inherit; text-align: left;
+      box-shadow:
+        0 0 0 2px rgba(190, 220, 255, 0.18),
+        0 0 0 6px rgba(150, 200, 250, 0.06),
+        0 10px 22px -14px rgba(30, 95, 167, 0.25),
+        0 0 32px -14px rgba(140, 190, 255, 0.4);
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      max-width: 100%;
+    }
+    .example-card:hover {
+      transform: translateY(-2px) scale(1.02);
+      border-color: rgba(30, 95, 167, 0.85);
+      background: linear-gradient(150deg, #e3effd 0%, #d7e8fc 100%);
+      box-shadow:
+        0 0 0 2px rgba(190, 220, 255, 0.4),
+        0 0 0 9px rgba(140, 190, 245, 0.14),
+        0 18px 34px -14px rgba(30, 95, 167, 0.4),
+        0 0 48px -8px rgba(120, 180, 255, 0.6);
+    }
+    .example-card:active { transform: translateY(0) scale(1.0); }
+    .example-card-icon {
+      flex-shrink: 0; width: 38px; height: 38px; border-radius: 12px;
+      background: #ffffff; color: #1e5fa7;
+      display: inline-flex; align-items: center; justify-content: center;
+      border: 1.5px solid rgba(160, 200, 245, 0.85);
+      box-shadow:
+        0 0 0 2px rgba(190, 220, 255, 0.25),
+        0 6px 12px -8px rgba(30, 95, 167, 0.35);
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .example-card-icon svg { width: 18px; height: 18px; stroke-width: 2.4; }
+    .example-card:hover .example-card-icon { transform: rotate(-8deg) scale(1.08); }
+    .example-card-text { display: flex; flex-direction: column; min-width: 0; gap: 0.1rem; }
+    .example-card-title { font-size: 0.9rem; font-weight: 800; color: #1e5fa7; letter-spacing: -0.01em; line-height: 1.3; }
+    .example-card-sub { font-size: 0.78rem; font-weight: 600; color: #4a6a86; line-height: 1.3; }
+
+    .study-card {
+      background: linear-gradient(150deg, #f4f9ff 0%, #eaf3fe 100%);
+      border: 2px solid rgba(160, 205, 250, 0.7);
+      border-radius: 2.5rem; padding: 2.75rem 2.25rem 2.5rem;
+      box-shadow:
+        0 0 0 2px rgba(190, 220, 255, 0.25),
+        0 0 0 8px rgba(150, 200, 250, 0.08),
+        0 20px 44px -20px rgba(20, 70, 120, 0.2),
+        0 0 60px -16px rgba(140, 190, 255, 0.4);
+      text-align: center;
+      animation: borderGlowPulse 7s ease-in-out infinite;
+      transition: box-shadow 0.4s ease, transform 0.35s ease, border-color 0.35s ease;
+      position: relative;
+    }
+    .study-card.correct-flash { animation: correctFlash 0.75s ease both; border-color: rgba(120, 220, 160, 0.9) !important; }
+    .study-card.paused-wrong { border-color: rgba(240, 150, 150, 0.95) !important; animation: softRedPulse 2.4s ease-in-out infinite; }
+
+    .round-chip {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      font-size: 0.72rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.12em; padding: 0.4rem 0.95rem; border-radius: 40px;
+      margin-bottom: 1.1rem; border: 1.5px solid currentColor;
+      transition: all 0.35s ease;
+    }
+    .round-chip svg { width: 13px; height: 13px; stroke-width: 2.6; }
+    .round-chip.practice { color: #1e5fa7; background: #e8f1ff; box-shadow: 0 0 0 2px rgba(190, 220, 255, 0.25), 0 0 18px -6px rgba(120, 170, 240, 0.4); }
+    .round-chip.test { color: #a35c00; background: #fff8ec; border-color: rgba(250, 210, 150, 0.9); box-shadow: 0 0 0 2px rgba(255, 220, 170, 0.25), 0 0 18px -6px rgba(250, 190, 100, 0.5); }
+    .round-chip.mastered { color: #1a7a44; background: #edfaf1; border-color: rgba(150, 220, 175, 0.9); box-shadow: 0 0 0 2px rgba(180, 235, 200, 0.3), 0 0 18px -6px rgba(100, 210, 140, 0.5); }
+    .round-chip.freeplay { color: #6a3fbf; background: #f3edff; border-color: rgba(190, 160, 245, 0.9); box-shadow: 0 0 0 2px rgba(200, 180, 250, 0.3), 0 0 18px -6px rgba(150, 100, 240, 0.5); }
+
+    .word-prompt {
+      font-size: clamp(1.9rem, 6vw, 3rem); font-weight: 800;
+      letter-spacing: -0.04em; color: #0b1c2c; line-height: 1.15;
+      margin-bottom: 0.5rem;
+      animation: resultPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+                 textGlowPulse 8s ease-in-out infinite;
+      word-break: break-word;
+    }
+    .word-sub { font-size: 0.95rem; color: #4a6a86; font-weight: 600; margin-bottom: 1.4rem; min-height: 1.4em; }
+    .practice-answer {
+      display: inline-block; font-size: 1.05rem; font-weight: 700; color: #1e5fa7;
+      padding: 0.55rem 1.25rem; background: rgba(255, 255, 255, 0.9);
+      border: 1.5px dashed rgba(160, 200, 245, 0.9);
+      border-radius: 1.15rem; margin-bottom: 1.35rem;
+      animation: fadeUp 0.35s ease both;
+    }
+    .practice-answer strong { color: #0b1c2c; font-weight: 800; }
+
+    .answer-form { display: flex; flex-direction: column; align-items: center; gap: 0.9rem; margin-top: 0.5rem; }
+    .answer-input {
+      font-family: inherit; font-size: 1.15rem; font-weight: 700;
+      text-align: center; color: #0b1c2c; background: #ffffff;
+      border: 2px solid rgba(180, 210, 245, 0.8);
+      border-radius: 1.15rem; padding: 0.95rem 1.15rem;
+      outline: none; width: 100%; max-width: 460px;
+      transition: all 0.35s ease;
+      box-shadow:
+        0 0 0 2px rgba(200, 225, 250, 0.1),
+        0 0 0 6px rgba(170, 205, 245, 0.03),
+        0 6px 14px -10px rgba(20, 70, 120, 0.1);
+    }
+    .answer-input::placeholder { color: #a8bfd4; font-weight: 500; }
+    .answer-input:focus {
+      border-color: #1e5fa7;
+      box-shadow:
+        0 0 0 2px rgba(160, 205, 250, 0.35),
+        0 0 0 9px rgba(140, 190, 245, 0.12),
+        0 10px 24px -12px rgba(30, 95, 167, 0.3),
+        0 0 44px -10px rgba(120, 180, 255, 0.55);
+    }
+    .answer-input.correct {
+      border-color: #35b06a;
+      box-shadow:
+        0 0 0 2px rgba(180, 235, 200, 0.5),
+        0 0 0 9px rgba(140, 220, 170, 0.18),
+        0 10px 24px -12px rgba(30, 140, 80, 0.35),
+        0 0 44px -10px rgba(100, 210, 140, 0.6);
+    }
+    .answer-input.incorrect { border-color: #e07070; animation: softRedPulse 2.4s ease-in-out infinite; }
+
+    .answer-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; justify-content: center; align-items: center; }
+    .answer-form.paused .answer-actions { display: none; }
+
+    .feedback-strip {
+      margin-top: 1.35rem; padding: 0.9rem 1.15rem;
+      border-radius: 1.15rem; font-size: 0.95rem; font-weight: 700;
+      display: none; align-items: center; justify-content: center;
+      gap: 0.55rem; animation: fadeUp 0.3s ease both;
+      flex-wrap: wrap;
+    }
+    .feedback-strip.show { display: inline-flex; }
+    .feedback-strip.ok { background: #edfaf1; color: #1a7a44; border: 1.5px solid rgba(150, 220, 175, 0.7); box-shadow: 0 0 0 2px rgba(180, 235, 200, 0.2), 0 0 26px -8px rgba(100, 210, 140, 0.5); }
+    .feedback-strip.warn { background: #fff8ec; color: #a35c00; border: 1.5px solid rgba(250, 210, 150, 0.8); box-shadow: 0 0 0 2px rgba(255, 220, 170, 0.25), 0 0 26px -8px rgba(250, 190, 100, 0.5); }
+    .feedback-strip.bad { background: #fff0f0; color: #b03030; border: 1.5px solid rgba(240, 170, 170, 0.75); box-shadow: 0 0 0 2px rgba(240, 180, 180, 0.2), 0 0 26px -8px rgba(240, 130, 130, 0.5); }
+    .feedback-strip svg { width: 17px; height: 17px; stroke-width: 2.6; flex-shrink: 0; }
+    .feedback-strip .answer-reveal { display: inline-block; margin-left: 0.35rem; padding: 0.15rem 0.7rem; border-radius: 40px; background: rgba(255, 255, 255, 0.85); font-weight: 800; }
+    .feedback-strip .typo-note { display: inline-block; margin-left: 0.35rem; font-size: 0.78rem; font-weight: 700; opacity: 0.85; font-style: italic; }
+
+    .continue-row { display: none; margin-top: 1.35rem; flex-direction: column; align-items: center; gap: 0.65rem; animation: fadeUp 0.35s ease both; }
+    .continue-row.show { display: flex; }
+    .continue-hint { font-size: 0.82rem; color: #718da8; font-weight: 600; text-align: center; padding: 0 0.5rem; }
+
+    .study-meta {
+      margin-top: 1.5rem; padding-top: 1.25rem;
+      border-top: 1px solid rgba(170, 210, 250, 0.5);
+      display: flex; flex-wrap: wrap; gap: 0.7rem 1.4rem;
+      justify-content: center; align-items: center;
+      font-size: 0.82rem; font-weight: 700; color: #4a6a86;
+    }
+    .study-meta-item { display: inline-flex; align-items: center; gap: 0.4rem; }
+    .study-meta-item svg { width: 14px; height: 14px; stroke-width: 2.4; color: #1e5fa7; }
+    .study-meta-item strong { color: #1e5fa7; font-weight: 800; font-variant-numeric: tabular-nums; }
+
+    .done-card {
+      text-align: center;
+      padding: 2.5rem 1.75rem 2.25rem;
+      background: linear-gradient(150deg, #f6fdf9 0%, #edfaf1 100%);
+      border: 2px solid rgba(150, 220, 175, 0.85);
+      border-radius: 2.5rem;
+      box-shadow:
+        0 0 0 2px rgba(180, 235, 200, 0.3),
+        0 0 0 8px rgba(140, 220, 170, 0.1),
+        0 20px 44px -20px rgba(20, 90, 60, 0.18),
+        0 0 60px -16px rgba(100, 210, 140, 0.4);
+      animation: fadeUp 0.5s ease both;
+    }
+    .done-icon {
+      width: 72px; height: 72px; border-radius: 22px;
+      margin: 0 auto 1.15rem; background: #ffffff; color: #1a7a44;
+      display: flex; align-items: center; justify-content: center;
+      border: 2px solid rgba(150, 220, 175, 0.9);
+      box-shadow:
+        0 0 0 2px rgba(180, 235, 200, 0.3),
+        0 0 0 8px rgba(140, 220, 170, 0.1),
+        0 14px 28px -12px rgba(30, 140, 80, 0.35),
+        0 0 44px -8px rgba(100, 210, 140, 0.55);
+      animation: dotPulse 3s ease-in-out infinite;
+    }
+    .done-icon svg { width: 34px; height: 34px; stroke-width: 2.6; }
+    .done-title { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.03em; color: #0b1c2c; margin-bottom: 0.4rem; }
+    .done-text { font-size: 0.98rem; color: #39566b; margin-bottom: 1.5rem; line-height: 1.65; }
+    .done-stats { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.85rem; margin-bottom: 1.75rem; }
+    .done-stat {
+      background: rgba(255, 255, 255, 0.9);
+      border: 1.5px solid rgba(180, 215, 250, 0.65);
+      border-radius: 1.15rem; padding: 0.85rem 1.35rem; min-width: 118px;
+      box-shadow: 0 0 0 2px rgba(200, 225, 250, 0.1), 0 6px 14px -10px rgba(20, 70, 120, 0.1);
+    }
+    .done-stat-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #6b8aa8; margin-bottom: 0.2rem; }
+    .done-stat-value { font-size: 1.35rem; font-weight: 800; color: #1e5fa7; line-height: 1.1; }
+    .done-stat-value.good { color: #1a7a44; }
+    .done-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.7rem; }
+
+    .privacy-note {
+      display: flex; align-items: center; justify-content: center;
+      gap: 0.5rem; margin-top: 2rem; padding: 0.7rem 1.25rem;
+      background: #f4faf6;
+      border: 1px solid rgba(170, 220, 190, 0.5);
+      border-radius: 50px; font-size: 0.85rem; font-weight: 600;
+      color: #3a7055;
+      box-shadow: 0 0 0 2px rgba(180, 230, 200, 0.12), 0 0 20px -8px rgba(120, 210, 150, 0.3);
+    }
+    .privacy-note svg { width: 16px; height: 16px; stroke-width: 2.4; flex-shrink: 0; }
+
+    @media (max-width: 800px) {
+      body { padding: 2rem 1rem; }
+      .page { padding: 2.5rem 1.75rem 2rem; border-radius: 2.25rem; }
+      .study-card { padding: 2rem 1.5rem 1.75rem; border-radius: 2rem; }
+      .done-card { padding: 2rem 1.35rem; border-radius: 2rem; }
+    }
+    @media (max-width: 650px) {
+      body { padding: 1.5rem 0.75rem; }
+      .page { padding: 2rem 1.25rem 1.75rem; border-radius: 2rem; }
+      .top-bar { flex-direction: column; align-items: flex-start; gap: 1rem; margin-bottom: 2.25rem; padding-bottom: 1.5rem; }
+      .header-actions { width: 100%; justify-content: space-between; }
+      .hero { margin-bottom: 1.75rem; }
+      h1 { font-size: 2rem; }
+      .hero-desc { font-size: 0.95rem; }
+      .progress-header { padding: 1.1rem 1.1rem 1rem; border-radius: 1.5rem; }
+      .progress-counter { font-size: 0.82rem; }
+      .study-card { padding: 1.75rem 1.25rem 1.5rem; border-radius: 1.75rem; }
+      .word-prompt { font-size: 1.85rem; }
+      .answer-input { font-size: 1.05rem; padding: 0.85rem 1rem; }
+      .answer-actions { width: 100%; }
+      .answer-actions .btn { flex: 1 1 auto; justify-content: center; }
+      .setup-card { padding: 1.5rem 1.25rem; border-radius: 1.5rem; }
+      .setup-actions .btn { width: 100%; justify-content: center; }
+      .done-stat { flex: 1 1 40%; }
+      .done-actions .btn { width: 100%; justify-content: center; }
+      .continue-row .btn { width: 100%; justify-content: center; }
+      .example-card { width: 100%; }
+    }
+  </style>
+  <link rel="stylesheet" href="../theme.css">
+  <link rel="stylesheet" href="../animations.css">
+</head>
+<body>
+  <div class="wrapper">
+    <main class="page">
+      <!-- HEADER -->
+      <header class="top-bar">
+        <a href="../index.html" class="brand">
+          <div class="brand-icon" aria-hidden="true">
+            <img src="../logo/logo.png" alt="">
+          </div>
+          Study<span>Stack</span>
+        </a>
+        <div class="header-actions">
+          <a href="../index.html" class="back-link">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
+            <span data-i18n="vocab.backHome">Terug naar home</span>
+          </a>
+          <label class="language-switcher">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c2.5 2.5 3.5 5.5 3.5 9s-1 6.5-3.5 9c-2.5-2.5-3.5-5.5-3.5-9S9.5 5.5 12 3Z"></path></svg>
+            <span data-i18n="language.label">Taal</span>
+            <select id="language-select" aria-label="Language">
+              <option value="en">English</option>
+              <option value="nl">Nederlands</option>
+            </select>
+            <svg class="language-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+          </label>
+        </div>
+      </header>
+
+      <!-- HERO -->
+      <section class="hero">
+        <div class="badge">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path>
+          </svg>
+          <span data-i18n="vocab.badge">gratis &amp; zonder account</span>
+        </div>
+        <h1 data-i18n="vocab.title">Woordtrainer</h1>
+        <p class="hero-desc" data-i18n="vocab.heroText">Leer snel begrippen en woordjes met een slimme 3-stappen leermethode. Eerst samen oefenen, dan zelfstandig testen.</p>
+      </section>
+
+      <!-- PROGRESS HEADER -->
+      <div class="progress-header" id="progress-header" style="display: none;">
+        <div class="progress-top">
+          <div class="progress-title">
+            <span class="progress-title-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path>
+              </svg>
+            </span>
+            <span id="set-name" data-i18n="vocab.setLabel">Woordset</span>
+          </div>
+          <div class="progress-counter">
+            <strong id="mastered-count">0</strong>
+            <span id="counter-divider"> / </span>
+            <span id="total-count">0</span>
+            <span data-i18n="vocab.masteredLabel"> beheerst</span>
+          </div>
+        </div>
+        <div class="progress-bar" aria-hidden="true">
+          <div class="progress-segment seg-unlearned" id="seg-unlearned" style="width: 100%;"></div>
+          <div class="progress-segment seg-learning" id="seg-learning" style="width: 0%;"></div>
+          <div class="progress-segment seg-mastered" id="seg-mastered" style="width: 0%;"></div>
+        </div>
+        <div class="progress-legend">
+          <span class="legend-item"><span class="legend-dot dot-unlearned"></span><span data-i18n="vocab.legendUnlearned">Ongeleerd</span>: <span id="legend-unlearned">0</span></span>
+          <span class="legend-item"><span class="legend-dot dot-learning"></span><span data-i18n="vocab.legendLearning">Aan het leren</span>: <span id="legend-learning">0</span></span>
+          <span class="legend-item"><span class="legend-dot dot-mastered"></span><span data-i18n="vocab.legendMastered">Beheerst</span>: <span id="legend-mastered">0</span></span>
+        </div>
+      </div>
+
+      <!-- SETUP CARD -->
+      <div class="setup-card" id="setup-card">
+        <h2>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 5v14M5 12h14"></path>
+          </svg>
+          <span data-i18n="vocab.setupTitle">Plak je woordset</span>
+        </h2>
+        <p class="setup-desc" data-i18n="vocab.setupDesc">Eén woord per regel, met een <strong>=</strong> of <strong>-</strong> tussen het woord en de betekenis. Bijvoorbeeld: <em>le chien = de hond</em>.</p>
+
+
+        <button class="example-card" id="btn-demo" type="button">
+          <span class="example-card-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path>
+            </svg>
+          </span>
+          <span class="example-card-text">
+            <span class="example-card-title" data-i18n="vocab.demoLink">Probeer voorbeeldlijst (Frans)</span>
+            <span class="example-card-sub" data-i18n="vocab.demoSub">8 woorden — Frans naar Nederlands</span>
+          </span>
+        </button>
+
+        <label class="setup-label" for="set-input" data-i18n="vocab.setupLabel">Jouw woorden</label>
+        <textarea class="setup-textarea" id="set-input" placeholder="le chien = de hond&#10;le chat = de kat&#10;l'oiseau = de vogel" data-i18n-placeholder="vocab.setupPlaceholder"></textarea>
+        <div class="setup-hint" data-i18n="vocab.setupHint">Tip: je kunt ook een <strong>tab</strong> of een <strong>komma</strong> gebruiken als scheiding.</div>
+        <div class="setup-error" id="setup-error"></div>
+        <div class="setup-actions">
+          <button class="btn btn-primary" id="btn-start" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
+              <polygon points="6 4 20 12 6 20 6 4"></polygon>
+            </svg>
+            <span data-i18n="vocab.startBtn">Start leren</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- STUDY CARD -->
+      <div class="study-card" id="study-card" style="display: none;">
+        <div>
+          <span class="round-chip practice" id="round-chip">
+            <svg id="round-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path>
+            </svg>
+            <span id="round-label" data-i18n="vocab.roundPractice">Oefenronde</span>
+          </span>
+        </div>
+        <div class="word-prompt" id="word-prompt">—</div>
+        <div class="word-sub" id="word-sub"></div>
+
+        <div class="practice-answer" id="practice-answer" style="display: none;"></div>
+
+        <form class="answer-form" id="answer-form" autocomplete="off">
+          <input class="answer-input" id="answer-input" type="text" placeholder="Typ het antwoord..." data-i18n-placeholder="vocab.inputPlaceholder" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
+          <div class="answer-actions">
+            <button class="btn btn-primary" type="submit" id="btn-submit">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span data-i18n="vocab.submitBtn">Antwoord</span>
+            </button>
+            <button class="btn btn-secondary" type="button" id="btn-skip">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polygon points="5 4 15 12 5 20 5 4"></polygon>
+                <line x1="19" y1="5" x2="19" y2="19"></line>
+              </svg>
+              <span data-i18n="vocab.skipBtn">Weet ik niet</span>
+            </button>
+          </div>
+        </form>
+
+        <div class="feedback-strip" id="feedback"></div>
+
+        <div class="continue-row" id="continue-row">
+          <button class="btn btn-continue" type="button" id="btn-continue">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14"></path>
+              <path d="m12 5 7 7-7 7"></path>
+            </svg>
+            <span data-i18n="vocab.continueBtn">Volgende</span>
+          </button>
+          <div class="continue-hint" data-i18n="vocab.continueHint">Neem de tijd om het juiste antwoord te bekijken. Klik op Volgende als je klaar bent.</div>
+        </div>
+
+        <div class="study-meta">
+          <span class="study-meta-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path></svg>
+            <span data-i18n="vocab.metaStreak">Reeks</span>: <strong id="meta-streak">0</strong>
+          </span>
+          <span class="study-meta-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+            <span data-i18n="vocab.metaThisRound">In ronde</span>: <strong id="meta-round">0</strong>
+          </span>
+          <button class="btn btn-ghost" id="btn-restart" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 12a9 9 0 1 0 3-6.7"></path>
+              <polyline points="3 4 3 10 9 10"></polyline>
+            </svg>
+            <span data-i18n="vocab.restartBtn">Opnieuw</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- DONE CARD -->
+      <div class="done-card" id="done-card" style="display: none;">
+        <div class="done-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path>
+            <path d="m9 12 2 2 4-4"></path>
+          </svg>
+        </div>
+        <div class="done-title" data-i18n="vocab.doneTitle">Alle woorden beheerst!</div>
+        <div class="done-text" data-i18n="vocab.doneText">Goed gedaan. Je hebt elk woord minstens drie keer zelfstandig goed beantwoord.</div>
+        <div class="done-stats">
+          <div class="done-stat">
+            <div class="done-stat-label" data-i18n="vocab.doneMastered">Beheerst</div>
+            <div class="done-stat-value good" id="done-mastered">0</div>
+          </div>
+          <div class="done-stat">
+            <div class="done-stat-label" data-i18n="vocab.doneTotal">Totaal</div>
+            <div class="done-stat-value" id="done-total">0</div>
+          </div>
+          <div class="done-stat">
+            <div class="done-stat-label" data-i18n="vocab.doneAccuracy">Nauwkeurigheid</div>
+            <div class="done-stat-value" id="done-accuracy">—</div>
+          </div>
+        </div>
+        <div class="done-actions">
+          <button class="btn btn-practice-mode" id="btn-practice-all" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 12a9 9 0 1 0 3-6.7"></path>
+              <polyline points="3 4 3 10 9 10"></polyline>
+            </svg>
+            <span data-i18n="vocab.practiceAllBtn">Herhaal alle woorden (Oefenmodus)</span>
+          </button>
+          <button class="btn btn-secondary" id="btn-new-set" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 5v14M5 12h14"></path>
+            </svg>
+            <span data-i18n="vocab.newSetBtn">Nieuwe woordset</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- PRIVACY NOTE -->
+      <div class="privacy-note">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path>
+          <path d="m9 12 2 2 4-4"></path>
+        </svg>
+        <span data-i18n="vocab.privacy">Alles blijft in je browser — geen account, geen tracking.</span>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    (function() {
+      "use strict";
+
+      /* ============================================================
+         TRANSLATIONS
+      ============================================================ */
+      const translations = {
+        en: {
+          "language.label": "Language",
+          "vocab.backHome": "Back to home",
+          "vocab.badge": "free & no account",
+          "vocab.title": "Woordtrainer",
+          "vocab.heroText": "Learn terms and vocabulary fast with a smart 3-step method. Practice together first, then test yourself.",
+          "vocab.setLabel": "Word set",
+          "vocab.masteredLabel": " mastered",
+          "vocab.legendUnlearned": "Unlearned",
+          "vocab.legendLearning": "Learning",
+          "vocab.legendMastered": "Mastered",
+          "vocab.setupTitle": "Paste your word set",
+          "vocab.setupDesc": "One word per line, with an <strong>=</strong> or <strong>-</strong> between the word and its meaning. For example: <em>le chien = de hond</em>.",
+          "vocab.setupLabel": "Your words",
+          "vocab.setupPlaceholder": "le chien = de hond\nle chat = de kat\nl'oiseau = de vogel",
+          "vocab.setupHint": "Tip: you can also use a <strong>tab</strong> or a <strong>comma</strong> as a separator.",
+          "vocab.startBtn": "Start learning",
+          "vocab.demoLink": "Try example list (French)",
+          "vocab.demoSub": "8 words — French to Dutch",
+          "vocab.setupErrorEmpty": "Paste at least one word in the format 'word = meaning'.",
+          "vocab.setupErrorFormat": "No valid lines found. Use 'word = meaning' on each line.",
+          "vocab.roundPractice": "Practice round",
+          "vocab.roundTest": "Test round",
+          "vocab.roundMastered": "Mastered",
+          "vocab.roundFreeplay": "Free practice",
+          "vocab.inputPlaceholder": "Type the answer…",
+          "vocab.submitBtn": "Answer",
+          "vocab.skipBtn": "I don't know",
+          "vocab.continueBtn": "Next",
+          "vocab.continueHint": "Take your time to review the correct answer. Click Next when you're ready.",
+          "vocab.feedbackCorrect": "Correct!",
+          "vocab.feedbackTypo": "Correct — check your spelling next time",
+          "vocab.feedbackIncorrect": "Not quite. The answer is",
+          "vocab.feedbackMastered": "Mastered!",
+          "vocab.metaStreak": "Streak",
+          "vocab.metaThisRound": "In round",
+          "vocab.restartBtn": "Restart",
+          "vocab.doneTitle": "All words mastered!",
+          "vocab.doneText": "Well done. You answered every word correctly at least three times without help.",
+          "vocab.doneMastered": "Mastered",
+          "vocab.doneTotal": "Total",
+          "vocab.doneAccuracy": "Accuracy",
+          "vocab.practiceAllBtn": "Practice all words (Endless mode)",
+          "vocab.newSetBtn": "New word set",
+          "vocab.againBtn": "Another round",
+          "vocab.practiceHint": "This word is new. Type the meaning to practice.",
+          "vocab.freeplayHint": "Endless practice — all words in random order",
+          "vocab.privacy": "Everything stays in your browser — no account, no tracking."
+        },
+        nl: {
+          "language.label": "Taal",
+          "vocab.backHome": "Terug naar home",
+          "vocab.badge": "gratis & zonder account",
+          "vocab.title": "Woordtrainer",
+          "vocab.heroText": "Leer snel begrippen en woordjes met een slimme 3-stappen leermethode. Eerst samen oefenen, dan zelfstandig testen.",
+          "vocab.setLabel": "Woordset",
+          "vocab.masteredLabel": " beheerst",
+          "vocab.legendUnlearned": "Ongeleerd",
+          "vocab.legendLearning": "Aan het leren",
+          "vocab.legendMastered": "Beheerst",
+          "vocab.setupTitle": "Plak je woordset",
+          "vocab.setupDesc": "Eén woord per regel, met een <strong>=</strong> of <strong>-</strong> tussen het woord en de betekenis. Bijvoorbeeld: <em>le chien = de hond</em>.",
+          "vocab.setupLabel": "Jouw woorden",
+          "vocab.setupPlaceholder": "le chien = de hond\nle chat = de kat\nl'oiseau = de vogel",
+          "vocab.setupHint": "Tip: je kunt ook een <strong>tab</strong> of een <strong>komma</strong> gebruiken als scheiding.",
+          "vocab.startBtn": "Start leren",
+          "vocab.demoLink": "Probeer voorbeeldlijst (Frans)",
+          "vocab.demoSub": "8 woorden — Frans naar Nederlands",
+          "vocab.setupErrorEmpty": "Plak minstens één woord in de vorm 'woord = betekenis'.",
+          "vocab.setupErrorFormat": "Geen geldige regels gevonden. Gebruik 'woord = betekenis' per regel.",
+          "vocab.roundPractice": "Oefenronde",
+          "vocab.roundTest": "Toetsronde",
+          "vocab.roundMastered": "Beheerst",
+          "vocab.roundFreeplay": "Oefenmodus",
+          "vocab.inputPlaceholder": "Typ het antwoord…",
+          "vocab.submitBtn": "Antwoord",
+          "vocab.skipBtn": "Weet ik niet",
+          "vocab.continueBtn": "Volgende",
+          "vocab.continueHint": "Neem de tijd om het juiste antwoord te bekijken. Klik op Volgende als je klaar bent.",
+          "vocab.feedbackCorrect": "Goed!",
+          "vocab.feedbackTypo": "Goed — let volgende keer op de spelling",
+          "vocab.feedbackIncorrect": "Bijna. Het antwoord is",
+          "vocab.feedbackMastered": "Beheerst!",
+          "vocab.metaStreak": "Reeks",
+          "vocab.metaThisRound": "In ronde",
+          "vocab.restartBtn": "Opnieuw",
+          "vocab.doneTitle": "Alle woorden beheerst!",
+          "vocab.doneText": "Goed gedaan. Je hebt elk woord minstens drie keer zelfstandig goed beantwoord.",
+          "vocab.doneMastered": "Beheerst",
+          "vocab.doneTotal": "Totaal",
+          "vocab.doneAccuracy": "Nauwkeurigheid",
+          "vocab.practiceAllBtn": "Herhaal alle woorden (Oefenmodus)",
+          "vocab.newSetBtn": "Nieuwe woordset",
+          "vocab.againBtn": "Nog een ronde",
+          "vocab.practiceHint": "Dit woord is nieuw. Typ de betekenis om te oefenen.",
+          "vocab.freeplayHint": "Oefenmodus — alle woorden in willekeurige volgorde",
+          "vocab.privacy": "Alles blijft in je browser — geen account, geen tracking."
+        }
+      };
+
+      let currentLanguage = localStorage.getItem('studystack-language') || 'nl';
+      function t(key) {
+        return (translations[currentLanguage] && translations[currentLanguage][key]) || translations.nl[key] || key;
+      }
+      function tFormat(key, values) {
+        return t(key).replace(/\{(\w+)\}/g, function(m, name) {
+          return values[name] === undefined ? m : values[name];
+        });
+      }
+
+      /* ============================================================
+         CONSTANTS
+      ============================================================ */
+      const BATCH_SIZE = 3;
+      const MASTERY_THRESHOLD = 3;
+      const STORAGE_KEY = 'studystack-vocab-session';
+
+      const DEMO_SET = [
+        { term: 'le chien', definition: 'de hond' },
+        { term: 'le chat', definition: 'de kat' },
+        { term: 'l\'oiseau', definition: 'de vogel' },
+        { term: 'la maison', definition: 'het huis' },
+        { term: 'le livre', definition: 'het boek' },
+        { term: 'l\'école', definition: 'de school' },
+        { term: 'le professeur', definition: 'de leraar' },
+        { term: 'la voiture', definition: 'de auto' }
+      ];
+
+      /* ============================================================
+         STATE
+      ============================================================ */
+      const state = {
+        setName: '',
+        words: [],
+        pendingIds: [],
+        batchIds: [],
+        practiceQueue: [],
+        testQueue: [],
+        batchNumber: 1,
+        totalAttempts: 0,
+        correctAttempts: 0,
+        streak: 0,
+        answeredThisRound: 0,
+        paused: false,
+        freeplay: false,
+        freeplayCurrentId: null
+      };
+
+      /* ============================================================
+         DOM
+      ============================================================ */
+      const setupCard = document.getElementById('setup-card');
+      const studyCard = document.getElementById('study-card');
+      const doneCard = document.getElementById('done-card');
+      const progressHeader = document.getElementById('progress-header');
+
+      const setInput = document.getElementById('set-input');
+      const setupError = document.getElementById('setup-error');
+      const btnStart = document.getElementById('btn-start');
+      const btnDemo = document.getElementById('btn-demo');
+
+      const roundChip = document.getElementById('round-chip');
+      const roundLabel = document.getElementById('round-label');
+      const wordPrompt = document.getElementById('word-prompt');
+      const wordSub = document.getElementById('word-sub');
+      const practiceAnswer = document.getElementById('practice-answer');
+
+      const answerForm = document.getElementById('answer-form');
+      const answerInput = document.getElementById('answer-input');
+      const btnSkip = document.getElementById('btn-skip');
+      const feedback = document.getElementById('feedback');
+
+      const continueRow = document.getElementById('continue-row');
+      const btnContinue = document.getElementById('btn-continue');
+
+      const metaStreak = document.getElementById('meta-streak');
+      const metaRound = document.getElementById('meta-round');
+      const btnRestart = document.getElementById('btn-restart');
+
+      const masteredCountEl = document.getElementById('mastered-count');
+      const totalCountEl = document.getElementById('total-count');
+      const segUnlearned = document.getElementById('seg-unlearned');
+      const segLearning = document.getElementById('seg-learning');
+      const segMastered = document.getElementById('seg-mastered');
+      const legendUnlearned = document.getElementById('legend-unlearned');
+      const legendLearning = document.getElementById('legend-learning');
+      const legendMastered = document.getElementById('legend-mastered');
+
+      const doneMastered = document.getElementById('done-mastered');
+      const doneTotal = document.getElementById('done-total');
+      const doneAccuracy = document.getElementById('done-accuracy');
+      const btnNewSet = document.getElementById('btn-new-set');
+      const btnPracticeAll = document.getElementById('btn-practice-all');
+
+      const languageSelect = document.getElementById('language-select');
+
+      /* ============================================================
+         ANSWER MATCHING (unchanged)
+      ============================================================ */
+      function normalize(str) {
+        if (str === null || str === undefined) return '';
+        return String(str)
+          .trim()
+          .toLowerCase()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .replace(/[^\p{L}\p{N}\s'’-]/gu, '')
+          .replace(/\s+/g, ' ')
+          .trim();
+      }
+      function stripParentheses(str) {
+        return String(str)
+          .replace(/\([^)]*\)/g, ' ')
+          .replace(/\[[^\]]*\]/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim();
+      }
+      function buildAcceptedList(definition) {
+        if (!definition) return [];
+        const raw = String(definition);
+        const parts = raw.split(/\s*[\/;]\s*/);
+        const accepted = [];
+        parts.forEach(function(part) {
+          const trimmed = part.trim();
+          if (!trimmed) return;
+          accepted.push(trimmed);
+          const noParens = stripParentheses(trimmed);
+          if (noParens && noParens !== trimmed) accepted.push(noParens);
+        });
+        const wholeNoParens = stripParentheses(raw);
+        if (wholeNoParens && wholeNoParens !== raw) accepted.push(wholeNoParens);
+        const seen = {};
+        return accepted.filter(function(a) {
+          const key = normalize(a);
+          if (!key || seen[key]) return false;
+          seen[key] = true;
+          return true;
+        });
+      }
+      function levenshtein(a, b) {
+        if (a === b) return 0;
+        if (!a.length) return b.length;
+        if (!b.length) return a.length;
+        const prev = new Array(b.length + 1);
+        const curr = new Array(b.length + 1);
+        for (let j = 0; j <= b.length; j++) prev[j] = j;
+        for (let i = 1; i <= a.length; i++) {
+          curr[0] = i;
+          for (let j = 1; j <= b.length; j++) {
+            const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+            curr[j] = Math.min(prev[j] + 1, curr[j - 1] + 1, prev[j - 1] + cost);
+          }
+          for (let j = 0; j <= b.length; j++) prev[j] = curr[j];
+        }
+        return prev[b.length];
+      }
+      function allowedTypos(len) {
+        if (len < 4) return 0;
+        if (len <= 7) return 1;
+        return 2;
+      }
+      function checkAnswer(input, definition) {
+        const normalizedInput = normalize(input);
+        if (!normalizedInput) return { status: 'wrong' };
+        const accepted = buildAcceptedList(definition);
+        if (accepted.length === 0) return { status: 'wrong' };
+        for (let i = 0; i < accepted.length; i++) {
+          if (normalize(accepted[i]) === normalizedInput) return { status: 'correct' };
+        }
+        for (let i = 0; i < accepted.length; i++) {
+          const target = normalize(accepted[i]);
+          if (!target) continue;
+          const dist = levenshtein(normalizedInput, target);
+          if (dist === 0) return { status: 'correct' };
+          if (dist <= allowedTypos(target.length)) {
+            return { status: 'typo', distance: dist, matched: accepted[i] };
+          }
+        }
+        return { status: 'wrong' };
+      }
+
+      /* ============================================================
+         PARSE / HELPERS (unchanged)
+      ============================================================ */
+      function parseWordSet(raw) {
+        if (!raw) return [];
+        const lines = String(raw).split(/\r?\n/);
+        const out = [];
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i].trim();
+          if (!line) continue;
+          let parts = null;
+          const eq = line.indexOf('=');
+          if (eq >= 0) {
+            parts = [line.slice(0, eq), line.slice(eq + 1)];
+          } else {
+            const tab = line.indexOf('\t');
+            if (tab >= 0) {
+              parts = [line.slice(0, tab), line.slice(tab + 1)];
+            } else {
+              const dashMatch = line.match(/^(.+?)\s+[-–—]\s+(.+)$/);
+              if (dashMatch) {
+                parts = [dashMatch[1], dashMatch[2]];
+              } else {
+                const comma = line.indexOf(',');
+                if (comma >= 0) {
+                  parts = [line.slice(0, comma), line.slice(comma + 1)];
+                }
+              }
+            }
+          }
+          if (!parts) continue;
+          const term = parts[0].trim();
+          const definition = parts[1].trim();
+          if (term && definition) out.push({ term: term, definition: definition });
+        }
+        return out;
+      }
+      function findWordById(id) { return state.words.find(function(w) { return w.id === id; }) || null; }
+      function currentWord() {
+        if (state.freeplay) {
+          return state.freeplayCurrentId ? findWordById(state.freeplayCurrentId) : null;
+        }
+        if (state.practiceQueue.length > 0) return findWordById(state.practiceQueue[0]);
+        if (state.testQueue.length > 0) return findWordById(state.testQueue[0]);
+        return null;
+      }
+      function isPracticePhase() {
+        if (state.freeplay) return false;
+        return state.practiceQueue.length > 0;
+      }
+      function escapeHtml(str) {
+        return String(str)
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+      }
+      function displayState(word) {
+        if (!word) return 'unlearned';
+        if (word.correctCount >= MASTERY_THRESHOLD) return 'mastered';
+        if (word.phase === 'test' && word.correctCount >= 1) return 'learning';
+        return 'unlearned';
+      }
+      function isWordClearedFromBatch(word) {
+        if (!word) return false;
+        return displayState(word) === 'learning' || displayState(word) === 'mastered';
+      }
+
+      /* ============================================================
+         PERSISTENCE (unchanged)
+      ============================================================ */
+      function saveSession() {
+        if (state.freeplay) return;
+        try {
+          const snapshot = {
+            setName: state.setName,
+            words: state.words.map(function(w) {
+              return { id: w.id, term: w.term, definition: w.definition, correctCount: w.correctCount, phase: w.phase };
+            }),
+            pendingIds: state.pendingIds.slice(),
+            batchIds: state.batchIds.slice(),
+            practiceQueue: state.practiceQueue.slice(),
+            testQueue: state.testQueue.slice(),
+            batchNumber: state.batchNumber,
+            totalAttempts: state.totalAttempts,
+            correctAttempts: state.correctAttempts,
+            streak: state.streak,
+            answeredThisRound: state.answeredThisRound
+          };
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(snapshot));
+        } catch (e) {}
+      }
+      function clearSavedSession() {
+        try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+      }
+
+      /* ============================================================
+         BATCH LOADING (unchanged)
+      ============================================================ */
+      function loadNextBatch() {
+        const hasUnclearedInBatch = state.batchIds.some(function(id) {
+          const w = findWordById(id);
+          return w && !isWordClearedFromBatch(w) && w.correctCount < MASTERY_THRESHOLD;
+        });
+        if (hasUnclearedInBatch) return false;
+        const nextIds = state.pendingIds.slice(0, BATCH_SIZE);
+        if (nextIds.length === 0) return false;
+        state.pendingIds = state.pendingIds.slice(nextIds.length);
+        state.batchIds = nextIds.slice();
+        nextIds.forEach(function(id) {
+          const w = findWordById(id);
+          if (!w) return;
+          w.correctCount = 0;
+          w.phase = 'practice';
+        });
+        state.practiceQueue = nextIds.slice();
+        state.testQueue = [];
+        if (state.batchIds.length > 0 && state.pendingIds.length + state.batchIds.length < state.words.length) {
+          state.batchNumber += 1;
+        }
+        return true;
+      }
+
+      /* ============================================================
+         START / RESET (unchanged)
+      ============================================================ */
+      function startSet(name, wordPairs) {
+        const words = wordPairs.map(function(p, i) {
+          return { id: 'w_' + i, term: p.term, definition: p.definition, correctCount: 0, phase: 'practice' };
+        });
+        state.setName = name || t('vocab.setLabel');
+        state.words = words;
+        state.pendingIds = words.map(function(w) { return w.id; });
+        state.batchIds = [];
+        state.practiceQueue = [];
+        state.testQueue = [];
+        state.batchNumber = 1;
+        state.totalAttempts = 0;
+        state.correctAttempts = 0;
+        state.streak = 0;
+        state.answeredThisRound = 0;
+        state.paused = false;
+        state.freeplay = false;
+        state.freeplayCurrentId = null;
+        loadNextBatch();
+        document.getElementById('set-name').textContent = state.setName;
+        showStudy();
+        updateProgress();
+        saveSession();
+        renderCurrentWord();
+      }
+      function showStudy() {
+        setupCard.style.display = 'none';
+        doneCard.style.display = 'none';
+        studyCard.style.display = 'block';
+        progressHeader.style.display = 'block';
+      }
+      function showDone() {
+        studyCard.style.display = 'none';
+        progressHeader.style.display = 'block';
+        doneCard.style.display = 'block';
+        const total = state.words.length;
+        const mastered = state.words.filter(function(w) { return w.correctCount >= MASTERY_THRESHOLD; }).length;
+        const accuracy = state.totalAttempts > 0 ? Math.round((state.correctAttempts / state.totalAttempts) * 100) : 0;
+        doneMastered.textContent = String(mastered);
+        doneTotal.textContent = String(total);
+        doneAccuracy.textContent = accuracy + '%';
+        clearSavedSession();
+      }
+      function showSetup() {
+        studyCard.style.display = 'none';
+        doneCard.style.display = 'none';
+        progressHeader.style.display = 'none';
+        setupCard.style.display = 'block';
+        setupError.className = 'setup-error';
+        setupError.textContent = '';
+        state.freeplay = false;
+        state.freeplayCurrentId = null;
+        setInput.focus();
+      }
+
+      /* ============================================================
+         PROGRESS (unchanged)
+      ============================================================ */
+      function updateProgress() {
+        const total = state.words.length;
+        if (total === 0) {
+          masteredCountEl.textContent = '0'; totalCountEl.textContent = '0';
+          segUnlearned.style.width = '0%'; segLearning.style.width = '0%'; segMastered.style.width = '0%';
+          legendUnlearned.textContent = '0'; legendLearning.textContent = '0'; legendMastered.textContent = '0';
+          return;
+        }
+        let mastered = 0, learning = 0, unlearned = 0;
+        state.words.forEach(function(w) {
+          const s = displayState(w);
+          if (s === 'mastered') mastered++;
+          else if (s === 'learning') learning++;
+          else unlearned++;
+        });
+        segMastered.style.width = ((mastered / total) * 100) + '%';
+        segLearning.style.width = ((learning / total) * 100) + '%';
+        segUnlearned.style.width = ((unlearned / total) * 100) + '%';
+        masteredCountEl.textContent = String(mastered);
+        totalCountEl.textContent = String(total);
+        legendUnlearned.textContent = String(unlearned);
+        legendLearning.textContent = String(learning);
+        legendMastered.textContent = String(mastered);
+      }
+
+      /* ============================================================
+         RENDER CURRENT WORD (unchanged)
+      ============================================================ */
+      function renderCurrentWord() {
+        feedback.className = 'feedback-strip';
+        feedback.textContent = '';
+        continueRow.classList.remove('show');
+        answerForm.classList.remove('paused');
+        studyCard.classList.remove('correct-flash', 'paused-wrong');
+        answerInput.classList.remove('correct', 'incorrect');
+        state.paused = false;
+
+        if (state.freeplay) {
+          if (!state.freeplayCurrentId || !findWordById(state.freeplayCurrentId)) {
+            state.freeplayCurrentId = pickRandomFreeplayId();
+          }
+          if (!state.freeplayCurrentId) { state.freeplay = false; showDone(); return; }
+        } else {
+          let guard = 0;
+          while (guard++ < 50) {
+            const word = currentWord();
+            if (word) break;
+            const loaded = loadNextBatch();
+            if (!loaded) break;
+          }
+        }
+
+        const word = currentWord();
+        if (!word) { showDone(); return; }
+
+        if (state.freeplay) {
+          roundChip.className = 'round-chip freeplay';
+          roundLabel.textContent = t('vocab.roundFreeplay');
+        } else {
+          const practice = isPracticePhase();
+          if (word.correctCount >= MASTERY_THRESHOLD) {
+            roundChip.className = 'round-chip mastered';
+            roundLabel.textContent = t('vocab.roundMastered');
+          } else if (practice) {
+            roundChip.className = 'round-chip practice';
+            roundLabel.textContent = t('vocab.roundPractice');
+          } else {
+            roundChip.className = 'round-chip test';
+            roundLabel.textContent = t('vocab.roundTest');
+          }
+        }
+
+        const practice = !state.freeplay && isPracticePhase();
+        wordPrompt.textContent = word.term;
+        if (state.freeplay) {
+          wordSub.textContent = t('vocab.freeplayHint');
+        } else {
+          wordSub.textContent = practice ? t('vocab.practiceHint') : '';
+        }
+        if (practice) {
+          practiceAnswer.style.display = 'inline-block';
+          practiceAnswer.innerHTML = '<strong>' + escapeHtml(word.definition) + '</strong>';
+        } else {
+          practiceAnswer.style.display = 'none';
+          practiceAnswer.innerHTML = '';
+        }
+        answerInput.value = '';
+        answerInput.disabled = false;
+        answerInput.className = 'answer-input';
+        metaStreak.textContent = String(state.streak);
+        metaRound.textContent = String(state.answeredThisRound);
+        setTimeout(function() {
+          if (document.activeElement !== answerInput) answerInput.focus();
+        }, 40);
+      }
+      function pickRandomFreeplayId() {
+        const pool = state.words;
+        if (!pool.length) return null;
+        let candidate = pool[Math.floor(Math.random() * pool.length)].id;
+        if (pool.length > 1 && candidate === state.freeplayCurrentId) {
+          let tries = 0;
+          while (candidate === state.freeplayCurrentId && tries < 8) {
+            candidate = pool[Math.floor(Math.random() * pool.length)].id;
+            tries++;
+          }
+        }
+        return candidate;
+      }
+
+      /* ============================================================
+         SUBMIT ANSWER (unchanged)
+      ============================================================ */
+      function submitAnswer(skipped) {
+        if (state.paused) return;
+        const word = currentWord();
+        if (!word) return;
+        const practice = !state.freeplay && isPracticePhase();
+        const rawAnswer = answerInput.value || '';
+        const result = skipped ? { status: 'wrong' } : checkAnswer(rawAnswer, word.definition);
+        state.totalAttempts++;
+        state.answeredThisRound++;
+
+        if (state.freeplay) {
+          if (result.status === 'correct' || result.status === 'typo') {
+            state.correctAttempts++;
+            state.streak++;
+            answerInput.classList.add('correct');
+            studyCard.classList.add('correct-flash');
+            if (result.status === 'typo') showFeedback('warn', t('vocab.feedbackTypo'), null);
+            else showFeedback('ok', t('vocab.feedbackCorrect'), null);
+            setTimeout(function() {
+              state.freeplayCurrentId = pickRandomFreeplayId();
+              renderCurrentWord();
+            }, 500);
+          } else {
+            state.streak = 0;
+            answerInput.classList.add('incorrect');
+            studyCard.classList.add('paused-wrong');
+            showFeedback('bad', t('vocab.feedbackIncorrect'), word.definition);
+            state.paused = true;
+            answerInput.disabled = true;
+            answerForm.classList.add('paused');
+            continueRow.classList.add('show');
+            setTimeout(function() { btnContinue.focus(); }, 60);
+          }
+          return;
+        }
+
+        if (result.status === 'correct' || result.status === 'typo') {
+          state.correctAttempts++;
+          state.streak++;
+          if (practice) {
+            word.phase = 'test';
+            word.correctCount = 0;
+            state.practiceQueue = state.practiceQueue.filter(function(id) { return id !== word.id; });
+            state.testQueue.push(word.id);
+          } else {
+            word.correctCount = Math.min(MASTERY_THRESHOLD, word.correctCount + 1);
+            if (word.correctCount >= MASTERY_THRESHOLD) {
+              word.phase = 'mastered';
+              state.testQueue = state.testQueue.filter(function(id) { return id !== word.id; });
+            } else {
+              state.testQueue.shift();
+              state.testQueue.push(word.id);
+            }
+          }
+          answerInput.classList.add('correct');
+          studyCard.classList.add('correct-flash');
+          if (result.status === 'typo') showFeedback('warn', t('vocab.feedbackTypo'), null);
+          else {
+            const masteredNow = word.phase === 'mastered';
+            showFeedback('ok', masteredNow ? t('vocab.feedbackMastered') : t('vocab.feedbackCorrect'), null);
+          }
+          updateProgress();
+          saveSession();
+          setTimeout(function() { renderCurrentWord(); }, 500);
+        } else {
+          state.streak = 0;
+          answerInput.classList.add('incorrect');
+          studyCard.classList.add('paused-wrong');
+          showFeedback('bad', t('vocab.feedbackIncorrect'), word.definition);
+          word.correctCount = 0;
+          word.phase = 'practice';
+          state.testQueue = state.testQueue.filter(function(id) { return id !== word.id; });
+          state.practiceQueue = state.practiceQueue.filter(function(id) { return id !== word.id; });
+          state.practiceQueue.unshift(word.id);
+          state.paused = true;
+          answerInput.disabled = true;
+          answerForm.classList.add('paused');
+          continueRow.classList.add('show');
+          updateProgress();
+          saveSession();
+          setTimeout(function() { btnContinue.focus(); }, 60);
+        }
+      }
+      function showFeedback(kind, mainText, revealAnswer) {
+        let html = '';
+        const iconOk = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>';
+        const iconBad = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>';
+        const iconWarn = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>';
+        if (kind === 'ok') html = iconOk + '<span>' + escapeHtml(mainText) + '</span>';
+        else if (kind === 'warn') html = iconWarn + '<span>' + escapeHtml(mainText) + '<span class="typo-note">' + (currentLanguage === 'en' ? 'spelling' : 'spelfout') + '</span></span>';
+        else html = iconBad + '<span>' + escapeHtml(mainText) + (revealAnswer ? ' <span class="answer-reveal">' + escapeHtml(revealAnswer) + '</span>' : '') + '</span>';
+        feedback.innerHTML = html;
+        feedback.className = 'feedback-strip show ' + kind;
+      }
+
+      btnStart.addEventListener('click', function() {
+        const parsed = parseWordSet(setInput.value);
+        if (parsed.length === 0) {
+          const raw = (setInput.value || '').trim();
+          setupError.textContent = raw.length === 0 ? t('vocab.setupErrorEmpty') : t('vocab.setupErrorFormat');
+          setupError.className = 'setup-error show';
+          return;
+        }
+        setupError.className = 'setup-error';
+        startSet(t('vocab.setLabel'), parsed);
+      });
+
+      btnDemo.addEventListener('click', function() {
+        setInput.value = DEMO_SET.map(function(w) { return w.term + ' = ' + w.definition; }).join('\n');
+        setupError.className = 'setup-error';
+        startSet(t('vocab.setLabel'), DEMO_SET.slice());
+      });
+
+      answerForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        submitAnswer(false);
+      });
+      btnSkip.addEventListener('click', function() { submitAnswer(true); });
+      btnContinue.addEventListener('click', function() {
+        if (!state.paused) return;
+        state.paused = false;
+        if (state.freeplay) state.freeplayCurrentId = pickRandomFreeplayId();
+        renderCurrentWord();
+      });
+      btnRestart.addEventListener('click', function() {
+        if (!state.words.length) return;
+        state.words.forEach(function(w) { w.correctCount = 0; w.phase = 'practice'; });
+        state.pendingIds = state.words.map(function(w) { return w.id; });
+        state.batchIds = []; state.practiceQueue = []; state.testQueue = [];
+        state.batchNumber = 1;
+        state.totalAttempts = 0; state.correctAttempts = 0;
+        state.streak = 0; state.answeredThisRound = 0;
+        state.paused = false; state.freeplay = false; state.freeplayCurrentId = null;
+        loadNextBatch();
+        updateProgress();
+        saveSession();
+        renderCurrentWord();
+      });
+      btnNewSet.addEventListener('click', function() {
+        clearSavedSession();
+        state.freeplay = false;
+        state.freeplayCurrentId = null;
+        showSetup();
+      });
+      btnPracticeAll.addEventListener('click', function() {
+        if (!state.words.length) return;
+        state.freeplay = true;
+        state.freeplayCurrentId = pickRandomFreeplayId();
+        state.paused = false;
+        showStudy();
+        renderCurrentWord();
+      });
+
+      /* ============================================================
+         LANGUAGE (unchanged)
+      ============================================================ */
+      function applyLanguage(language) {
+        currentLanguage = translations[language] ? language : 'nl';
+        document.documentElement.lang = currentLanguage;
+        document.querySelectorAll('[data-i18n]').forEach(function(element) {
+          const key = element.dataset.i18n;
+          if (key === 'vocab.setupDesc' || key === 'vocab.setupHint') {
+            element.innerHTML = t(key);
+          } else {
+            element.textContent = t(key);
+          }
+        });
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(function(element) {
+          element.placeholder = t(element.dataset.i18nPlaceholder);
+        });
+        languageSelect.value = currentLanguage;
+        languageSelect.setAttribute('aria-label', t('language.label'));
+        localStorage.setItem('studystack-language', currentLanguage);
+        if (studyCard.style.display !== 'none' && state.words.length > 0 && !state.paused) {
+          renderCurrentWord();
+        }
+      }
+      languageSelect.addEventListener('change', function() {
+        applyLanguage(languageSelect.value);
+      });
+
+      /* ============================================================
+         INIT (unchanged)
+      ============================================================ */
+      clearSavedSession();
+      applyLanguage(currentLanguage);
+      showSetup();
+    })();
+  </script>
+  <script src="../page-intro.js"></script>
+</body>
+</html>

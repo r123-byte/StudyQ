@@ -1399,6 +1399,15 @@
       box-shadow: 0 8px 18px -8px rgba(37, 99, 235, 0.2) !important;
     }
   </style>
+  <style>
+    /* Pomodoro theme overrides: keep green accents and black primary actions. */
+    body.mode-focus, body.mode-break { --accent:#10B981; --accent-light:#6EE7B7; --accent-pale:#A7F3D0; --accent-wash:#ECFDF5; }
+    body.mode-focus .btn-primary, body.mode-break .btn-primary { background:#000 !important; color:#fff !important; border-color:#000 !important; box-shadow:0 4px 12px -2px rgba(0,0,0,.2) !important; }
+    body.mode-focus .btn-primary:hover, body.mode-break .btn-primary:hover { background:#1a1a1a !important; border-color:#1a1a1a !important; box-shadow:0 12px 24px -6px rgba(16,185,129,.4) !important; }
+    body.mode-focus .timer-display { color:var(--accent) !important; text-shadow:var(--text-glow) !important; }
+    body.mode-focus .preset-btn.active { background:var(--accent) !important; border-color:var(--accent) !important; }
+    body.mode-focus :focus-visible, body.mode-break :focus-visible { outline:2px solid var(--accent) !important; }
+  </style>
 </head>
 <body class="mode-focus">
   <div class="wrapper">

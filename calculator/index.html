@@ -1105,6 +1105,15 @@
       border-color: #93c5fd !important;
     }
   </style>
+  <style>
+    /* Calculator theme overrides: keep blue accents and black primary actions. */
+    body:has(#calculate-required) { --accent: #2563EB; --accent-light: #93C5FD; --accent-pale: #BFDBFE; --accent-wash: #EFF6FF; }
+    body:has(#calculate-required) .btn-calculate, body:has(#calculate-required) .btn-add { background:#000 !important; color:#fff !important; border-color:#000 !important; box-shadow:0 4px 12px -2px rgba(0,0,0,.2) !important; }
+    body:has(#calculate-required) .btn-calculate:hover, body:has(#calculate-required) .btn-add:hover { background:#1a1a1a !important; border-color:#1a1a1a !important; box-shadow:0 12px 24px -6px rgba(37,99,235,.4) !important; }
+    body:has(#calculate-required) .tab-btn.active { background:var(--accent) !important; box-shadow:var(--pop-shadow) !important; }
+    body:has(#calculate-required) .result-value { color:var(--accent) !important; text-shadow:var(--text-glow) !important; }
+    body:has(#calculate-required) :focus-visible { outline:2px solid var(--accent) !important; }
+  </style>
 </head>
 <body>
   <div class="wrapper">

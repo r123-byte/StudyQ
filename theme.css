@@ -1430,9 +1430,26 @@ body.mode-focus .btn-primary:hover { background: var(--tool-hover) !important; b
 
 /* ---------- 32. Focus outline ---------- */
 :focus-visible {
-  outline: 2px solid #2563EB !important;
+  outline: 2px solid var(--accent, #2563EB) !important;
   outline-offset: 2px !important;
 }
+
+/* Keep shared theme hover, focus, and highlight states in each tool palette. */
+.test-card:hover, .tool-card:hover, .example-card:hover, .comparison-card:hover,
+.plan-detail:hover, .quick-add-item:hover, .grade-row:hover, .study-card:hover,
+.deck-card:hover, .card-row:hover {
+  border-color: var(--accent-light) !important;
+  box-shadow: var(--pop-shadow) !important;
+}
+.field-input:focus, .answer-input:focus, .type-input:focus, input:focus-visible,
+textarea:focus-visible, select:focus-visible {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent) !important;
+}
+.result-value, .word-prompt { text-shadow: var(--text-glow) !important; }
+.example-card-title, .plan-reason strong, .session-round strong { color: var(--accent) !important; }
+.plan-duration, .practice-answer, .example-card { background-color: var(--accent-wash) !important; border-color: var(--accent-pale) !important; }
+.plan-duration, .practice-answer { color: var(--accent-hover) !important; }
 
 /* ---------- 33. Responsive tidy ---------- */
 @media (max-width: 800px) {

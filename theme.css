@@ -20,12 +20,12 @@
 [class*="Pop"]      { animation: none !important; }
 
 /* Per-tool accent palettes. */
-body { --tool-accent: #2563EB; --tool-hover: #1D4ED8; --tool-wash: #EFF6FF; --tool-light: #DBEAFE; --tool-shadow: rgba(37, 99, 235, 0.4); }
-body:has(#calculate-required) { --tool-accent: #8B5CF6; --tool-hover: #7C3AED; --tool-wash: #F5F3FF; --tool-light: #DDD6FE; --tool-shadow: rgba(139, 92, 246, 0.4); }
-body.mode-focus, body.mode-break { --tool-accent: #F97316; --tool-hover: #EA580C; --tool-wash: #FFF7ED; --tool-light: #FED7AA; --tool-shadow: rgba(249, 115, 22, 0.4); }
-body:has(#btn-start) { --tool-accent: #E11D48; --tool-hover: #BE123C; --tool-wash: #FFF1F2; --tool-light: #FECDD3; --tool-shadow: rgba(225, 29, 72, 0.4); }
-body:has(#deck-subject) { --tool-accent: #4F46E5; --tool-hover: #4338CA; --tool-wash: #EEF2FF; --tool-light: #C7D2FE; --tool-shadow: rgba(79, 70, 229, 0.4); }
-body:has(#save-test) { --tool-accent: #0D9488; --tool-hover: #0F766E; --tool-wash: #F0FDFA; --tool-light: #99F6E4; --tool-shadow: rgba(13, 148, 136, 0.4); }
+body { --tool-accent: #2563EB; --tool-hover: #1D4ED8; --tool-wash: #EFF6FF; --tool-light: #BFDBFE; --tool-shadow: rgba(37, 99, 235, 0.4); }
+body:has(#calculate-required) { --tool-accent: #2563EB; --tool-hover: #1D4ED8; --tool-wash: #EFF6FF; --tool-light: #BFDBFE; --tool-shadow: rgba(37, 99, 235, 0.4); }
+body.mode-focus, body.mode-break { --tool-accent: #10B981; --tool-hover: #059669; --tool-wash: #ECFDF5; --tool-light: #A7F3D0; --tool-shadow: rgba(16, 185, 129, 0.4); }
+body:has(#btn-start) { --tool-accent: #8B5CF6; --tool-hover: #7C3AED; --tool-wash: #F5F3FF; --tool-light: #DDD6FE; --tool-shadow: rgba(139, 92, 246, 0.4); }
+body:has(#deck-subject) { --tool-accent: #E11D48; --tool-hover: #BE123C; --tool-wash: #FFF1F2; --tool-light: #FECDD3; --tool-shadow: rgba(225, 29, 72, 0.4); }
+body:has(#save-test) { --tool-accent: #F59E0B; --tool-hover: #D97706; --tool-wash: #FFFBEB; --tool-light: #FDE68A; --tool-shadow: rgba(245, 158, 11, 0.4); }
 
 /* ---------- 2. Base ---------- */
 html, body {
@@ -720,9 +720,9 @@ body.mode-break .btn-primary {
   box-shadow: 0 4px 12px -2px rgba(5, 150, 105, 0.4) !important;
 }
 body.mode-break .btn-primary:hover { background: #047857 !important; border-color: #047857 !important; }
-body:not(.mode-break) .timer-display { color: var(--tool-accent) !important; }
-body:not(.mode-break) .btn-primary { background: var(--tool-accent) !important; border-color: var(--tool-accent) !important; box-shadow: 0 4px 12px -2px var(--tool-shadow) !important; }
-body:not(.mode-break) .btn-primary:hover { background: var(--tool-hover) !important; border-color: var(--tool-hover) !important; }
+body.mode-focus .timer-display { color: var(--tool-accent) !important; }
+body.mode-focus .btn-primary { background: var(--tool-accent) !important; border-color: var(--tool-accent) !important; box-shadow: 0 4px 12px -2px var(--tool-shadow) !important; }
+body.mode-focus .btn-primary:hover { background: var(--tool-hover) !important; border-color: var(--tool-hover) !important; }
 .deck-subject-pill, .mode-icon, .fc-progress-count { color: var(--tool-accent) !important; background: var(--tool-wash) !important; border-color: var(--tool-light) !important; }
 .type-input:focus { border-color: var(--tool-accent) !important; box-shadow: 0 0 0 4px var(--tool-shadow) !important; }
 .fc-progress-segment.seg-mastered { background: var(--tool-accent) !important; }

@@ -1336,3 +1336,43 @@ input[type="range"]:focus { outline: none; }
     scroll-behavior: auto !important;
   }
 }
+
+/* Homepage shares the monochrome foundation while retaining its tile accents. */
+html, body { background:#09090B !important; color:#F4F4F5 !important; }
+body { background-image:none !important; }
+.page { background:#111113 !important; border-color:#3F3F46 !important; box-shadow:0 25px 60px -18px rgba(0,0,0,.9), 0 0 0 1px rgba(255,255,255,.05) !important; }
+.page-decor { opacity:.16 !important; }
+.top-bar, .tools-section { border-color:#27272A !important; }
+.brand, .hero h1, .hero p, .section-heading, .tools-section h2, .tool-card h3, .tool-card p, .tool-footer { color:#F4F4F5 !important; }
+.tool-card { background:#18181B !important; border-color:#3F3F46 !important; color:#F4F4F5 !important; box-shadow:0 12px 30px -18px rgba(0,0,0,.9), 0 0 0 1px rgba(255,255,255,.05) !important; }
+.tool-card:hover { border-color:var(--accent-light) !important; box-shadow:var(--pop-shadow-strong) !important; }
+.tool-tag, .tool-icon { color:var(--accent) !important; background:var(--accent-wash) !important; border-color:var(--accent-pale) !important; }
+.tool-card.blue { --accent:#2563EB; --accent-light:#93C5FD; --accent-pale:#BFDBFE; --accent-wash:#EFF6FF; }
+.tool-card.teal { --accent:#10B981; --accent-light:#6EE7B7; --accent-pale:#A7F3D0; --accent-wash:#ECFDF5; }
+.tool-card.purple { --accent:#8B5CF6; --accent-light:#C4B5FD; --accent-pale:#DDD6FE; --accent-wash:#F5F3FF; }
+.tool-card.amber { --accent:#F59E0B; --accent-light:#FCD34D; --accent-pale:#FDE68A; --accent-wash:#FFFBEB; }
+.tool-card.rose { --accent:#E11D48; --accent-light:#FDA4AF; --accent-pale:#FECDD3; --accent-wash:#FFF1F2; }
+:focus-visible { outline:2px solid var(--accent,#FFFFFF) !important; outline-offset:3px !important; }
+
+/* Shared monochrome surfaces for tool pages. */
+body:not(:has(.tool-card)) { background:#09090B !important; color:#F4F4F5 !important; }
+body:not(:has(.tool-card)) .page { background:#111113 !important; color:#F4F4F5 !important; border-color:#3F3F46 !important; box-shadow:0 25px 55px -16px rgba(0,0,0,.8), 0 0 0 1px rgba(255,255,255,.06) !important; }
+body:not(:has(.tool-card)) :is(.timer-card,.study-card,.done-card,.result-card,.test-card,.plan-card,.quick-add-card,.ai-chat-shell,.ai-timetable-panel,.session-content,.reco-block,.ocr-zone,.drop-zone,.progress-header,.example-card,.comparison-card,.import-preview,.setup-card,.grade-row,.plan-detail,.confidence-grid,.session-options,.modal,.done-stat) {
+  background:#18181B !important; color:#F4F4F5 !important; border-color:#3F3F46 !important;
+  box-shadow:0 8px 24px -14px rgba(0,0,0,.85), 0 0 0 1px rgba(255,255,255,.04) !important;
+}
+body:not(:has(.tool-card)) :is(h1,h2,h3,h4,p,li,label,.brand,.hero-desc,.privacy-note,.result-label,.meta-item,.plan-subject,.plan-detail-value,.empty-state,.plan-empty,.ai-timetable-empty,.modal-header h3,.footer,.section-header h2) { color:#F4F4F5 !important; }
+body:not(:has(.tool-card)) :is(.hero-desc,.privacy-note,.result-label,.meta-item,.footer,.plan-detail-label,.field-hint,.empty-state,.plan-empty,.ai-timetable-empty) { color:#A1A1AA !important; }
+body:not(:has(.tool-card)) textarea, body:not(:has(.tool-card)) select, body:not(:has(.tool-card)) input,
+body:not(:has(.tool-card)) .field-input, body:not(:has(.tool-card)) .fill-input, body:not(:has(.tool-card)) .fill-select,
+body:not(:has(.tool-card)) .quick-add-input, body:not(:has(.tool-card)) .setup-textarea,
+body:not(:has(.tool-card)) .answer-input, body:not(:has(.tool-card)) .shared-weight-input,
+body:not(:has(.tool-card)) .ocr-input, body:not(:has(.tool-card)) .ai-composer textarea {
+  background:#09090B !important; color:#FAFAFA !important; border-color:#52525B !important;
+}
+body:not(:has(.tool-card)) .test-card:hover, body:not(:has(.tool-card)) .plan-card:hover,
+body:not(:has(.tool-card)) .study-card:hover, body:not(:has(.tool-card)) .grade-row:hover,
+body:not(:has(.tool-card)) .result-card:hover, body:not(:has(.tool-card)) .deck-card:hover {
+  border-color:var(--accent-light) !important; box-shadow:var(--pop-shadow-strong) !important;
+}
+body:not(:has(.tool-card)) :focus-visible { outline-color:var(--accent) !important; }

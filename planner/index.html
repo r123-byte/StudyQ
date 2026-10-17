@@ -11,6 +11,12 @@
         <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
+    /* ---------- GLOBAL SVG SAFETY NET ---------- */
+    /* An <svg> with a viewBox but no width/height defaults to 100% of its
+       container — that is what made icons explode. Default everything to
+       a sane icon size; specific class rules below override this. */
+    svg { width: 18px; height: 18px; flex-shrink: 0; }
+
     :root {
       --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
       --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -46,7 +52,63 @@
     }
     @keyframes micSpin { 100% { transform: rotate(360deg); } }
 
-    /* ---------- BASE & TYPOGRAPHY ---------- */
+    /* ---------- NOVA MEET FIX v2 (bulletproof: wins over ../animations.css + ../theme.css) ---------- */
+    .nova-meet {
+      position: relative !important;
+      overflow: hidden !important;
+      border-radius: 1.25rem !important;
+      border: 1px solid #E2E8F0 !important;
+      background: linear-gradient(135deg, #EFF6FF 0%, #FFFFFF 65%) !important;
+      padding: 2rem 1.5rem !important;
+      margin: 0 0 1.25rem 0 !important;
+      text-align: center !important;
+      max-width: 100% !important;
+    }
+    .nova-meet-glow {
+      position: absolute !important;
+      top: 50% !important;
+      left: 50% !important;
+      width: 220px !important;
+      height: 220px !important;
+      transform: translate(-50%, -50%) !important;
+      border-radius: 50% !important;
+      background: radial-gradient(circle, rgba(37, 99, 235, 0.16), transparent 70%) !important;
+      pointer-events: none !important;
+    }
+    /* hard cap: NO svg inside .nova-meet may ever exceed 30px, no matter what */
+    .nova-meet svg {
+      max-width: 30px !important;
+      max-height: 30px !important;
+      width: 100% !important;
+      height: 100% !important;
+      display: block !important;
+    }
+    .nova-meet-sparkle,
+    .nova-meet-sparkle.one,
+    .nova-meet-sparkle.two,
+    .nova-meet-sparkle.three {
+      position: absolute !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      overflow: hidden !important;
+      pointer-events: none !important;
+      color: var(--accent) !important;
+    }
+    .nova-meet-sparkle       { top: 14px !important; left: 18px  !important; width: 20px !important; height: 20px !important; opacity: 0.40 !important; }
+    .nova-meet-sparkle.two   { top: 20px !important; right: 22px !important; left: auto !important; width: 14px !important; height: 14px !important; opacity: 0.30 !important; }
+    .nova-meet-sparkle.three { top: auto !important; bottom: 18px !important; right: 34px !important; left: auto !important; width: 22px !important; height: 22px !important; opacity: 0.45 !important; }
+    .nova-meet-content { position: relative !important; z-index: 1 !important; max-width: 480px !important; margin: 0 auto !important; }
+    .nova-meet-title { font-size: 1.5rem !important; font-weight: 800 !important; letter-spacing: -0.02em !important; color: #0b1c2c !important; margin: 0 0 0.4rem 0 !important; line-height: 1.2 !important; }
+    .nova-meet-text { font-size: 0.95rem !important; color: #64748B !important; line-height: 1.6 !important; }
+    .nova-meet .nova-meet-content {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+    }
+    .nova-meet.revealed .nova-meet-content { opacity: 1 !important; transform: translateY(0) !important; }
+
+/* ---------- BASE & TYPOGRAPHY ---------- */
     body {
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
       background-color: #F5F8FE;
@@ -291,6 +353,7 @@
   </style>
   <link rel="stylesheet" href="../theme.css">
   <link rel="stylesheet" href="../animations.css">
+<base target="_blank">
 </head>
 <body>
   <div class="wrapper">
@@ -491,18 +554,18 @@
       <!-- Meet Nova — scroll-triggered reveal -->
       <div class="nova-meet" id="nova-meet">
         <span class="nova-meet-glow" aria-hidden="true"></span>
-        <span class="nova-meet-sparkle one" aria-hidden="true">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+        <span class="nova-meet-sparkle one" aria-hidden="true" style="width:20px;height:20px;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" stroke="none">
             <path d="M12 1 C 13 7.5, 16.5 11, 23 12 C 16.5 13, 13 16.5, 12 23 C 11 16.5, 7.5 13, 1 12 C 7.5 11, 11 7.5, 12 1 Z"/>
           </svg>
         </span>
-        <span class="nova-meet-sparkle two" aria-hidden="true">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+        <span class="nova-meet-sparkle two" aria-hidden="true" style="width:14px;height:14px;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="currentColor" stroke="none">
             <path d="M12 1 C 13 7.5, 16.5 11, 23 12 C 16.5 13, 13 16.5, 12 23 C 11 16.5, 7.5 13, 1 12 C 7.5 11, 11 7.5, 12 1 Z"/>
           </svg>
         </span>
-        <span class="nova-meet-sparkle three" aria-hidden="true">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+        <span class="nova-meet-sparkle three" aria-hidden="true" style="width:22px;height:22px;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" fill="currentColor" stroke="none">
             <path d="M12 1 C 13 7.5, 16.5 11, 23 12 C 16.5 13, 13 16.5, 12 23 C 11 16.5, 7.5 13, 1 12 C 7.5 11, 11 7.5, 12 1 Z"/>
           </svg>
         </span>
@@ -887,6 +950,7 @@
           "planner.planTitle": "What should I study now?",
           "planner.quickAddTitle": "Quick-add homework",
           "planner.quickAddHint": "Click, fill in, done — no prompt needed.",
+          "planner.addHomework": "Add homework",
           "planner.qaTitle": "Title",
           "planner.qaTitlePlaceholder": "e.g. Math §4.1 exercises 1-10",
           "planner.qaTime": "Time needed (min)",
@@ -1097,6 +1161,7 @@
           "planner.planTitle": "Wat moet ik nu leren?",
           "planner.quickAddTitle": "Snel huiswerk toevoegen",
           "planner.quickAddHint": "Klik, vul in, klaar — geen prompt nodig.",
+          "planner.addHomework": "Huiswerk toevoegen",
           "planner.qaTitle": "Titel",
           "planner.qaTitlePlaceholder": "bijv. Wiskunde §4.1 opgaven 1-10",
           "planner.qaTime": "Tijd nodig (min)",

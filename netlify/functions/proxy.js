@@ -1,12 +1,27 @@
 export default async (req, context) => {
   const url = new URL(req.url);
-
-  // ── CORS headers ──────────────────────────────────────────────
-  // IMPORTANT: replace this with your actual GitHub Pages URL later.
-  const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || "*";
+  
+  // 1. Get the origin of the incoming request
+  const requestOrigin = req.headers.get("origin") || "";
+  
+  // 2. Read the allowed origins from your Netlify environment variable
+  // We split by comma in case you want to add more later
+  const allowedOriginsStr = process.env.ALLOWED_ORIGIN || "*";
+  const allowedOrigins = allowedOriginsStr.split(",").map(o => o.trim());
+  
+  // 3. Determine if this origin is allowed
+  let corsOrigin = "*";
+  if (allowedOriginsStr !== "*") {
+    if (allowedOrigins.includes(requestOrigin)) {
+      corsOrigin = requestOrigin; // Echo back the exact allowed origin
+    } else {
+      // Optional: Block unauthorized origins entirely
+      // return new Response("CORS blocked", { status: 403 });
+    }
+  }
 
   const corsHeaders = {
-    "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
+    "Access-Control-Allow-Origin": corsOrigin,
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type"
   };
@@ -18,17 +33,16 @@ export default async (req, context) => {
 
   const path = url.searchParams.get("path") || "";
 
-  // ── Route: ?path=openrouter/* → openrouter.ai/api/v1/* ────────
+  // ── Route: ?path=openrouter/* ────────────
   if (path.startsWith("openrouter/")) {
-    const target = "https://openrouter.ai/api/v1/" +
-      path.replace("openrouter/", "");
+    const target = "https://openrouter.ai/api/v1/" + path.replace("openrouter/", "");
 
     const upstream = await fetch(target, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
-        "HTTP-Referer": ALLOWED_ORIGIN,
+        "HTTP-Referer": corsOrigin,
         "X-Title": "StudyStack"
       },
       body: req.body
@@ -43,10 +57,9 @@ export default async (req, context) => {
     });
   }
 
-  // ── Route: ?path=groq/* → api.groq.com/openai/v1/* ────────────
+  // ── Route: ?path=groq/* ────────────
   if (path.startsWith("groq/")) {
-    const target = "https://api.groq.com/openai/v1/" +
-      path.replace("groq/", "");
+    const target = "https://api.groq.com/openai/v1/" + path.replace("groq/", "");
 
     const upstream = await fetch(target, {
       method: "POST",

@@ -19,6 +19,14 @@
 [class*="Rise"]     { animation: none !important; }
 [class*="Pop"]      { animation: none !important; }
 
+/* Per-tool accent palettes. */
+body { --tool-accent: #2563EB; --tool-hover: #1D4ED8; --tool-wash: #EFF6FF; --tool-light: #DBEAFE; --tool-shadow: rgba(37, 99, 235, 0.4); }
+body:has(#calculate-required) { --tool-accent: #8B5CF6; --tool-hover: #7C3AED; --tool-wash: #F5F3FF; --tool-light: #DDD6FE; --tool-shadow: rgba(139, 92, 246, 0.4); }
+body.mode-focus, body.mode-break { --tool-accent: #F97316; --tool-hover: #EA580C; --tool-wash: #FFF7ED; --tool-light: #FED7AA; --tool-shadow: rgba(249, 115, 22, 0.4); }
+body:has(#btn-start) { --tool-accent: #E11D48; --tool-hover: #BE123C; --tool-wash: #FFF1F2; --tool-light: #FECDD3; --tool-shadow: rgba(225, 29, 72, 0.4); }
+body:has(#deck-subject) { --tool-accent: #4F46E5; --tool-hover: #4338CA; --tool-wash: #EEF2FF; --tool-light: #C7D2FE; --tool-shadow: rgba(79, 70, 229, 0.4); }
+body:has(#save-test) { --tool-accent: #0D9488; --tool-hover: #0F766E; --tool-wash: #F0FDFA; --tool-light: #99F6E4; --tool-shadow: rgba(13, 148, 136, 0.4); }
+
 /* ---------- 2. Base ---------- */
 html, body {
   font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif !important;
@@ -81,12 +89,12 @@ body > .wrapper > .page {
   transform: none !important;
 }
 .brand:hover { transform: none !important; }
-.brand span { color: #2563EB !important; }
+.brand span { color: var(--tool-accent) !important; }
 
 .brand-icon {
   width: 42px !important;
   height: 42px !important;
-  background: #2563EB !important;
+  background: var(--tool-accent) !important;
   color: #fff !important;
   border-radius: 12px !important;
   border: none !important;
@@ -99,6 +107,7 @@ body > .wrapper > .page {
 }
 .brand:hover .brand-icon { transform: none !important; }
 .brand-icon svg { width: 22px !important; height: 22px !important; stroke-width: 2.2 !important; }
+.brand-icon, .brand-mark { background: var(--tool-accent) !important; box-shadow: 0 4px 12px -2px var(--tool-shadow) !important; }
 
 .header-actions {
   display: flex !important;
@@ -242,6 +251,12 @@ p.hero-desc,
 }
 .badge:hover { transform: none !important; }
 .badge svg { width: 14px !important; height: 14px !important; stroke-width: 2.4 !important; }
+.badge { background: var(--tool-wash) !important; color: var(--tool-accent) !important; border-color: var(--tool-light) !important; }
+.mode-label { background: var(--tool-wash) !important; color: var(--tool-accent) !important; border-color: var(--tool-light) !important; }
+.utility-float { color: var(--tool-accent) !important; border-color: var(--tool-light) !important; background: var(--tool-wash) !important; }
+.utility-float::after { background: var(--tool-accent) !important; }
+.utility-float.is-active { background: var(--tool-accent) !important; color: #fff !important; border-color: var(--tool-accent) !important; }
+.preset-btn.active { background: var(--tool-accent) !important; border-color: var(--tool-accent) !important; box-shadow: 0 4px 12px -2px var(--tool-shadow) !important; }
 
 /* ---------- 9. Buttons (universal) ---------- */
 .btn,
@@ -295,9 +310,9 @@ a.btn,
 .btn-add {
   background: #2563EB !important;
   color: #FFFFFF !important;
-  border: 1px solid #2563EB !important;
+  border: 1px solid var(--tool-accent) !important;
   border-radius: 999px !important;
-  box-shadow: 0 4px 12px -2px rgba(37, 99, 235, 0.4) !important;
+  box-shadow: 0 4px 12px -2px var(--tool-shadow) !important;
   padding: 0.8rem 1.5rem !important;
   font-size: 0.95rem !important;
 }
@@ -307,10 +322,10 @@ a.btn,
 .btn-practice-mode:hover,
 .btn-vision:hover,
 .btn-add:hover {
-  background: #1D4ED8 !important;
-  border-color: #1D4ED8 !important;
+  background: var(--tool-hover) !important;
+  border-color: var(--tool-hover) !important;
   transform: translateY(-1px) !important;
-  box-shadow: 0 8px 20px -4px rgba(37, 99, 235, 0.5) !important;
+  box-shadow: 0 8px 20px -4px var(--tool-shadow) !important;
 }
 .btn-primary svg,
 .btn-calculate svg,
@@ -445,10 +460,10 @@ a.btn,
   box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.06) !important;
 }
 .preset-btn.active {
-  background: #2563EB !important;
+  background: var(--tool-accent) !important;
   color: #FFFFFF !important;
-  border-color: #2563EB !important;
-  box-shadow: 0 4px 12px -2px rgba(37, 99, 235, 0.4) !important;
+  border-color: var(--tool-accent) !important;
+  box-shadow: 0 4px 12px -2px var(--tool-shadow) !important;
 }
 
 .tabs,
@@ -693,7 +708,7 @@ body.mode-break .mode-label {
 }
 
 .timer-display {
-  color: #2563EB !important;
+  color: var(--tool-accent) !important;
   text-shadow: none !important;
   animation: none !important;
 }
@@ -705,6 +720,14 @@ body.mode-break .btn-primary {
   box-shadow: 0 4px 12px -2px rgba(5, 150, 105, 0.4) !important;
 }
 body.mode-break .btn-primary:hover { background: #047857 !important; border-color: #047857 !important; }
+body:not(.mode-break) .timer-display { color: var(--tool-accent) !important; }
+body:not(.mode-break) .btn-primary { background: var(--tool-accent) !important; border-color: var(--tool-accent) !important; box-shadow: 0 4px 12px -2px var(--tool-shadow) !important; }
+body:not(.mode-break) .btn-primary:hover { background: var(--tool-hover) !important; border-color: var(--tool-hover) !important; }
+.deck-subject-pill, .mode-icon, .fc-progress-count { color: var(--tool-accent) !important; background: var(--tool-wash) !important; border-color: var(--tool-light) !important; }
+.type-input:focus { border-color: var(--tool-accent) !important; box-shadow: 0 0 0 4px var(--tool-shadow) !important; }
+.fc-progress-segment.seg-mastered { background: var(--tool-accent) !important; }
+.deck-card:hover { border-color: var(--tool-light) !important; box-shadow: 0 14px 32px -8px var(--tool-shadow) !important; }
+.card-box-badge.box-3 { border-color: var(--tool-light) !important; color: var(--tool-accent) !important; }
 
 /* ---------- 14. Timer card icon button ---------- */
 .timer-card-fullscreen,
@@ -746,7 +769,7 @@ body.mode-break .btn-primary:hover { background: #047857 !important; border-colo
   border-color: #A7F3D0 !important;
 }
 .session-timer {
-  color: #2563EB !important;
+  color: var(--tool-accent) !important;
   text-shadow: none !important;
   animation: none !important;
 }
@@ -1180,7 +1203,7 @@ body.mode-break .btn-primary:hover { background: #047857 !important; border-colo
 }
 .example-card:hover {
   background: #DBEAFE !important;
-  border-color: #93C5FD !important;
+  border-color: var(--tool-accent) !important;
   transform: translateY(-1px) !important;
   box-shadow: 0 4px 12px -2px rgba(37, 99, 235, 0.15) !important;
 }
@@ -1193,7 +1216,11 @@ body.mode-break .btn-primary:hover { background: #047857 !important; border-colo
 .example-card-title { color: #1D4ED8 !important; }
 .example-card-sub { color: #64748B !important; }
 
-.word-prompt { color: #0F172A !important; animation: none !important; }
+.word-prompt { color: var(--tool-accent) !important; animation: none !important; }
+.answer-input:focus { border-color: var(--tool-accent) !important; box-shadow: 0 0 0 3px var(--tool-shadow) !important; }
+.progress-segment.seg-mastered { background: var(--tool-accent) !important; }
+.btn-continue { background: var(--tool-accent) !important; border-color: var(--tool-accent) !important; box-shadow: 0 4px 12px -2px var(--tool-shadow) !important; }
+.btn-continue:hover { background: var(--tool-hover) !important; border-color: var(--tool-hover) !important; }
 .word-sub { color: #64748B !important; }
 .practice-answer {
   background: #EFF6FF !important;
@@ -1211,7 +1238,7 @@ body.mode-break .btn-primary:hover { background: #047857 !important; border-colo
   font-weight: 700 !important;
   box-shadow: none !important;
 }
-.round-chip.practice { background: #EFF6FF !important; color: #1D4ED8 !important; border-color: #DBEAFE !important; }
+.round-chip.practice { background: var(--tool-wash) !important; color: var(--tool-accent) !important; border-color: var(--tool-light) !important; }
 .round-chip.test { background: #FFFBEB !important; color: #B45309 !important; border-color: #FDE68A !important; }
 .round-chip.mastered { background: #ECFDF5 !important; color: #047857 !important; border-color: #A7F3D0 !important; }
 .round-chip.freeplay { background: #F5F3FF !important; color: #6D28D9 !important; border-color: #DDD6FE !important; }
@@ -1372,7 +1399,7 @@ body.mode-break .btn-primary:hover { background: #047857 !important; border-colo
 }
 .ocr-zone-icon {
   background: #FFFFFF !important;
-  color: #2563EB !important;
+  color: var(--tool-accent) !important;
   border: 1px solid #E2E8F0 !important;
   border-radius: 14px !important;
   box-shadow: none !important;

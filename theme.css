@@ -4,15 +4,20 @@
    to force the homepage design language across the whole site.
    ============================================================ */
 
-/* ---------- 1. Shared theme base ---------- */
+/* ---------- 1. Kill all infinite animations globally ---------- */
+@keyframes _studystack_disabled_ {
+  from { opacity: 1; }
+  to   { opacity: 1; }
+}
 
-/* Per-tool accent palettes. */
-body { --tool-accent: #2563EB; --tool-hover: #1D4ED8; --tool-wash: #EFF6FF; --tool-light: #BFDBFE; --tool-shadow: rgba(37, 99, 235, 0.4); }
-body:has(#calculate-required) { --tool-accent: #2563EB; --tool-hover: #1D4ED8; --tool-wash: #EFF6FF; --tool-light: #BFDBFE; --tool-shadow: rgba(37, 99, 235, 0.4); }
-body.mode-focus, body.mode-break { --tool-accent: #10B981; --tool-hover: #059669; --tool-wash: #ECFDF5; --tool-light: #A7F3D0; --tool-shadow: rgba(16, 185, 129, 0.4); }
-body:has(#btn-start) { --tool-accent: #8B5CF6; --tool-hover: #7C3AED; --tool-wash: #F5F3FF; --tool-light: #DDD6FE; --tool-shadow: rgba(139, 92, 246, 0.4); }
-body:has(#deck-subject) { --tool-accent: #E11D48; --tool-hover: #BE123C; --tool-wash: #FFF1F2; --tool-light: #FECDD3; --tool-shadow: rgba(225, 29, 72, 0.4); }
-body:has(#save-test) { --tool-accent: #F59E0B; --tool-hover: #D97706; --tool-wash: #FFFBEB; --tool-light: #FDE68A; --tool-shadow: rgba(245, 158, 11, 0.4); }
+/* Anything using `animation` gets flattened */
+[style*="animation"] { animation: none !important; }
+[class*="glow"]     { animation: none !important; text-shadow: none !important; box-shadow: inherit !important; }
+[class*="Pulse"]    { animation: none !important; }
+[class*="Breath"]   { animation: none !important; }
+[class*="Float"]    { animation: none !important; }
+[class*="Rise"]     { animation: none !important; }
+[class*="Pop"]      { animation: none !important; }
 
 /* ---------- 2. Base ---------- */
 html, body {
@@ -21,6 +26,7 @@ html, body {
   background-image: none !important;
   color: #0F172A !important;
   -webkit-font-smoothing: antialiased;
+  animation: none !important;
 }
 
 body::before { display: none !important; content: none !important; }
@@ -38,6 +44,7 @@ body > .wrapper > .page {
   border: 1px solid #E2E8F0 !important;
   border-radius: 36px !important;
   box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.12) !important;
+  animation: none !important;
   padding: 3rem 3rem 2.5rem !important;
   margin-bottom: 2rem !important;
 }
@@ -56,6 +63,7 @@ body > .wrapper > .page {
   margin-bottom: 2.5rem !important;
   border-bottom: 1px solid #F1F5F9 !important;
   box-shadow: none !important;
+  animation: none !important;
   flex-wrap: wrap !important;
 }
 
@@ -68,16 +76,17 @@ body > .wrapper > .page {
   letter-spacing: -0.03em !important;
   color: #0F172A !important;
   text-decoration: none !important;
+  animation: none !important;
   text-shadow: none !important;
   transform: none !important;
 }
 .brand:hover { transform: none !important; }
-.brand span { color: var(--tool-accent) !important; }
+.brand span { color: #2563EB !important; }
 
 .brand-icon {
   width: 42px !important;
   height: 42px !important;
-  background: var(--tool-accent) !important;
+  background: #2563EB !important;
   color: #fff !important;
   border-radius: 12px !important;
   border: none !important;
@@ -85,11 +94,11 @@ body > .wrapper > .page {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
+  animation: none !important;
   transform: none !important;
 }
 .brand:hover .brand-icon { transform: none !important; }
 .brand-icon svg { width: 22px !important; height: 22px !important; stroke-width: 2.2 !important; }
-.brand-icon, .brand-mark { background: var(--tool-accent) !important; box-shadow: 0 4px 12px -2px var(--tool-shadow) !important; }
 
 .header-actions {
   display: flex !important;
@@ -114,6 +123,7 @@ body > .wrapper > .page {
   border: 1px solid #E2E8F0 !important;
   box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.06) !important;
   transition: all 0.15s ease !important;
+  animation: none !important;
 }
 .back-link:hover {
   background: #EFF6FF !important;
@@ -139,6 +149,7 @@ body > .wrapper > .page {
   font-weight: 600 !important;
   font-size: 0.9rem !important;
   box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+  animation: none !important;
   transition: all 0.15s ease !important;
   height: auto !important;
 }
@@ -172,6 +183,7 @@ body > .wrapper > .page {
 .hero {
   margin-bottom: 2.5rem !important;
   text-align: center !important;
+  animation: none !important;
 }
 .hero h1,
 h1 {
@@ -181,6 +193,7 @@ h1 {
   letter-spacing: -0.04em !important;
   color: #0F172A !important;
   text-shadow: none !important;
+  animation: none !important;
   opacity: 1 !important;
   margin-bottom: 0.85rem !important;
   transition: none !important;
@@ -201,6 +214,7 @@ p.hero-desc,
   font-weight: 400 !important;
   line-height: 1.65 !important;
   text-shadow: none !important;
+  animation: none !important;
   max-width: 640px !important;
   margin: 0 auto !important;
   border-left: none !important;
@@ -223,16 +237,11 @@ p.hero-desc,
   letter-spacing: 0 !important;
   border: 1px solid #DBEAFE !important;
   box-shadow: none !important;
+  animation: none !important;
   transform: none !important;
 }
 .badge:hover { transform: none !important; }
 .badge svg { width: 14px !important; height: 14px !important; stroke-width: 2.4 !important; }
-.badge { background: var(--tool-wash) !important; color: var(--tool-accent) !important; border-color: var(--tool-light) !important; }
-.mode-label { background: var(--tool-wash) !important; color: var(--tool-accent) !important; border-color: var(--tool-light) !important; }
-.utility-float { color: var(--tool-accent) !important; border-color: var(--tool-light) !important; background: var(--tool-wash) !important; }
-.utility-float::after { background: var(--tool-accent) !important; }
-.utility-float.is-active { background: var(--tool-accent) !important; color: #fff !important; border-color: var(--tool-accent) !important; }
-.preset-btn.active { background: var(--tool-accent) !important; border-color: var(--tool-accent) !important; box-shadow: 0 4px 12px -2px var(--tool-shadow) !important; }
 
 /* ---------- 9. Buttons (universal) ---------- */
 .btn,
@@ -274,6 +283,7 @@ a.btn,
   font-weight: 700 !important;
   letter-spacing: -0.01em !important;
   transition: all 0.15s ease !important;
+  animation: none !important;
   text-shadow: none !important;
 }
 
@@ -285,24 +295,11 @@ a.btn,
 .btn-add {
   background: #2563EB !important;
   color: #FFFFFF !important;
-  border: 1px solid var(--tool-accent) !important;
+  border: 1px solid #2563EB !important;
   border-radius: 999px !important;
-  box-shadow: 0 4px 12px -2px var(--tool-shadow) !important;
+  box-shadow: 0 4px 12px -2px rgba(37, 99, 235, 0.4) !important;
   padding: 0.8rem 1.5rem !important;
   font-size: 0.95rem !important;
-}
-.btn-primary, .btn-calculate, .btn-add, .btn-plan-start, .btn-practice-mode, .btn-continue,
-.btn-primary:hover, .btn-calculate:hover, .btn-add:hover, .btn-plan-start:hover, .btn-practice-mode:hover, .btn-continue:hover,
-body.mode-break .btn-primary, body.mode-break .btn-primary:hover {
-  background: #000000 !important;
-  color: #FFFFFF !important;
-  border-color: #000000 !important;
-  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.3) !important;
-}
-.btn-primary:hover, .btn-calculate:hover, .btn-add:hover, .btn-plan-start:hover, .btn-practice-mode:hover, .btn-continue:hover,
-body.mode-break .btn-primary:hover {
-  background: #1A1A1A !important;
-  border-color: #1A1A1A !important;
 }
 .btn-primary:hover,
 .btn-calculate:hover,
@@ -310,10 +307,10 @@ body.mode-break .btn-primary:hover {
 .btn-practice-mode:hover,
 .btn-vision:hover,
 .btn-add:hover {
-  background: var(--tool-hover) !important;
-  border-color: var(--tool-hover) !important;
+  background: #1D4ED8 !important;
+  border-color: #1D4ED8 !important;
   transform: translateY(-1px) !important;
-  box-shadow: 0 8px 20px -4px var(--tool-shadow) !important;
+  box-shadow: 0 8px 20px -4px rgba(37, 99, 235, 0.5) !important;
 }
 .btn-primary svg,
 .btn-calculate svg,
@@ -421,6 +418,7 @@ body.mode-break .btn-primary:hover {
   border: 1px solid #FECDD3 !important;
   color: #BE123C !important;
   box-shadow: none !important;
+  animation: none !important;
 }
 .remove-btn:hover,
 .ocr-remove-row:hover {
@@ -447,10 +445,10 @@ body.mode-break .btn-primary:hover {
   box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.06) !important;
 }
 .preset-btn.active {
-  background: var(--tool-accent) !important;
+  background: #2563EB !important;
   color: #FFFFFF !important;
-  border-color: var(--tool-accent) !important;
-  box-shadow: 0 4px 12px -2px var(--tool-shadow) !important;
+  border-color: #2563EB !important;
+  box-shadow: 0 4px 12px -2px rgba(37, 99, 235, 0.4) !important;
 }
 
 .tabs,
@@ -561,6 +559,7 @@ select,
   box-shadow: none !important;
   font-weight: 500 !important;
   transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+  animation: none !important;
 }
 input:focus,
 textarea:focus,
@@ -627,6 +626,7 @@ select:focus,
   border: 1px solid #E2E8F0 !important;
   border-radius: 20px !important;
   box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.06), 0 2px 4px -1px rgba(15, 23, 42, 0.04) !important;
+  animation: none !important;
   transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
 }
 
@@ -684,6 +684,7 @@ body.mode-focus .page {
   border-radius: 999px !important;
   font-weight: 700 !important;
   box-shadow: none !important;
+  animation: none !important;
 }
 body.mode-break .mode-label {
   background: #ECFDF5 !important;
@@ -692,8 +693,9 @@ body.mode-break .mode-label {
 }
 
 .timer-display {
-  color: var(--tool-accent) !important;
+  color: #2563EB !important;
   text-shadow: none !important;
+  animation: none !important;
 }
 body.mode-break .timer-display { color: #047857 !important; }
 
@@ -703,14 +705,6 @@ body.mode-break .btn-primary {
   box-shadow: 0 4px 12px -2px rgba(5, 150, 105, 0.4) !important;
 }
 body.mode-break .btn-primary:hover { background: #047857 !important; border-color: #047857 !important; }
-body.mode-focus .timer-display { color: var(--tool-accent) !important; }
-body.mode-focus .btn-primary { background: var(--tool-accent) !important; border-color: var(--tool-accent) !important; box-shadow: 0 4px 12px -2px var(--tool-shadow) !important; }
-body.mode-focus .btn-primary:hover { background: var(--tool-hover) !important; border-color: var(--tool-hover) !important; }
-.deck-subject-pill, .mode-icon, .fc-progress-count { color: var(--tool-accent) !important; background: var(--tool-wash) !important; border-color: var(--tool-light) !important; }
-.type-input:focus { border-color: var(--tool-accent) !important; box-shadow: 0 0 0 4px var(--tool-shadow) !important; }
-.fc-progress-segment.seg-mastered { background: var(--tool-accent) !important; }
-.deck-card:hover { border-color: var(--tool-light) !important; box-shadow: 0 14px 32px -8px var(--tool-shadow) !important; }
-.card-box-badge.box-3 { border-color: var(--tool-light) !important; color: var(--tool-accent) !important; }
 
 /* ---------- 14. Timer card icon button ---------- */
 .timer-card-fullscreen,
@@ -744,6 +738,7 @@ body.mode-focus .btn-primary:hover { background: var(--tool-hover) !important; b
   border: 1px solid #DBEAFE !important;
   border-radius: 999px !important;
   box-shadow: none !important;
+  animation: none !important;
 }
 .session-overlay.session-break .session-phase {
   background: #ECFDF5 !important;
@@ -751,8 +746,9 @@ body.mode-focus .btn-primary:hover { background: var(--tool-hover) !important; b
   border-color: #A7F3D0 !important;
 }
 .session-timer {
-  color: var(--tool-accent) !important;
+  color: #2563EB !important;
   text-shadow: none !important;
+  animation: none !important;
 }
 .session-overlay.session-break .session-timer { color: #047857 !important; text-shadow: none !important; }
 
@@ -806,6 +802,7 @@ body.mode-focus .btn-primary:hover { background: var(--tool-hover) !important; b
   border: 1px solid #E2E8F0 !important;
   border-radius: 999px !important;
   box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+  animation: none !important;
 }
 .quick-add-item-diff.diff-low { background: #059669 !important; }
 .quick-add-item-diff.diff-mid { background: #2563EB !important; }
@@ -826,6 +823,7 @@ body.mode-focus .btn-primary:hover { background: var(--tool-hover) !important; b
   flex-shrink: 0;
   transform: none !important;
   transition: none !important;
+  animation: none !important;
 }
 .brand-mark img,
 .brand-icon img {
@@ -1054,7 +1052,7 @@ body.mode-focus .btn-primary:hover { background: var(--tool-hover) !important; b
 .test-countdown.soon { color: #B45309 !important; }
 .test-when { color: #94A3B8 !important; }
 
-.plan-subject { color: #0F172A !important; }
+.plan-subject { color: #0F172A !important; animation: none !important; }
 .plan-duration {
   background: #EFF6FF !important;
   color: #1D4ED8 !important;
@@ -1079,14 +1077,17 @@ body.mode-focus .btn-primary:hover { background: var(--tool-hover) !important; b
 .reco-block.reco-stop {
   background: #ECFDF5 !important;
   border-color: #A7F3D0 !important;
+  animation: none !important;
 }
 .reco-block.reco-continue {
   background: #FFFBEB !important;
   border-color: #FDE68A !important;
+  animation: none !important;
 }
 .reco-block.reco-urgent {
   background: #FFF1F2 !important;
   border-color: #FECDD3 !important;
+  animation: none !important;
 }
 .reco-icon {
   background: #FFFFFF !important;
@@ -1112,6 +1113,7 @@ body.mode-focus .btn-primary:hover { background: var(--tool-hover) !important; b
 .result-label { color: #64748B !important; }
 .result-value {
   color: #2563EB !important;
+  animation: none !important;
   text-shadow: none !important;
 }
 .result-meta { border-top: 1px solid #E2E8F0 !important; }
@@ -1178,7 +1180,7 @@ body.mode-focus .btn-primary:hover { background: var(--tool-hover) !important; b
 }
 .example-card:hover {
   background: #DBEAFE !important;
-  border-color: var(--tool-accent) !important;
+  border-color: #93C5FD !important;
   transform: translateY(-1px) !important;
   box-shadow: 0 4px 12px -2px rgba(37, 99, 235, 0.15) !important;
 }
@@ -1191,11 +1193,7 @@ body.mode-focus .btn-primary:hover { background: var(--tool-hover) !important; b
 .example-card-title { color: #1D4ED8 !important; }
 .example-card-sub { color: #64748B !important; }
 
-.word-prompt { color: var(--tool-accent) !important; }
-.answer-input:focus { border-color: var(--tool-accent) !important; box-shadow: 0 0 0 3px var(--tool-shadow) !important; }
-.progress-segment.seg-mastered { background: var(--tool-accent) !important; }
-.btn-continue { background: var(--tool-accent) !important; border-color: var(--tool-accent) !important; box-shadow: 0 4px 12px -2px var(--tool-shadow) !important; }
-.btn-continue:hover { background: var(--tool-hover) !important; border-color: var(--tool-hover) !important; }
+.word-prompt { color: #0F172A !important; animation: none !important; }
 .word-sub { color: #64748B !important; }
 .practice-answer {
   background: #EFF6FF !important;
@@ -1213,7 +1211,7 @@ body.mode-focus .btn-primary:hover { background: var(--tool-hover) !important; b
   font-weight: 700 !important;
   box-shadow: none !important;
 }
-.round-chip.practice { background: var(--tool-wash) !important; color: var(--tool-accent) !important; border-color: var(--tool-light) !important; }
+.round-chip.practice { background: #EFF6FF !important; color: #1D4ED8 !important; border-color: #DBEAFE !important; }
 .round-chip.test { background: #FFFBEB !important; color: #B45309 !important; border-color: #FDE68A !important; }
 .round-chip.mastered { background: #ECFDF5 !important; color: #047857 !important; border-color: #A7F3D0 !important; }
 .round-chip.freeplay { background: #F5F3FF !important; color: #6D28D9 !important; border-color: #DDD6FE !important; }
@@ -1242,6 +1240,7 @@ body.mode-focus .btn-primary:hover { background: var(--tool-hover) !important; b
   color: #047857 !important;
   border: 1px solid #A7F3D0 !important;
   box-shadow: none !important;
+  animation: none !important;
 }
 .done-stat {
   background: #FFFFFF !important;
@@ -1258,6 +1257,7 @@ body.mode-focus .btn-primary:hover { background: var(--tool-hover) !important; b
   border-radius: 999px !important;
   color: #64748B !important;
   box-shadow: none !important;
+  animation: none !important;
   font-weight: 500 !important;
 }
 .privacy-note svg { color: #10B981 !important; }
@@ -1372,7 +1372,7 @@ body.mode-focus .btn-primary:hover { background: var(--tool-hover) !important; b
 }
 .ocr-zone-icon {
   background: #FFFFFF !important;
-  color: var(--tool-accent) !important;
+  color: #2563EB !important;
   border: 1px solid #E2E8F0 !important;
   border-radius: 14px !important;
   box-shadow: none !important;
@@ -1403,26 +1403,9 @@ body.mode-focus .btn-primary:hover { background: var(--tool-hover) !important; b
 
 /* ---------- 32. Focus outline ---------- */
 :focus-visible {
-  outline: 2px solid var(--accent, #2563EB) !important;
+  outline: 2px solid #2563EB !important;
   outline-offset: 2px !important;
 }
-
-/* Keep shared theme hover, focus, and highlight states in each tool palette. */
-.test-card:hover, .tool-card:hover, .example-card:hover, .comparison-card:hover,
-.plan-detail:hover, .quick-add-item:hover, .grade-row:hover, .study-card:hover,
-.deck-card:hover, .card-row:hover {
-  border-color: var(--accent-light) !important;
-  box-shadow: var(--pop-shadow) !important;
-}
-.field-input:focus, .answer-input:focus, .type-input:focus, input:focus-visible,
-textarea:focus-visible, select:focus-visible {
-  border-color: var(--accent) !important;
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent) !important;
-}
-.result-value, .word-prompt { text-shadow: var(--text-glow) !important; }
-.example-card-title, .plan-reason strong, .session-round strong { color: var(--accent) !important; }
-.plan-duration, .practice-answer, .example-card { background-color: var(--accent-wash) !important; border-color: var(--accent-pale) !important; }
-.plan-duration, .practice-answer { color: var(--accent-hover) !important; }
 
 /* ---------- 33. Responsive tidy ---------- */
 @media (max-width: 800px) {
@@ -1437,7 +1420,15 @@ textarea:focus-visible, select:focus-visible {
 }
 
 /* ---------- 34. Performance pass ---------- */
-/* Preserve animation and compositor settings from animations.css. */
+/* Kill the infinite decorative keyframes (pulses, glows, floats).
+   We deliberately do NOT touch `transition-duration` or `will-change`
+   on `*` — `animations.css` owns those two properties and sets them
+   per-element. Forcing them here was defeating the GPU layer promotion
+   that `animations.css` sets up, which made tile-heavy pages feel choppy. */
+* {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+}
 
 html, body {
   scroll-behavior: auto !important;
@@ -1445,6 +1436,8 @@ html, body {
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
     will-change: auto !important;
@@ -1473,53 +1466,5 @@ html, body {
   .brand { gap: 0.25rem !important; }
   .brand-mark,
   .brand-icon { margin-right: -6px; }
-}
-
-/* ---------- Monochrome premium base; per-tool accents remain visible. ---------- */
-html, body { background:#09090B !important; color:#F4F4F5 !important; }
-body.mode-focus, body.mode-break { background:#09090B !important; }
-.page, .wrapper > .page, body > .wrapper > .page {
-  background:#111113 !important;
-  border-color:#3F3F46 !important;
-  color:#F4F4F5 !important;
-  box-shadow:0 25px 55px -16px rgba(0,0,0,.8), 0 0 0 1px rgba(255,255,255,.06) !important;
-}
-.timer-card, .study-card, .done-card, .result-card, .test-card, .plan-card,
-.quick-add-card, .ai-chat-shell, .ai-timetable-panel, .session-content,
-.reco-block, .ocr-zone, .drop-zone, .progress-header, .example-card,
-.comparison-card, .import-preview, .setup-card, .grade-row, .plan-detail,
-.confidence-grid, .session-options, .modal, .done-stat, .tool-card {
-  background:#18181B !important;
-  color:#F4F4F5 !important;
-  border-color:#3F3F46 !important;
-  box-shadow:0 8px 24px -14px rgba(0,0,0,.85), 0 0 0 1px rgba(255,255,255,.04) !important;
-}
-.top-bar, .section-header { border-color:#27272A !important; }
-body :is(h1,h2,h3,h4,p,li,label,.brand,.hero-desc,.privacy-note,.result-label,.meta-item,.plan-subject,.plan-detail-value,.empty-state,.plan-empty,.ai-timetable-empty,.modal-header h3,.footer,.section-header h2) { color:#F4F4F5 !important; }
-body :is(.hero-desc,.privacy-note,.result-label,.meta-item,.footer,.plan-detail-label,.field-hint,.empty-state,.plan-empty,.ai-timetable-empty) { color:#A1A1AA !important; }
-textarea, select, input, .field-input, .fill-input, .fill-select, .quick-add-input,
-.setup-textarea, .answer-input, .shared-weight-input, .ocr-input, .ai-composer textarea {
-  background:#09090B !important; color:#FAFAFA !important; border-color:#52525B !important;
-}
-.back-link, .language-switcher, .btn-secondary, .btn-clear, .btn-skip, .btn-ghost,
-.timer-card-fullscreen, .fullscreen-exit, .preset-btn, .advanced-toggle,
-.utility-sound, .utility-float, .modal-close {
-  background:#18181B !important; color:#E4E4E7 !important; border-color:#52525B !important;
-}
-.btn-secondary:hover, .btn-clear:hover, .back-link:hover, .language-switcher:hover,
-.timer-card-fullscreen:hover, .fullscreen-exit:hover, .preset-btn:hover:not(.active),
-.advanced-toggle:hover, .utility-sound:hover, .utility-float:hover {
-  border-color:var(--tool-accent) !important; box-shadow:var(--pop-shadow) !important;
-}
-.btn-primary, .btn-calculate, .btn-add, .btn-plan-start, .btn-practice-mode, .btn-continue {
-  background:var(--tool-accent) !important; color:#FFFFFF !important; border-color:var(--tool-accent) !important;
-  box-shadow:0 5px 16px -5px var(--tool-shadow) !important;
-}
-.btn-primary:hover, .btn-calculate:hover, .btn-add:hover, .btn-plan-start:hover, .btn-practice-mode:hover, .btn-continue:hover {
-  background:var(--tool-hover) !important; border-color:var(--tool-hover) !important; box-shadow:var(--pop-shadow-strong) !important;
-}
-:focus-visible { outline:2px solid var(--tool-accent) !important; outline-offset:3px !important; }
-.badge, .mode-label, .round-chip.practice, .deck-subject-pill, .mode-icon, .fc-progress-count {
-  background:var(--tool-wash) !important; color:var(--tool-accent) !important; border-color:var(--tool-light) !important;
 }
 

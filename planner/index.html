@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
-      <style>
+        <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
@@ -64,6 +64,21 @@
     .wrapper { max-width: 1100px; width: 100%; margin: 0 auto; position: relative; }
     .page { background: #ffffff; border-radius: 3rem; box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.1); padding: 4rem 4rem 3rem; border: 1px solid #E2E8F0; margin-bottom: 2rem; }
 
+    /* ---------- SVG FIXES (Prevents giant icons) ---------- */
+    .empty-state svg { width: 44px; height: 44px; margin-bottom: 0.75rem; color: #94A3B8; }
+    .plan-empty svg { width: 36px; height: 36px; margin-bottom: 0.5rem; color: #94A3B8; }
+    .nova-sparkles { width: 34px; height: 26px; flex-shrink: 0; }
+    .nova-meet-sparkle { display: flex; align-items: center; justify-content: center; }
+    .nova-meet-sparkle svg { width: 100%; height: 100%; }
+    .hero-explain-icon svg { width: 16px; height: 16px; }
+    .section-header h2 svg { width: 22px; height: 22px; flex-shrink: 0; }
+    .ai-planner-toolbar-label svg { width: 18px; height: 18px; flex-shrink: 0; }
+    .day-tile-icon svg { width: 16px; height: 16px; }
+    .test-meta-item svg { width: 13px; height: 13px; flex-shrink: 0; }
+    .btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+    .ai-avatar svg { width: 18px; height: 18px; flex-shrink: 0; }
+    .ai-send-btn svg { width: 20px; height: 20px; flex-shrink: 0; }
+
     /* ---------- HEADER ---------- */
     .top-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; margin-bottom: 3.5rem; padding-bottom: 2rem; border-bottom: 1px solid #F1F5F9; animation: fadeUp 0.6s var(--ease-out) both; }
     .brand { display: flex; align-items: center; gap: 0.75rem; font-weight: 800; font-size: 1.4rem; color: #0d1b2a; text-decoration: none; transition: color var(--dur) var(--ease-out); }
@@ -98,11 +113,9 @@
 
     .section-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem; padding-bottom: 1.25rem; border-bottom: 1px solid #E2E8F0; }
     .section-header h2 { display: inline-flex; align-items: center; gap: 0.6rem; font-size: 1.6rem; font-weight: 800; color: #0b1c2c; }
-    .section-header h2 svg { width: 22px; height: 22px; color: var(--accent); }
 
     /* ---------- BUTTONS ---------- */
     .btn { font-weight: 700; font-size: 0.9rem; padding: 0.75rem 1.5rem; border-radius: 50px; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; border: 1px solid transparent; transition: transform var(--dur) var(--ease-pop), box-shadow var(--dur) var(--ease-out), background var(--dur) var(--ease-out), color var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out); }
-    .btn svg { width: 16px; height: 16px; transition: transform var(--dur) var(--ease-pop); }
     .btn:hover svg { transform: scale(1.15); }
     .btn:active { transform: scale(0.96); transition-duration: 0.1s; }
     .btn-primary { background: var(--accent); color: white; border-color: var(--accent); box-shadow: 0 4px 12px -2px rgba(37, 99, 235, 0.4); }
@@ -141,32 +154,26 @@
 
     /* ---------- COMPACT "WHAT TO STUDY NOW" CARD ---------- */
     .plan-card { 
-      background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 1.5rem;
-      padding: 1.5rem 1.5rem 1.25rem; box-shadow: 0 4px 12px -4px rgba(15, 23, 42, 0.05);
+      background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 1.25rem;
+      padding: 1.25rem 1.5rem; box-shadow: 0 4px 12px -4px rgba(15, 23, 42, 0.05);
       transform: translateZ(0); backface-visibility: hidden;
       transition: transform var(--dur) var(--ease-pop), box-shadow var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out);
     }
-    .plan-card:hover { transform: translate3d(0, -5px, 0) scale(1.005); box-shadow: var(--pop-shadow-strong); border-color: var(--accent-light); }
+    .plan-card:hover { transform: translate3d(0, -4px, 0) scale(1.005); box-shadow: var(--pop-shadow-strong); border-color: var(--accent-light); }
     
-    .plan-subject { font-size: clamp(1.3rem, 3vw, 1.6rem); font-weight: 800; letter-spacing: -0.02em; color: #0b1c2c; margin-bottom: 0.25rem; line-height: 1.15; }
-    .plan-duration { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; font-weight: 800; color: var(--accent); padding: 0.3rem 0.8rem; background: var(--accent-wash); border-radius: 40px; border: 1px solid #DBEAFE; margin-bottom: 1.25rem; }
-    .plan-duration svg { width: 14px; height: 14px; }
+    .plan-subject { font-size: clamp(1.2rem, 2.5vw, 1.4rem); font-weight: 800; letter-spacing: -0.02em; color: #0b1c2c; margin-bottom: 0.15rem; line-height: 1.15; }
+    .plan-duration { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; font-weight: 800; color: var(--accent); padding: 0.2rem 0.6rem; background: var(--accent-wash); border-radius: 40px; border: 1px solid #DBEAFE; margin-bottom: 0.75rem; }
     
-    .plan-detail-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 1.25rem; }
-    .plan-detail { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 1rem; padding: 0.85rem 1rem; transition: border-color var(--dur) var(--ease-out); }
+    .plan-detail-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-bottom: 1rem; }
+    .plan-detail { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 0.75rem; padding: 0.6rem 0.75rem; transition: border-color var(--dur) var(--ease-out); }
     .plan-detail:hover { border-color: var(--accent-light); }
-    .plan-detail-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #64748B; margin-bottom: 0.2rem; }
-    .plan-detail-value { font-size: 0.9rem; font-weight: 700; color: #0b1c2c; line-height: 1.3; }
+    .plan-detail-label { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #64748B; margin-bottom: 0.1rem; }
+    .plan-detail-value { font-size: 0.85rem; font-weight: 700; color: #0b1c2c; line-height: 1.3; }
     
     .plan-actions { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; }
-    .btn-plan-start { background: var(--accent); color: white; padding: 0.75rem 1.5rem; font-size: 0.95rem; font-weight: 800; border: 1px solid var(--accent); box-shadow: 0 4px 12px -2px rgba(37, 99, 235, 0.4); }
-    .btn-plan-start:hover { background: #1D4ED8; border-color: #1D4ED8; transform: translate3d(0, -3px, 0) scale(1.02); box-shadow: var(--pop-shadow-strong); }
-    .plan-reason { font-size: 0.82rem; color: #64748B; font-style: italic; padding-left: 0.85rem; border-left: 3px solid #DBEAFE; line-height: 1.5; flex: 1 1 240px; }
-
-    .plan-empty { text-align: center; padding: 2rem 1rem; color: #64748B; }
-    .plan-empty svg { width: 36px; height: 36px; color: #94A3B8; margin-bottom: 0.5rem; }
-    .plan-empty h3 { font-size: 1.1rem; font-weight: 800; color: #0b1c2c; margin-bottom: 0.25rem; }
-    .plan-empty p { font-size: 0.9rem; }
+    .btn-plan-start { background: var(--accent); color: white; padding: 0.6rem 1.25rem; font-size: 0.85rem; font-weight: 800; border: 1px solid var(--accent); box-shadow: 0 4px 12px -2px rgba(37, 99, 235, 0.4); }
+    .btn-plan-start:hover { background: #1D4ED8; border-color: #1D4ED8; transform: translate3d(0, -2px, 0) scale(1.02); box-shadow: var(--pop-shadow-strong); }
+    .plan-reason { font-size: 0.8rem; color: #64748B; font-style: italic; padding-left: 0.75rem; border-left: 3px solid #DBEAFE; line-height: 1.4; flex: 1 1 240px; }
 
     /* ---------- RECOMMENDATION ---------- */
     .reco-block { 

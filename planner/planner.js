@@ -13,9 +13,9 @@
   /* ============================================================
      CONFIG
      ============================================================ */
-  // API keys live server-side in the Netlify function's environment variables.
+  // API keys live server-side in the Vercel function's environment variables.
   // The frontend never sees them. All requests go through the proxy.
-  const PROXY_URL = "https://timely-dasik-afcd22.netlify.app/.netlify/functions/proxy?path=openrouter/chat/completions";
+  const PROXY_URL = "/api/proxy?path=openrouter/chat/completions";
   const MODEL = "dots-studio/dots-3-note-preview:free";
 
   const STORAGE_KEY = "studystack-planner-tests";
@@ -1181,7 +1181,7 @@
      API CALL
      ============================================================ */
   async function generatePlanStream(userRequest, onDelta) {
-    if (!PROXY_URL || PROXY_URL.indexOf("timely-dasik") === -1) {
+    if (!PROXY_URL) {
       throw new Error("NO_KEY");
     }
 

@@ -5626,8 +5626,8 @@
          Records audio → Groq Whisper-large-v3 → text into textarea.
          ============================================================ */
       (function initChatMic() {
-        // Groq key lives server-side in the Netlify function's environment variables.
-        const GROQ_PROXY_URL = "https://timely-dasik-afcd22.netlify.app/.netlify/functions/proxy?path=groq/audio/transcriptions";
+        // Groq key lives server-side in the Vercel function's environment variables.
+        const GROQ_PROXY_URL = "/api/proxy?path=groq/audio/transcriptions";
         const GROQ_MODEL = "whisper-large-v3";
         const MAX_RECORD_SEC = 120;
 
@@ -5835,7 +5835,7 @@
         async function sendToGroq(blob) {
           if (isProcessing) return;
 
-          if (!GROQ_PROXY_URL || GROQ_PROXY_URL.indexOf("timely-dasik") === -1) {
+          if (!GROQ_PROXY_URL) {
             isProcessing = false;
             setMicState('idle');
             showToast('mic.noKey', 'error');

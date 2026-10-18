@@ -1,0 +1,6 @@
+/* Keep animated page blocks in their starting state until page-intro.js
+   attaches the Web Animations API animation. This prevents a full-size flash. */
+.intro-pending .page > *:not(.page-decor) {
+  opacity: 0;
+  transform: translateY(18px) scale(0.96);
+}

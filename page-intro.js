@@ -52,7 +52,10 @@
 
   function run() {
     const blocks = getBlocks();
-    if (blocks.length === 0) return;
+    if (blocks.length === 0) {
+      document.documentElement.classList.remove('intro-pending');
+      return;
+    }
 
     blocks.forEach(function (el, i) {
       // Web Animations API — runs on the element directly.
@@ -75,6 +78,9 @@
         // Silently fail if animation fails (e.g., element removed)
       }
     });
+    // The animations now hold their own starting and ending states, so the
+    // pre-paint state can be removed without flashing the completed layout.
+    document.documentElement.classList.remove('intro-pending');
   }
 
   if (document.readyState === 'complete' || document.readyState === 'interactive') {

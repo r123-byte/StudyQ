@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && Element.prototype.animate) {
+      document.documentElement.classList.add('intro-pending');
+    }
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>StudyStack · Study smarter, not harder</title>
@@ -59,6 +64,11 @@
     }
 
     html { scroll-behavior: smooth; scroll-padding-top: 2rem; }
+
+    .intro-pending .page > *:not(.page-decor) {
+      opacity: 0;
+      transform: translateY(18px) scale(0.96);
+    }
 
     /* ---------- In-header navigation ---------- */
     .top-nav {

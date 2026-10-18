@@ -64,7 +64,7 @@
     .top-nav {
       display: flex;
       align-items: center;
-      gap: 2rem;
+      gap: 1.25rem;
       margin-left: auto;
       margin-right: 2rem;
     }
@@ -76,6 +76,15 @@
       transition: color 0.2s ease;
     }
     .nav-link:hover { color: var(--blue-600); }
+    .nav-link::before {
+      content: "·";
+      display: inline-block;
+      margin-right: 1.25rem;
+      color: var(--slate-300);
+      font-size: 1.25rem;
+      line-height: 0;
+      vertical-align: middle;
+    }
     .nav-dropdown { position: relative; }
     .nav-dropbtn {
       display: flex;
@@ -105,7 +114,6 @@
       flex-direction: column;
       gap: 0.25rem;
       min-width: 200px;
-      margin-top: 0.5rem;
       padding: 0.5rem;
       border: 1px solid var(--slate-200);
       border-radius: 16px;
@@ -113,7 +121,7 @@
       box-shadow: 0 10px 30px -10px rgba(37, 99, 235, 0.2);
       opacity: 0;
       visibility: hidden;
-      transform: translate(-50%, 10px);
+      transform: translate(-50%, 0);
       transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
     }
     .nav-dropdown:hover .nav-dropdown-content,

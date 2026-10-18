@@ -106,17 +106,13 @@
       transition: color 0.2s ease;
     }
     .nav-dropbtn svg { width: 16px; height: 16px; transition: transform 0.2s ease; }
-    .nav-dropdown:hover .nav-dropbtn,
-    .nav-dropdown.is-open .nav-dropbtn,
-    .nav-dropdown:focus-within .nav-dropbtn { color: var(--blue-600); }
-    .nav-dropdown:hover .nav-dropbtn svg,
-    .nav-dropdown.is-open .nav-dropbtn svg,
-    .nav-dropdown:focus-within .nav-dropbtn svg { transform: rotate(180deg); }
+    .nav-dropdown.is-open .nav-dropbtn { color: var(--blue-600); }
+    .nav-dropdown.is-open .nav-dropbtn svg { transform: rotate(180deg); }
     .nav-dropdown-content {
       position: absolute;
       top: 100%;
       left: 50%;
-      z-index: 100;
+      z-index: 10000;
       display: flex;
       flex-direction: column;
       gap: 0.25rem;
@@ -132,9 +128,7 @@
       transform: translate(-50%, 0);
       transition: opacity 0.16s ease, visibility 0.16s;
     }
-    .nav-dropdown:hover .nav-dropdown-content,
-    .nav-dropdown.is-open .nav-dropdown-content,
-    .nav-dropdown:focus-within .nav-dropdown-content {
+    .nav-dropdown.is-open .nav-dropdown-content {
       opacity: 1;
       visibility: visible;
       pointer-events: auto;
@@ -200,6 +194,7 @@
       z-index: 10;
       min-height: 72px;
     }
+    .page > header.top-bar { z-index: 50; }
 
     .brand {
       display: inline-flex;
@@ -1153,20 +1148,18 @@
           };
 
           button.addEventListener('click', () => {
-            if (!window.matchMedia('(hover: none)').matches) return;
             const isOpen = dropdown.classList.toggle('is-open');
             button.setAttribute('aria-expanded', String(isOpen));
           });
           document.addEventListener('click', (event) => {
             if (!dropdown.contains(event.target)) {
               closeDropdown();
-              button.blur();
             }
           });
           document.addEventListener('keydown', (event) => {
             if (event.key === 'Escape') {
               closeDropdown();
-              button.blur();
+              button.focus();
             }
           });
         })();

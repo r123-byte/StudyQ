@@ -15,7 +15,7 @@
      ============================================================ */
   // API keys live server-side in the Vercel function's environment variables.
   // The frontend never sees them. All requests go through the proxy.
-  const PROXY_URL = "/api/proxy?path=openrouter/chat/completions";
+  const PROXY_URL = "https://studyq-nu.vercel.app/api/proxy?path=openrouter/chat/completions";
   const MODEL = "dots-studio/dots-3-note-preview:free";
 
   const STORAGE_KEY = "studystack-planner-tests";

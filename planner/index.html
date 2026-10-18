@@ -5627,7 +5627,7 @@
          ============================================================ */
       (function initChatMic() {
         // Groq key lives server-side in the Vercel function's environment variables.
-        const GROQ_PROXY_URL = "/api/proxy?path=groq/audio/transcriptions";
+        const GROQ_PROXY_URL = "https://studyq-nu.vercel.app/api/proxy?path=groq/audio/transcriptions";
         const GROQ_MODEL = "whisper-large-v3";
         const MAX_RECORD_SEC = 120;
 

@@ -60,95 +60,6 @@
 
     html { scroll-behavior: smooth; scroll-padding-top: 2rem; }
 
-    /* ---------- Homepage navigation ---------- */
-    .navbar {
-      position: fixed;
-      inset: 0 0 auto;
-      width: 100%;
-      background: rgba(255, 255, 255, 0.88);
-      -webkit-backdrop-filter: blur(12px);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--slate-200);
-      z-index: 9999;
-    }
-    .nav-container {
-      max-width: 1240px;
-      margin: 0 auto;
-      padding: 0.65rem 2rem;
-      min-height: 64px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-    }
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 0.55rem;
-      color: var(--slate-900);
-      text-decoration: none;
-      font-weight: 800;
-      font-size: 1.2rem;
-    }
-    .nav-brand img { width: 36px; height: 36px; object-fit: contain; }
-    .nav-brand span { color: var(--blue-600); }
-    .nav-links { display: flex; align-items: center; gap: 1.5rem; }
-    .nav-link, .nav-dropbtn {
-      color: var(--slate-600);
-      font: inherit;
-      font-size: 0.95rem;
-      font-weight: 600;
-      text-decoration: none;
-      transition: color 0.2s ease;
-    }
-    .nav-link:hover, .nav-dropbtn:hover, .nav-dropdown:focus-within .nav-dropbtn { color: var(--blue-600); }
-    .nav-dropdown { position: relative; }
-    .nav-dropbtn {
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-      padding: 0.5rem 0;
-      border: 0;
-      background: transparent;
-      cursor: pointer;
-    }
-    .nav-dropbtn svg { width: 16px; height: 16px; transition: transform 0.2s ease; }
-    .nav-dropdown:hover .nav-dropbtn svg, .nav-dropdown:focus-within .nav-dropbtn svg { transform: rotate(180deg); }
-    .nav-dropdown-content {
-      position: absolute;
-      top: 100%;
-      right: 0;
-      margin-top: 0.5rem;
-      min-width: 220px;
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-      padding: 0.5rem;
-      background: #fff;
-      border: 1px solid var(--slate-200);
-      border-radius: 16px;
-      box-shadow: 0 10px 30px -10px rgba(37, 99, 235, 0.2);
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(8px);
-      transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
-    }
-    .nav-dropdown:hover .nav-dropdown-content, .nav-dropdown:focus-within .nav-dropdown-content {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-    }
-    .nav-dropdown-content a {
-      padding: 0.6rem 1rem;
-      border-radius: 10px;
-      color: var(--slate-700);
-      font-size: 0.9rem;
-      font-weight: 600;
-      text-decoration: none;
-    }
-    .nav-dropdown-content a:hover, .nav-dropdown-content a:focus-visible { color: var(--blue-600); background: var(--blue-50); }
-    body { padding-top: 90px; }
-
     body {
       font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
       background: #F5F8FE;
@@ -638,11 +549,6 @@
     }
     @media (max-width: 720px) {
       body { padding: 0.75rem; }
-      body { padding-top: 82px; }
-      .nav-container { padding: 0.65rem 1rem; }
-      .nav-links { gap: 1rem; }
-      .nav-brand > span { display: none; }
-      .nav-dropdown-content { right: -10px; }
       .page { border-radius: var(--r-xl); }
       .top-bar { padding: 1rem 1.25rem; gap: 1rem; }
       .hero { padding: 3rem 1.5rem 3rem; }
@@ -1004,31 +910,6 @@
   <link rel="stylesheet" href="animations.css">
 </head>
 <body>
-  <!-- HOMEPAGE NAVBAR -->
-  <nav class="navbar" aria-label="Main navigation">
-    <div class="nav-container">
-      <a href="index.html" class="nav-brand" aria-label="StudyStack home">
-        <img src="logo/logo.png" alt="">
-        <span>StudyStack</span>
-      </a>
-      <div class="nav-links">
-        <div class="nav-dropdown">
-          <button class="nav-dropbtn" type="button" aria-haspopup="true">
-            Tools
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
-          </button>
-          <div class="nav-dropdown-content">
-            <a href="calculator/index.html">Grade Calculator</a>
-            <a href="pomodoro/index.html">Pomodoro Timer</a>
-            <a href="planner/index.html">Testweek Planner</a>
-            <a href="vocab/index.html">Woordtrainer</a>
-            <a href="flashcards/index.html">Flashcards</a>
-          </div>
-        </div>
-        <a href="contact/index.html" class="nav-link">Contact</a>
-      </div>
-    </div>
-  </nav>
   <div class="shell">
     <div class="page">
 
@@ -1123,6 +1004,13 @@
       </div>
 
       <header class="top-bar">
+        <a href="index.html" class="brand">
+          <span class="brand-mark" aria-hidden="true">
+            <img src="logo/logo.png" alt="">
+          </span>
+          <span class="brand-name">Study<span>Stack</span></span>
+        </a>
+
         <label class="language-switcher">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
             <circle cx="12" cy="12" r="9"></circle>

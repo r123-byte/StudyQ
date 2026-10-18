@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact | StudyTools</title>
+  <meta name="description" content="Have a question, found a bug, or have an idea? Send us a message.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="icon" type="image/png" href="../favicon.png">
+  
+  <style>
+    /* ============================================================
+       CONTACT PAGE STYLES: Minimalist B&W with Sharp Outlines
+       ============================================================ */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --dur: 0.35s;
+      --accent: #000000;
+      --accent-hover: #1a1a1a;
+      --border-color: #E2E8F0;
+      --bg-color: #FFFFFF;
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: #F5F8FE;
+      color: var(--text-main);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      padding: 3rem 1.5rem;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .wrapper { max-width: 900px; width: 100%; margin: 0 auto; }
+    
+    .page {
+      background: var(--bg-color);
+      border-radius: 3rem;
+      box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.1);
+      padding: 4rem 4rem 3rem;
+      border: 1px solid var(--border-color);
+      margin-bottom: 2rem;
+    }
+
+    /* --- Header (Standard) --- */
+    .top-bar {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      margin-bottom: 3.5rem; padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .brand {
+      display: flex; align-items: center; gap: 0.75rem;
+      font-weight: 800; font-size: 1.4rem; color: var(--text-main); text-decoration: none;
+      transition: color var(--dur) var(--ease-out);
+    }
+    .brand:hover { color: var(--accent); }
+    .brand-icon {
+      background: var(--accent); width: 42px; height: 42px;
+      display: flex; align-items: center; justify-content: center; border-radius: 13px;
+      box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.3);
+    }
+    .brand-icon img { width: 100%; height: 100%; object-fit: contain; transform: scale(2); transition: transform var(--dur) var(--ease-pop); }
+    .brand:hover .brand-icon img { transform: scale(2.1) rotate(-4deg); }
+    .brand span { color: var(--accent); }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.9rem; font-weight: 600; color: var(--text-muted); text-decoration: none;
+      padding: 0.6rem 1.3rem; border-radius: 50px; background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      transition: transform var(--dur) var(--ease-pop), box-shadow var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out), color var(--dur) var(--ease-out);
+    }
+    .back-link svg { width: 16px; height: 16px; }
+    .back-link:hover {
+      transform: translate3d(-3px, 0, 0); box-shadow: 0 8px 16px -6px rgba(0,0,0,0.1);
+      border-color: #CBD5E1; color: var(--accent);
+    }
+
+    /* --- Central Branding --- */
+    .contact-hero {
+      text-align: center;
+      margin-bottom: 3rem;
+      animation: fadeUp 0.6s var(--ease-out) both;
+    }
+    .contact-logo {
+      width: 100px; height: 100px;
+      margin: 0 auto 1.5rem;
+      background: var(--bg-color);
+      border-radius: 24px;
+      border: 1px solid var(--border-color);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 10px 24px -8px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+    .contact-logo img {
+      width: 100%; height: 100%; object-fit: contain;
+      transform: scale(1.8);
+      transition: transform var(--dur) var(--ease-pop);
+    }
+    .contact-logo:hover img { transform: scale(2) rotate(5deg); }
+
+    .contact-title {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      color: var(--text-main);
+      margin-bottom: 0.75rem;
+    }
+    .contact-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* --- Form Styles --- */
+    .contact-form {
+      max-width: 640px;
+      margin: 0 auto;
+      animation: fadeUp 0.6s 0.1s var(--ease-out) both;
+    }
+
+    .form-group {
+      margin-bottom: 1.75rem;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.6rem;
+      padding-left: 0.25rem;
+    }
+    .form-label span { color: var(--text-muted); font-weight: 500; font-size: 0.8rem; }
+
+    /* Radio Pills */
+    .radio-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .radio-label {
+      position: relative;
+      cursor: pointer;
+      flex: 1 1 auto;
+    }
+    .radio-label input {
+      position: absolute;
+      opacity: 0;
+      width: 0; height: 0;
+    }
+    .radio-pill {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.8rem 1.25rem;
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-color);
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      transition: all 0.3s var(--ease-out);
+      text-align: center;
+    }
+    .radio-label:hover .radio-pill {
+      border-color: #CBD5E1;
+      transform: translate3d(0, -2px, 0);
+      box-shadow: 0 4px 10px -4px rgba(0,0,0,0.05);
+    }
+    .radio-label input:checked + .radio-pill {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #FFFFFF;
+      box-shadow: 0 6px 16px -4px rgba(0, 0, 0, 0.25);
+      transform: translate3d(0, -2px, 0);
+    }
+
+    /* Inputs & Textareas */
+    .form-control {
+      width: 100%;
+      padding: 0.9rem 1.1rem;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text-main);
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-color);
+      border-radius: 12px;
+      outline: none;
+      transition: border-color var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease-out), transform var(--dur) var(--ease-out);
+    }
+    .form-control::placeholder { color: #94A3B8; }
+    .form-control:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+      transform: translate3d(0, -1px, 0);
+    }
+    textarea.form-control {
+      min-height: 140px;
+      resize: vertical;
+    }
+
+    /* Error State */
+    .form-group.has-error .form-control,
+    .form-group.has-error .radio-pill {
+      border-color: #EF4444;
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+    }
+    .error-msg {
+      display: none;
+      color: #EF4444;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-top: 0.4rem;
+      padding-left: 0.25rem;
+    }
+    .form-group.has-error .error-msg { display: block; }
+
+    /* Submit Button */
+    .btn-submit {
+      width: 100%;
+      padding: 1rem 1.5rem;
+      background: var(--accent);
+      color: #FFFFFF;
+      font-family: inherit;
+      font-size: 1.05rem;
+      font-weight: 800;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all var(--dur) var(--ease-pop);
+      box-shadow: 0 8px 20px -6px rgba(0, 0, 0, 0.3);
+    }
+    .btn-submit:hover {
+      background: var(--accent-hover);
+      transform: translate3d(0, -3px, 0) scale(1.02);
+      box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.4);
+    }
+    .btn-submit:active { transform: translate3d(0, 0, 0) scale(0.98); }
+    .btn-submit svg { width: 18px; height: 18px; stroke-width: 2.5; }
+    .btn-submit:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+
+    /* --- Success Message --- */
+    .success-message {
+      display: none;
+      text-align: center;
+      padding: 3rem 2rem;
+      background: #F0FDF4;
+      border: 1.5px solid #BBF7D0;
+      border-radius: 20px;
+      animation: popIn 0.5s var(--ease-pop) both;
+    }
+    .success-icon {
+      width: 64px; height: 64px;
+      background: #22C55E;
+      color: #FFFFFF;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.5rem;
+      box-shadow: 0 8px 20px -6px rgba(34, 197, 94, 0.4);
+    }
+    .success-icon svg { width: 32px; height: 32px; stroke-width: 3; }
+    .success-title { font-size: 1.5rem; font-weight: 800; color: #166534; margin-bottom: 0.5rem; }
+    .success-text { font-size: 1rem; color: #15803D; }
+
+    @keyframes fadeUp {
+      0% { opacity: 0; transform: translate3d(0, 20px, 0); }
+      100% { opacity: 1; transform: translate3d(0, 0, 0); }
+    }
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.9); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .page { padding: 2.5rem 1.5rem; border-radius: 2rem; }
+      .top-bar { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      .radio-group { flex-direction: column; }
+      .radio-label { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <main class="page">
+      <!-- Standard Header -->
+      <header class="top-bar">
+        <a href="../index.html" class="brand">
+          <div class="brand-icon" aria-hidden="true">
+            <img src="../logo/logo.png" alt="Logo">
+          </div>
+          Study<span>Stack</span>
+        </a>
+        <a href="../index.html" class="back-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+          <span>Back to home</span>
+        </a>
+      </header>
+
+      <!-- Central Branding -->
+      <div class="contact-hero">
+        <div class="contact-logo">
+          <img src="../logo/logo.png" alt="StudyTools Logo">
+        </div>
+        <h1 class="contact-title">Contact StudyTools</h1>
+        <p class="contact-subtitle">Have a question, found a bug, or have an idea? Send us a message.</p>
+      </div>
+
+      <!-- Contact Form -->
+      <form id="contact-form" action="https://api.web3forms.com/submit" method="POST" class="contact-form" novalidate>
+        
+        <!-- Web3Forms Access Key -->
+        <input type="hidden" name="access_key" value="d4669d32-cef4-4bce-b8ec-3fd0eb594824">
+        
+        <!-- Field 1: Topic (Required) -->
+        <div class="form-group" id="group-topic">
+          <label class="form-label">What is this about? *</label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="topic" value="Bug report">
+              <span class="radio-pill">Bug report</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="topic" value="Feature suggestion">
+              <span class="radio-pill">Feature suggestion</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="topic" value="General questions">
+              <span class="radio-pill">General questions</span>
+            </label>
+          </div>
+          <div class="error-msg">Please select a topic.</div>
+        </div>
+
+        <!-- Field 2: Name (Optional) -->
+        <div class="form-group">
+          <label class="form-label" for="name">Your Name <span>(Optional)</span></label>
+          <input type="text" id="name" name="name" class="form-control" placeholder="Jane Doe">
+        </div>
+
+        <!-- Field 3: Email (Optional) -->
+        <div class="form-group">
+          <label class="form-label" for="email">Your Email <span>(Optional)</span></label>
+          <input type="email" id="email" name="email" class="form-control" placeholder="jane@example.com">
+        </div>
+
+        <!-- Field 4: Message (Required) -->
+        <div class="form-group" id="group-message">
+          <label class="form-label" for="message">Your Message *</label>
+          <textarea id="message" name="message" class="form-control" placeholder="How can we help you?"></textarea>
+          <div class="error-msg">Please enter your message.</div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn-submit">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"></path><path d="M22 2 11 13"></path></svg>
+          Send Message
+        </button>
+      </form>
+
+      <!-- Success State (Hidden by default) -->
+      <div id="success-message" class="success-message">
+        <div class="success-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+        </div>
+        <h2 class="success-title">Message sent successfully!</h2>
+        <p class="success-text">Thank you for reaching out. We will get back to you shortly.</p>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Script -->
+  <script src="contact.js"></script>
+  <!-- Global page intro script -->
+  <script src="../page-intro.js"></script>
+</body>
+</html>

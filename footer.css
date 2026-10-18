@@ -1,0 +1,56 @@
+/* Shared StudyStack footer */
+.site-footer {
+  width: min(1240px, calc(100% - 2.5rem));
+  margin: 4rem auto 0;
+  padding: 3.5rem 2rem 1.5rem;
+  border-top: 1px solid #3F3F46;
+  color: #F4F4F5;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+.footer-container {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+.footer-brand { max-width: 320px; }
+.footer-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: .65rem;
+  margin-bottom: 1rem;
+  color: #FAFAFA;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 1.2rem;
+}
+.footer-logo img { width: 34px; height: 34px; object-fit: contain; }
+.footer-logo span { color: #FAFAFA; }
+.footer-logo:hover, .footer-logo:hover span { color: #D4D4D8; }
+.footer-brand p { color: #A1A1AA; font-size: .9rem; line-height: 1.65; }
+.footer-links { display: contents; }
+.footer-col { display: flex; flex-direction: column; align-items: flex-start; gap: .7rem; }
+.footer-col h4 {
+  margin-bottom: .35rem;
+  color: #FAFAFA;
+  font-size: .8rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.footer-col a {
+  width: fit-content;
+  color: #A1A1AA;
+  text-decoration: none;
+  font-size: .9rem;
+  font-weight: 500;
+  transition: color .2s ease, transform .2s ease;
+}
+.footer-col a:hover { color: #FFFFFF; transform: translateX(3px); }
+.footer-bottom { border-top: 1px solid #27272A; padding-top: 1.5rem; text-align: center; }
+.footer-bottom p { color: #71717A; font-size: .82rem; font-weight: 500; }
+@media (max-width: 768px) {
+  .site-footer { width: calc(100% - 2rem); padding: 2.5rem 1rem 1.25rem; }
+  .footer-container { grid-template-columns: 1fr 1fr; gap: 2rem 1.25rem; }
+  .footer-brand { grid-column: 1 / -1; max-width: 100%; }
+}

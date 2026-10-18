@@ -1,22 +1,20 @@
-export default async (req, context) => {
+export const config = { runtime: 'edge' };
+
+export default async function handler(req) {
   const url = new URL(req.url);
   
-  // 1. Get the origin of the incoming request
+  // Get the origin of the incoming request
   const requestOrigin = req.headers.get("origin") || "";
   
-  // 2. Read the allowed origins from your Netlify environment variable
-  // We split by comma in case you want to add more later
+  // Read allowed origins from Vercel environment variables
   const allowedOriginsStr = process.env.ALLOWED_ORIGIN || "*";
   const allowedOrigins = allowedOriginsStr.split(",").map(o => o.trim());
   
-  // 3. Determine if this origin is allowed
+  // Determine if this origin is allowed
   let corsOrigin = "*";
   if (allowedOriginsStr !== "*") {
     if (allowedOrigins.includes(requestOrigin)) {
-      corsOrigin = requestOrigin; // Echo back the exact allowed origin
-    } else {
-      // Optional: Block unauthorized origins entirely
-      // return new Response("CORS blocked", { status: 403 });
+      corsOrigin = requestOrigin; 
     }
   }
 
@@ -79,9 +77,8 @@ export default async (req, context) => {
     });
   }
 
-  // Health check
   return new Response(
-    JSON.stringify({ status: "ok", message: "StudyStack proxy is running." }),
+    JSON.stringify({ status: "ok", message: "StudyStack Vercel proxy is running." }),
     { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
   );
-};
+}

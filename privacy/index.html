@@ -199,48 +199,197 @@
           <span>Back to home</span>
         </a>
       </header>
-
-      <!-- Privacy Header -->
-      <div class="privacy-header">
-        <h1 class="privacy-title">Privacy Policy</h1>
-        <p class="privacy-date">Last updated: October 2026</p>
-      </div>
-
-      <!-- Privacy Content -->
       <div class="privacy-content">
-        <div class="privacy-highlight">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
-          <div>
-            <strong>Short version:</strong> StudyStack is designed with privacy in mind. You don't need an account to use the tools, and the vast majority of your data (like your grades, flashcards, and study plans) never leaves your device.
-          </div>
-        </div>
-
-        <h2>1. Data Storage (Local Storage)</h2>
-        <p>StudyStack is a static web application. When you use our tools to add tests, create flashcards, or calculate grades, that data is saved directly in your browser using <strong>Local Storage</strong>.</p>
-        <ul>
-          <li>This data is physically stored on your device.</li>
-          <li>We do not have servers that store or process this data.</li>
-          <li>Clearing your browser's cache or site data will permanently delete your saved progress.</li>
-        </ul>
-
-        <h2>2. Third-Party Services</h2>
-        <p>While we do not store your personal data, we do use a few external services for specific features:</p>
-        <ul>
-          <li><strong>AI Planner (Nova):</strong> When you chat with the AI planner, your prompts and study data are sent to our secure proxy and then to <em>OpenRouter</em> to generate a response. We do not log or store these conversations.</li>
-          <li><strong>Voice Input:</strong> If you use the microphone feature in the planner, your audio is securely processed by <em>Groq</em> to transcribe it to text. Audio is not stored.</li>
-          <li><strong>Contact Form:</strong> If you contact us via the Contact page, your message is processed by <em>Web3Forms</em> and sent directly to our email inbox.</li>
-        </ul>
-
-        <h2>3. Cookies & Tracking</h2>
-        <p>We do not use tracking cookies, analytics scripts, or advertising pixels. We do not track your behavior across the internet or build profiles about you.</p>
-
-        <h2>4. Your Rights</h2>
-        <p>Because we don't store your personal data on our servers, you have complete control over it. You can manage or delete your data at any time by clearing your browser's Local Storage.</p>
-
-        <h2>5. Contact Us</h2>
-        <p>If you have any questions about this Privacy Policy, or if you've found a bug or have a feature idea, please reach out to us via our <a href="../contact/index.html">Contact Page</a>.</p>
+        <h1>Privacy Policy — StudyTools</h1>
+<p><strong>Effective date:</strong> 18 October 2026</p>
+<p><strong>Last updated:</strong> 19 October 2026</p>
+<h2>1. Introduction</h2>
+<p>Welcome to StudyTools ("we", "us" or "our"), an educational website providing study tools such as flashcards, vocabulary training, grade calculation, study planning and productivity features.</p>
+<p>This Privacy Policy explains how information is stored, used and transmitted when you use StudyTools, including its AI planner, voice dictation, contact form and Magister calendar import feature.</p>
+<p>We aim to minimise personal data processing and explain our practices transparently. Where applicable, this policy is intended to address the requirements of the General Data Protection Regulation (EU) 2016/679 ("GDPR") and relevant Dutch privacy laws.</p>
+<p>StudyTools does not require users to create an account. Most saved study information is stored locally in your browser. Some features require information to be transmitted to external service providers.</p>
+<h2>2. Data Controller and Contact Information</h2>
+<p>The data controller is the person or organisation responsible for determining the purposes and means of processing personal data.</p>
+<p><strong>Data controller:</strong> [Insert the responsible person's or organisation's legal name]</p>
+<p><strong>Privacy contact email:</strong> [Insert your contact email address]</p>
+<p><strong>Website:</strong> [Insert your website URL]</p>
+<p>For questions about this Privacy Policy or requests concerning your personal data, please use the contact details above.</p>
+<h2>3. Information Stored Locally in Your Browser</h2>
+<p>StudyTools uses browser `localStorage` to save information needed for its features.</p>
+<p>Depending on how you use the website, this information may include:</p>
+<ul>
+<li>**Preferences:** Selected language, sound preferences and other settings.</li>
+<li>**Flashcards:** Custom decks, vocabulary items and learning progress.</li>
+<li>**Study planning:** Tests, subjects, homework tasks and schedules.</li>
+<li>**Study progress:** Completed tasks, checklists and progress information.</li>
+<li>**Planner history:** A limited history of previous study interactions.</li>
+<li>**AI-generated schedules:** Schedules and other planner results saved for later use.</li>
+<li>**Temporary application data:** Information used to prepare, transfer or display results.</li>
+</ul>
+<p>This information is generally stored in your browser rather than in a central StudyTools user database.</p>
+<p>Some locally stored information may constitute personal data if it relates to an identifiable person. For example, a study plan may include identifying information entered by a user.</p>
+<h3>Local storage and deletion</h3>
+<p>Locally stored information generally remains on your device until it is removed by a feature, cleared through your browser settings or otherwise deleted.</p>
+<p>Clearing the relevant website data may permanently remove saved flashcards, schedules, preferences and study progress. StudyTools cannot recover locally stored information after deletion unless another copy exists.</p>
+<p>Browser local storage is not an encrypted vault. Other people who can access your device or browser profile may be able to access it.</p>
+<p>Please avoid storing passwords, confidential information or unnecessary sensitive personal data in StudyTools.</p>
+<h2>4. Information Processed by External Services</h2>
+<p>Some StudyTools features require information to be sent to external services. This occurs when you actively use the relevant feature or submit information.</p>
+<h3>4.1 AI study planner — Vercel and OpenRouter</h3>
+<p>When you use the AI study planner, the website sends the relevant prompt and study context to an API proxy hosted on Vercel. The proxy forwards the request to OpenRouter for AI processing.</p>
+<p>Depending on your request and the feature used, the information transmitted may include:</p>
+<ul>
+<li>Instructions and prompts you provide.</li>
+<li>Test dates, subjects and homework information included in the request.</li>
+<li>Relevant study schedules and progress information.</li>
+<li>Previous study interactions included as context.</li>
+</ul>
+<p>This information is used to generate study-related responses and planning suggestions.</p>
+<p>Vercel hosts the API proxy. OpenRouter may route requests to a selected AI model provider. These services may process request data and technical information to provide, secure and operate their services.</p>
+<p>StudyTools does not intentionally maintain a central database of AI conversations. This does not guarantee that Vercel, OpenRouter or a selected model provider never retains request data or technical logs.</p>
+<p>Further information:</p>
+<ul>
+<li>[Vercel Privacy Notice](https://vercel.com/legal/privacy-notice)</li>
+<li>[OpenRouter Privacy Policy](https://openrouter.ai/privacy/)</li>
+<li>[OpenRouter Provider Information](https://openrouter.ai/providers)</li>
+</ul>
+<h3>4.2 Voice dictation — Groq</h3>
+<p>When you activate voice dictation, your audio is transmitted to the Groq API for speech-to-text processing using a Whisper model.</p>
+<p>The resulting transcription may then be used by the relevant StudyTools feature. If you submit that transcription to the AI planner, the text and relevant study context may also be sent through the API proxy for AI processing.</p>
+<p>Voice dictation is initiated by the user. Audio is not intentionally transmitted through this feature when it has not been activated.</p>
+<p>The handling and retention of audio, transcriptions and associated technical information depend on Groq's applicable terms, privacy practices and data-handling settings. We do not guarantee that all audio or transcription data is immediately deleted after processing.</p>
+<p>Further information:</p>
+<ul>
+<li>[Groq Privacy Policy](https://groq.com/privacy-policy/)</li>
+<li>[Groq Documentation](https://console.groq.com/docs/your-data)</li>
+</ul>
+<h3>4.3 Contact form — Web3Forms</h3>
+<p>If you submit a message through the StudyTools Contact page, the information you provide is transmitted to Web3Forms for processing and delivery to the configured recipient.</p>
+<p>This may include your name, email address, enquiry category and message.</p>
+<p>The information is used to receive and respond to your enquiry. Web3Forms and the recipient may process or retain submissions in accordance with their applicable policies and arrangements.</p>
+<p>Submitting a contact form is a separate action from using the study tools.</p>
+<p>Further information: [Web3Forms](https://web3forms.com/).</p>
+<h3>4.4 Magister calendar import — iCalendar and `webcal` links</h3>
+<p>StudyTools allows users to paste a personal Magister iCalendar (`iCal`) or `webcal` link to import calendar information into the study planner.</p>
+<p>#### Information processed</p>
+<p>The calendar link may provide access to information such as lesson times and schedule entries. The available information depends on the calendar feed provided by Magister.</p>
+<p>Based on the current implementation, the calendar link is processed in the browser and is not sent to the StudyTools API proxy. The browser uses the link to retrieve the calendar feed directly from the relevant calendar service.</p>
+<p>The calendar service may receive technical information associated with the request, such as the user's IP address and request details.</p>
+<p>Calendar information retrieved by the browser is processed locally by StudyTools unless another feature or network request transmits it elsewhere. StudyTools does not intentionally send the Magister calendar link or imported calendar data to its API proxy.</p>
+<p>#### Confidentiality of your calendar link</p>
+<p>A personal Magister calendar link should be treated as confidential because someone who obtains a functioning link may be able to access the calendar information it exposes.</p>
+<p>Only provide the link if you choose to use the calendar-import feature. Avoid sharing it publicly or sending it to people you do not trust.</p>
+<p>If the link is stored in your browser, it may remain there until you remove it or clear the relevant website data.</p>
+<p>#### Revoking access</p>
+<p>Magister provides controls for managing calendar sharing. If you believe your calendar link has been exposed, use the available Magister controls to stop sharing or generate a replacement link.</p>
+<p>Revoking or replacing a link may prevent future access through the old link. It does not automatically delete calendar data that may already have been retrieved or retained elsewhere.</p>
+<p>Further information: [Magister Support](https://service.magister.nl/).</p>
+<h2>5. Cookies, Local Storage and Similar Technologies</h2>
+<p>StudyTools currently does not intentionally use advertising cookies or analytics tracking technologies.</p>
+<p>Based on our current checks, no cookies were visible in the website's Chrome Application panel. However, this does not guarantee that no cookies or similar technologies are ever set by the website, its features or external services.</p>
+<p>StudyTools uses `localStorage` to retain information required by its features. Local storage is technically different from cookies, but laws governing the storage of information on, or access to information from, a user's device may also apply.</p>
+<p>We aim to use device storage only for purposes connected to the website's functionality.</p>
+<p>If we introduce cookies or similar technologies that require consent under applicable law, we will implement the required consent mechanism before using them.</p>
+<p>Users can manage or clear locally stored information through their browser settings. Doing so may remove saved StudyTools data.</p>
+<h2>6. Purposes and Legal Bases for Processing</h2>
+<p>Where the GDPR applies, personal data must be processed on a valid legal basis under Article 6 GDPR.</p>
+<p>The appropriate legal basis depends on the actual processing activity and circumstances. The following table describes potential bases that must be assessed and confirmed by the data controller.</p>
+<p>| Activity | Purpose | Potential legal basis |</p>
+<p>|---|---|---|</p>
+<p>| Local browser storage | Saving preferences and study information | Applicable device-storage rules and, where relevant, an appropriate GDPR basis |</p>
+<p>| AI planner | Generating study plans and responses | Article 6(1)(b) where necessary for a contract, or Article 6(1)(a) where valid consent is appropriate |</p>
+<p>| Voice dictation | Converting speech into text | An appropriate basis under Article 6 GDPR |</p>
+<p>| Magister calendar import | Retrieving and organising calendar information | An appropriate basis under Article 6 GDPR |</p>
+<p>| Contact form | Receiving and responding to enquiries | Article 6(1)(b) for relevant pre-contractual requests, or Article 6(1)(f) where legitimate interests are appropriate |</p>
+<p>| Technical security information | Operating, maintaining and securing the service | Article 6(1)(f), where a legitimate-interest assessment supports its use |</p>
+<p>| Legal compliance | Meeting applicable legal obligations | Article 6(1)(c), where processing is necessary for a legal obligation |</p>
+<p>These are potential legal bases, not a declaration that every listed basis currently applies. The data controller must determine and document the appropriate basis for each actual processing activity.</p>
+<p>Where consent is required, it must be freely given, specific, informed and unambiguous. Consent may be withdrawn at any time without affecting the lawfulness of processing before withdrawal.</p>
+<p>Where processing relies on legitimate interests, those interests and the required balancing assessment must be documented.</p>
+<p>Rules governing cookies and other technologies that store or access information on a user's device must also be assessed separately from the GDPR legal basis.</p>
+<h2>7. Data Sharing and Recipients</h2>
+<p>Depending on the features you use, information may be processed by:</p>
+<ul>
+<li>**Vercel:** Hosting the API proxy and processing associated requests and technical information.</li>
+<li>**OpenRouter and AI model providers:** Processing AI prompts and relevant study context.</li>
+<li>**Groq:** Processing audio for speech-to-text conversion.</li>
+<li>**Web3Forms:** Processing contact form submissions for delivery.</li>
+<li>**Magister:** Providing the calendar feed accessed through the user's personal calendar link.</li>
+<li>**Other infrastructure providers:** Supporting the website's hosting, delivery, security and operation.</li>
+</ul>
+<p>The roles of these providers depend on the service and processing involved. A provider may act as a processor or as an independent controller for particular activities.</p>
+<p>Where a provider acts as a processor on behalf of the data controller, the contractual arrangements required by Article 28 GDPR must be in place where applicable.</p>
+<p>StudyTools does not sell personal data.</p>
+<h2>8. International Data Transfers</h2>
+<p>Some service providers may process information outside the European Economic Area (EEA).</p>
+<p>Where a transfer of personal data to a third country is subject to Chapter V GDPR, an appropriate transfer mechanism must be in place. Depending on the circumstances, this may include an adequacy decision under Article 45 or appropriate safeguards under Article 46 GDPR.</p>
+<p>Information about applicable safeguards and how to obtain a copy will be provided where required by law.</p>
+<h2>9. Data Retention</h2>
+<p>Retention depends on the type of information, the feature used and the service processing it.</p>
+<ul>
+<li>**Local browser data:** Generally remains until deleted by the user, removed by a feature or cleared through browser settings.</li>
+<li>**AI planner requests:** May be subject to processing, logging or retention by Vercel, OpenRouter and the selected model provider.</li>
+<li>**Voice recordings and transcriptions:** Subject to Groq's applicable data-handling practices and settings, as well as any subsequent processing of the transcription.</li>
+<li>**Contact form submissions:** May be retained by Web3Forms or the configured recipient for as long as necessary to handle the enquiry and meet applicable obligations.</li>
+<li>**Magister calendar links and imported data:** Processed in the browser according to the calendar feature's implementation. The calendar service may retain request logs under its applicable practices.</li>
+<li>**Technical logs:** May be retained by hosting or infrastructure providers for operational, security or legal purposes.</li>
+</ul>
+<p>StudyTools does not guarantee immediate deletion of information from third-party systems after a request has been processed.</p>
+<p>Where the data controller determines the retention period for personal data under its control, information will be retained only for as long as necessary for the relevant purpose, unless applicable law requires otherwise.</p>
+<h2>10. Data Security</h2>
+<p>We aim to protect information processed through StudyTools by minimising unnecessary processing and applying appropriate technical and organisational measures.</p>
+<p>Communications with external services should use HTTPS where supported and properly configured. Browser-based storage is not a substitute for encrypted, access-controlled server storage.</p>
+<p>We aim to keep secret API keys on the server side rather than exposing them in public website code. Security depends on the actual implementation and configuration of the services involved.</p>
+<p>No method of transmission or storage can be guaranteed to be completely secure.</p>
+<p>Where a personal data breach occurs, the data controller will comply with the notification and communication obligations applicable under Articles 33 and 34 GDPR.</p>
+<h2>11. Your Rights Under the GDPR</h2>
+<p>Where the GDPR applies, you may have the following rights, subject to the conditions and limitations established by law:</p>
+<ul>
+<li>**Right of access — Article 15:** To obtain confirmation of whether your personal data is being processed and access to that data and relevant information.</li>
+<li>**Right to rectification — Article 16:** To request correction of inaccurate personal data or completion of incomplete data.</li>
+<li>**Right to erasure — Article 17:** To request deletion of personal data where the applicable conditions are met.</li>
+<li>**Right to restriction — Article 18:** To request restriction of processing in the circumstances specified by law.</li>
+<li>**Right to data portability — Article 20:** To receive eligible personal data in a structured, commonly used and machine-readable format and, where applicable, transmit it to another controller.</li>
+<li>**Right to object — Article 21:** To object to processing based on Article 6(1)(e) or Article 6(1)(f) on grounds relating to your particular situation, subject to the applicable legal requirements.</li>
+<li>**Right to withdraw consent:** Where processing is based on consent, to withdraw it at any time without affecting the lawfulness of processing before withdrawal.</li>
+</ul>
+<p>You may exercise your rights by contacting the data controller using the details in Section 2.</p>
+<p>The data controller will respond within the period required by Article 12 GDPR, normally within one month. Where legally permitted, this period may be extended for complex or multiple requests. You will be informed of any extension and the reasons for it.</p>
+<p>Where information is stored solely in your browser, you can generally delete it yourself through the relevant feature, where available, or through your browser's site-data settings.</p>
+<p>Where information is processed independently by a third-party provider, you may also need to contact that provider directly. Revoking a Magister calendar link can stop future access through that link, but it does not automatically erase copies of information already retrieved.</p>
+<h2>12. Right to Lodge a Complaint</h2>
+<p>If you believe that the processing of your personal data infringes the GDPR, you have the right to lodge a complaint with a competent supervisory authority.</p>
+<p>In the Netherlands, the supervisory authority is the Autoriteit Persoonsgegevens.</p>
+<p>Website: [https://autoriteitpersoonsgegevens.nl/](https://autoriteitpersoonsgegevens.nl/)</p>
+<p>You may also have the right to seek an effective judicial remedy under applicable law.</p>
+<h2>13. Children's Privacy</h2>
+<p>StudyTools is intended for educational use and may be used by students, including minors.</p>
+<p>Users should avoid submitting unnecessary personal data, passwords, confidential school information or sensitive information about other people to AI features and contact forms.</p>
+<p>Personal calendar links should be treated as confidential and provided only when the user chooses to use the calendar-import feature.</p>
+<p>Where applicable law requires parental authorisation, consent or additional safeguards for children, those requirements must be respected.</p>
+<p>Article 8 GDPR establishes specific conditions for consent in relation to certain information society services offered directly to children when processing is based on consent. The applicable age threshold and requirements depend on the circumstances and national law.</p>
+<p>If you believe a child's personal data has been processed inappropriately, please contact the data controller so the matter can be assessed.</p>
+<h2>14. AI and Automated Processing</h2>
+<p>StudyTools uses AI services to generate study-related responses and planning suggestions.</p>
+<p>AI-generated information may be inaccurate and should be checked before being relied upon.</p>
+<p>StudyTools is not intended to make decisions about users that produce legal effects or similarly significant effects solely through automated processing within the meaning of Article 22 GDPR.</p>
+<p>If this changes, the data controller will assess the applicable legal obligations and provide any additional information and safeguards required.</p>
+<h2>15. Data Protection by Design and Default</h2>
+<p>We aim to apply the principles of data minimisation, purpose limitation and data protection by design and by default under Articles 5 and 25 GDPR.</p>
+<p>Where feasible, study information is stored locally in the user's browser rather than in a central database.</p>
+<p>External transmission occurs when users activate features that require external processing, such as AI planning, voice transcription or contact form submission. Calendar import retrieves information directly through the browser, according to the current implementation.</p>
+<p>We aim to provide clear information about these transmissions and limit processing to what is necessary for the relevant feature.</p>
+<h2>16. Changes to This Privacy Policy</h2>
+<p>We may update this Privacy Policy when our website functionality, service providers, data processing activities or legal obligations change.</p>
+<p>The revised version will be published on this page with an updated "Last Updated" date.</p>
+<p>Where required by law, we will provide additional notice or obtain consent before implementing changes that require it.</p>
+<h2>17. Contact</h2>
+<p>For questions about this Privacy Policy or to exercise your data protection rights, contact the data controller using the details provided in Section 2.</p>
+<p>We aim to operate StudyTools with privacy, transparency and data minimisation in mind.</p>
+<p>---</p>
+<p><strong>End of Privacy Policy</strong></p>
       </div>
-    </main>
+</main>
   </div>
 
   <!-- GLOBAL FOOTER (Updated with Privacy Link) -->

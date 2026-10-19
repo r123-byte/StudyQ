@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy | StudyStack</title>
+  <meta name="description" content="Read the Privacy Policy for StudyStack. Learn how we protect your data, how local storage works, and how third-party services are used.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="icon" type="image/png" href="../favicon.png">
+  <link rel="stylesheet" href="../theme.css">
+  <link rel="stylesheet" href="../animations.css">
+  
+  <style>
+    /* ============================================================
+       PRIVACY PAGE STYLES: Blue & White Theme
+       ============================================================ */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --dur: 0.35s;
+      
+      --accent: #2563EB;
+      --accent-hover: #1D4ED8;
+      --accent-light: #93C5FD;
+      --accent-pale: #BFDBFE;
+      --accent-wash: #EFF6FF;
+      
+      --pop-shadow: 0 18px 36px -10px rgba(37, 99, 235, 0.22), 0 8px 18px -6px rgba(37, 99, 235, 0.12), 0 0 0 1px rgba(147, 197, 253, 0.55);
+      
+      --border-color: #E2E8F0;
+      --bg-color: #FFFFFF;
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: #F5F8FE;
+      color: var(--text-main);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      padding: 3rem 1.5rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .wrapper { max-width: 900px; width: 100%; margin: 0 auto; }
+    
+    .page {
+      background: var(--bg-color);
+      border-radius: 3rem;
+      box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.1);
+      padding: 4rem 4rem 3rem;
+      border: 1px solid var(--border-color);
+      margin-bottom: 2rem;
+    }
+
+    /* --- Header (Standard) --- */
+    .top-bar {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      margin-bottom: 3.5rem; padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .brand {
+      display: flex; align-items: center; gap: 0.75rem;
+      font-weight: 800; font-size: 1.4rem; color: var(--text-main); text-decoration: none;
+      transition: color var(--dur) var(--ease-out);
+    }
+    .brand:hover { color: var(--accent); }
+    .brand-icon {
+      background: var(--accent); width: 42px; height: 42px;
+      display: flex; align-items: center; justify-content: center; border-radius: 13px;
+      box-shadow: 0 4px 12px -2px rgba(37, 99, 235, 0.4);
+    }
+    .brand-icon img { width: 100%; height: 100%; object-fit: contain; transform: scale(2); transition: transform var(--dur) var(--ease-pop); }
+    .brand:hover .brand-icon img { transform: scale(2.1) rotate(-4deg); }
+    .brand span { color: var(--accent); }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.9rem; font-weight: 600; color: var(--text-muted); text-decoration: none;
+      padding: 0.6rem 1.3rem; border-radius: 50px; background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      transition: transform var(--dur) var(--ease-pop), box-shadow var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out), color var(--dur) var(--ease-out);
+    }
+    .back-link svg { width: 16px; height: 16px; }
+    .back-link:hover {
+      transform: translate3d(-3px, 0, 0); box-shadow: var(--pop-shadow);
+      border-color: var(--accent-light); color: var(--accent);
+    }
+
+    /* --- Content Styles --- */
+    .privacy-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      animation: fadeUp 0.6s var(--ease-out) both;
+    }
+    .privacy-title {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      color: var(--text-main);
+      margin-bottom: 0.75rem;
+      transition: color var(--dur) var(--ease-out);
+    }
+    .privacy-date {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .privacy-content {
+      animation: fadeUp 0.6s 0.1s var(--ease-out) both;
+    }
+    .privacy-content h2 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin: 2rem 0 1rem;
+      letter-spacing: -0.02em;
+    }
+    .privacy-content h2:first-child { margin-top: 0; }
+    .privacy-content p {
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+    .privacy-content ul {
+      margin: 0 0 1.5rem 1.5rem;
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+    .privacy-content li {
+      margin-bottom: 0.5rem;
+    }
+    .privacy-content strong {
+      color: var(--text-main);
+      font-weight: 700;
+    }
+    .privacy-content a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color var(--dur) var(--ease-out);
+    }
+    .privacy-content a:hover { color: var(--accent-hover); text-decoration: underline; }
+
+    .privacy-highlight {
+      background: var(--accent-wash);
+      border: 1px solid var(--accent-pale);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      color: var(--accent-hover);
+      font-weight: 500;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+    .privacy-highlight svg {
+      width: 24px; height: 24px; flex-shrink: 0; color: var(--accent);
+    }
+
+    @keyframes fadeUp {
+      0% { opacity: 0; transform: translate3d(0, 20px, 0); }
+      100% { opacity: 1; transform: translate3d(0, 0, 0); }
+    }
+
+    @media (max-width: 768px) {
+      .page { padding: 2.5rem 1.5rem; border-radius: 2rem; }
+      .top-bar { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <main class="page">
+      <!-- Standard Header -->
+      <header class="top-bar">
+        <a href="../index.html" class="brand">
+          <div class="brand-icon" aria-hidden="true">
+            <img src="../logo/logo.png" alt="Logo">
+          </div>
+          Study<span>Stack</span>
+        </a>
+        <a href="../index.html" class="back-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+          <span>Back to home</span>
+        </a>
+      </header>
+
+      <!-- Privacy Header -->
+      <div class="privacy-header">
+        <h1 class="privacy-title">Privacy Policy</h1>
+        <p class="privacy-date">Last updated: October 2026</p>
+      </div>
+
+      <!-- Privacy Content -->
+      <div class="privacy-content">
+        <div class="privacy-highlight">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
+          <div>
+            <strong>Short version:</strong> StudyStack is designed with privacy in mind. You don't need an account to use the tools, and the vast majority of your data (like your grades, flashcards, and study plans) never leaves your device.
+          </div>
+        </div>
+
+        <h2>1. Data Storage (Local Storage)</h2>
+        <p>StudyStack is a static web application. When you use our tools to add tests, create flashcards, or calculate grades, that data is saved directly in your browser using <strong>Local Storage</strong>.</p>
+        <ul>
+          <li>This data is physically stored on your device.</li>
+          <li>We do not have servers that store or process this data.</li>
+          <li>Clearing your browser's cache or site data will permanently delete your saved progress.</li>
+        </ul>
+
+        <h2>2. Third-Party Services</h2>
+        <p>While we do not store your personal data, we do use a few external services for specific features:</p>
+        <ul>
+          <li><strong>AI Planner (Nova):</strong> When you chat with the AI planner, your prompts and study data are sent to our secure proxy and then to <em>OpenRouter</em> to generate a response. We do not log or store these conversations.</li>
+          <li><strong>Voice Input:</strong> If you use the microphone feature in the planner, your audio is securely processed by <em>Groq</em> to transcribe it to text. Audio is not stored.</li>
+          <li><strong>Contact Form:</strong> If you contact us via the Contact page, your message is processed by <em>Web3Forms</em> and sent directly to our email inbox.</li>
+        </ul>
+
+        <h2>3. Cookies & Tracking</h2>
+        <p>We do not use tracking cookies, analytics scripts, or advertising pixels. We do not track your behavior across the internet or build profiles about you.</p>
+
+        <h2>4. Your Rights</h2>
+        <p>Because we don't store your personal data on our servers, you have complete control over it. You can manage or delete your data at any time by clearing your browser's Local Storage.</p>
+
+        <h2>5. Contact Us</h2>
+        <p>If you have any questions about this Privacy Policy, or if you've found a bug or have a feature idea, please reach out to us via our <a href="../contact/index.html">Contact Page</a>.</p>
+      </div>
+    </main>
+  </div>
+
+  <!-- GLOBAL FOOTER (Updated with Privacy Link) -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <a href="../index.html" class="footer-logo">
+          <img src="../logo/logo.png" alt="StudyStack Logo">
+          <span>StudyStack</span>
+        </a>
+        <p>Made by students, for students. Free tools to help you study smarter, stay focused, and ace your tests.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Tools</h4>
+          <a href="../calculator/index.html">Grade Calculator</a>
+          <a href="../pomodoro/index.html">Pomodoro Timer</a>
+          <a href="../planner/index.html">Testweek Planner</a>
+          <a href="../vocab/index.html">Woordtrainer</a>
+          <a href="../flashcards/index.html">Flashcards</a>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <a href="../index.html">Home</a>
+          <a href="../contact/index.html">Contact Us</a>
+          <a href="../privacy/index.html">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 StudyStack. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../page-intro.js"></script>
+</body>
+</html>

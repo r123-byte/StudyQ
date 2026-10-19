@@ -181,7 +181,26 @@
       .page { padding: 2.5rem 1.5rem; border-radius: 2rem; }
       .top-bar { flex-direction: column; align-items: flex-start; gap: 1rem; }
     }
-  </style>
+  
+    .privacy-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 0.95rem;
+      border: 1px solid var(--border-color);
+    }
+    .privacy-table th, .privacy-table td {
+      padding: 0.75rem;
+      border: 1px solid var(--border-color);
+      text-align: left;
+    }
+    .privacy-table th {
+      background: var(--accent-wash);
+      color: var(--accent-hover);
+      font-weight: 700;
+    }
+
+</style>
 </head>
 <body>
   <div class="shell">
@@ -211,8 +230,8 @@
 <h2>2. Data Controller and Contact Information</h2>
 <p>The data controller is the person or organisation responsible for determining the purposes and means of processing personal data.</p>
 <p><strong>Data controller:</strong> Reyansh Ghulghule</p>
-<p><strong>Privacy contact email:</strong> [Insert your contact email address]</p>
-<p><strong>Website:</strong> https://studyq-nu.vercel.app</p>
+<p><strong>Privacy contact email:</strong> <a href="mailto:[Insert your contact email address]">[Insert your contact email address]</a></p>
+<p><strong>Website:</strong> <a href="https://studyq-nu.vercel.app" target="_blank" rel="noopener noreferrer">https://studyq-nu.vercel.app</a></p>
 <p>For questions about this Privacy Policy or requests concerning your personal data, please use the contact details above.</p>
 <h2>3. Information Stored Locally in Your Browser</h2>
 <p>StudyTools uses browser `localStorage` to save information needed for its features.</p>
@@ -249,9 +268,9 @@
 <p>StudyTools does not intentionally maintain a central database of AI conversations. This does not guarantee that Vercel, OpenRouter or a selected model provider never retains request data or technical logs.</p>
 <p>Further information:</p>
 <ul>
-<li>[Vercel Privacy Notice](https://vercel.com/legal/privacy-notice)</li>
-<li>[OpenRouter Privacy Policy](https://openrouter.ai/privacy/)</li>
-<li>[OpenRouter Provider Information](https://openrouter.ai/providers)</li>
+<li><a href="https://vercel.com/legal/privacy-notice">Vercel Privacy Notice</a></li>
+<li><a href="https://openrouter.ai/privacy/">OpenRouter Privacy Policy</a></li>
+<li><a href="https://openrouter.ai/providers">OpenRouter Provider Information</a></li>
 </ul>
 <h3>4.2 Voice dictation — Groq</h3>
 <p>When you activate voice dictation, your audio is transmitted to the Groq API for speech-to-text processing using a Whisper model.</p>
@@ -260,30 +279,30 @@
 <p>The handling and retention of audio, transcriptions and associated technical information depend on Groq's applicable terms, privacy practices and data-handling settings. We do not guarantee that all audio or transcription data is immediately deleted after processing.</p>
 <p>Further information:</p>
 <ul>
-<li>[Groq Privacy Policy](https://groq.com/privacy-policy/)</li>
-<li>[Groq Documentation](https://console.groq.com/docs/your-data)</li>
+<li><a href="https://groq.com/privacy-policy/">Groq Privacy Policy</a></li>
+<li><a href="https://console.groq.com/docs/your-data">Groq Documentation</a></li>
 </ul>
 <h3>4.3 Contact form — Web3Forms</h3>
 <p>If you submit a message through the StudyTools Contact page, the information you provide is transmitted to Web3Forms for processing and delivery to the configured recipient.</p>
 <p>This may include your name, email address, enquiry category and message.</p>
 <p>The information is used to receive and respond to your enquiry. Web3Forms and the recipient may process or retain submissions in accordance with their applicable policies and arrangements.</p>
 <p>Submitting a contact form is a separate action from using the study tools.</p>
-<p>Further information: [Web3Forms](https://web3forms.com/).</p>
+<p>Further information: <a href="https://web3forms.com/">Web3Forms</a>.</p>
 <h3>4.4 Magister calendar import — iCalendar and `webcal` links</h3>
 <p>StudyTools allows users to paste a personal Magister iCalendar (`iCal`) or `webcal` link to import calendar information into the study planner.</p>
-<p>#### Information processed</p>
+<h4>Information processed</h4>
 <p>The calendar link may provide access to information such as lesson times and schedule entries. The available information depends on the calendar feed provided by Magister.</p>
 <p>Based on the current implementation, the calendar link is processed in the browser and is not sent to the StudyTools API proxy. The browser uses the link to retrieve the calendar feed directly from the relevant calendar service.</p>
 <p>The calendar service may receive technical information associated with the request, such as the user's IP address and request details.</p>
 <p>Calendar information retrieved by the browser is processed locally by StudyTools unless another feature or network request transmits it elsewhere. StudyTools does not intentionally send the Magister calendar link or imported calendar data to its API proxy.</p>
-<p>#### Confidentiality of your calendar link</p>
+<h4>Confidentiality of your calendar link</h4>
 <p>A personal Magister calendar link should be treated as confidential because someone who obtains a functioning link may be able to access the calendar information it exposes.</p>
 <p>Only provide the link if you choose to use the calendar-import feature. Avoid sharing it publicly or sending it to people you do not trust.</p>
 <p>If the link is stored in your browser, it may remain there until you remove it or clear the relevant website data.</p>
-<p>#### Revoking access</p>
+<h4>Revoking access</h4>
 <p>Magister provides controls for managing calendar sharing. If you believe your calendar link has been exposed, use the available Magister controls to stop sharing or generate a replacement link.</p>
 <p>Revoking or replacing a link may prevent future access through the old link. It does not automatically delete calendar data that may already have been retrieved or retained elsewhere.</p>
-<p>Further information: [Magister Support](https://service.magister.nl/).</p>
+<p>Further information: <a href="https://service.magister.nl/">Magister Support</a>.</p>
 <h2>5. Cookies, Local Storage and Similar Technologies</h2>
 <p>StudyTools currently does not intentionally use advertising cookies or analytics tracking technologies.</p>
 <p>Based on our current checks, no cookies were visible in the website's Chrome Application panel. However, this does not guarantee that no cookies or similar technologies are ever set by the website, its features or external services.</p>
@@ -294,20 +313,19 @@
 <h2>6. Purposes and Legal Bases for Processing</h2>
 <p>Where the GDPR applies, personal data must be processed on a valid legal basis under Article 6 GDPR.</p>
 <p>The appropriate legal basis depends on the actual processing activity and circumstances. The following table describes potential bases that must be assessed and confirmed by the data controller.</p>
-<p>| Activity | Purpose | Potential legal basis |</p>
-<p>|---|---|---|</p>
-<p>| Local browser storage | Saving preferences and study information | Applicable device-storage rules and, where relevant, an appropriate GDPR basis |</p>
-<p>| AI planner | Generating study plans and responses | Article 6(1)(b) where necessary for a contract, or Article 6(1)(a) where valid consent is appropriate |</p>
-<p>| Voice dictation | Converting speech into text | An appropriate basis under Article 6 GDPR |</p>
-<p>| Magister calendar import | Retrieving and organising calendar information | An appropriate basis under Article 6 GDPR |</p>
-<p>| Contact form | Receiving and responding to enquiries | Article 6(1)(b) for relevant pre-contractual requests, or Article 6(1)(f) where legitimate interests are appropriate |</p>
-<p>| Technical security information | Operating, maintaining and securing the service | Article 6(1)(f), where a legitimate-interest assessment supports its use |</p>
-<p>| Legal compliance | Meeting applicable legal obligations | Article 6(1)(c), where processing is necessary for a legal obligation |</p>
-<p>These are potential legal bases, not a declaration that every listed basis currently applies. The data controller must determine and document the appropriate basis for each actual processing activity.</p>
-<p>Where consent is required, it must be freely given, specific, informed and unambiguous. Consent may be withdrawn at any time without affecting the lawfulness of processing before withdrawal.</p>
-<p>Where processing relies on legitimate interests, those interests and the required balancing assessment must be documented.</p>
-<p>Rules governing cookies and other technologies that store or access information on a user's device must also be assessed separately from the GDPR legal basis.</p>
-<h2>7. Data Sharing and Recipients</h2>
+<p><table class="privacy-table">
+  <thead>
+    <tr><th>Activity</th><th>Purpose</th><th>Potential legal basis</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>AI planner</td><td>Generating study plans and responses</td><td>Article 6(1)(b) where necessary for a contract, or Article 6(1)(a) where valid consent is appropriate</td></tr>
+    <tr><td>Voice dictation</td><td>Converting speech into text</td><td>An appropriate basis under Article 6 GDPR</td></tr>
+    <tr><td>Magister calendar import</td><td>Retrieving and organising calendar information</td><td>An appropriate basis under Article 6 GDPR</td></tr>
+    <tr><td>Contact form</td><td>Receiving and responding to enquiries</td><td>Article 6(1)(b) for relevant pre-contractual requests, or Article 6(1)(f) where legitimate interests are appropriate</td></tr>
+    <tr><td>Technical security information</td><td>Operating, maintaining and securing the service</td><td>Article 6(1)(f), where a legitimate-interest assessment supports its use</td></tr>
+    <tr><td>Legal compliance</td><td>Meeting applicable legal obligations</td><td>Article 6(1)(c), where processing is necessary for a legal obligation</td></tr>
+  </tbody>
+</table><h2>7. Data Sharing and Recipients</h2>
 <p>Depending on the features you use, information may be processed by:</p>
 <ul>
 <li>**Vercel:** Hosting the API proxy and processing associated requests and technical information.</li>
@@ -360,7 +378,7 @@
 <h2>12. Right to Lodge a Complaint</h2>
 <p>If you believe that the processing of your personal data infringes the GDPR, you have the right to lodge a complaint with a competent supervisory authority.</p>
 <p>In the Netherlands, the supervisory authority is the Autoriteit Persoonsgegevens.</p>
-<p>Website: [https://autoriteitpersoonsgegevens.nl/](https://autoriteitpersoonsgegevens.nl/)</p>
+<p>Website: <a href="https://autoriteitpersoonsgegevens.nl/">https://autoriteitpersoonsgegevens.nl/</a></p>
 <p>You may also have the right to seek an effective judicial remedy under applicable law.</p>
 <h2>13. Children's Privacy</h2>
 <p>StudyTools is intended for educational use and may be used by students, including minors.</p>

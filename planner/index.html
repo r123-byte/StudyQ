@@ -20,27 +20,29 @@
   <style>
 
     /* AI Disclaimer Banner */
+    
+    /* AI Disclaimer Banner (Inside Chat Tile) */
     .ai-disclaimer {
       display: flex;
-      align-items: flex-start;
-      gap: 0.6rem;
-      margin-top: 1.25rem;
-      padding: 0.85rem 1rem;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1rem;
       background: #FFFBEB;
-      border: 1px solid #FDE68A;
-      border-radius: 12px;
+      border-top: 1px solid #FDE68A;
       color: #B45309;
-      font-size: 0.8rem;
-      font-weight: 500;
-      line-height: 1.5;
+      font-size: 0.75rem;
+      font-weight: 600;
+      line-height: 1.4;
+      text-align: center;
     }
     .ai-disclaimer svg {
-      width: 16px;
-      height: 16px;
+      width: 15px;
+      height: 15px;
       flex-shrink: 0;
-      margin-top: 0.1rem;
       color: #D97706;
     }
+
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -2686,6 +2688,16 @@
                 </div>
                 <div class="ai-loading-sub" data-i18n="planner.aiLoadingSub">DeepSeek V3.2 is processing your message…</div>
               </div>
+            </div>
+
+            
+            <!-- AI Disclaimer -->
+            <div class="ai-disclaimer">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 9v4M12 17h.01"></path>
+                <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+              </svg>
+              <span>AI-generated content: results may be inaccurate. Please verify all dates and requirements independently.</span>
             </div>
 
             <div class="ai-composer">

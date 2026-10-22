@@ -328,7 +328,7 @@
 
     .hero {
       position: relative;
-      padding: 4.5rem 4rem 5rem;
+      padding: 3.1rem 3.4rem 3.4rem;
       overflow: hidden;
       background: transparent;
     }
@@ -337,8 +337,8 @@
       position: relative;
       z-index: 1;
       display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 3rem;
+      grid-template-columns: 1fr 1.05fr;
+      gap: 2rem;
       align-items: center;
     }
 
@@ -350,7 +350,7 @@
       font-weight: 600;
       color: var(--blue-600);
       line-height: 1.15;
-      margin-bottom: 1.5rem;
+      margin-bottom: .8rem;
       display: flex;
       align-items: flex-start;
       gap: 0.6rem;
@@ -371,7 +371,7 @@
       line-height: 1.05;
       letter-spacing: -0.045em;
       color: var(--slate-900);
-      margin-bottom: 1.5rem;
+      margin-bottom: .8rem;
     }
     .hero h1 .line { display: block; }
     .hero h1 .accent { color: var(--blue-600); }
@@ -420,22 +420,24 @@
       display: block;
       position: relative;
       z-index: 1;
-      width: min(115%, 620px);
-      height: 440px;
+      width: min(120%, 680px);
+      height: 420px;
       object-fit: cover;
       object-position: center;
-      border-radius: 42% 58% 51% 49% / 45% 40% 60% 55%;
-      clip-path: polygon(12% 13%, 42% 0, 62% 8%, 78% 18%, 98% 30%, 91% 55%, 100% 76%, 79% 91%, 55% 100%, 33% 91%, 8% 88%, 0 64%, 8% 43%);
+      border-radius: 0;
+      clip-path: none;
+      -webkit-mask: radial-gradient(ellipse 72% 62% at 52% 50%, #000 64%, transparent 100%);
+      mask: radial-gradient(ellipse 72% 62% at 52% 50%, #000 64%, transparent 100%);
       filter: drop-shadow(0 24px 36px rgba(37, 99, 235, 0.18));
       transform: rotate(-1deg);
     }
     .hero-visual::before {
       content: "";
       position: absolute;
-      width: 88%; height: 82%;
-      border-radius: 38% 62% 60% 40% / 43% 40% 60% 57%;
-      background: #dceafe;
-      transform: rotate(8deg);
+      inset: 6% -6%;
+      border-radius: 44% 56% 49% 51% / 42% 37% 63% 58%;
+      background: #cfe2ff;
+      transform: rotate(-8deg);
     }
     .hero-tool-float {
       position: absolute;
@@ -451,9 +453,9 @@
       font-weight: 700;
     }
     .hero-tool-float small { display:block; margin-top:.3rem; color:var(--slate-500); font-size:.72rem; font-weight:500; }
-    .hero-tool-float.calc { left: -2%; top: 16%; }
-    .hero-tool-float.pomo { right: -2%; top: 24%; }
-    .hero-tool-float.cards { right: -8%; top: 56%; }
+    .hero-tool-float.calc { left: 0; top: 13%; }
+    .hero-tool-float.pomo { right: 0; top: 20%; }
+    .hero-tool-float.cards { right: -5%; top: 49%; }
     .hero-tool-float.planner { left: 2%; bottom: 2%; }
     .hero-visual-svg {
       width: 100%;
@@ -556,15 +558,15 @@
 
     .tool-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.25rem;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: .9rem;
     }
 
     .tool-card {
       background: #fff;
       border: 1px solid var(--slate-200);
       border-radius: var(--r-lg);
-      padding: 1.75rem 1.5rem 1.35rem;
+      padding: 1rem 1rem .8rem;
       display: flex;
       flex-direction: column;
       text-decoration: none;
@@ -580,17 +582,17 @@
     }
 
     .tool-icon {
-      width: 64px;
-      height: 64px;
+      width: 44px;
+      height: 44px;
       border-radius: 18px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 1.5rem;
+      margin-bottom: .8rem;
     }
     .tool-icon svg {
-      width: 38px;
-      height: 38px;
+      width: 26px;
+      height: 26px;
       stroke-width: 2.2;
     }
 
@@ -612,7 +614,7 @@
       color: var(--slate-500);
       line-height: 1.55;
       flex: 1 1 auto;
-      margin-bottom: 1.5rem;
+      margin-bottom: .8rem;
     }
 
     .tool-footer {
@@ -860,8 +862,8 @@
     .deco-icon-cap {
       bottom: 320px;
       left: 7%;
-      width: 64px;
-      height: 64px;
+      width: 44px;
+      height: 44px;
       color: #7C3AED;
       transform: rotate(-6deg);
       opacity: 0.45;

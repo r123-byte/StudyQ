@@ -17,7 +17,7 @@
   <meta name="description" content="StudyStack — smart study tools built by students, for students. Grade calculator, Pomodoro timer, word trainer and Testweek Planner.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Sofia+Pro:wght@400;500;600;700;800;900&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -328,7 +328,7 @@
 
     .hero {
       position: relative;
-      padding: 3.1rem 3.4rem 3.4rem;
+      padding: 4.5rem 4rem 5rem;
       overflow: hidden;
       background: transparent;
     }
@@ -337,8 +337,8 @@
       position: relative;
       z-index: 1;
       display: grid;
-      grid-template-columns: 1fr 1.05fr;
-      gap: 2rem;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 3rem;
       align-items: center;
     }
 
@@ -350,7 +350,7 @@
       font-weight: 600;
       color: var(--blue-600);
       line-height: 1.15;
-      margin-bottom: .8rem;
+      margin-bottom: 1.5rem;
       display: flex;
       align-items: flex-start;
       gap: 0.6rem;
@@ -371,7 +371,7 @@
       line-height: 1.05;
       letter-spacing: -0.045em;
       color: var(--slate-900);
-      margin-bottom: .8rem;
+      margin-bottom: 1.5rem;
     }
     .hero h1 .line { display: block; }
     .hero h1 .accent { color: var(--blue-600); }
@@ -416,47 +416,6 @@
       align-items: center;
       min-height: 320px;
     }
-    .hero-study-image {
-      display: block;
-      position: relative;
-      z-index: 1;
-      width: min(120%, 680px);
-      height: 420px;
-      object-fit: cover;
-      object-position: center;
-      border-radius: 0;
-      clip-path: none;
-      -webkit-mask: radial-gradient(ellipse 72% 62% at 52% 50%, #000 64%, transparent 100%);
-      mask: radial-gradient(ellipse 72% 62% at 52% 50%, #000 64%, transparent 100%);
-      filter: drop-shadow(0 24px 36px rgba(37, 99, 235, 0.18));
-      transform: rotate(-1deg);
-    }
-    .hero-visual::before {
-      content: "";
-      position: absolute;
-      inset: 6% -6%;
-      border-radius: 44% 56% 49% 51% / 42% 37% 63% 58%;
-      background: #cfe2ff;
-      transform: rotate(-8deg);
-    }
-    .hero-tool-float {
-      position: absolute;
-      z-index: 2;
-      padding: .85rem 1rem;
-      min-width: 170px;
-      border: 1px solid rgba(219,234,254,.9);
-      border-radius: 18px;
-      background: rgba(255,255,255,.94);
-      box-shadow: 0 12px 32px rgba(37,99,235,.15);
-      color: var(--slate-900);
-      font-size: .9rem;
-      font-weight: 700;
-    }
-    .hero-tool-float small { display:block; margin-top:.3rem; color:var(--slate-500); font-size:.72rem; font-weight:500; }
-    .hero-tool-float.calc { left: 0; top: 13%; }
-    .hero-tool-float.pomo { right: 0; top: 20%; }
-    .hero-tool-float.cards { right: -5%; top: 49%; }
-    .hero-tool-float.planner { left: 2%; bottom: 2%; }
     .hero-visual-svg {
       width: 100%;
       max-width: 380px;
@@ -558,15 +517,15 @@
 
     .tool-grid {
       display: grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-      gap: .9rem;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
     }
 
     .tool-card {
       background: #fff;
       border: 1px solid var(--slate-200);
       border-radius: var(--r-lg);
-      padding: 1rem 1rem .8rem;
+      padding: 1.75rem 1.5rem 1.35rem;
       display: flex;
       flex-direction: column;
       text-decoration: none;
@@ -582,17 +541,17 @@
     }
 
     .tool-icon {
-      width: 44px;
-      height: 44px;
+      width: 64px;
+      height: 64px;
       border-radius: 18px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: .8rem;
+      margin-bottom: 1.5rem;
     }
     .tool-icon svg {
-      width: 26px;
-      height: 26px;
+      width: 38px;
+      height: 38px;
       stroke-width: 2.2;
     }
 
@@ -614,7 +573,7 @@
       color: var(--slate-500);
       line-height: 1.55;
       flex: 1 1 auto;
-      margin-bottom: .8rem;
+      margin-bottom: 1.5rem;
     }
 
     .tool-footer {
@@ -862,8 +821,8 @@
     .deco-icon-cap {
       bottom: 320px;
       left: 7%;
-      width: 44px;
-      height: 44px;
+      width: 64px;
+      height: 64px;
       color: #7C3AED;
       transform: rotate(-6deg);
       opacity: 0.45;
@@ -1241,12 +1200,7 @@
               </svg>
             </div>
 
-            <img class="hero-study-image" src="assets/study-desk.jpg" alt="Laptop, notebook and phone on a study desk">
-            <div class="hero-tool-float calc">▦ &nbsp; Grade Calculator<small>Calculate your grades</small></div>
-            <div class="hero-tool-float pomo">◷ &nbsp; Pomodoro<small>Focus without distractions</small></div>
-            <div class="hero-tool-float cards">▣ &nbsp; Flashcards<small>Remember more</small></div>
-            <div class="hero-tool-float planner">▦ &nbsp; Test Planner<small>Plan your study week</small></div>
-            <svg class="hero-visual-svg" viewBox="0 0 400 340" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:none">
+            <svg class="hero-visual-svg" viewBox="0 0 400 340" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <circle cx="200" cy="180" r="140" fill="#EAF2FE"/>
 
               <rect x="80" y="225" width="240" height="44" rx="6" fill="#fff" stroke="#2563EB" stroke-width="3"/>

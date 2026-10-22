@@ -416,6 +416,16 @@
       align-items: center;
       min-height: 320px;
     }
+    .hero-study-image {
+      display: block;
+      width: min(100%, 520px);
+      height: 370px;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 36px;
+      box-shadow: 0 24px 60px rgba(37, 99, 235, 0.18);
+      transform: rotate(-2deg);
+    }
     .hero-visual-svg {
       width: 100%;
       max-width: 380px;
@@ -1200,7 +1210,8 @@
               </svg>
             </div>
 
-            <svg class="hero-visual-svg" viewBox="0 0 400 340" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <img class="hero-study-image" src="assets/study-desk.jpg" alt="Laptop, notebook and phone on a study desk">
+            <svg class="hero-visual-svg" viewBox="0 0 400 340" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:none">
               <circle cx="200" cy="180" r="140" fill="#EAF2FE"/>
 
               <rect x="80" y="225" width="240" height="44" rx="6" fill="#fff" stroke="#2563EB" stroke-width="3"/>

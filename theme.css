@@ -210,7 +210,7 @@ body > .wrapper > .page {
 .language-switcher:hover svg { color: #1D4ED8 !important; }
 
 /* ---------- 7. Hero / page title ---------- */
-.hero {
+body:has(> .page) .hero {
   margin-bottom: 2.5rem !important;
   text-align: center !important;
   animation: none !important;
@@ -250,6 +250,22 @@ p.hero-desc,
   border-left: none !important;
   padding-left: 0 !important;
   box-shadow: none !important;
+}
+
+/* Homepage hero keeps its original large, left-aligned layout. */
+body:has(.hero-inner) .hero { text-align: left !important; margin-bottom: 0 !important; }
+body:has(.hero-inner) .hero h1 {
+  font-size: clamp(3rem, 5.5vw, 4.6rem) !important;
+  line-height: 1.08 !important;
+}
+body:has(.hero-inner) .hero-subtitle {
+  font-size: clamp(1.1rem, 1.5vw, 1.35rem) !important;
+  max-width: 680px !important;
+  margin: 0 !important;
+}
+body:has(.hero-inner) .hero-cta { font-size: 1.1rem !important; }
+@media (max-width: 720px) {
+  body:has(.hero-inner) .hero h1 { font-size: clamp(2.5rem, 9vw, 3.2rem) !important; }
 }
 
 /* ---------- 8. Badge ---------- */

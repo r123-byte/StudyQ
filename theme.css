@@ -7,37 +7,30 @@
 /* Local Sofia Pro font files */
 @font-face {
   font-family: 'Sofia Pro';
-  src: url('assets/fonts/sofia-pro/Sofia%20Pro%20Regular%20Az.otf') format('opentype');
+  src: url('/assets/fonts/sofia-pro/Sofia%20Pro%20Regular%20Az.otf') format('opentype');
   font-style: normal;
   font-weight: 400;
   font-display: swap;
 }
 @font-face {
   font-family: 'Sofia Pro';
-  src: url('assets/fonts/sofia-pro/Sofia%20Pro%20Medium%20Az.otf') format('opentype');
+  src: url('/assets/fonts/sofia-pro/Sofia%20Pro%20Medium%20Az.otf') format('opentype');
   font-style: normal;
   font-weight: 500;
   font-display: swap;
 }
 @font-face {
   font-family: 'Sofia Pro';
-  src: url('assets/fonts/sofia-pro/Sofia%20Pro%20Semi%20Bold%20Az.otf') format('opentype');
+  src: url('/assets/fonts/sofia-pro/Sofia%20Pro%20Semi%20Bold%20Az.otf') format('opentype');
   font-style: normal;
   font-weight: 600;
   font-display: swap;
 }
 @font-face {
   font-family: 'Sofia Pro';
-  src: url('assets/fonts/sofia-pro/Sofia%20Pro%20Bold%20Az.otf') format('opentype');
+  src: url('/assets/fonts/sofia-pro/Sofia%20Pro%20Bold%20Az.otf') format('opentype');
   font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Sofia Pro';
-  src: url('assets/fonts/sofia-pro/Sofia%20Pro%20Black%20Az.otf') format('opentype');
-  font-style: normal;
-  font-weight: 900;
+  font-weight: 700 900;
   font-display: swap;
 }
 

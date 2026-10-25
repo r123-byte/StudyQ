@@ -449,6 +449,8 @@
     }
     .badge {
       display: inline-flex;
+      outline: 1px solid rgba(37, 99, 235, 0.12);
+      outline-offset: 2px;
       align-items: center;
       gap: 0.5rem;
       background: #e8f1ff;
@@ -498,6 +500,9 @@
 
     /* ---------- PRESET SELECTOR ---------- */
     .presets {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       display: flex;
       flex-wrap: wrap;
       gap: 0.65rem;
@@ -1369,6 +1374,130 @@
 
     .page {
       contain: layout style;
+      position: relative;
+      isolation: isolate;
+      background:
+        radial-gradient(130% 180% at 12% -35%, rgba(255,255,255,.96) 0%, rgba(255,255,255,.42) 35%, transparent 62%),
+        radial-gradient(120% 140% at 100% 110%, rgba(191,219,254,.32), transparent 58%),
+        rgba(244, 249, 255, .68);
+      -webkit-backdrop-filter: blur(28px) saturate(185%);
+      backdrop-filter: blur(28px) saturate(185%);
+      border: 1px solid rgba(255,255,255,.82);
+      box-shadow: inset 0 1px 1.5px rgba(255,255,255,.98), inset 0 -1px 1px rgba(255,255,255,.55), 0 30px 70px -28px rgba(15,45,80,.28), 0 0 0 1px rgba(37,99,235,.12), 0 0 80px -30px rgba(120,180,255,.42);
+    }
+    .liquid-glass-filter { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+    .timer-card, .timer-options, .custom-panel, .advanced-panel,
+    .ambient-selector, .language-switcher, .back-link, .utility-sound,
+    .utility-float, .tab-btn {
+      background: linear-gradient(145deg, rgba(255,255,255,.48), rgba(239,246,255,.22) 55%, rgba(219,234,254,.32)) !important;
+      background-image: linear-gradient(145deg, rgba(255,255,255,.48), rgba(239,246,255,.22) 55%, rgba(219,234,254,.32)) !important;
+      border: 1px solid rgba(255,255,255,.92) !important;
+      -webkit-backdrop-filter: blur(26px) saturate(190%);
+      backdrop-filter: blur(26px) saturate(190%);
+      box-shadow: inset 1px 1px 1px rgba(255,255,255,.98), inset -1px -1px 1px rgba(255,255,255,.5), inset 0 0 22px rgba(255,255,255,.2), 0 18px 38px -24px rgba(24,53,98,.42), 0 0 0 1px rgba(37,99,235,.1) !important;
+    }
+    .timer-card, .timer-options, .custom-panel, .advanced-panel {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+    }
+    .timer-card::after, .timer-options::after, .custom-panel::after, .advanced-panel::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      z-index: 0;
+      background: radial-gradient(120% 95% at 8% 0%, rgba(255,255,255,.78), transparent 48%), linear-gradient(135deg, rgba(255,255,255,.13), transparent 42%, rgba(191,219,254,.08));
+      box-shadow: inset 1px 1px 0 rgba(255,255,255,.72), inset -1px -1px 0 rgba(255,255,255,.28);
+    }
+    .timer-card > *, .timer-options > *, .custom-panel > *, .advanced-panel > * {
+      position: relative;
+      z-index: 1;
+    }
+    .timer-card, .timer-options, .custom-panel, .advanced-panel {
+      animation: none !important;
+      transition: transform .48s cubic-bezier(.22, 1, .36, 1), box-shadow .48s cubic-bezier(.22, 1, .36, 1), border-color .38s ease, background .38s ease !important;
+    }
+    .timer-card:hover, .timer-options:hover, .custom-panel:hover, .advanced-panel:hover {
+      transform: translateY(-3px);
+      border-color: rgba(255,255,255,.98) !important;
+      box-shadow: inset 1px 1px 1px rgba(255,255,255,1), inset -1px -1px 1px rgba(255,255,255,.55), inset 0 0 22px rgba(255,255,255,.24), 0 24px 42px -24px rgba(24,53,98,.48), 0 0 0 1px rgba(37,99,235,.16) !important;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .timer-card, .timer-options, .custom-panel, .advanced-panel {
+        transition: none !important;
+      }
+      .timer-card:hover, .timer-options:hover, .custom-panel:hover, .advanced-panel:hover { transform: none; }
+    }
+    .timer-card:hover, .timer-options:hover, .custom-panel:hover, .advanced-panel:hover,
+    .tab-btn:hover, .back-link:hover {
+      box-shadow: inset 0 1px 1.5px rgba(255,255,255,1), 0 18px 32px -16px rgba(31,58,110,.32), 0 0 0 1px rgba(37,99,235,.2) !important;
+    }
+
+    /* Segmented liquid-glass bar for the focus and break time presets. */
+    .presets {
+      width: fit-content;
+      max-width: 100%;
+      margin-inline: auto;
+      padding: 0.38rem;
+      gap: 0;
+      flex-wrap: nowrap;
+      border: 1px solid rgba(255,255,255,.9);
+      border-radius: 999px;
+      background: linear-gradient(145deg, rgba(255,255,255,.58), rgba(207,222,240,.3));
+      -webkit-backdrop-filter: url(#pomodoro-glass-distortion) blur(24px) saturate(180%);
+      backdrop-filter: url(#pomodoro-glass-distortion) blur(24px) saturate(180%);
+      box-shadow: inset 0 1px 1px rgba(255,255,255,.95), inset 0 -1px 1px rgba(255,255,255,.35), 0 12px 28px -16px rgba(15,45,80,.35), 0 0 0 1px rgba(37,99,235,.1);
+    }
+    .preset-indicator {
+      position: absolute;
+      z-index: 0;
+      left: .38rem;
+      top: .38rem;
+      bottom: .38rem;
+      width: calc((100% - .76rem) / 4);
+      border: 1px solid rgba(255,255,255,.98);
+      border-radius: 999px;
+      background: linear-gradient(145deg, rgba(255,255,255,.96), rgba(225,238,253,.76));
+      -webkit-backdrop-filter: url(#pomodoro-glass-distortion) blur(12px) saturate(180%);
+      backdrop-filter: url(#pomodoro-glass-distortion) blur(12px) saturate(180%);
+      box-shadow: inset 0 1px 1px white, 0 5px 15px -8px rgba(20,70,120,.5), 0 0 0 1px rgba(37,99,235,.17);
+      pointer-events: none;
+    }
+    .presets .preset-btn {
+      flex: 1 1 auto;
+      position: relative;
+      z-index: 1;
+      min-width: 0;
+      padding: .72rem 1.25rem;
+      border: 1px solid transparent !important;
+      border-radius: 999px;
+      background: transparent !important;
+      background-image: none !important;
+      color: #36516c;
+      box-shadow: none !important;
+      transform: none;
+      animation: none !important;
+      transition: background .25s ease, color .25s ease, box-shadow .25s ease;
+    }
+    .presets .preset-btn:hover { background: rgba(255,255,255,.35) !important; color: #174f8c; }
+    .presets .preset-btn.active {
+      color: #174f8c !important;
+      background: transparent !important;
+      border-color: transparent !important;
+      box-shadow: none !important;
+    }
+    .timer-card, .timer-options, .custom-panel, .advanced-panel,
+    .timer-card-fullscreen, .utility-sound, .utility-float,
+    .ambient-selector, .advanced-toggle, .controls .btn, .fullscreen-controls .btn {
+      -webkit-backdrop-filter: url(#pomodoro-glass-distortion) blur(18px) saturate(180%);
+      backdrop-filter: url(#pomodoro-glass-distortion) blur(18px) saturate(180%);
+    }
+    @media (max-width: 520px) {
+      .presets { width: 100%; gap: 0; padding: .28rem; }
+      .presets .preset-btn { padding: .62rem .45rem; font-size: .78rem; }
     }
 
     /* Keep layout work local without clipping the card's hover lift. */
@@ -1407,9 +1536,217 @@
       border-color: #93c5fd !important;
       box-shadow: 0 8px 18px -8px rgba(37, 99, 235, 0.2) !important;
     }
+
+    /* One authoritative motion and glow treatment for the main timer tile. */
+    .timer-card, .timer-card:hover, .timer-card:active {
+      animation: none !important;
+      transform: none !important;
+      transition: none !important;
+      will-change: auto;
+      border-color: rgba(255,255,255,.96) !important;
+      box-shadow: inset 2px -2px 1px -1px rgba(255,255,255,.98), inset -2px 2px 1px -1px rgba(255,255,255,.96), inset 5px -5px 1px -5px rgba(255,255,255,.72), inset -5px 5px 1px -5px rgba(255,255,255,.72), inset 0 0 1px rgba(20,50,90,.28), 0 22px 46px -24px rgba(24,53,98,.36), 0 0 0 1px rgba(37,99,235,.12), 0 0 42px -18px rgba(96,165,250,.38) !important;
+    }
+    body.mode-break .timer-card, body.mode-break .timer-card:hover, body.mode-break .timer-card:active {
+      box-shadow: inset 2px -2px 1px -1px rgba(255,255,255,.98), inset -2px 2px 1px -1px rgba(255,255,255,.96), inset 5px -5px 1px -5px rgba(255,255,255,.72), inset -5px 5px 1px -5px rgba(255,255,255,.72), inset 0 0 1px rgba(20,70,48,.24), 0 22px 46px -24px rgba(24,70,48,.34), 0 0 0 1px rgba(34,197,94,.12), 0 0 42px -18px rgba(74,222,128,.32) !important;
+    }
+    .timer-options { display: none !important; }
+
+    /* Liquid-glass lens treatment for both play/pause controls. */
+    .controls .btn-primary, .fullscreen-controls .btn-primary {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      color: #123c70 !important;
+      background: linear-gradient(118deg, rgba(190,255,245,.27), rgba(230,249,255,.18) 42%, rgba(153,198,255,.34)) !important;
+      background-image: linear-gradient(118deg, rgba(190,255,245,.27), rgba(230,249,255,.18) 42%, rgba(153,198,255,.34)) !important;
+      border: 1px solid rgba(255,255,255,.98) !important;
+      -webkit-backdrop-filter: blur(22px) saturate(230%) contrast(112%);
+      backdrop-filter: blur(22px) saturate(230%) contrast(112%);
+      box-shadow: inset 2px -2px 1px -1px rgba(255,255,255,.98),
+                  inset -2px 2px 1px -1px rgba(255,255,255,.98),
+                  inset 5px -5px 1px -5px rgba(255,255,255,.72),
+                  inset -5px 5px 1px -5px rgba(255,255,255,.72),
+                  inset 0 0 1px rgba(20,50,90,.35),
+                  0 8px 18px -10px rgba(25,63,115,.42),
+                  0 0 0 1px rgba(37,99,235,.14) !important;
+      text-shadow: 0 1px rgba(255,255,255,.55);
+      animation: none !important;
+      transition: transform 420ms cubic-bezier(.22, 1, .36, 1), box-shadow 420ms cubic-bezier(.22, 1, .36, 1), border-color 320ms ease !important;
+    }
+    .controls .btn-primary::before, .fullscreen-controls .btn-primary::before {
+      content: "";
+      position: absolute;
+      z-index: 0;
+      inset: 1px;
+      border-radius: inherit;
+      pointer-events: none;
+      background: linear-gradient(118deg, rgba(255,255,255,.76) 0%, rgba(255,255,255,.26) 8%, transparent 24%, transparent 70%, rgba(255,255,255,.46) 88%, rgba(255,255,255,.76) 100%), radial-gradient(120% 100% at 12% 0%, rgba(255,255,255,.5), transparent 52%);
+      opacity: .92;
+      transition: opacity 420ms ease, filter 420ms ease;
+    }
+    .controls .btn-primary::after, .fullscreen-controls .btn-primary::after {
+      content: "";
+      position: absolute;
+      z-index: 0;
+      inset: 2px;
+      border-radius: inherit;
+      pointer-events: none;
+      border: 1px solid rgba(255,255,255,.48);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.82), inset 0 -1px 0 rgba(47,91,150,.12);
+      background: linear-gradient(180deg, rgba(255,255,255,.18), transparent 40%, rgba(67,121,189,.05));
+    }
+    .controls .btn-primary > *, .fullscreen-controls .btn-primary > * { position: relative; z-index: 1; }
+    .controls .btn-primary:hover, .fullscreen-controls .btn-primary:hover {
+      transform: translateY(-3px) scale(1.035) !important;
+      border-color: #fff !important;
+      box-shadow: inset 2px -2px 1px -1px rgba(255,255,255,1), inset -2px 2px 1px -1px rgba(255,255,255,1), inset 5px -5px 1px -5px rgba(255,255,255,.9), inset -5px 5px 1px -5px rgba(255,255,255,.9), inset 0 0 1px rgba(20,50,90,.28), 0 18px 32px -12px rgba(26,85,155,.52), 0 0 32px -8px rgba(80,170,255,.58) !important;
+    }
+    .controls .btn-primary:hover::before, .fullscreen-controls .btn-primary:hover::before { opacity: 1; }
+    .controls .btn-primary:active, .fullscreen-controls .btn-primary:active { transform: scale(.98) !important; }
+    body.mode-break .controls .btn-primary, body.mode-break .fullscreen-controls .btn-primary {
+      color: #14583a !important;
+      background: linear-gradient(118deg, rgba(190,255,222,.3), rgba(228,255,242,.2) 48%, rgba(167,235,194,.36)) !important;
+      background-image: linear-gradient(118deg, rgba(190,255,222,.3), rgba(228,255,242,.2) 48%, rgba(167,235,194,.36)) !important;
+      box-shadow: inset 2px -2px 1px -1px rgba(255,255,255,.94), inset -2px 2px 1px -1px rgba(255,255,255,.9), inset 0 0 0 1px rgba(255,255,255,.28), 0 10px 24px -12px rgba(24,110,65,.42), 0 0 0 1px rgba(34,197,94,.12) !important;
+    }
+    /* Give the timer surface and its focus/break badge the same glass lens depth. */
+    .timer-card {
+      background: linear-gradient(145deg, rgba(255,255,255,.3), rgba(233,244,255,.18) 52%, rgba(191,219,254,.32)) !important;
+      background-image: linear-gradient(145deg, rgba(255,255,255,.3), rgba(233,244,255,.18) 52%, rgba(191,219,254,.32)) !important;
+      border: 1px solid rgba(255,255,255,.96) !important;
+      -webkit-backdrop-filter: blur(28px) saturate(220%) contrast(108%);
+      backdrop-filter: blur(28px) saturate(220%) contrast(108%);
+      box-shadow: inset 2px -2px 1px -1px rgba(255,255,255,.98), inset -2px 2px 1px -1px rgba(255,255,255,.96), inset 5px -5px 1px -5px rgba(255,255,255,.72), inset -5px 5px 1px -5px rgba(255,255,255,.72), inset 0 0 1px rgba(20,50,90,.28), 0 22px 46px -24px rgba(24,53,98,.36), 0 0 0 1px rgba(37,99,235,.12) !important;
+    }
+    .mode-label {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      background: linear-gradient(120deg, rgba(206,236,255,.36), rgba(255,255,255,.2) 48%, rgba(174,210,255,.38)) !important;
+      border: 1px solid rgba(255,255,255,.96) !important;
+      -webkit-backdrop-filter: blur(20px) saturate(220%);
+      backdrop-filter: blur(20px) saturate(220%);
+      box-shadow: inset 2px -2px 1px -1px rgba(255,255,255,.98), inset -2px 2px 1px -1px rgba(255,255,255,.92), inset 0 0 0 1px rgba(255,255,255,.3), 0 8px 18px -10px rgba(25,63,115,.38), 0 0 0 1px rgba(37,99,235,.12) !important;
+      animation: none !important;
+    }
+    .mode-label svg {
+      filter: drop-shadow(0 1px 1px rgba(255,255,255,.8)) drop-shadow(0 2px 4px rgba(37,99,235,.24));
+    }
+    body.mode-break .timer-card {
+      background: linear-gradient(145deg, rgba(232,255,239,.32), rgba(243,255,247,.18) 52%, rgba(187,238,203,.34)) !important;
+      background-image: linear-gradient(145deg, rgba(232,255,239,.32), rgba(243,255,247,.18) 52%, rgba(187,238,203,.34)) !important;
+      box-shadow: inset 2px -2px 1px -1px rgba(255,255,255,.98), inset -2px 2px 1px -1px rgba(255,255,255,.96), inset 5px -5px 1px -5px rgba(255,255,255,.72), inset -5px 5px 1px -5px rgba(255,255,255,.72), inset 0 0 1px rgba(20,70,48,.24), 0 22px 46px -24px rgba(24,70,48,.34), 0 0 0 1px rgba(34,197,94,.12) !important;
+    }
+    body.mode-break .mode-label {
+      background: linear-gradient(120deg, rgba(203,255,220,.4), rgba(255,255,255,.2) 48%, rgba(170,235,190,.4)) !important;
+      box-shadow: inset 2px -2px 1px -1px rgba(255,255,255,.98), inset -2px 2px 1px -1px rgba(255,255,255,.92), inset 0 0 0 1px rgba(255,255,255,.3), 0 8px 18px -10px rgba(24,110,65,.34), 0 0 0 1px rgba(34,197,94,.12) !important;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .controls .btn-primary, .fullscreen-controls .btn-primary { transition: none !important; }
+    }
+
+    /* Match the secondary timer controls to the play/pause glass lens. */
+    .controls .btn-secondary, .controls .btn-skip,
+    .fullscreen-controls .btn-secondary, .fullscreen-controls .btn-skip,
+    .ambient-selector {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      background: linear-gradient(118deg, rgba(212,250,255,.34), rgba(246,252,255,.2) 48%, rgba(177,211,255,.38)) !important;
+      background-image: linear-gradient(118deg, rgba(212,250,255,.34), rgba(246,252,255,.2) 48%, rgba(177,211,255,.38)) !important;
+      border: 1px solid rgba(255,255,255,.96) !important;
+      -webkit-backdrop-filter: blur(22px) saturate(225%) contrast(110%);
+      backdrop-filter: blur(22px) saturate(225%) contrast(110%);
+      box-shadow: inset 2px -2px 1px -1px rgba(255,255,255,.98), inset -2px 2px 1px -1px rgba(255,255,255,.96), inset 5px -5px 1px -5px rgba(255,255,255,.78), inset -5px 5px 1px -5px rgba(255,255,255,.78), inset 0 0 1px rgba(20,50,90,.3), 0 8px 20px -11px rgba(25,63,115,.4), 0 0 0 1px rgba(37,99,235,.13) !important;
+      animation: none !important;
+      transition: transform 420ms cubic-bezier(.22, 1, .36, 1), box-shadow 420ms cubic-bezier(.22, 1, .36, 1), border-color 320ms ease !important;
+    }
+    .controls .btn-secondary::before, .controls .btn-skip::before,
+    .fullscreen-controls .btn-secondary::before, .fullscreen-controls .btn-skip::before,
+    .ambient-selector::before {
+      content: "";
+      position: absolute;
+      z-index: 0;
+      inset: 1px;
+      border-radius: inherit;
+      pointer-events: none;
+      background: linear-gradient(118deg, rgba(255,255,255,.78), rgba(255,255,255,.18) 12%, transparent 27%, transparent 70%, rgba(255,255,255,.54));
+      opacity: .9;
+    }
+    .controls .btn-secondary::after, .controls .btn-skip::after,
+    .fullscreen-controls .btn-secondary::after, .fullscreen-controls .btn-skip::after,
+    .ambient-selector::after {
+      content: "";
+      position: absolute;
+      z-index: 0;
+      inset: 2px;
+      border: 1px solid rgba(255,255,255,.46);
+      border-radius: inherit;
+      pointer-events: none;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.82), inset 0 -1px 0 rgba(47,91,150,.12);
+    }
+    .controls .btn-secondary > *, .controls .btn-skip > *,
+    .fullscreen-controls .btn-secondary > *, .fullscreen-controls .btn-skip > *,
+    .ambient-selector > * { position: relative; z-index: 1; }
+    .controls .btn-secondary:hover, .controls .btn-skip:hover,
+    .fullscreen-controls .btn-secondary:hover, .fullscreen-controls .btn-skip:hover,
+    .ambient-selector:hover {
+      transform: translateY(-2px) scale(1.025) !important;
+      border-color: #fff !important;
+      box-shadow: inset 2px -2px 1px -1px #fff, inset -2px 2px 1px -1px #fff, inset 5px -5px 1px -5px rgba(255,255,255,.9), inset -5px 5px 1px -5px rgba(255,255,255,.9), 0 15px 28px -12px rgba(25,63,115,.46), 0 0 25px -8px rgba(100,170,255,.42) !important;
+    }
+    .controls .btn-skip, .fullscreen-controls .btn-skip { color: #80500d !important; }
+    .controls .btn-skip, .fullscreen-controls .btn-skip {
+      background: linear-gradient(118deg, rgba(255,241,203,.34), rgba(255,251,238,.2) 48%, rgba(255,213,139,.36)) !important;
+      background-image: linear-gradient(118deg, rgba(255,241,203,.34), rgba(255,251,238,.2) 48%, rgba(255,213,139,.36)) !important;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .controls .btn-secondary, .controls .btn-skip, .fullscreen-controls .btn-secondary, .fullscreen-controls .btn-skip, .ambient-selector { transition: none !important; }
+    }
+
+    /* Frosted glass finish for the privacy reassurance pill. */
+    .privacy-note {
+      background: linear-gradient(135deg, rgba(210,255,228,.42), rgba(255,255,255,.3) 52%, rgba(183,239,204,.38)) !important;
+      border: 1px solid rgba(255,255,255,.92) !important;
+      -webkit-backdrop-filter: blur(18px) saturate(190%);
+      backdrop-filter: blur(18px) saturate(190%);
+      box-shadow: inset 1px 1px 1px rgba(255,255,255,.96), inset -1px -1px 1px rgba(255,255,255,.56), 0 8px 20px -12px rgba(24,90,53,.3), 0 0 0 1px rgba(34,197,94,.1) !important;
+    }
+    .privacy-note svg { filter: drop-shadow(0 1px 1px rgba(255,255,255,.8)); }
+
+    /* Match the homepage footer's expanding liquid-glass link pills. */
+    .site-footer .footer-col a {
+      position: relative;
+      z-index: 1;
+      transition: color .25s ease;
+    }
+    .site-footer .footer-col a::before {
+      content: "";
+      position: absolute;
+      inset: -.35rem -.85rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,.45);
+      -webkit-backdrop-filter: blur(12px) saturate(180%);
+      backdrop-filter: blur(12px) saturate(180%);
+      border: 1px solid rgba(255,255,255,.95);
+      box-shadow: inset 0 1px 2px rgba(255,255,255,1), 0 0 0 1px rgba(37,99,235,.16), 0 6px 16px -4px rgba(31,38,135,.14);
+      opacity: 0;
+      transform: scale(.85);
+      transition: opacity .3s ease, transform .3s cubic-bezier(.34,1.56,.64,1);
+      z-index: -1;
+      pointer-events: none;
+    }
+    .site-footer .footer-col a:hover::before,
+    .site-footer .footer-col a:focus-visible::before { opacity: 1; transform: scale(1); }
   </style>
 </head>
 <body class="mode-focus">
+  <svg class="liquid-glass-filter" aria-hidden="true" focusable="false">
+    <filter id="pomodoro-glass-distortion" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.018" numOctaves="2" seed="8" result="glass-noise" />
+      <feDisplacementMap in="SourceGraphic" in2="glass-noise" scale="8" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </svg>
   <div class="wrapper">
     <main class="page">
       <!-- HEADER -->
@@ -1480,6 +1817,7 @@
 
       <!-- PRESETS -->
       <div class="presets" role="group" aria-label="Presets">
+        <span class="preset-indicator" aria-hidden="true"></span>
         <button class="preset-btn active" data-preset="25" data-i18n="pomo.preset25">25 / 5</button>
         <button class="preset-btn" data-preset="50" data-i18n="pomo.preset50">50 / 10</button>
         <button class="preset-btn" data-preset="45" data-i18n="pomo.preset45">45 / 15</button>
@@ -1502,16 +1840,6 @@
             </svg>
             <span data-i18n="pomo.timerOptions">Timer opties</span>
           </span>
-          <button class="advanced-toggle" id="advanced-toggle" type="button" aria-expanded="false" aria-controls="advanced-panel">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
-              <circle cx="12" cy="12" r="3"></circle>
-            </svg>
-            <span data-i18n="pomo.advanced">Geavanceerd</span>
-            <svg class="advanced-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="m6 9 6 6 6-6"></path>
-            </svg>
-          </button>
         </div>
 
         <div class="advanced-panel" id="advanced-panel">
@@ -1860,13 +2188,45 @@
       const soundToggle = document.getElementById('sound-toggle');
       const soundToggleLabel = document.getElementById('sound-toggle-label');
       const presetButtons = document.querySelectorAll('.preset-btn');
+      const presetsBar = document.querySelector('.presets');
+      const presetIndicator = presetsBar && presetsBar.querySelector('.preset-indicator');
+      let presetPillReady = false;
+      let presetPillAnimation = null;
+      function positionPresetPill() {
+        const activePreset = presetsBar && presetsBar.querySelector('.preset-btn.active');
+        if (!activePreset || !presetIndicator) return;
+        const barRect = presetsBar.getBoundingClientRect();
+        const buttonRect = activePreset.getBoundingClientRect();
+        const left = buttonRect.left - barRect.left - presetsBar.clientLeft;
+        const current = getComputedStyle(presetIndicator);
+        const from = {
+          left: `${presetPillReady ? parseFloat(current.left) : left}px`,
+          width: `${presetPillReady ? parseFloat(current.width) : buttonRect.width}px`
+        };
+        if (presetPillAnimation) {
+          presetPillAnimation.cancel();
+          presetPillAnimation = null;
+        }
+        presetIndicator.style.left = left + 'px';
+        presetIndicator.style.width = buttonRect.width + 'px';
+        if (presetPillReady && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          presetPillAnimation = presetIndicator.animate([
+            from,
+            { left: `${left}px`, width: `${buttonRect.width}px` }
+          ], {
+            duration: 620,
+            easing: 'cubic-bezier(.22, 1, .36, 1)',
+            fill: 'none'
+          });
+        }
+        presetPillReady = true;
+      }
+      window.addEventListener('resize', positionPresetPill);
       const customPanel = document.getElementById('custom-panel');
       const customFocus = document.getElementById('custom-focus');
       const customShort = document.getElementById('custom-short');
       const customLong = document.getElementById('custom-long');
       const customCycle = document.getElementById('custom-cycle');
-      const advancedToggle = document.getElementById('advanced-toggle');
-      const advancedPanel = document.getElementById('advanced-panel');
 
       const ambientSelector = document.getElementById('ambient-selector');
       const ambientSelect = document.getElementById('ambient-select');
@@ -2104,6 +2464,7 @@
         presetButtons.forEach(function(btn) {
           btn.classList.toggle('active', btn.dataset.preset === state.preset);
         });
+        positionPresetPill();
         customPanel.classList.toggle('active', state.preset === 'custom');
 
         // Update the sound toggle and float button titles/aria
@@ -2509,14 +2870,6 @@
             closePip();
           }
         }
-      });
-
-      /* ============================================================
-         ADVANCED PANEL TOGGLE
-      ============================================================ */
-      advancedToggle.addEventListener('click', function() {
-        const isOpen = advancedPanel.classList.toggle('active');
-        advancedToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
       });
 
       /* ============================================================

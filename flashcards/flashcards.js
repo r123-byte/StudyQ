@@ -38,6 +38,12 @@
       "fc.editDeck": "Edit",
       "fc.deleteDeck": "Delete",
       "fc.cards": "Cards",
+      "fc.addCardsMenu": "Add cards",
+      "fc.overviewTitle": "Add multiple cards",
+      "fc.overviewHint": "Add one card per line. Separate the front and back with =, a tab, or a comma.",
+      "fc.overviewPlaceholder": "le chien = the dog\nle chat = the cat\nl'oiseau = the bird",
+      "fc.overviewSave": "Add cards",
+      "fc.overviewEmpty": "Enter at least one card as front = back.",
       "fc.addCard": "Single card",
       "fc.addCardTitle": "Add card",
       "fc.editCardTitle": "Edit card",
@@ -60,6 +66,7 @@
       "fc.exitStudy": "Stop",
       "fc.sessionDone": "Session complete!",
       "fc.sessionDoneText": "You've mastered every card in this deck.",
+      "fc.redoDeck": "Study this deck again",
       "fc.backToDecks": "Back to decks",
       "fc.noDecks": "No decks yet",
       "fc.noDecksHint": "Create your first deck to get started.",
@@ -115,6 +122,12 @@
       "fc.editDeck": "Kaartenset aanpassen",
       "fc.deleteDeck": "Verwijderen",
       "fc.cards": "Kaarten",
+      "fc.addCardsMenu": "Kaarten toevoegen",
+      "fc.overviewTitle": "Meerdere kaarten toevoegen",
+      "fc.overviewHint": "Voeg één kaart per regel toe. Scheid de voor- en achterkant met =, een tab of een komma.",
+      "fc.overviewPlaceholder": "le chien = de hond\nle chat = de kat\nl'oiseau = de vogel",
+      "fc.overviewSave": "Kaarten toevoegen",
+      "fc.overviewEmpty": "Voeg minstens één kaart toe als voorkant = achterkant.",
       "fc.addCard": "Losse kaart",
       "fc.addCardTitle": "Kaart toevoegen",
       "fc.editCardTitle": "Kaart aanpassen",
@@ -137,6 +150,7 @@
       "fc.exitStudy": "Stoppen",
       "fc.sessionDone": "Sessie klaar!",
       "fc.sessionDoneText": "Je beheerst nu alle kaarten in deze kaartenset.",
+      "fc.redoDeck": "Deze kaartenset opnieuw oefenen",
       "fc.backToDecks": "Terug naar kaartensets",
       "fc.noDecks": "Nog geen kaartensets",
       "fc.noDecksHint": "Maak je eerste kaartenset om te beginnen.",
@@ -291,8 +305,9 @@
   }
 
   function switchView(view) {
-    document.querySelectorAll('.deck-view').forEach(function (v) { v.classList.remove('active'); });
     const target = document.getElementById('view-' + view);
+    if (target && target.classList.contains('active')) return;
+    document.querySelectorAll('.deck-view').forEach(function (v) { v.classList.remove('active'); });
     if (target) target.classList.add('active');
   }
 
@@ -635,7 +650,7 @@
     const ta = document.getElementById('paste-textarea');
     if (!ta) return;
     const pairs = parseDelimited(ta.value);
-    if (pairs.length === 0) { window.alert(t('fc.importEmpty')); return; }
+    if (pairs.length === 0) { window.alert(t('fc.overviewEmpty')); return; }
 
     pairs.forEach(function (p) {
       deck.cards.push({
@@ -648,6 +663,39 @@
     save();
     ta.value = '';
     updatePasteCount();
+    renderDeckDetail();
+    renderDeckGrid();
+  }
+
+  function updateOverviewCount() {
+    const input = document.getElementById('overview-textarea');
+    const count = document.getElementById('overview-count');
+    if (!input || !count) return;
+    const total = parseDelimited(input.value).length;
+    count.innerHTML = total ? '<strong>' + total + '</strong> ' + t('fc.pasteReady') : '';
+  }
+
+  function addOverviewCards() {
+    const deck = getDeck(activeDeckId);
+    const input = document.getElementById('overview-textarea');
+    if (!deck || !input) return;
+    const pairs = parseDelimited(input.value);
+    if (!pairs.length) { window.alert(t('fc.overviewEmpty')); input.focus(); return; }
+    pairs.forEach(function (pair) {
+      deck.cards.push({
+        id: 'c_' + Math.random().toString(36).slice(2, 9),
+        front: pair.front,
+        back: pair.back,
+        phase: 'practice',
+        correctCount: 0,
+        createdAt: Date.now()
+      });
+    });
+    save();
+    input.value = '';
+    updateOverviewCount();
+    const menu = document.querySelector('.add-cards-menu');
+    if (menu) menu.open = false;
     renderDeckDetail();
     renderDeckGrid();
   }
@@ -690,7 +738,12 @@
     };
 
     switchView('study');
-    document.getElementById('mode-flip-panel').style.display = 'flex';
+    const studyView = document.getElementById('view-study');
+    studyView.classList.remove('is-complete');
+    studyView.querySelector('.study-top').hidden = false;
+    const flipPanel = document.getElementById('mode-flip-panel');
+    flipPanel.hidden = false;
+    flipPanel.style.display = 'flex';
     document.getElementById('session-done').classList.remove('show');
     isFlipped = false;
 
@@ -864,9 +917,28 @@
   }
 
   function showSessionDone() {
-    document.getElementById('mode-flip-panel').style.display = 'none';
+    const studyView = document.getElementById('view-study');
+    studyView.classList.add('is-complete');
+    studyView.querySelector('.study-top').hidden = true;
+    const flipPanel = document.getElementById('mode-flip-panel');
+    flipPanel.hidden = true;
+    flipPanel.style.display = 'none';
+    document.getElementById('rating-flip').classList.remove('show');
     document.getElementById('session-done').classList.add('show');
     document.getElementById('session-done-text').textContent = t('fc.sessionDoneText');
+  }
+
+  function redoStudy() {
+    if (!activeSession) return;
+    const deck = getDeck(activeSession.deckId);
+    if (!deck) return;
+    deck.cards.forEach(function (card) {
+      card.phase = 'practice';
+      card.correctCount = 0;
+    });
+    activeDeckId = deck.id;
+    save();
+    startStudy();
   }
 
   function exitStudy() {
@@ -973,6 +1045,10 @@
   if (ta) ta.addEventListener('input', updatePasteCount);
   const pasteBtn = document.getElementById('btn-paste-add');
   if (pasteBtn) pasteBtn.addEventListener('click', addPastedCards);
+  const overviewInput = document.getElementById('overview-textarea');
+  const overviewSave = document.getElementById('btn-overview-save');
+  if (overviewInput) overviewInput.addEventListener('input', updateOverviewCount);
+  if (overviewSave) overviewSave.addEventListener('click', addOverviewCards);
 
   document.getElementById('btn-back-decks').addEventListener('click', function () {
     activeDeckId = null;
@@ -1012,6 +1088,7 @@
 
   document.getElementById('btn-exit-study').addEventListener('click', exitStudy);
   document.getElementById('btn-done-exit').addEventListener('click', exitStudy);
+  document.getElementById('btn-done-redo').addEventListener('click', redoStudy);
 
   document.addEventListener('keydown', function (e) {
     if (!activeSession) return;

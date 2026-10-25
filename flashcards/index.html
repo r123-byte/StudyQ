@@ -420,70 +420,73 @@
     .card-row-back { font-size: 0.82rem; color: #64748B; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .card-row-actions { display: flex; gap: 0.35rem; flex-shrink: 0; }
 
-    /* ---------- Study view ---------- */
-    .study-view {
-      display: none;
+    /* ============================================================
+       FIXED STUDY VIEW LAYOUT & FLIP CARD
+       ============================================================ */
+    .study-view.active {
+      display: flex !important;
       flex-direction: column;
       align-items: center;
-      gap: 1.5rem;
+      gap: 2rem;
+      width: 100%;
+      max-width: 840px;
+      margin: 0 auto;
     }
-    .study-view.active { display: flex; animation: viewFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both; }
 
     .study-top {
       width: 100%;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-    .study-progress {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: #64748B;
-    }
-    .study-progress strong { color: #0F172A; }
-    .study-progress-bar {
-      width: 180px;
-      height: 6px;
-      background: #E2E8F0;
-      border-radius: 999px;
-      overflow: hidden;
-      position: relative;
-    }
-    .study-progress-fill {
-      position: absolute;
-      inset: 0;
-      background: #2563EB;
-      border-radius: 999px;
-      transform-origin: left;
-      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-      will-change: transform;
+      justify-content: flex-start;
     }
 
-    /* 3D flip card */
+    #mode-flip-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      width: 100%;
+    }
+    #mode-flip-panel[hidden] { display: none !important; }
+    .study-view.is-complete .study-top,
+    .study-view.is-complete #mode-flip-panel { display: none !important; }
+
+    .fc-progress {
+      width: 100%;
+      max-width: 840px;
+      padding: 1.25rem 1.5rem;
+      background: #FFFFFF;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+    }
+
     .fc-3d {
       width: 100%;
-      max-width: 620px;
-      height: 380px;
+      max-width: 840px;
+      height: 420px !important; /* Force height */
+      min-height: 420px !important;
+      flex-shrink: 0;
       perspective: 1400px;
       position: relative;
       cursor: pointer;
       user-select: none;
+      margin: 0 auto;
     }
+    @media (max-width: 600px) {
+      .fc-3d { height: 320px !important; min-height: 320px !important; }
+    }
+
     .fc-inner {
       position: absolute;
       inset: 0;
       transform-style: preserve-3d;
-      transition: transform 1.7s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
       will-change: transform;
       transform: translateZ(0);
-      backface-visibility: hidden;
     }
     .fc-inner.flipped { transform: rotateY(180deg); }
+    
     .fc-face {
       position: absolute;
       inset: 0;
@@ -495,129 +498,76 @@
       box-shadow: 0 18px 40px -10px rgba(15, 23, 42, 0.12);
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
-      padding: 2.5rem 2rem;
+      justify-content: center;
+      padding: 3rem 2rem;
       text-align: center;
       overflow: hidden;
     }
+    
     .fc-face-back {
       transform: rotateY(180deg);
       background: linear-gradient(150deg, #EFF6FF 0%, #DBEAFE 100%);
       border-color: #BFDBFE;
     }
+
     .fc-face-label {
       position: absolute;
-      top: 1.1rem;
-      left: 1.35rem;
-      font-size: 0.72rem;
+      top: 1.5rem;
+      left: 1.5rem;
+      font-size: 0.75rem;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.1em;
       color: #94A3B8;
     }
     .fc-face-back .fc-face-label { color: #1D4ED8; }
+
+    /* Natural flexbox layout for content prevents overlap */
     .fc-face-content {
-      font-size: clamp(1.35rem, 3vw, 2rem);
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
       font-weight: 800;
       letter-spacing: -0.03em;
       color: #0F172A;
       line-height: 1.25;
       word-break: break-word;
-      max-width: 100%;
     }
+
+    /* Hint sits safely at the bottom via margin-top: auto */
     .fc-face-hint {
-      position: absolute;
-      bottom: 1.2rem;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 0.75rem;
+      margin-top: auto;
+      font-size: 0.8rem;
       color: #94A3B8;
       font-weight: 600;
       white-space: nowrap;
+      pointer-events: none;
     }
 
-    /* Type-answer mode */
-    .type-mode { width: 100%; max-width: 620px; display: flex; flex-direction: column; gap: 1rem; }
-    .type-prompt {
-      background: #FFFFFF;
-      border: 2px solid #E2E8F0;
-      border-radius: 24px;
-      padding: 2.25rem 2rem;
-      text-align: center;
-      box-shadow: 0 18px 40px -10px rgba(15, 23, 42, 0.10);
-    }
-    .type-prompt-label {
-      font-size: 0.72rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: #94A3B8;
-      margin-bottom: 0.75rem;
-    }
-    .type-prompt-text {
-      font-size: clamp(1.35rem, 3vw, 2rem);
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      color: #0F172A;
-      line-height: 1.25;
-      word-break: break-word;
-    }
-    .type-input-wrap { position: relative; }
-    .type-input {
-      width: 100%;
-      padding: 1rem 1.15rem;
-      font-family: inherit;
-      font-size: 1.05rem;
-      font-weight: 600;
-      color: #0F172A;
-      background: #FFFFFF;
-      border: 2px solid #E2E8F0;
-      border-radius: 16px;
-      outline: none;
-      transition: border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .type-input:focus { border-color: #93C5FD; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12); }
-    .type-input.correct { border-color: #10B981; background: #F0FDF4; }
-    .type-input.wrong { border-color: #F87171; background: #FEF2F2; }
-
-    .type-feedback {
-      display: none;
-      padding: 1rem 1.15rem;
-      border-radius: 14px;
-      font-size: 0.9rem;
-      line-height: 1.5;
-      border: 1px solid;
-    }
-    .type-feedback.show { display: block; animation: viewFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both; }
-    .type-feedback.ok { background: #ECFDF5; color: #047857; border-color: #A7F3D0; }
-    .type-feedback.bad { background: #FFF1F2; color: #BE123C; border-color: #FECDD3; }
-    .type-feedback strong { font-weight: 800; }
-
-    .type-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
-    .type-actions .btn { flex: 1 1 auto; justify-content: center; }
-
-    /* Rating buttons */
     .rating-row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 0.6rem;
+      gap: 1rem;
       width: 100%;
-      max-width: 620px;
+      max-width: 840px;
       opacity: 0;
       transform: translate3d(0, 8px, 0);
       pointer-events: none;
-      transition:
-        opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      will-change: opacity, transform;
-      backface-visibility: hidden;
+      transition: opacity 0.35s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .rating-row.show {
       opacity: 1;
       transform: translate3d(0, 0, 0);
       pointer-events: auto;
     }
+    @media (max-width: 600px) {
+      .rating-row { grid-template-columns: 1fr; gap: 0.75rem; }
+    }
+
     .rating-btn {
       font-family: inherit;
       font-weight: 700;
@@ -651,16 +601,6 @@
     /* ============================================================
        SEGMENTED PROGRESS BAR
        ============================================================ */
-    .fc-progress {
-      width: 100%;
-      max-width: 620px;
-      margin: 0 auto 1.25rem;
-      padding: 1rem 1.15rem 0.9rem;
-      background: #FFFFFF;
-      border: 1.5px solid #E2E8F0;
-      border-radius: 16px;
-      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
-    }
     .fc-progress-top {
       display: flex;
       align-items: center;
@@ -890,56 +830,65 @@
       .fc-3d { height: 260px; }
       .fc-face { padding: 1.75rem 1.25rem; }
     }
+    
     /* ============================================================
-       PASTE-VOCAB CARD
+       DECK OVERVIEW CARD (Replaces Paste Card)
        ============================================================ */
-    .paste-card {
+    .overview-card {
       margin: 1.5rem 0 1.75rem;
-      padding: 1.35rem 1.35rem 1.15rem;
+      padding: 1.5rem 1.5rem 1.25rem;
       background: #F8FAFC;
-      border: 1px solid #E2E8F0;
-      border-radius: 18px;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 20px;
+      box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.02);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
-    .paste-card-header {
+    .overview-card:focus-within {
+      border-color: #93C5FD;
+      box-shadow: 0 8px 20px -6px rgba(37, 99, 235, 0.1);
+      background: #FFFFFF;
+    }
+    .overview-card-header {
       display: flex;
       align-items: flex-start;
       gap: 0.85rem;
-      margin-bottom: 0.9rem;
+      margin-bottom: 1rem;
     }
-    .paste-card-icon {
+    .overview-card-icon {
       flex-shrink: 0;
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
       background: #FFFFFF;
       color: #2563EB;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       border: 1px solid #E2E8F0;
+      box-shadow: 0 2px 4px rgba(15, 23, 42, 0.02);
     }
-    .paste-card-icon svg { width: 18px; height: 18px; }
-    .paste-card-title {
-      font-size: 0.98rem;
+    .overview-card-icon svg { width: 20px; height: 20px; }
+    .overview-card-title {
+      font-size: 1.05rem;
       font-weight: 800;
       letter-spacing: -0.01em;
       color: #0F172A;
       margin-bottom: 0.15rem;
     }
-    .paste-card-hint {
+    .overview-card-hint {
       font-size: 0.82rem;
       color: #64748B;
       line-height: 1.5;
     }
-    .paste-card-hint strong { color: #2563EB; font-weight: 700; }
+    .overview-card-hint strong { color: #2563EB; font-weight: 700; }
 
-    .paste-textarea {
+    .overview-textarea {
       width: 100%;
-      min-height: 130px;
-      padding: 0.9rem 1rem;
+      min-height: 220px;
+      padding: 1rem 1.15rem;
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: 0.88rem;
-      line-height: 1.6;
+      font-size: 0.92rem;
+      line-height: 1.7;
       color: #0F172A;
       background: #FFFFFF;
       border: 1.5px solid #E2E8F0;
@@ -947,27 +896,73 @@
       outline: none;
       resize: vertical;
       transition: border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: inset 0 1px 3px rgba(15, 23, 42, 0.02);
     }
-    .paste-textarea:focus {
+    .overview-textarea:focus {
       border-color: #93C5FD;
-      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+      box-shadow: inset 0 1px 3px rgba(15, 23, 42, 0.02), 0 0 0 4px rgba(59, 130, 246, 0.12);
     }
-    .paste-textarea::placeholder { color: #94A3B8; }
+    .overview-textarea::placeholder { color: #94A3B8; }
 
-    .paste-actions {
+    .add-cards-menu { position: relative; }
+    .add-cards-menu > summary { list-style: none; cursor: pointer; }
+    .add-cards-menu > summary::-webkit-details-marker { display: none; }
+    .add-cards-submenu {
+      position: absolute;
+      z-index: 30;
+      top: calc(100% + .65rem);
+      right: 0;
+      width: min(560px, calc(100vw - 2rem));
+      max-height: min(75vh, 680px);
+      overflow: auto;
+      padding: 1rem;
+      border: 1px solid rgba(255,255,255,.92);
+      border-radius: 22px;
+      background: rgba(245,249,255,.88);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      backdrop-filter: blur(24px) saturate(180%);
+      box-shadow: 0 20px 48px -18px rgba(15,23,42,.28), inset 0 1px 1px #fff;
+    }
+    .add-cards-submenu .overview-card { margin-top: .75rem; }
+    .add-cards-submenu .overview-textarea { min-height: 150px; }
+    @media (max-width: 600px) {
+      .add-cards-submenu { position: fixed; top: auto; right: 1rem; left: 1rem; bottom: 1rem; width: auto; max-height: 78vh; }
+    }
+
+    .overview-actions {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 0.75rem;
-      margin-top: 0.85rem;
+      margin-top: 1rem;
       flex-wrap: wrap;
     }
-    .paste-count {
-      font-size: 0.82rem;
+    .overview-count {
+      font-size: 0.85rem;
       font-weight: 600;
       color: #64748B;
     }
-    .paste-count strong { color: #0F172A; font-weight: 800; }
+    .how-works-toggle { margin-top: 1rem; }
+    .how-works-toggle > summary {
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .75rem;
+      padding: .9rem 1.1rem;
+      border: 1px solid rgba(255,255,255,.9);
+      border-radius: 16px;
+      background: rgba(255,255,255,.5);
+      color: #334155;
+      font-weight: 700;
+      box-shadow: inset 0 1px 1px rgba(255,255,255,.95), 0 6px 16px -10px rgba(31,58,110,.2);
+    }
+    .how-works-toggle > summary::-webkit-details-marker { display: none; }
+    .how-works-toggle > summary::after { content: "⌄"; color: #2563eb; font-size: 1.2rem; transition: transform .2s ease; }
+    .how-works-toggle[open] > summary::after { transform: rotate(180deg); }
+    .how-works-toggle .legend-explain { margin-top: .65rem; }
+    .overview-count strong { color: #0F172A; font-weight: 800; }
 
     /* ============================================================
        DECK LEGEND
@@ -1102,9 +1097,9 @@
     }
 
     @media (max-width: 560px) {
-      .paste-card { padding: 1.1rem 1.1rem 0.95rem; border-radius: 16px; }
-      .paste-actions { flex-direction: column; align-items: stretch; }
-      .paste-actions .btn { justify-content: center; }
+      .overview-card { padding: 1.1rem 1.1rem 0.95rem; border-radius: 16px; }
+      .overview-actions { flex-direction: column; align-items: stretch; }
+      .overview-actions .btn { justify-content: center; }
       .deck-legend { padding: 0.75rem 0.85rem; gap: 0.4rem; border-radius: 14px; }
       .legend-item { font-size: 0.76rem; padding: 0.35rem 0.6rem; gap: 0.4rem; }
       .legend-label { display: none; }
@@ -1115,11 +1110,7 @@
 
     /* ============================================================
        CARD ANIMATION PASS
-       Uniform hover lift + shadow growth on every card and tile
-       on the flashcards page. Uses only transform/opacity/box-shadow.
        ============================================================ */
-
-    /* ---------- Deck cards ---------- */
     .deck-card {
       transition:
         transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
@@ -1148,7 +1139,6 @@
     .deck-card:hover .deck-subject-pill { transform: translate3d(0, -1px, 0); }
     .deck-card:hover h3 { transform: translate3d(1px, 0, 0); }
 
-    /* ---------- Mode cards (Flip Cards on deck page) ---------- */
     .mode-card {
       transition:
         transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
@@ -1177,7 +1167,6 @@
       transform: scale(1.1) translateZ(0);
     }
 
-    /* ---------- Card rows in the deck list ---------- */
     .card-row {
       transition:
         transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
@@ -1200,8 +1189,7 @@
       transform: scale(1.12) translateZ(0);
     }
 
-    /* ---------- Stat cards (kept for consistency even if unused) ---------- */
-    .stat-card {
+    .overview-card {
       transition:
         transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
         box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1),
@@ -1209,45 +1197,19 @@
       will-change: transform, box-shadow;
       transform: translateZ(0);
     }
-    .stat-card:hover {
-      transform: translate3d(0, -4px, 0) !important;
-      box-shadow: 0 18px 34px -10px rgba(15, 23, 42, 0.12) !important;
-      border-color: #CBD5E1 !important;
-    }
-
-    /* ---------- Paste card ---------- */
-    .paste-card {
-      transition:
-        transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-        box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-        border-color 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
-      will-change: transform, box-shadow;
-      transform: translateZ(0);
-    }
-    .paste-card:hover {
+    .overview-card:hover {
       transform: translate3d(0, -2px, 0) !important;
       box-shadow: 0 16px 30px -12px rgba(15, 23, 42, 0.10) !important;
       border-color: #CBD5E1 !important;
     }
-    .paste-card .paste-card-icon {
+    .overview-card .overview-card-icon {
       transition: transform 0.45s cubic-bezier(0.34, 1.3, 0.64, 1);
       will-change: transform;
     }
-    .paste-card:hover .paste-card-icon {
+    .overview-card:hover .overview-card-icon {
       transform: scale(1.1) rotate(-4deg) translateZ(0);
     }
 
-    /* ---------- Empty state ---------- */
-    .empty-state {
-      transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s ease;
-      will-change: transform;
-    }
-    .empty-state:hover {
-      transform: translate3d(0, -3px, 0);
-      box-shadow: 0 12px 26px -12px rgba(15, 23, 42, 0.08);
-    }
-
-    /* ---------- Buttons — bigger, more polished lift ---------- */
     .btn {
       transition:
         transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
@@ -1273,7 +1235,6 @@
       transform: scale(1.12) translateZ(0);
     }
 
-    /* ---------- Back link ---------- */
     .back-link {
       transition:
         transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
@@ -1292,7 +1253,6 @@
       transition-duration: 0.16s;
     }
 
-    /* ---------- Rating buttons ---------- */
     .rating-btn {
       transition:
         transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
@@ -1309,7 +1269,6 @@
       transition-duration: 0.16s;
     }
 
-    /* ---------- Flashcard faces ---------- */
     .fc-3d {
       transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
       will-change: transform;
@@ -1325,7 +1284,6 @@
       box-shadow: 0 22px 46px -12px rgba(15, 23, 42, 0.16);
     }
 
-    /* ---------- Section headers ---------- */
     .section-header h2 svg {
       transition: transform 0.4s cubic-bezier(0.34, 1.3, 0.64, 1);
       will-change: transform;
@@ -1334,7 +1292,6 @@
       transform: scale(1.08) translateZ(0);
     }
 
-    /* ---------- Modal ---------- */
     .modal {
       transition:
         transform 0.5s cubic-bezier(0.34, 1.3, 0.64, 1),
@@ -1342,7 +1299,6 @@
       will-change: transform, opacity;
     }
 
-    /* ---------- Badge (hero) ---------- */
     .badge {
       transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       will-change: transform;
@@ -1351,7 +1307,6 @@
       transform: translate3d(0, -2px, 0) scale(1.03);
     }
 
-    /* ---------- Drop zone (import modal) ---------- */
     .drop-zone {
       transition:
         transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
@@ -1363,9 +1318,324 @@
       transform: translate3d(0, -2px, 0) scale(1.008) !important;
     }
 
+    /* Liquid-glass surfaces across the Flashcards interface. */
+    .page, .overview-card, .legend-explain, .deck-legend, .deck-card,
+    .mode-card, .card-row, .modal, .drop-zone, .fc-face, .how-works-toggle > summary,
+    .add-cards-submenu {
+      background: linear-gradient(145deg, rgba(255,255,255,.64), rgba(239,246,255,.34) 55%, rgba(219,234,254,.4)) !important;
+      border-color: rgba(255,255,255,.92) !important;
+      -webkit-backdrop-filter: blur(24px) saturate(195%) contrast(106%);
+      backdrop-filter: blur(24px) saturate(195%) contrast(106%);
+      box-shadow: inset 2px -2px 1px -1px rgba(255,255,255,.94), inset -2px 2px 1px -1px rgba(255,255,255,.9), inset 5px -5px 1px -5px rgba(255,255,255,.68), inset -5px 5px 1px -5px rgba(255,255,255,.68), 0 14px 32px -20px rgba(31,58,110,.28), 0 0 0 1px rgba(37,99,235,.08) !important;
+    }
+    .field-input, .field-textarea, .overview-textarea {
+      background: linear-gradient(145deg, rgba(255,255,255,.6), rgba(235,245,255,.34)) !important;
+      border-color: rgba(255,255,255,.94) !important;
+      -webkit-backdrop-filter: blur(20px) saturate(190%);
+      backdrop-filter: blur(20px) saturate(190%);
+      box-shadow: inset 2px -2px 1px -1px rgba(255,255,255,.94), inset -2px 2px 1px -1px rgba(255,255,255,.82), inset 0 0 2px rgba(31,58,110,.12), 0 6px 16px -12px rgba(31,58,110,.24);
+    }
+    .field-input:focus, .field-textarea:focus, .overview-textarea:focus {
+      border-color: rgba(147,197,253,.95) !important;
+      box-shadow: inset 2px -2px 1px -1px #fff, inset -2px 2px 1px -1px rgba(255,255,255,.94), 0 0 0 3px rgba(37,99,235,.13), 0 10px 22px -14px rgba(37,99,235,.32);
+    }
+    .btn, .rating-btn, .back-link, .add-cards-menu > summary {
+      background: linear-gradient(140deg, rgba(255,255,255,.7), rgba(226,239,255,.44)) !important;
+      border-color: rgba(255,255,255,.94) !important;
+      -webkit-backdrop-filter: blur(18px) saturate(190%);
+      backdrop-filter: blur(18px) saturate(190%);
+      box-shadow: inset 2px -2px 1px -1px rgba(255,255,255,.96), inset -2px 2px 1px -1px rgba(255,255,255,.86), 0 8px 20px -12px rgba(31,58,110,.28) !important;
+    }
+    .mode-card.mode-flip {
+      background: linear-gradient(135deg, rgba(37,99,235,.92), rgba(83,153,255,.8) 55%, rgba(29,78,216,.92)) !important;
+      border: 1px solid rgba(255,255,255,.94) !important;
+      color: #fff;
+      box-shadow: inset 2px -2px 1px -1px rgba(255,255,255,.92), inset -2px 2px 1px -1px rgba(255,255,255,.8), inset 0 0 0 1px rgba(255,255,255,.18), 0 18px 36px -14px rgba(37,99,235,.42), 0 0 0 1px rgba(37,99,235,.14) !important;
+    }
+    .mode-card.mode-flip .mode-title, .mode-card.mode-flip .mode-desc, .mode-card.mode-flip .mode-count { color: #fff !important; }
+    .mode-card.mode-flip .mode-icon { background: rgba(255,255,255,.2) !important; color: #fff !important; border-color: rgba(255,255,255,.62) !important; box-shadow: inset 1px 1px 1px rgba(255,255,255,.72), 0 6px 14px rgba(15,45,100,.2); }
+    .mode-card.mode-flip:hover { box-shadow: inset 2px -2px 1px -1px #fff, inset -2px 2px 1px -1px rgba(255,255,255,.94), 0 24px 42px -14px rgba(37,99,235,.5), 0 0 28px -8px rgba(96,165,250,.48) !important; }
+    .site-footer { background: linear-gradient(145deg, rgba(255,255,255,.68), rgba(239,246,255,.4) 58%, rgba(219,234,254,.42)); border-color: rgba(255,255,255,.9); -webkit-backdrop-filter: blur(24px) saturate(190%); backdrop-filter: blur(24px) saturate(190%); box-shadow: inset 1px 1px 1px rgba(255,255,255,.94), 0 -12px 36px -28px rgba(15,23,42,.28); }
+    /* Liquid glass v2: sculpted bezel, rim light, and a gentle refraction layer. */
+    .page, .overview-card, .legend-explain, .deck-legend, .deck-card,
+    .mode-card, .card-row, .modal, .drop-zone, .fc-face,
+    .how-works-toggle > summary, .add-cards-submenu {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      background:
+        radial-gradient(130% 90% at 8% 0%, rgba(255,255,255,.88), transparent 55%),
+        linear-gradient(145deg, rgba(255,255,255,.48), rgba(232,242,255,.26) 52%, rgba(205,226,255,.34)) !important;
+      border: 1px solid rgba(255,255,255,.78) !important;
+      -webkit-backdrop-filter: blur(22px) saturate(180%);
+      backdrop-filter: blur(22px) saturate(180%);
+      box-shadow:
+        inset 1px 1px 0 rgba(255,255,255,.95),
+        inset -1px -1px 0 rgba(127,166,224,.16),
+        inset 0 0 18px rgba(255,255,255,.2),
+        0 14px 34px -22px rgba(25,55,105,.34),
+        0 1px 2px rgba(25,55,105,.08) !important;
+    }
+    .overview-card::before, .deck-card::before, .mode-card::before,
+    .card-row::before, .drop-zone::before, .fc-face::before,
+    .modal::before, .add-cards-submenu::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        linear-gradient(122deg, rgba(255,255,255,.62), transparent 28% 72%, rgba(255,255,255,.12)),
+        radial-gradient(90% 50% at 50% 0%, rgba(255,255,255,.42), transparent 70%);
+      opacity: .72;
+    }
+    .overview-card > *, .deck-card > *, .mode-card > *, .card-row > *,
+    .drop-zone > *, .fc-face > *, .modal > *, .add-cards-submenu > * {
+      position: relative;
+      z-index: 1;
+    }
+    .field-input, .field-textarea, .overview-textarea {
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.66), rgba(226,239,255,.3)) !important;
+      border: 1px solid rgba(255,255,255,.84) !important;
+      -webkit-backdrop-filter: blur(18px) saturate(175%);
+      backdrop-filter: blur(18px) saturate(175%);
+      box-shadow: inset 1px 1px 0 rgba(255,255,255,.94), inset 0 -1px 0 rgba(100,140,205,.12), 0 8px 18px -14px rgba(31,58,110,.3);
+    }
+    .field-input:focus, .field-textarea:focus, .overview-textarea:focus {
+      border-color: rgba(96,165,250,.72) !important;
+      box-shadow: inset 1px 1px 0 #fff, 0 0 0 3px rgba(59,130,246,.12), 0 10px 24px -16px rgba(37,99,235,.44);
+    }
+    .btn, .rating-btn, .back-link, .add-cards-menu > summary {
+      background: linear-gradient(145deg, rgba(255,255,255,.7), rgba(220,236,255,.35)) !important;
+      border: 1px solid rgba(255,255,255,.84) !important;
+      -webkit-backdrop-filter: blur(16px) saturate(175%);
+      backdrop-filter: blur(16px) saturate(175%);
+      box-shadow: inset 1px 1px 0 rgba(255,255,255,.94), inset 0 -1px 0 rgba(104,143,202,.14), 0 7px 18px -14px rgba(31,58,110,.32) !important;
+    }
+    .mode-card.mode-flip {
+      background:
+        radial-gradient(120% 100% at 6% 0%, rgba(255,255,255,.42), transparent 52%),
+        linear-gradient(145deg, rgba(72,145,255,.86), rgba(35,103,225,.78) 58%, rgba(29,78,216,.88)) !important;
+      border: 1px solid rgba(255,255,255,.82) !important;
+      box-shadow: inset 1px 1px 0 rgba(255,255,255,.88), inset -1px -1px 0 rgba(12,52,145,.22), 0 16px 32px -18px rgba(37,99,235,.55), 0 0 0 1px rgba(79,146,255,.18) !important;
+    }
+    .mode-card.mode-flip:hover { box-shadow: inset 1px 1px 0 #fff, 0 20px 38px -20px rgba(37,99,235,.65), 0 0 28px -14px rgba(96,165,250,.72) !important; }
+    .mode-card.mode-flip .mode-icon { background: rgba(255,255,255,.22) !important; border: 1px solid rgba(255,255,255,.7) !important; box-shadow: inset 1px 1px 0 rgba(255,255,255,.86), 0 5px 14px rgba(15,45,100,.2); }
+    .site-footer {
+      background: radial-gradient(120% 120% at 10% 0%, rgba(255,255,255,.72), transparent 60%), linear-gradient(145deg, rgba(255,255,255,.54), rgba(220,235,255,.34));
+      border-color: rgba(255,255,255,.82);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      backdrop-filter: blur(24px) saturate(180%);
+      box-shadow: inset 1px 1px 0 rgba(255,255,255,.96), inset 0 -1px 0 rgba(112,150,207,.14), 0 -12px 36px -28px rgba(15,23,42,.3);
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+    }
+    .site-footer::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      border-radius: inherit;
+      background:
+        radial-gradient(75% 90% at 8% 0%, rgba(255,255,255,.72), transparent 62%),
+        linear-gradient(115deg, rgba(255,255,255,.28), transparent 38%, rgba(191,219,254,.16));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.95), inset 0 -1px 0 rgba(255,255,255,.58);
+    }
+    /* Keep white labels readable on translucent controls and colored glass. */
+    .mode-card.mode-flip {
+      background:
+        radial-gradient(120% 100% at 6% 0%, rgba(255,255,255,.24), transparent 48%),
+        linear-gradient(145deg, rgba(29,78,216,.98), rgba(30,83,190,.96) 58%, rgba(23,61,155,.98)) !important;
+    }
+    .mode-card.mode-flip .mode-title,
+    .mode-card.mode-flip .mode-desc,
+    .mode-card.mode-flip .mode-count,
+    .mode-card.mode-flip .mode-icon { color: #fff !important; text-shadow: 0 1px 2px rgba(8,35,98,.35); }
+    .btn-primary {
+      color: #fff !important;
+      background: linear-gradient(145deg, rgba(59,130,246,.98), rgba(37,99,235,.98) 58%, rgba(29,78,216,.99)) !important;
+      border-color: rgba(255,255,255,.72) !important;
+      text-shadow: 0 1px 2px rgba(8,35,98,.3);
+    }
+    .btn-danger {
+      color: #fff !important;
+      background: linear-gradient(145deg, #e05265, #be123c) !important;
+      border-color: rgba(255,255,255,.72) !important;
+      text-shadow: 0 1px 2px rgba(92,10,31,.32);
+    }
+    .card-box-badge.box-5 { color: #fff; background: #047857; }
+    /* Keep dialogs and their copy crisp; a glass surface should not wash out labels. */
+    .modal {
+      background: linear-gradient(145deg, rgba(255,255,255,.97), rgba(240,246,255,.95)) !important;
+      border-color: rgba(255,255,255,.98) !important;
+      color: #17243a;
+      box-shadow: inset 1px 1px 0 #fff, inset 0 -1px 0 rgba(102,138,194,.16), 0 28px 72px -28px rgba(13,32,67,.44) !important;
+    }
+    .modal::before { opacity: .22; }
+    .modal .modal-header h3, .modal .field-label { color: #17243a !important; }
+    .modal .field-hint { color: #53657e !important; }
+    .modal .field-input, .modal .field-textarea {
+      color: #17243a !important;
+      background: rgba(255,255,255,.97) !important;
+      border-color: #c7d5e8 !important;
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+      box-shadow: inset 0 1px 2px rgba(26,48,82,.06), 0 1px 0 rgba(255,255,255,.92) !important;
+    }
+    .modal .field-input::placeholder, .modal .field-textarea::placeholder { color: #64748b !important; opacity: 1; }
+    .modal .field-input:focus, .modal .field-textarea:focus {
+      border-color: #3b82f6 !important;
+      box-shadow: 0 0 0 3px rgba(59,130,246,.18), inset 0 1px 2px rgba(26,48,82,.04) !important;
+    }
+    .modal .btn-secondary { color: #1e293b !important; }
+    .add-cards-submenu { color: #17243a; background: linear-gradient(145deg, rgba(255,255,255,.98), rgba(239,246,255,.97)) !important; }
+    .add-cards-menu > summary { color: #1e3a5f !important; }
+    .add-cards-submenu .overview-card { background: rgba(255,255,255,.86) !important; }
+    /* The popover is positioned under its trigger; preserve that layout over the glass surface rules. */
+    .add-cards-menu { position: relative; z-index: 40; }
+    .add-cards-submenu {
+      position: fixed !important;
+      display: none;
+      z-index: 10001;
+      top: 0;
+      right: auto;
+      left: 0;
+      width: min(520px, calc(100vw - 2rem));
+      max-height: min(75vh, 680px);
+      overflow: auto !important;
+      padding: 1rem;
+    }
+    .add-cards-submenu.is-open { display: block; }
+    .add-cards-submenu > .overview-card { margin: .75rem 0 0; }
+    @media (max-width: 600px) {
+      .add-cards-submenu { position: fixed !important; top: auto; right: 1rem; left: 1rem; bottom: 1rem; width: auto; max-height: 78vh; }
+    }
+    /* SVG backdrop refraction is progressive enhancement (Chromium only); other browsers retain the CSS glass above. */
+    @supports (backdrop-filter: url(#flashcards-liquid-glass)) {
+      .overview-card, .deck-card, .mode-card, .card-row, .modal, .drop-zone,
+      .fc-face, .how-works-toggle > summary, .add-cards-submenu, .site-footer {
+        -webkit-backdrop-filter: url(#flashcards-liquid-glass) blur(18px) saturate(175%);
+        backdrop-filter: url(#flashcards-liquid-glass) blur(18px) saturate(175%);
+      }
+    }
+
+    /* Glossy segmented progress track with a raised, refractive glass shell. */
+    .fc-progress {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      background: linear-gradient(145deg, rgba(255,255,255,.74), rgba(230,241,255,.46) 58%, rgba(214,232,255,.48)) !important;
+      border: 1px solid rgba(255,255,255,.94) !important;
+      -webkit-backdrop-filter: blur(22px) saturate(185%);
+      backdrop-filter: blur(22px) saturate(185%);
+      box-shadow: inset 1px 1px 0 rgba(255,255,255,.98), inset -1px -1px 0 rgba(113,151,207,.18), 0 16px 34px -24px rgba(28,61,114,.4) !important;
+    }
+    .fc-progress::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background: linear-gradient(120deg, rgba(255,255,255,.46), transparent 36% 72%, rgba(255,255,255,.14));
+    }
+    .fc-progress > * { position: relative; z-index: 1; }
+    .fc-progress-count {
+      background: linear-gradient(145deg, rgba(255,255,255,.86), rgba(219,234,254,.62)) !important;
+      border-color: rgba(255,255,255,.95) !important;
+      box-shadow: inset 1px 1px 0 #fff, 0 4px 12px -8px rgba(37,99,235,.38);
+    }
+    .fc-progress-bar {
+      height: 12px;
+      background: rgba(187,207,234,.5) !important;
+      border: 1px solid rgba(255,255,255,.78);
+      box-shadow: inset 0 2px 4px rgba(33,58,95,.13), 0 1px 0 rgba(255,255,255,.92);
+    }
+    .fc-progress-segment { position: relative; box-shadow: inset 0 1px 0 rgba(255,255,255,.58), inset 0 -1px 1px rgba(18,36,70,.22); }
+    .fc-progress-segment::after {
+      content: "";
+      position: absolute;
+      inset: 1px 2px auto;
+      height: 42%;
+      border-radius: inherit;
+      background: linear-gradient(180deg, rgba(255,255,255,.58), transparent);
+      pointer-events: none;
+    }
+    .fc-progress-legend .legend-item {
+      padding: .28rem .55rem;
+      border: 1px solid rgba(255,255,255,.86);
+      border-radius: 999px;
+      background: rgba(255,255,255,.48);
+      box-shadow: inset 1px 1px 0 rgba(255,255,255,.86), 0 4px 12px -10px rgba(31,58,110,.35);
+    }
+    .session-done {
+      width: 100%;
+      max-width: 840px;
+      min-height: 380px;
+      margin: 0 auto;
+      justify-content: center;
+      background: radial-gradient(100% 85% at 8% 0%, rgba(255,255,255,.92), transparent 58%), linear-gradient(145deg, rgba(255,255,255,.82), rgba(220,245,235,.64)) !important;
+      border: 1px solid rgba(255,255,255,.96) !important;
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      backdrop-filter: blur(24px) saturate(180%);
+      box-shadow: inset 1px 1px 0 rgba(255,255,255,.98), inset -1px -1px 0 rgba(100,160,130,.16), 0 20px 44px -28px rgba(20,90,62,.32) !important;
+    }
+    .session-done.show { display: flex; grid-column: 1 / -1; }
+    .study-view.is-complete .session-done { grid-column: 1 / -1; width: 100%; max-width: 840px; min-height: 380px; }
+    .session-done-actions { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: .7rem; margin-top: .5rem; }
+    .session-done-actions .btn { justify-content: center; }
+    .session-done .session-done-icon { background: rgba(255,255,255,.76); border-color: rgba(255,255,255,.96); box-shadow: inset 1px 1px 0 #fff, 0 8px 20px -14px rgba(4,120,87,.4); }
+    @media (max-width: 600px) {
+      .session-done { min-height: 320px; padding: 2rem 1.25rem; }
+      .session-done-actions { width: 100%; }
+      .session-done-actions .btn { width: 100%; }
+    }
+    /* Keep the front and back as two full-size faces of one ordinary card. */
+    .fc-3d { outline: none; }
+    .fc-3d:focus-visible { outline: 3px solid rgba(37,99,235,.62); outline-offset: 4px; border-radius: 26px; }
+    .fc-inner { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .fc-face {
+      position: absolute !important;
+      inset: 0 !important;
+      width: 100%;
+      height: 100%;
+      min-height: 100%;
+    }
+    .fc-face .fc-face-label { position: absolute; z-index: 2; top: 1.1rem; left: 1.35rem; }
+    .fc-face .fc-face-hint { position: absolute; z-index: 2; bottom: 1.2rem; left: 50%; transform: translateX(-50%); }
+    .fc-face .fc-face-content { position: relative; inset: auto; width: auto; height: auto; margin: 0; padding: 0; }
+    @keyframes deleteRedGlow {
+      0%, 100% { filter: drop-shadow(0 0 3px rgba(239,68,68,.52)); }
+      50% { filter: drop-shadow(0 0 8px #ef4444) drop-shadow(0 0 18px rgba(220,38,38,.95)); }
+    }
+    #btn-delete-deck:hover,
+    #btn-delete-deck:focus-visible { animation: deleteRedGlow .9s ease-in-out infinite; box-shadow: 0 0 0 3px rgba(239,68,68,.32), 0 0 24px 7px rgba(220,38,38,.72) !important; }
+    .card-row-actions [data-action="delete"]:hover,
+    .card-row-actions [data-action="delete"]:focus-visible {
+      color: #fff !important;
+      background: linear-gradient(145deg, #ef5363, #be123c) !important;
+      border-color: rgba(255,255,255,.88) !important;
+      box-shadow: 0 0 0 3px rgba(239,68,68,.32), 0 0 22px 6px rgba(220,38,38,.72) !important;
+      animation: deleteRedGlow .9s ease-in-out infinite;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #btn-delete-deck:hover, #btn-delete-deck:focus-visible,
+      .card-row-actions [data-action="delete"]:hover,
+      .card-row-actions [data-action="delete"]:focus-visible { animation: none; }
+    }
   </style>
 </head>
 <body>
+  <svg aria-hidden="true" width="0" height="0" style="position:absolute;overflow:hidden" focusable="false">
+    <filter id="flashcards-liquid-glass" x="-8%" y="-8%" width="116%" height="116%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.018" numOctaves="2" seed="7" result="surfaceMap" />
+      <feGaussianBlur in="surfaceMap" stdDeviation="1.1" result="softMap" />
+      <feDisplacementMap in="SourceGraphic" in2="softMap" scale="7" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </svg>
   <div class="shell">
     <div class="page">
 
@@ -1466,7 +1736,7 @@
         <div class="study-modes">
           <button class="mode-card mode-flip" id="mode-flip">
             <span class="mode-icon" aria-hidden="true">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M8 12h8"></path><path d="M12 8v8"></path></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.8c0-.78.85-1.26 1.52-.86l9.7 5.8a1 1 0 0 1 0 1.72l-9.7 5.8A1 1 0 0 1 8 17.4z"/></svg>
             </span>
             <div class="mode-body">
               <div class="mode-title" data-i18n="fc.modeFlip">Flip Cards</div>
@@ -1476,28 +1746,29 @@
           </button>
         </div>
 
-        <!-- Paste-vocab card — the main way to add cards -->
-        <div class="paste-card">
-          <div class="paste-card-header">
-            <span class="paste-card-icon" aria-hidden="true">
+        <!-- Overview Card (Replaces Paste Card) -->
+        <div class="overview-card">
+          <div class="overview-card-header">
+            <span class="overview-card-icon" aria-hidden="true">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
-                <path d="M9 12h6"></path>
-                <path d="M9 16h6"></path>
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
               </svg>
             </span>
             <div>
-              <div class="paste-card-title" data-i18n="fc.pasteTitle">Plak je woordjes</div>
-              <div class="paste-card-hint" data-i18n="fc.pasteHint">Één woord per regel, met een <strong>=</strong>, <strong>tab</strong>, of <strong>komma</strong> ertussen.</div>
+              <div class="overview-card-title" data-i18n="fc.overviewTitle">Kaarten overzicht</div>
+              <div class="overview-card-hint" data-i18n="fc.overviewHint">Bewerk hier al je kaarten in één keer. Gebruik <strong>=</strong> om de voorkant en achterkant te scheiden.</div>
             </div>
           </div>
-          <textarea class="paste-textarea" id="paste-textarea" placeholder="le chien = de hond&#10;le chat = de kat&#10;l'oiseau = de vogel" data-i18n-placeholder="fc.pastePlaceholder"></textarea>
-          <div class="paste-actions">
-            <span class="paste-count" id="paste-count"></span>
-            <button class="btn btn-primary" id="btn-paste-add" type="button">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"></path></svg>
-              <span data-i18n="fc.pasteAdd">Toevoegen aan deck</span>
+          <textarea class="overview-textarea" id="overview-textarea" placeholder="le chien = de hond&#10;le chat = de kat&#10;l'oiseau = de vogel" data-i18n-placeholder="fc.overviewPlaceholder"></textarea>
+          <div class="overview-actions">
+            <span class="overview-count" id="overview-count"></span>
+            <button class="btn btn-primary" id="btn-overview-save" type="button">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+              <span data-i18n="fc.overviewSave">Wijzigingen opslaan</span>
             </button>
           </div>
         </div>
@@ -1565,26 +1836,24 @@
           </button>
         </div>
 
-        <!-- Progress header (matches Woordtrainer) -->
-        <div class="fc-progress">
-          <div class="fc-progress-top">
-            <span class="fc-progress-label" data-i18n="fc.progressLabel">Voortgang</span>
-            <span class="fc-progress-count" id="fc-progress-count">0 / 0</span>
-          </div>
-          <div class="fc-progress-bar">
-            <div class="fc-progress-segment seg-practice" id="fc-seg-practice" style="width: 0%;"></div>
-            <div class="fc-progress-segment seg-test" id="fc-seg-test" style="width: 0%;"></div>
-            <div class="fc-progress-segment seg-mastered" id="fc-seg-mastered" style="width: 0%;"></div>
-          </div>
-          <div class="fc-progress-legend">
-            <span class="legend-item"><span class="legend-dot practice"></span><span data-i18n="fc.legendPractice">Oefenen</span>: <span id="fc-legend-practice">0</span></span>
-            <span class="legend-item"><span class="legend-dot test"></span><span data-i18n="fc.legendTest">Toetsen</span>: <span id="fc-legend-test">0</span></span>
-            <span class="legend-item"><span class="legend-dot mastered"></span><span data-i18n="fc.legendMastered">Beheerst</span>: <span id="fc-legend-mastered">0</span></span>
-          </div>
-        </div>
-
         <!-- Flip mode -->
-        <div id="mode-flip-panel" style="display:none; width:100%; align-items:center; display:none; flex-direction:column; gap:1.5rem;">
+        <div id="mode-flip-panel" style="display: none;">
+          <div class="fc-progress">
+            <div class="fc-progress-top">
+              <span class="fc-progress-label" data-i18n="fc.progressLabel">Voortgang</span>
+              <span class="fc-progress-count" id="fc-progress-count">0 / 0</span>
+            </div>
+            <div class="fc-progress-bar">
+              <div class="fc-progress-segment seg-practice" id="fc-seg-practice" style="width: 0%;"></div>
+              <div class="fc-progress-segment seg-test" id="fc-seg-test" style="width: 0%;"></div>
+              <div class="fc-progress-segment seg-mastered" id="fc-seg-mastered" style="width: 0%;"></div>
+            </div>
+            <div class="fc-progress-legend">
+              <span class="legend-item"><span class="legend-dot practice"></span><span data-i18n="fc.legendPractice">Oefenen</span>: <span id="fc-legend-practice">0</span></span>
+              <span class="legend-item"><span class="legend-dot test"></span><span data-i18n="fc.legendTest">Toetsen</span>: <span id="fc-legend-test">0</span></span>
+              <span class="legend-item"><span class="legend-dot mastered"></span><span data-i18n="fc.legendMastered">Beheerst</span>: <span id="fc-legend-mastered">0</span></span>
+            </div>
+          </div>
           <div class="fc-3d" id="fc-3d" role="button" tabindex="0" aria-label="Flashcard">
             <div class="fc-inner" id="fc-inner">
               <div class="fc-face fc-face-front">
@@ -1624,9 +1893,15 @@
           </div>
           <h3 data-i18n="fc.sessionDone">Sessie klaar!</h3>
           <p id="session-done-text" data-i18n="fc.sessionDoneText">Goed gedaan — je hebt alle kaarten in dit rondje gedaan.</p>
-          <button class="btn btn-primary" id="btn-done-exit" type="button">
+          <div class="session-done-actions">
+            <button class="btn btn-primary" id="btn-done-redo" type="button">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15.36-6.36L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-15.36 6.36L3 16"></path><path d="M3 21v-5h5"></path></svg>
+              <span data-i18n="fc.redoDeck">Study this deck again</span>
+            </button>
+            <button class="btn btn-secondary" id="btn-done-exit" type="button">
             <span data-i18n="fc.backToDecks">Terug naar decks</span>
-          </button>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -1731,6 +2006,71 @@
     </div>
   </div>
 
+  <script>
+    (function () {
+      const addButton = document.getElementById('btn-add-card');
+      const overview = document.querySelector('.overview-card');
+      const actions = addButton && addButton.parentElement;
+      if (!addButton || !overview || !actions) return;
+      const menu = document.createElement('details');
+      menu.className = 'add-cards-menu';
+      const summary = document.createElement('summary');
+      summary.className = addButton.className;
+      summary.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg><span data-i18n="fc.addCardsMenu">Add cards</span><svg class="menu-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>';
+      const submenu = document.createElement('div');
+      submenu.className = 'add-cards-submenu';
+      menu.append(summary, submenu);
+      actions.replaceChild(menu, addButton);
+      submenu.append(addButton, overview);
+      addButton.addEventListener('click', function () { menu.open = false; });
+      function placeSubmenu() {
+        if (!menu.open || submenu.parentElement !== document.body) return;
+        const anchor = summary.getBoundingClientRect();
+        const width = Math.min(520, Math.max(0, window.innerWidth - 32));
+        submenu.style.width = width + 'px';
+        submenu.style.maxHeight = Math.min(window.innerHeight * 0.75, 680) + 'px';
+        const height = submenu.getBoundingClientRect().height;
+        let top = anchor.bottom + 10;
+        if (top + height > window.innerHeight - 12) top = anchor.top - height - 10;
+        top = Math.max(12, Math.min(top, window.innerHeight - height - 12));
+        const left = Math.max(16, Math.min(anchor.right - width, window.innerWidth - width - 16));
+        submenu.style.top = top + 'px';
+        submenu.style.left = left + 'px';
+        submenu.style.right = 'auto';
+        submenu.style.bottom = 'auto';
+      }
+      menu.addEventListener('toggle', function () {
+        if (menu.open) {
+          document.body.appendChild(submenu);
+          submenu.classList.add('is-open');
+          placeSubmenu();
+        } else {
+          submenu.classList.remove('is-open');
+          menu.appendChild(submenu);
+        }
+      });
+      window.addEventListener('resize', placeSubmenu);
+      window.addEventListener('scroll', placeSubmenu, true);
+      document.addEventListener('click', function (event) {
+        if (!menu.contains(event.target) && !submenu.contains(event.target)) menu.open = false;
+      });
+    })();
+  </script>
+  <script>
+    (function () {
+      const explanation = document.getElementById('legend-explain');
+      const cards = document.getElementById('card-list');
+      if (!explanation || !cards) return;
+      const title = explanation.querySelector('.legend-explain-title');
+      const disclosure = document.createElement('details');
+      const summary = document.createElement('summary');
+      disclosure.className = 'how-works-toggle';
+      if (title) summary.appendChild(title);
+      disclosure.appendChild(summary);
+      disclosure.appendChild(explanation);
+      cards.after(disclosure);
+    })();
+  </script>
   <script src="flashcards.js"></script>
   <script src="../page-intro.js"></script>
 

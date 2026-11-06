@@ -31,17 +31,21 @@ export default async function handler(req) {
 
   const path = url.searchParams.get("path") || "";
 
-  // ── Route: ?path=openrouter/* ────────────
-  if (path.startsWith("openrouter/")) {
-    const target = "https://openrouter.ai/api/v1/" + path.replace("openrouter/", "");
+  // ── Route: ?path=openai/* ────────────
+  if (path.startsWith("openai/")) {
+    if (!process.env.OPENAI_API_KEY) {
+      return new Response(JSON.stringify({ error: { message: "OpenAI API key is not configured." } }), {
+        status: 503,
+        headers: { "Content-Type": "application/json", ...corsHeaders }
+      });
+    }
+    const target = "https://api.openai.com/v1/" + path.replace("openai/", "");
 
     const upstream = await fetch(target, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
-        "HTTP-Referer": corsOrigin,
-        "X-Title": "StudyStack"
+        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
       },
       body: req.body
     });

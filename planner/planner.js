@@ -5,7 +5,7 @@
    2. Conditional study tables (no table on casual chat)
    3. Bi-directional Pomodoro sync
    4. Scope & formatting (section IDs, no lettered prefixes, HH:MM)
-   Model: DeepSeek V3.2 via OpenRouter
+   Model: GPT-5.5 via the OpenAI API
    ============================================================ */
 (function () {
   "use strict";
@@ -15,8 +15,8 @@
      ============================================================ */
   // API keys live server-side in the Vercel function's environment variables.
   // The frontend never sees them. All requests go through the proxy.
-  const PROXY_URL = "https://studyq-nu.vercel.app/api/proxy?path=openrouter/chat/completions";
-  const MODEL = "dots-studio/dots-3-note-preview:free";
+  const PROXY_URL = "https://studyq-nu.vercel.app/api/proxy?path=openai/chat/completions";
+  const MODEL = "gpt-5.5";
 
   const STORAGE_KEY = "studystack-planner-tests";
   const OUTPUT_KEY = "studystack-planner-ai-output";
@@ -1122,7 +1122,7 @@
       loadingMessageTimer = setInterval(cycleLoadingMessage, 2200);
     } else {
       const sub = document.querySelector(".ai-loading-sub");
-      if (sub) sub.textContent = "DeepSeek V3.2 is processing your message…";
+      if (sub) sub.textContent = "GPT-5.5 is processing your message…";
     }
   }
 
@@ -1168,8 +1168,8 @@
       const isNoKey = err && err.message === "NO_KEY";
       const errMsg = isNoKey
         ? (currentLanguage() === "en"
-            ? "No API key configured. Ask the site owner to add an OpenRouter key in planner.js."
-            : "Geen API-sleutel ingesteld. Vraag de beheerder om een OpenRouter-sleutel in planner.js te plaatsen.")
+            ? "No API key configured. Ask the site owner to add OPENAI_API_KEY to the Vercel environment variables."
+            : "Geen API-sleutel ingesteld. Vraag de beheerder om OPENAI_API_KEY toe te voegen aan de Vercel-omgevingsvariabelen.")
         : (currentLanguage() === "en"
             ? "Something went wrong while generating the plan. Please try again."
             : "Er ging iets mis bij het genereren van het plan. Probeer het opnieuw.");
@@ -1188,13 +1188,8 @@
     const body = {
       model: MODEL,
       messages: buildMessages(userRequest),   // ← now includes memory
-      temperature: 0.4,
       stream: true,
-      reasoning: { effort: "low" },
-      provider: {
-        sort: "throughput",
-        preferred_max_latency: { p90: 3 }
-      }
+      reasoning_effort: "low"
     };
     const response = await fetch(PROXY_URL, {
       method: "POST",

@@ -5,7 +5,7 @@
    2. Conditional study tables (no table on casual chat)
    3. Bi-directional Pomodoro sync
    4. Scope & formatting (section IDs, no lettered prefixes, HH:MM)
-   Model: GPT-5.5 via the OpenAI API
+   Model: Ministral 3B via the Mistral API
    ============================================================ */
 (function () {
   "use strict";
@@ -15,8 +15,8 @@
      ============================================================ */
   // API keys live server-side in the Vercel function's environment variables.
   // The frontend never sees them. All requests go through the proxy.
-  const PROXY_URL = "https://studyq-nu.vercel.app/api/proxy?path=openai/chat/completions";
-  const MODEL = "gpt-5.4-mini";
+  const PROXY_URL = "https://studyq-nu.vercel.app/api/proxy?path=mistral/chat/completions";
+  const MODEL = "ministral-3b-2512";
 
   const STORAGE_KEY = "studystack-planner-tests";
   const OUTPUT_KEY = "studystack-planner-ai-output";
@@ -1122,7 +1122,7 @@
       loadingMessageTimer = setInterval(cycleLoadingMessage, 2200);
     } else {
       const sub = document.querySelector(".ai-loading-sub");
-      if (sub) sub.textContent = "GPT-5.5 is processing your message…";
+      if (sub) sub.textContent = "Ministral is processing your message…";
     }
   }
 
@@ -1170,16 +1170,16 @@
       let errMsg;
       if (errorText === "NO_KEY" || /HTTP 503/.test(errorText) || /API key is not configured/i.test(errorText)) {
         errMsg = isEnglish
-          ? "The OpenAI API key is missing on the server. Add OPENAI_API_KEY to the Vercel project’s environment variables, then redeploy."
-          : "De OpenAI API-sleutel ontbreekt op de server. Voeg OPENAI_API_KEY toe aan de omgevingsvariabelen van Vercel en deploy opnieuw.";
+          ? "The Mistral API key is missing on the server. Add MISTRAL_API_KEY to the Vercel project’s environment variables, then redeploy."
+          : "De Mistral API-sleutel ontbreekt op de server. Voeg MISTRAL_API_KEY toe aan de omgevingsvariabelen van Vercel en deploy opnieuw.";
       } else if (/HTTP 401|HTTP 403/.test(errorText)) {
         errMsg = isEnglish
-          ? "OpenAI rejected the API key. Check that OPENAI_API_KEY is valid and has API access, then redeploy."
-          : "OpenAI heeft de API-sleutel geweigerd. Controleer of OPENAI_API_KEY geldig is en API-toegang heeft, en deploy opnieuw.";
+          ? "Mistral rejected the API key. Check that MISTRAL_API_KEY is valid and has API access, then redeploy."
+          : "Mistral heeft de API-sleutel geweigerd. Controleer of MISTRAL_API_KEY geldig is en API-toegang heeft, en deploy opnieuw.";
       } else if (/HTTP 429/.test(errorText)) {
         errMsg = isEnglish
-          ? "OpenAI rate limit or quota reached. Check the project’s API usage and billing."
-          : "De OpenAI-limiet of het tegoed is bereikt. Controleer het API-gebruik en de facturering van het project.";
+          ? "Mistral rate limit or quota reached. Check the project’s API usage and billing."
+          : "De Mistral-limiet of het tegoed is bereikt. Controleer het API-gebruik en de facturering van het project.";
       } else {
         const detail = errorText.replace(/^HTTP \d+\s*/, "").slice(0, 260);
         errMsg = (isEnglish
@@ -1202,7 +1202,6 @@
       model: MODEL,
       messages: buildMessages(userRequest),   // ← now includes memory
       stream: true,
-      reasoning_effort: "low"
     };
     const response = await fetch(PROXY_URL, {
       method: "POST",

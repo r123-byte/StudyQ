@@ -31,21 +31,21 @@ export default async function handler(req) {
 
   const path = url.searchParams.get("path") || "";
 
-  // ── Route: ?path=openai/* ────────────
-  if (path.startsWith("openai/")) {
-    if (!process.env.OPENAI_API_KEY) {
-      return new Response(JSON.stringify({ error: { message: "OpenAI API key is not configured." } }), {
+  // ── Route: ?path=mistral/* ────────────
+  if (path.startsWith("mistral/")) {
+    if (!process.env.MISTRAL_API_KEY) {
+      return new Response(JSON.stringify({ error: { message: "Mistral API key is not configured." } }), {
         status: 503,
         headers: { "Content-Type": "application/json", ...corsHeaders }
       });
     }
-    const target = "https://api.openai.com/v1/" + path.replace("openai/", "");
+    const target = "https://api.mistral.ai/v1/" + path.replace("mistral/", "");
 
     const upstream = await fetch(target, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
+        "Authorization": `Bearer ${process.env.MISTRAL_API_KEY}`
       },
       body: req.body
     });

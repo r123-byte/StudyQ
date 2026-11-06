@@ -254,8 +254,8 @@
 <p>Please avoid storing passwords, confidential information or unnecessary sensitive personal data in StudyTools.</p>
 <h2>4. Information Processed by External Services</h2>
 <p>Some StudyTools features require information to be sent to external services. This occurs when you actively use the relevant feature or submit information.</p>
-<h3>4.1 AI study planner — Vercel and OpenAI</h3>
-<p>When you use the AI study planner, the website sends the relevant prompt and study context to an API proxy hosted on Vercel. The proxy forwards the request to OpenAI for AI processing.</p>
+<h3>4.1 AI study planner — Vercel and Mistral AI</h3>
+<p>When you use the AI study planner, the website sends the relevant prompt and study context to an API proxy hosted on Vercel. The proxy forwards the request to Mistral AI for AI processing.</p>
 <p>Depending on your request and the feature used, the information transmitted may include:</p>
 <ul>
 <li>Instructions and prompts you provide.</li>
@@ -264,12 +264,12 @@
 <li>Previous study interactions included as context.</li>
 </ul>
 <p>This information is used to generate study-related responses and planning suggestions.</p>
-<p>Vercel hosts the API proxy. OpenAI processes AI planner requests sent through the OpenAI API. These services may process request data and technical information to provide, secure and operate their services.</p>
-<p>StudyTools does not intentionally maintain a central database of AI conversations. This does not guarantee that Vercel or OpenAI never retains request data or technical logs.</p>
+<p>Vercel hosts the API proxy. Mistral AI processes AI planner requests sent through the Mistral API. These services may process request data and technical information to provide, secure and operate their services.</p>
+<p>StudyTools does not intentionally maintain a central database of AI conversations. This does not guarantee that Vercel or Mistral AI never retains request data or technical logs.</p>
 <p>Further information:</p>
 <ul>
 <li><a href="https://vercel.com/legal/privacy-notice">Vercel Privacy Notice</a></li>
-<li><a href="https://openai.com/policies/privacy-policy/">OpenAI Privacy Policy</a></li>
+<li><a href="https://legal.mistral.ai/terms/privacy-policy/">Mistral AI Privacy Policy</a></li>
 </ul>
 <h3>4.2 Voice dictation — Groq</h3>
 <p>When you activate voice dictation, your audio is transmitted to the Groq API for speech-to-text processing using a Whisper model.</p>
@@ -328,7 +328,7 @@
 <p>Depending on the features you use, information may be processed by:</p>
 <ul>
 <li>**Vercel:** Hosting the API proxy and processing associated requests and technical information.</li>
-<li>**OpenAI:** Processing AI prompts and relevant study context through the OpenAI API.</li>
+<li>**Mistral AI:** Processing AI prompts and relevant study context through the Mistral API.</li>
 <li>**Groq:** Processing audio for speech-to-text conversion.</li>
 <li>**Web3Forms:** Processing contact form submissions for delivery.</li>
 <li>**Magister:** Providing the calendar feed accessed through the user's personal calendar link.</li>
@@ -345,7 +345,7 @@
 <p>Retention depends on the type of information, the feature used and the service processing it.</p>
 <ul>
 <li>**Local browser data:** Generally remains until deleted by the user, removed by a feature or cleared through browser settings.</li>
-<li>**AI planner requests:** May be subject to processing, logging or retention by Vercel and OpenAI.</li>
+<li>**AI planner requests:** May be subject to processing, logging or retention by Vercel and Mistral AI.</li>
 <li>**Voice recordings and transcriptions:** Subject to Groq's applicable data-handling practices and settings, as well as any subsequent processing of the transcription.</li>
 <li>**Contact form submissions:** May be retained by Web3Forms or the configured recipient for as long as necessary to handle the enquiry and meet applicable obligations.</li>
 <li>**Magister calendar links and imported data:** Processed in the browser according to the calendar feature's implementation. The calendar service may retain request logs under its applicable practices.</li>

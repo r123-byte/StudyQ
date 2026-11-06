@@ -1165,15 +1165,28 @@
     } catch (err) {
       setBusy(false);
       try { console.warn("AI Planner error:", err); } catch (e) {}
-      const isNoKey = err && err.message === "NO_KEY";
-      const errMsg = isNoKey
-        ? (currentLanguage() === "en"
-            ? "No API key configured. Ask the site owner to add OPENAI_API_KEY to the Vercel environment variables."
-            : "Geen API-sleutel ingesteld. Vraag de beheerder om OPENAI_API_KEY toe te voegen aan de Vercel-omgevingsvariabelen.")
-        : (currentLanguage() === "en"
-            ? "Something went wrong while generating the plan. Please try again."
-            : "Er ging iets mis bij het genereren van het plan. Probeer het opnieuw.");
-      contentEl.innerHTML = "<p>" + escapeHtml(errMsg) + "</p>";
+      const errorText = err && err.message ? err.message : "Unknown error";
+      const isEnglish = currentLanguage() === "en";
+      let errMsg;
+      if (errorText === "NO_KEY" || /HTTP 503/.test(errorText) || /API key is not configured/i.test(errorText)) {
+        errMsg = isEnglish
+          ? "The OpenAI API key is missing on the server. Add OPENAI_API_KEY to the Vercel project’s environment variables, then redeploy."
+          : "De OpenAI API-sleutel ontbreekt op de server. Voeg OPENAI_API_KEY toe aan de omgevingsvariabelen van Vercel en deploy opnieuw.";
+      } else if (/HTTP 401|HTTP 403/.test(errorText)) {
+        errMsg = isEnglish
+          ? "OpenAI rejected the API key. Check that OPENAI_API_KEY is valid and has API access, then redeploy."
+          : "OpenAI heeft de API-sleutel geweigerd. Controleer of OPENAI_API_KEY geldig is en API-toegang heeft, en deploy opnieuw.";
+      } else if (/HTTP 429/.test(errorText)) {
+        errMsg = isEnglish
+          ? "OpenAI rate limit or quota reached. Check the project’s API usage and billing."
+          : "De OpenAI-limiet of het tegoed is bereikt. Controleer het API-gebruik en de facturering van het project.";
+      } else {
+        const detail = errorText.replace(/^HTTP \d+\s*/, "").slice(0, 260);
+        errMsg = (isEnglish
+          ? "Something went wrong while generating the plan."
+          : "Er ging iets mis bij het genereren van het plan.") + (detail ? "\n" + detail : "");
+      }
+      contentEl.innerHTML = "<p>" + escapeHtml(errMsg).replace(/\n/g, "<br>") + "</p>";
     }
   }
 

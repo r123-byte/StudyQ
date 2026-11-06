@@ -16,7 +16,7 @@
   // API keys live server-side in the Vercel function's environment variables.
   // The frontend never sees them. All requests go through the proxy.
   const PROXY_URL = "https://studyq-nu.vercel.app/api/proxy?path=openai/chat/completions";
-  const MODEL = "gpt-5.5";
+  const MODEL = "gpt-5.4-mini";
 
   const STORAGE_KEY = "studystack-planner-tests";
   const OUTPUT_KEY = "studystack-planner-ai-output";

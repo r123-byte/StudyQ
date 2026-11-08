@@ -3,7 +3,7 @@ const ALLOWED_COUNTS = new Set([5, 10, 15, 20]);
 const ALLOWED_TYPES = new Set(["multiple_choice", "true_false", "fill_blank", "open"]);
 // OpenRouter credentials stay on the Vercel proxy.
 const DEFAULT_AI_PROXY_URL = "https://studyq-nu.vercel.app/api/proxy?path=openrouter/chat/completions";
-const TEST_GENERATION_MODEL = "google/gemma-4-26b-a4b-it:free";
+const TEST_GENERATION_MODEL = "dots-studio/dots-3-note-preview:free";
 
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" } });

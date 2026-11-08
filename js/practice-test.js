@@ -1,31 +1,33 @@
 // OpenRouter credentials stay on the Vercel proxy.
 const OPENROUTER_PROXY_URL = "https://studyq-nu.vercel.app/api/proxy?path=openrouter/chat/completions";
 const GROQ_PROXY_URL = "https://studyq-nu.vercel.app/api/proxy?path=groq/chat/completions";
-const PRACTICE_TEST_MODEL = "google/gemma-4-26b-a4b-it:free";
+const PRACTICE_TEST_MODEL = "dots-studio/dots-3-note-preview:free";
 const GROQ_FALLBACK_MODEL = "qwen/qwen3.8-27b";
 const STORAGE_KEY = "studystack-practice-test-history-v1";
 const MAX_MATERIAL = 30000;
 const MAX_FILE_BYTES = 15 * 1024 * 1024;
-const MAX_PDF_IMAGE_CHARS = 3400000;
+const MAX_PDF_PAGE_CHARS = 1000000;
+const MAX_IMAGE_BATCH_CHARS = 3400000;
+const MAX_IMAGE_BATCH_PAGES = 6;
 const PDFJS_URL = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs";
 const PDF_WORKER_URL = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.mjs";
 
 const translations = {
   en: {
     back:"Home", eyebrow:"Study tools", title:"Practice Test", subtitle:"Turn your notes into a practice exam. Answer at your own pace and review what to work on next.", removeFile:"Remove",
-    setupTitle:"Build a practice test", setupSub:"Add notes, choose your settings, and generate questions.", private:"Saved on this device", materialLabel:"Study material", dropTitle:"Drop a PDF here or click to choose", dropSub:"PDF only · up to 15 MB · Gemma reads page images when it generates the test", materialPlaceholder:"Paste or type your notes here…", materialHint:"Use clear notes, textbook excerpts, or summaries.",
+    setupTitle:"Build a practice test", setupSub:"Add notes, choose your settings, and generate questions.", private:"Saved on this device", materialLabel:"Study material", dropTitle:"Drop a PDF here or click to choose", dropSub:"PDF only · up to 15 MB · pages are converted to images for the test", materialPlaceholder:"Paste or type your notes here…", materialHint:"Use clear notes, textbook excerpts, or summaries.",
     subject:"Subject", subjectPlaceholder:"e.g. Biology", testTitle:"Test title", titlePlaceholder:"Suggested from subject", difficulty:"Difficulty", easy:"Easy", medium:"Medium", hard:"Hard", mixed:"Mixed", questionCount:"Number of questions", questionTypes:"Question types (choose at least one)", mc:"Multiple choice", tf:"True / false", fill:"Fill in the blanks", open:"Open questions", timeLimit:"Time limit (minutes, optional)", options:"Options", shuffle:"Shuffle question order", hints:"Show hints", explanations:"Show explanations after", generate:"Generate test", generating:"Generating and checking your questions…", history:"Test history", savedTests:"Saved tests", noHistory:"Your saved tests will appear here.",
     previous:"Previous", next:"Next", submit:"Submit test", results:"Results", backToSetup:"Practice Test home", retry:"Retry test", newTest:"Generate another test", confirmSubmit:"Some questions are unanswered. Submit anyway?", expired:"Time is up. Your answers are being submitted.",
-    needText:"Add study material or upload a PDF before generating a test.", needSubject:"Enter a subject first.", chooseType:"Choose at least one question type.", tooLong:"Your material is over the 30,000 character limit. Shorten it before generating; nothing was cut off.", badFile:"Choose a PDF file no larger than 15 MB.", pdfImageTooLarge:"These PDF pages create too large an image request. Try a shorter PDF or lower-resolution copy.", pdfError:"Could not read this PDF. Try another file or paste the text.", extracting:"Converting PDF pages to images…", apiError:"Could not generate the test. Please try again.", 
+    needText:"Add study material or upload a PDF before generating a test.", needSubject:"Enter a subject first.", chooseType:"Choose at least one question type.", tooLong:"Your material is over the 30,000 character limit. Shorten it before generating; nothing was cut off.", badFile:"Choose a PDF file no larger than 15 MB.", pdfImageTooLarge:"A page could not be resized small enough to send. Try another PDF or a lower-resolution copy.", pdfError:"Could not read this PDF. Try another file or paste the text.", extracting:"Converting PDF pages to images…", apiError:"Could not generate the test. Please try again.", 
     malformed:"The test service returned an unexpected format. Please try again.", countError:"The requested number of valid questions could not be created from these notes. Try fewer questions.", question:"Question", points:"points", hint:"Hint", answer:"Your answer", correctAnswer:"Correct answer", explanation:"Explanation", feedback:"Feedback", criteria:"What earns marks", unanswered:"Unanswered", correct:"Correct", incorrect:"Incorrect", partial:"Partially correct", pending:"Needs review", score:"Score", percent:"of total", grade:"Estimated grade", gradeNote:"An estimate based only on automatically marked questions; it is not an official school grade.", correctCount:"Correct", incorrectCount:"Incorrect", pendingCount:"Open answers to review", topics:"Topics to improve", noTopics:"Great work — no lost-mark topics to review.", openPending:"Open answers are not automatically graded. Review them against the criteria below. They are excluded from this provisional score.", started:"In progress", completed:"Completed", remove:"Delete saved test", deleteConfirm:"Delete this saved test? This cannot be undone.",
     qType:{multiple_choice:"Multiple choice",true_false:"True / false",fill_blank:"Fill in the blanks",open:"Open question"}, trueLabel:"True", falseLabel:"False", minutes:"min", seconds:"sec", more:"More", less:"Less"
   },
   nl: {
     back:"Home", eyebrow:"Studietools", title:"Oefentoets", subtitle:"Maak van je aantekeningen een oefentoets. Beantwoord vragen op je eigen tempo en zie wat je nog kunt oefenen.", removeFile:"Verwijderen",
-    setupTitle:"Maak een oefentoets", setupSub:"Voeg leerstof toe, kies je instellingen en genereer vragen.", private:"Op dit apparaat opgeslagen", materialLabel:"Leerstof", dropTitle:"Sleep een pdf hierheen of klik om te kiezen", dropSub:"Alleen pdf · maximaal 15 MB · Gemma leest pagina-afbeeldingen bij het maken van de toets", materialPlaceholder:"Plak of typ hier je aantekeningen…", materialHint:"Gebruik duidelijke aantekeningen, tekstboekfragmenten of samenvattingen.",
+    setupTitle:"Maak een oefentoets", setupSub:"Voeg leerstof toe, kies je instellingen en genereer vragen.", private:"Op dit apparaat opgeslagen", materialLabel:"Leerstof", dropTitle:"Sleep een pdf hierheen of klik om te kiezen", dropSub:"Alleen pdf · maximaal 15 MB · pagina’s worden omgezet naar afbeeldingen voor de toets", materialPlaceholder:"Plak of typ hier je aantekeningen…", materialHint:"Gebruik duidelijke aantekeningen, tekstboekfragmenten of samenvattingen.",
     subject:"Vak", subjectPlaceholder:"bijv. Biologie", testTitle:"Titel van de toets", titlePlaceholder:"Wordt voorgesteld op basis van je vak", difficulty:"Moeilijkheid", easy:"Makkelijk", medium:"Gemiddeld", hard:"Moeilijk", mixed:"Gemengd", questionCount:"Aantal vragen", questionTypes:"Vraagtypen (kies minstens één)", mc:"Meerkeuze", tf:"Waar / niet waar", fill:"Invulvragen", open:"Open vragen", timeLimit:"Tijdslimiet (minuten, optioneel)", options:"Opties", shuffle:"Vragen door elkaar", hints:"Hints tonen", explanations:"Uitleg na afloop tonen", generate:"Oefentoets maken", generating:"Vragen genereren en controleren…", history:"Toetsgeschiedenis", savedTests:"Bewaarde toetsen", noHistory:"Je bewaarde toetsen verschijnen hier.",
     previous:"Vorige", next:"Volgende", submit:"Toets inleveren", results:"Resultaat", backToSetup:"Terug naar Oefentoets", retry:"Opnieuw maken", newTest:"Nieuwe oefentoets maken", confirmSubmit:"Er zijn nog onbeantwoorde vragen. Toch inleveren?", expired:"De tijd is om. Je antwoorden worden ingeleverd.",
-    needText:"Voeg leerstof toe of upload een pdf.", needSubject:"Vul eerst een vak in.", chooseType:"Kies minstens één vraagtype.", tooLong:"Je leerstof is langer dan 30.000 tekens. Maak het korter; er is niets afgekapt.", badFile:"Kies een pdf-bestand van maximaal 15 MB.", pdfImageTooLarge:"De pagina-afbeeldingen zijn samen te groot voor één verzoek. Probeer een kortere pdf of een versie met lagere resolutie.", pdfError:"Deze pdf kon niet worden uitgelezen. Probeer een andere pdf of plak de tekst.", extracting:"Pdf-pagina’s omzetten naar afbeeldingen…", apiError:"De oefentoets kon niet worden gemaakt. Probeer het opnieuw.", 
+    needText:"Voeg leerstof toe of upload een pdf.", needSubject:"Vul eerst een vak in.", chooseType:"Kies minstens één vraagtype.", tooLong:"Je leerstof is langer dan 30.000 tekens. Maak het korter; er is niets afgekapt.", badFile:"Kies een pdf-bestand van maximaal 15 MB.", pdfImageTooLarge:"Een pagina kon niet klein genoeg worden gemaakt om te versturen. Probeer een andere pdf of een versie met lagere resolutie.", pdfError:"Deze pdf kon niet worden uitgelezen. Probeer een andere pdf of plak de tekst.", extracting:"Pdf-pagina’s omzetten naar afbeeldingen…", apiError:"De oefentoets kon niet worden gemaakt. Probeer het opnieuw.", 
     malformed:"De toetsservice gaf een onverwacht formaat. Probeer het opnieuw.", countError:"Er konden niet genoeg geldige vragen uit deze leerstof worden gemaakt. Kies minder vragen.", question:"Vraag", points:"punten", hint:"Hint", answer:"Jouw antwoord", correctAnswer:"Goed antwoord", explanation:"Uitleg", feedback:"Feedback", criteria:"Punten verdien je met", unanswered:"Niet beantwoord", correct:"Goed", incorrect:"Niet goed", partial:"Gedeeltelijk goed", pending:"Zelf nakijken", score:"Score", percent:"van totaal", grade:"Geschat cijfer", gradeNote:"Een schatting op basis van automatisch nagekeken vragen; dit is geen officieel schoolcijfer.", correctCount:"Goed", incorrectCount:"Fout", pendingCount:"Open vragen ter controle", topics:"Onderwerpen om te oefenen", noTopics:"Goed gedaan — er zijn geen verloren punten om te herhalen.", openPending:"Open antwoorden worden niet automatisch nagekeken. Beoordeel ze aan de hand van de criteria hieronder. Ze tellen niet mee in deze voorlopige score.", started:"Bezig", completed:"Afgerond", remove:"Verwijder bewaarde toets", deleteConfirm:"Deze bewaarde toets verwijderen? Dit kan niet ongedaan worden gemaakt.",
     qType:{multiple_choice:"Meerkeuze",true_false:"Waar / niet waar",fill_blank:"Invulvraag",open:"Open vraag"}, trueLabel:"Waar", falseLabel:"Niet waar", minutes:"min", seconds:"sec", more:"Meer", less:"Minder"
   }
@@ -54,7 +56,7 @@ let pdfjsPromise = null;
 
 function t(key) { return translations[language][key] || translations.en[key] || key; }
 const i18nAliases = {"calc.backHome":"back","pt.eyebrow":"eyebrow","pt.title":"title","pt.subtitle":"subtitle","setup.material":"materialLabel","setup.settings":"options","setup.tabPdf":"tabPdf","setup.tabPaste":"tabPaste","setup.tabManual":"tabManual","setup.dropTitle":"dropTitle","setup.dropHint":"dropSub","setup.pastePlaceholder":"materialPlaceholder","setup.manualPlaceholder":"materialPlaceholder","setup.pasteBtn":"pasteBtn","setup.subject":"subject","setup.name":"testTitle","setup.nameHint":"titlePlaceholder","setup.difficulty":"difficulty","setup.easy":"easy","setup.medium":"medium","setup.hard":"hard","setup.mixed":"mixed","setup.count":"questionCount","setup.types":"questionTypes","type.mc":"mc","type.tf":"tf","type.open":"open","type.fill":"fill","setup.typesHint":"typesHint","setup.options":"options","setup.timeLimit":"timeLimit","setup.minutes":"minutes","setup.shuffle":"shuffle","setup.hints":"hints","setup.explanations":"explanations","setup.tooLong":"tooLong","generate.notice":"generationNotice","generate.btn":"generate","generate.loading":"generating","history.title":"history","history.saved":"savedTests","history.hint":"historyHint","generating.title":"generating","generating.step1":"generating","generating.cancel":"backToSetup","test.prev":"previous","test.next":"next","test.submit":"submit","results.score":"score","results.estimatedGrade":"grade","results.gradeNote":"gradeNote","results.topics":"topics","results.review":"results","results.retry":"retry","results.newTest":"newTest","results.back":"backToSetup","footer.madeBy":"footerMadeBy","footer.note":"footerNote","dialog.cancel":"cancel","dialog.ok":"continue","language.english":"english","language.dutch":"dutch"};
-const extraText = {en:{tabPdf:"PDF",tabPaste:"Paste",tabManual:"Type",pasteBtn:"Paste from clipboard",typesHint:"Choose at least one type. Open questions are reviewed by you.",historyHint:"Saved locally in this browser.",generationNotice:"Your notes and uploaded page images are sent to OpenRouter to generate the test. Groq Qwen is used as a fallback if OpenRouter fails.",footerMadeBy:"· made by students, for students",footerNote:"No account · everything stays in your browser",cancel:"Cancel",continue:"Continue",english:"English",dutch:"Nederlands"},nl:{tabPdf:"PDF",tabPaste:"Plakken",tabManual:"Typen",pasteBtn:"Plakken vanaf klembord",typesHint:"Kies minstens één type. Open vragen kijk je zelf na.",historyHint:"Lokaal opgeslagen in deze browser.",generationNotice:"Je aantekeningen en pdf-pagina-afbeeldingen worden naar OpenRouter gestuurd om de toets te maken. Groq Qwen wordt als reserve gebruikt als OpenRouter mislukt.",footerMadeBy:"· gemaakt door studenten, voor studenten",footerNote:"Geen account · alles blijft in je browser",cancel:"Annuleren",continue:"Doorgaan",english:"English",dutch:"Nederlands"}};
+const extraText = {en:{tabPdf:"PDF",tabPaste:"Paste",tabManual:"Type",pasteBtn:"Paste from clipboard",typesHint:"Choose at least one type. Open questions are reviewed by you.",historyHint:"Saved locally in this browser.",generationNotice:"Your notes and uploaded page images are sent to an AI service to generate the test.",footerMadeBy:"· made by students, for students",footerNote:"No account · everything stays in your browser",cancel:"Cancel",continue:"Continue",english:"English",dutch:"Nederlands"},nl:{tabPdf:"PDF",tabPaste:"Plakken",tabManual:"Typen",pasteBtn:"Plakken vanaf klembord",typesHint:"Kies minstens één type. Open vragen kijk je zelf na.",historyHint:"Lokaal opgeslagen in deze browser.",generationNotice:"Je aantekeningen en pdf-pagina-afbeeldingen worden naar een AI-service gestuurd om de toets te maken.",footerMadeBy:"· gemaakt door studenten, voor studenten",footerNote:"Geen account · alles blijft in je browser",cancel:"Annuleren",continue:"Doorgaan",english:"English",dutch:"Nederlands"}};
 function loadHistory() {
   try {
     const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
@@ -126,15 +128,34 @@ function buildTestQuestion(settings, material) {
   ].join("\n\n");
 }
 
-function buildTestMessage(settings, material) {
+function buildTestMessage(settings, material, images = pdfImages) {
   const prompt = buildTestQuestion(settings, material || "No typed notes were provided; use the attached PDF page images.");
-  if (!pdfImages.length) return prompt;
+  if (!images.length) return prompt;
   const content = [{ type: "text", text: `${prompt}\n\nThe following are the uploaded PDF pages, in their original order. Read them directly and use their content to create the test.` }];
-  for (const { pageNo, dataUrl } of pdfImages) {
+  for (const { pageNo, dataUrl } of images) {
     content.push({ type: "text", text: `PDF page ${pageNo}:` });
     content.push({ type: "image_url", image_url: { url: dataUrl } });
   }
   return content;
+}
+
+function splitPdfImages(images, maxChars = MAX_IMAGE_BATCH_CHARS, maxPages = MAX_IMAGE_BATCH_PAGES) {
+  if (!images.length) return [[]];
+  const batches = [];
+  let batch = [];
+  let batchChars = 0;
+  for (const image of images) {
+    if (image.dataUrl.length > maxChars) throw new Error("PDF_PAGE_TOO_LARGE");
+    if (batch.length && (batchChars + image.dataUrl.length > maxChars || batch.length >= maxPages)) {
+      batches.push(batch);
+      batch = [];
+      batchChars = 0;
+    }
+    batch.push(image);
+    batchChars += image.dataUrl.length;
+  }
+  if (batch.length) batches.push(batch);
+  return batches;
 }
 
 async function requestChatCompletion(proxyUrl, model, messages, { maxTokens = 8192, jsonMode = false, reasoningEffort } = {}) {
@@ -167,7 +188,7 @@ async function requestChatCompletion(proxyUrl, model, messages, { maxTokens = 81
 }
 
 async function generateWithGroqFallback(settings, material) {
-  if (pdfImages.length <= 3) {
+  if (pdfImages.length <= 3 && splitPdfImages(pdfImages, MAX_IMAGE_BATCH_CHARS, 3).length === 1) {
     const content = await requestChatCompletion(GROQ_PROXY_URL, GROQ_FALLBACK_MODEL, [
       { role: "user", content: buildTestMessage(settings, material) }
     ], { maxTokens: 8192, jsonMode: true, reasoningEffort: "none" });
@@ -178,8 +199,7 @@ async function generateWithGroqFallback(settings, material) {
   // the fallback model to read images in batches, then generate the test from
   // that text so every uploaded page remains represented.
   const transcriptions = [];
-  for (let offset = 0; offset < pdfImages.length; offset += 3) {
-    const batch = pdfImages.slice(offset, offset + 3);
+  for (const batch of splitPdfImages(pdfImages, MAX_IMAGE_BATCH_CHARS, 3)) {
     const content = [{
       type: "text",
       text: `Transcribe all readable text from these PDF pages in order. Preserve headings, lists, equations, and table rows. Do not summarize or add commentary. The document may be in English or Dutch. Page numbers: ${batch.map(page => page.pageNo).join(", ")}.`
@@ -199,17 +219,56 @@ async function generateWithGroqFallback(settings, material) {
   return validateTestData(parseModelJson(generated), settings);
 }
 
+async function generateWithOpenRouter(settings, material) {
+  const batches = splitPdfImages(pdfImages);
+  if (batches.length === 1) {
+    const answer = await requestChatCompletion(OPENROUTER_PROXY_URL, PRACTICE_TEST_MODEL, [
+      { role: "user", content: buildTestMessage(settings, material, batches[0]) }
+    ], { maxTokens: 8192, jsonMode: true });
+    return validateTestData(parseModelJson(answer), settings);
+  }
+
+  const questions = [];
+  let remaining = settings.count;
+  for (let batchIndex = 0; batchIndex < batches.length; batchIndex++) {
+    const batchesLeft = batches.length - batchIndex;
+    const count = Math.ceil(remaining / batchesLeft);
+    remaining -= count;
+    const batchSettings = { ...settings, count };
+    const answer = await requestChatCompletion(OPENROUTER_PROXY_URL, PRACTICE_TEST_MODEL, [
+      { role: "user", content: buildTestMessage(batchSettings, material, batches[batchIndex]) }
+    ], { maxTokens: 8192, jsonMode: true });
+    const batchTest = validateTestData(parseModelJson(answer), batchSettings);
+    batchTest.questions.forEach((question, index) => {
+      question.id = `b${batchIndex + 1}_${question.id || index + 1}`.slice(0, 40);
+      questions.push(question);
+    });
+  }
+  return validateTestData({ title: settings.title, subject: settings.subject, questions }, settings);
+}
+
 async function pdfPageAsDataUrl(page) {
   const base = page.getViewport({ scale:1 });
-  // Render at a readable resolution with a pixel cap to limit request size.
-  const scale = Math.min(160 / 72, 1600 / base.width, 2200 / base.height, Math.sqrt(1600000 / (base.width * base.height)));
-  const viewport = page.getViewport({ scale });
   const canvas = document.createElement("canvas");
-  canvas.width = Math.ceil(viewport.width); canvas.height = Math.ceil(viewport.height);
-  await page.render({ canvasContext:canvas.getContext("2d"), viewport }).promise;
-  const image = canvas.toDataURL("image/jpeg", 0.76);
-  canvas.width = 0; canvas.height = 0;
-  return image;
+  const context = canvas.getContext("2d");
+  let scale = Math.min(150 / 72, 1500 / base.width, 2100 / base.height, Math.sqrt(1000000 / (base.width * base.height)));
+  let quality = 0.72;
+  try {
+    while (scale >= 0.35) {
+      const viewport = page.getViewport({ scale });
+      canvas.width = Math.ceil(viewport.width);
+      canvas.height = Math.ceil(viewport.height);
+      await page.render({ canvasContext: context, viewport }).promise;
+      const image = canvas.toDataURL("image/jpeg", quality);
+      if (image.length <= MAX_PDF_PAGE_CHARS) return image;
+      scale *= 0.78;
+      quality = Math.max(0.52, quality - 0.05);
+    }
+    throw new Error("PDF_PAGE_TOO_LARGE");
+  } finally {
+    canvas.width = 0;
+    canvas.height = 0;
+  }
 }
 
 async function readPdf(file) {
@@ -231,27 +290,24 @@ async function readPdf(file) {
     documentPdf = await pdfjs.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise;
     if (documentPdf.numPages > 12) throw new Error("PDF_TOO_MANY_PAGES");
     const pages = [];
-    let imageChars = 0;
     for (let pageNo = 1; pageNo <= documentPdf.numPages; pageNo++) {
       const page = await documentPdf.getPage(pageNo);
       const progress = `${language === "nl" ? "Pagina omzetten naar afbeelding" : "Converting page to image"} ${pageNo}/${documentPdf.numPages}…`;
       els.drop.querySelector("strong").textContent = progress;
       els.pdfStatus.textContent = progress;
       const dataUrl = await pdfPageAsDataUrl(page);
-      imageChars += dataUrl.length;
-      if (imageChars > MAX_PDF_IMAGE_CHARS) throw new Error("PDF_IMAGE_TOO_LARGE");
       pages.push({ pageNo, dataUrl });
     }
     if (!pages.length) throw new Error("PDF_NO_PAGES");
     pdfImages = pages;
     els.drop.querySelector("strong").textContent = file.name;
-    els.pdfStatus.textContent = language === "nl" ? `${pages.length} pagina-afbeeldingen klaar. Gemma leest ze bij het maken van de toets.` : `${pages.length} page images ready. Gemma will read them when it generates the test.`;
+    els.pdfStatus.textContent = language === "nl" ? `${pages.length} pagina-afbeeldingen klaar. De pagina’s worden meegestuurd bij het maken van de toets.` : `${pages.length} page images ready. They will be sent with the test-generation request.`;
   } catch (error) {
     els.fileRow.hidden = true;
     els.pdfStatus.hidden = true;
     els.drop.querySelector("strong").textContent = t("dropTitle");
     const fallback = language === "nl" ? "Deze pdf kon niet worden omgezet naar afbeeldingen. Probeer een andere pdf." : "Could not convert this PDF to images. Try another PDF.";
-    const detail = error.message === "PDF_TOO_MANY_PAGES" ? (language === "nl" ? "Deze pdf bevat meer dan 12 pagina’s. Splits de pdf en upload de delen apart." : "This PDF has more than 12 pages. Split it and upload the parts separately.") : error.message === "PDF_IMAGE_TOO_LARGE" ? t("pdfImageTooLarge") : `${fallback} (${error.message || "unknown error"})`;
+    const detail = error.message === "PDF_TOO_MANY_PAGES" ? (language === "nl" ? "Deze pdf bevat meer dan 12 pagina’s. Splits de pdf en upload de delen apart." : "This PDF has more than 12 pages. Split it and upload the parts separately.") : error.message === "PDF_PAGE_TOO_LARGE" ? t("pdfImageTooLarge") : `${fallback} (${error.message || "unknown error"})`;
     showNotice(detail);
   } finally {
     if (documentPdf) await documentPdf.destroy().catch(() => {});
@@ -308,13 +364,13 @@ function validateTestData(data, settings) {
   return { title: pick(data, "title", settings.title).slice(0, 100), subject: pick(data, "subject", settings.subject).slice(0, 80), questions };
 }
 function displayError(error) {
-  if (error.message === "AI_PROXY_CONFIG") return language === "nl" ? "De OpenRouter-proxy is niet ingesteld. Voeg OPENROUTER_API_KEY toe aan het Vercel-project en deploy opnieuw." : "The OpenRouter proxy is not configured. Add OPENROUTER_API_KEY to the Vercel project and redeploy.";
-  if (error.message === "AI_RATE_LIMIT") return language === "nl" ? "De gratis OpenRouter-limiet is bereikt. Probeer het later opnieuw." : "The OpenRouter free-tier limit was reached. Try again later.";
-  if (error.message === "GROQ_FALLBACK_CONFIG") return language === "nl" ? "OpenRouter en de Groq-reserve zijn niet beschikbaar. Voeg GROQ_API_KEY toe aan Vercel om de reserve in te schakelen." : "OpenRouter failed and the Groq fallback is not configured. Add GROQ_API_KEY to Vercel to enable it.";
-  if (error.message === "GROQ_FALLBACK_RATE_LIMIT") return language === "nl" ? "OpenRouter en de Groq-reserve hebben hun limiet bereikt. Probeer het later opnieuw." : "OpenRouter and the Groq fallback reached their rate limits. Try again later.";
-  if (error.message === "GROQ_FALLBACK_FAILED") return language === "nl" ? "OpenRouter is mislukt en de Groq-reserve kon de toets niet maken. Probeer het opnieuw." : "OpenRouter failed and the Groq fallback could not generate the test. Please try again.";
+  if (error.message === "AI_PROXY_CONFIG") return language === "nl" ? "De AI-service is niet ingesteld. Controleer de API-sleutel in Vercel en deploy opnieuw." : "The AI service is not configured. Check its API key in Vercel and redeploy.";
+  if (error.message === "AI_RATE_LIMIT") return language === "nl" ? "De AI-service heeft de gebruikslimiet bereikt. Probeer het later opnieuw." : "The AI service has reached its usage limit. Try again later.";
+  if (error.message === "GROQ_FALLBACK_CONFIG") return language === "nl" ? "De reserve-AI-service is niet ingesteld. Controleer de API-sleutel in Vercel." : "The backup AI service is not configured. Check its API key in Vercel.";
+  if (error.message === "GROQ_FALLBACK_RATE_LIMIT") return language === "nl" ? "De AI-services hebben hun gebruikslimiet bereikt. Probeer het later opnieuw." : "The AI services reached their usage limits. Try again later.";
+  if (error.message === "GROQ_FALLBACK_FAILED") return language === "nl" ? "De reserve-AI kon de toets niet maken. Probeer het opnieuw." : "The backup AI service could not generate the test. Please try again.";
   if (error.message === "AI_TIMEOUT") return language === "nl" ? "Het maken van de toets duurde te lang. Probeer minder leerstof of minder vragen." : "Test generation timed out. Try using less material or fewer questions.";
-  if (error.message === "AI_PROXY_UNAVAILABLE" || error.message.startsWith("AI_UPSTREAM_ERROR")) return language === "nl" ? "OpenRouter is tijdelijk niet beschikbaar. Probeer het straks opnieuw." : "OpenRouter is temporarily unavailable. Please try again shortly.";
+  if (error.message === "AI_PROXY_UNAVAILABLE" || error.message.startsWith("AI_UPSTREAM_ERROR")) return language === "nl" ? "De AI-service is tijdelijk niet beschikbaar. Probeer het straks opnieuw." : "The AI service is temporarily unavailable. Please try again shortly.";
   if (error.message === "AI_INVALID_RESPONSE") return language === "nl" ? "De AI gaf geen geldige toets terug. Probeer het opnieuw of kies minder vragen." : "The AI returned an invalid test. Try again or choose fewer questions.";
   if (error.message === "INVALID_REQUEST") return language === "nl" ? "Controleer je instellingen en probeer het opnieuw." : "Check your settings and try again.";
   if (error.message === "INSUFFICIENT_SOURCE") return language === "nl" ? "Er staan niet genoeg verschillende feiten in je leerstof voor dit aantal vraagtypen. Voeg meer tekst toe of kies minder vragen." : "There are not enough distinct facts in this material for the selected question types. Add more notes or choose fewer questions.";
@@ -336,10 +392,7 @@ async function generateTest() {
   try {
     let generated;
     try {
-      const answer = await requestChatCompletion(OPENROUTER_PROXY_URL, PRACTICE_TEST_MODEL, [
-        { role: "user", content: buildTestMessage(settings, els.material.value.trim()) }
-      ], { maxTokens: 8192, jsonMode: true });
-      generated = validateTestData(parseModelJson(answer), settings);
+      generated = await generateWithOpenRouter(settings, els.material.value.trim());
     } catch {
       try {
         generated = await generateWithGroqFallback(settings, els.material.value.trim());

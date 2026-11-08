@@ -53,8 +53,8 @@ export default async function handler(req) {
         headers: { "Content-Type": "application/json", ...corsHeaders }
       });
     }
-    if (body?.model !== "google/gemma-4-26b-a4b-it:free" || !Array.isArray(body.messages)) {
-      return new Response(JSON.stringify({ error: { message: "This proxy only allows the configured free Gemma model." } }), {
+    if (body?.model !== "dots-studio/dots-3-note-preview:free" || !Array.isArray(body.messages)) {
+      return new Response(JSON.stringify({ error: { message: "This proxy only allows the configured free model." } }), {
         status: 400,
         headers: { "Content-Type": "application/json", ...corsHeaders }
       });

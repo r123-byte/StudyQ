@@ -1,6 +1,7 @@
-// Eden AI credentials stay on the Vercel proxy.
-const EDENAI_PROXY_URL = "https://studyq-nu.vercel.app/api/proxy?path=edenai/chat/completions";
-const TEST_GENERATION_MODEL = "gemma-4-26b-a4b-it";
+// Groq credentials stay on the Vercel proxy.
+const GROQ_PROXY_URL = "https://studyq-nu.vercel.app/api/proxy?path=groq/chat/completions";
+const OCR_MODEL = "qwen/qwen3.8-27b";
+const TEST_GENERATION_MODEL = "openai/gpt-oss-120b";
 const STORAGE_KEY = "studystack-practice-test-history-v1";
 const MAX_MATERIAL = 30000;
 const MAX_FILE_BYTES = 15 * 1024 * 1024;
@@ -51,7 +52,7 @@ let pdfjsPromise = null;
 
 function t(key) { return translations[language][key] || translations.en[key] || key; }
 const i18nAliases = {"calc.backHome":"back","pt.eyebrow":"eyebrow","pt.title":"title","pt.subtitle":"subtitle","setup.material":"materialLabel","setup.settings":"options","setup.tabPdf":"tabPdf","setup.tabPaste":"tabPaste","setup.tabManual":"tabManual","setup.dropTitle":"dropTitle","setup.dropHint":"dropSub","setup.pastePlaceholder":"materialPlaceholder","setup.manualPlaceholder":"materialPlaceholder","setup.pasteBtn":"pasteBtn","setup.subject":"subject","setup.name":"testTitle","setup.nameHint":"titlePlaceholder","setup.difficulty":"difficulty","setup.easy":"easy","setup.medium":"medium","setup.hard":"hard","setup.mixed":"mixed","setup.count":"questionCount","setup.types":"questionTypes","type.mc":"mc","type.tf":"tf","type.open":"open","type.fill":"fill","setup.typesHint":"typesHint","setup.options":"options","setup.timeLimit":"timeLimit","setup.minutes":"minutes","setup.shuffle":"shuffle","setup.hints":"hints","setup.explanations":"explanations","setup.tooLong":"tooLong","generate.notice":"generationNotice","generate.btn":"generate","generate.loading":"generating","history.title":"history","history.saved":"savedTests","history.hint":"historyHint","generating.title":"generating","generating.step1":"generating","generating.cancel":"backToSetup","test.prev":"previous","test.next":"next","test.submit":"submit","results.score":"score","results.estimatedGrade":"grade","results.gradeNote":"gradeNote","results.topics":"topics","results.review":"results","results.retry":"retry","results.newTest":"newTest","results.back":"backToSetup","footer.madeBy":"footerMadeBy","footer.note":"footerNote","dialog.cancel":"cancel","dialog.ok":"continue","language.english":"english","language.dutch":"dutch"};
-const extraText = {en:{tabPdf:"PDF",tabPaste:"Paste",tabManual:"Type",pasteBtn:"Paste from clipboard",typesHint:"Choose at least one type. Open questions are reviewed by you.",historyHint:"Saved locally in this browser.",generationNotice:"Your notes and uploaded page images are sent to Eden AI through our Vercel proxy for extraction and test generation.",footerMadeBy:"· made by students, for students",footerNote:"No account · everything stays in your browser",cancel:"Cancel",continue:"Continue",english:"English",dutch:"Nederlands"},nl:{tabPdf:"PDF",tabPaste:"Plakken",tabManual:"Typen",pasteBtn:"Plakken vanaf klembord",typesHint:"Kies minstens één type. Open vragen kijk je zelf na.",historyHint:"Lokaal opgeslagen in deze browser.",generationNotice:"Je aantekeningen en afbeeldingen van pdf-pagina’s worden via onze Vercel-proxy naar Eden AI gestuurd voor tekstherkenning en het maken van de toets.",footerMadeBy:"· gemaakt door studenten, voor studenten",footerNote:"Geen account · alles blijft in je browser",cancel:"Annuleren",continue:"Doorgaan",english:"English",dutch:"Nederlands"}};
+const extraText = {en:{tabPdf:"PDF",tabPaste:"Paste",tabManual:"Type",pasteBtn:"Paste from clipboard",typesHint:"Choose at least one type. Open questions are reviewed by you.",historyHint:"Saved locally in this browser.",generationNotice:"Your notes and uploaded page images are sent through our Vercel proxy to Groq for extraction and test generation.",footerMadeBy:"· made by students, for students",footerNote:"No account · everything stays in your browser",cancel:"Cancel",continue:"Continue",english:"English",dutch:"Nederlands"},nl:{tabPdf:"PDF",tabPaste:"Plakken",tabManual:"Typen",pasteBtn:"Plakken vanaf klembord",typesHint:"Kies minstens één type. Open vragen kijk je zelf na.",historyHint:"Lokaal opgeslagen in deze browser.",generationNotice:"Je aantekeningen en afbeeldingen van pdf-pagina’s worden via onze Vercel-proxy naar Groq gestuurd voor tekstherkenning en het maken van de toets.",footerMadeBy:"· gemaakt door studenten, voor studenten",footerNote:"Geen account · alles blijft in je browser",cancel:"Annuleren",continue:"Doorgaan",english:"English",dutch:"Nederlands"}};
 function loadHistory() {
   try {
     const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
@@ -112,17 +113,18 @@ async function extractPdfPageWithAi(page, pageNo, totalPages) {
   const timeout = setTimeout(() => controller.abort(), 70000);
   let response;
   try {
-    response = await fetch(EDENAI_PROXY_URL, {
+    response = await fetch(GROQ_PROXY_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       signal: controller.signal,
       body: JSON.stringify({
-        model: TEST_GENERATION_MODEL,
+        model: OCR_MODEL,
         messages: [{ role: "user", content: [
           { type: "text", text: `Transcribe all readable text from this document page. Preserve headings, lists, equations, and table rows as plain text. Do not summarize or add commentary. The document language may be English or Dutch. This is page ${pageNo} of ${totalPages}.` },
           { type: "image_url", image_url: { url: image } }
         ] }],
-        max_tokens: 4000
+        max_completion_tokens: 4000,
+        reasoning_effort: "none"
       })
     });
   } catch (error) {
@@ -270,11 +272,11 @@ function validateTestData(data, settings) {
   return { title: pick(data, "title", settings.title).slice(0, 100), subject: pick(data, "subject", settings.subject).slice(0, 80), questions };
 }
 function displayError(error) {
-  if (error.message === "AI_PROXY_CONFIG") return language === "nl" ? "De Eden AI-proxy is niet ingesteld. Voeg EDENAI_API_KEY toe aan het Vercel-project en deploy opnieuw." : "The Eden AI proxy is not configured. Add EDENAI_API_KEY to the Vercel project and redeploy.";
-  if (error.message === "AI_RATE_LIMIT") return language === "nl" ? "De Eden AI-limiet is bereikt. Controleer je Eden AI-account." : "The Eden AI rate limit was reached. Check your Eden AI account.";
+  if (error.message === "AI_PROXY_CONFIG") return language === "nl" ? "De Groq-proxy is niet ingesteld. Voeg GROQ_API_KEY toe aan het Vercel-project en deploy opnieuw." : "The Groq proxy is not configured. Add GROQ_API_KEY to the Vercel project and redeploy.";
+  if (error.message === "AI_RATE_LIMIT") return language === "nl" ? "De Groq-limiet is bereikt. Controleer je Groq-account." : "The Groq rate limit was reached. Check your Groq account.";
   if (error.message === "AI_TIMEOUT") return language === "nl" ? "Het maken van de toets duurde te lang. Probeer minder leerstof of minder vragen." : "Test generation timed out. Try using less material or fewer questions.";
-  if (error.message === "AI_PROXY_UNAVAILABLE" || error.message.startsWith("AI_UPSTREAM_ERROR")) return language === "nl" ? "De Eden AI-proxy is tijdelijk niet beschikbaar. Probeer het straks opnieuw." : "The Eden AI proxy is temporarily unavailable. Please try again shortly.";
-  if (error.message === "PDF_AI_ERROR") return language === "nl" ? "Eden AI kon deze pagina niet uitlezen. Probeer een andere pdf of plak de tekst." : "Eden AI could not read this page. Try another PDF or paste the text.";
+  if (error.message === "AI_PROXY_UNAVAILABLE" || error.message.startsWith("AI_UPSTREAM_ERROR")) return language === "nl" ? "De Groq-proxy is tijdelijk niet beschikbaar. Probeer het straks opnieuw." : "The Groq proxy is temporarily unavailable. Please try again shortly.";
+  if (error.message === "PDF_AI_ERROR") return language === "nl" ? "Groq kon deze pagina niet uitlezen. Probeer een andere pdf of plak de tekst." : "Groq could not read this page. Try another PDF or paste the text.";
   if (error.message === "AI_INVALID_RESPONSE") return language === "nl" ? "De AI gaf geen geldige toets terug. Probeer het opnieuw of kies minder vragen." : "The AI returned an invalid test. Try again or choose fewer questions.";
   if (error.message === "INVALID_REQUEST") return language === "nl" ? "Controleer je instellingen en probeer het opnieuw." : "Check your settings and try again.";
   if (error.message === "INSUFFICIENT_SOURCE") return language === "nl" ? "Er staan niet genoeg verschillende feiten in je leerstof voor dit aantal vraagtypen. Voeg meer tekst toe of kies minder vragen." : "There are not enough distinct facts in this material for the selected question types. Add more notes or choose fewer questions.";
@@ -298,10 +300,12 @@ async function generateTest() {
     const timeout = setTimeout(() => controller.abort(), 55000);
     let generated;
     try {
-      const response = await fetch(EDENAI_PROXY_URL, { method:"POST", headers:{"Content-Type":"application/json"}, signal:controller.signal, body:JSON.stringify({
+      const response = await fetch(GROQ_PROXY_URL, { method:"POST", headers:{"Content-Type":"application/json"}, signal:controller.signal, body:JSON.stringify({
         model:TEST_GENERATION_MODEL,
         messages:[{ role:"user", content:buildTestQuestion(settings, els.material.value.trim()) }],
-        max_tokens:8192
+        reasoning_effort:"low",
+        max_completion_tokens:8192,
+        response_format:{ type:"json_object" }
       }) });
       const payload = await response.json().catch(() => ({}));
       if (!response.ok) {

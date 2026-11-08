@@ -31,28 +31,6 @@ export default async function handler(req) {
 
   const path = url.searchParams.get("path") || "";
 
-  // ── Route: Eden AI chat completions ─────────────────────
-  if (path === "edenai/chat/completions") {
-    if (!process.env.EDENAI_API_KEY) {
-      return new Response(JSON.stringify({ error: { message: "Eden AI API key is not configured." } }), {
-        status: 503,
-        headers: { "Content-Type": "application/json", ...corsHeaders }
-      });
-    }
-    const upstream = await fetch("https://api.edenai.run/v3/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env.EDENAI_API_KEY}`
-      },
-      body: req.body
-    });
-    return new Response(upstream.body, {
-      status: upstream.status,
-      headers: { "Content-Type": upstream.headers.get("Content-Type") || "application/json", ...corsHeaders }
-    });
-  }
-
   // ── Route: ?path=groq/* ────────────
   if (path.startsWith("groq/")) {
     if (!process.env.GROQ_API_KEY) {

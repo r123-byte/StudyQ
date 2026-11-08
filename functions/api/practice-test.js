@@ -1,9 +1,9 @@
 const MAX_MATERIAL = 30000;
 const ALLOWED_COUNTS = new Set([5, 10, 15, 20]);
 const ALLOWED_TYPES = new Set(["multiple_choice", "true_false", "fill_blank", "open"]);
-// Eden AI credentials stay on the Vercel proxy.
-const DEFAULT_AI_PROXY_URL = "https://studyq-nu.vercel.app/api/proxy?path=edenai/chat/completions";
-const TEST_GENERATION_MODEL = "gemma-4-26b-a4b-it";
+// Groq credentials stay on the Vercel proxy.
+const DEFAULT_AI_PROXY_URL = "https://studyq-nu.vercel.app/api/proxy?path=groq/chat/completions";
+const TEST_GENERATION_MODEL = "openai/gpt-oss-120b";
 
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" } });
@@ -85,7 +85,9 @@ async function generateWithAi(body, env = {}) {
         model: TEST_GENERATION_MODEL,
         messages: [{ role: "user", content: buildPrompt(body) }],
         temperature: 0.2,
-        max_tokens: 8192
+        reasoning_effort: "low",
+        max_completion_tokens: 8192,
+        response_format: { type: "json_object" }
       })
     });
   } catch (error) {

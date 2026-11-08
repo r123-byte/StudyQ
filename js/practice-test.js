@@ -1,5 +1,5 @@
 // Same Vercel proxy host as the Testweek Planner, routed to Cloudflare Workers AI.
-const API_URL = "https://studyq-nu.vercel.app/api/proxy?path=cloudflare/ai/run/@cf/moondream/moondream3.1-9B-A2";
+const API_URL = "https://studyq-nu.vercel.app/api/proxy?path=cloudflare/ai/run/@cf/moondream/moondream3.1-9B-A2B";
 const STORAGE_KEY = "studystack-practice-test-history-v1";
 const MAX_MATERIAL = 30000;
 const MAX_FILE_BYTES = 15 * 1024 * 1024;

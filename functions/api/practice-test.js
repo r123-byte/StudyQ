@@ -2,7 +2,8 @@ const MAX_MATERIAL = 30000;
 const ALLOWED_COUNTS = new Set([5, 10, 15, 20]);
 const ALLOWED_TYPES = new Set(["multiple_choice", "true_false", "fill_blank", "open"]);
 // Same Vercel proxy host as planner/planner.js, routed to Cloudflare Workers AI.
-const DEFAULT_AI_PROXY_URL = "https://studyq-nu.vercel.app/api/proxy?path=cloudflare/ai/run/@cf/moondream/moondream3.1-9B-A2B";
+const DEFAULT_AI_PROXY_URL = "https://studyq-nu.vercel.app/api/proxy?path=cloudflare/ai/v1/chat/completions";
+const TEST_GENERATION_MODEL = "particle/particle-1";
 
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" } });
@@ -81,11 +82,11 @@ async function generateWithAi(body, env = {}) {
       headers: { "Content-Type": "application/json" },
       signal: controller.signal,
       body: JSON.stringify({
-        task: "query",
-        question: buildPrompt(body),
-        reasoning: false,
+        model: TEST_GENERATION_MODEL,
+        messages: [{ role: "user", content: buildPrompt(body) }],
+        reasoning_effort: "none",
         temperature: 0.2,
-        max_tokens: 8192
+        max_completion_tokens: 8192
       })
     });
   } catch (error) {
@@ -99,7 +100,7 @@ async function generateWithAi(body, env = {}) {
     if (response.status === 401 || response.status === 403 || response.status === 503) throw new Error("AI_PROXY_CONFIG");
     throw new Error("AI_UPSTREAM_ERROR");
   }
-  const content = payload?.result?.answer;
+  const content = payload?.choices?.[0]?.message?.content;
   if (typeof content !== "string") throw new Error("AI_INVALID_RESPONSE");
   const result = parseAiJson(content);
   if (!validateAiResult(result, body.settings)) throw new Error("AI_INVALID_RESPONSE");

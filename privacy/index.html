@@ -272,7 +272,7 @@
 <li><a href="https://groq.com/privacy-policy">Groq Privacy Policy</a></li>
 </ul>
 <h3>4.2 Practice test generation and PDF extraction — Vercel and OpenRouter</h3>
-<p>When you generate a practice test, your notes and settings are sent through the Vercel API proxy to OpenRouter for processing with Google's Gemma 4 26B A4B model. When you upload a PDF, its pages are rendered as images in your browser and sent to OpenRouter one page at a time for text extraction with the same model. The extracted text is then used to generate the test.</p>
+<p>When you generate a practice test, your notes and settings are sent through the Vercel API proxy to OpenRouter for processing with Google's Gemma 4 26B A4B model. When you upload a PDF, its pages are rendered as images in your browser and attached directly to the test-generation request. The model reads those images and creates questions from them; there is no separate OCR or transcription request.</p>
 <p>These requests are initiated by you. StudyTools stores saved tests in your browser and does not intentionally maintain a central database of uploaded PDFs, extracted text or generated tests. Vercel, OpenRouter and its model providers may process request data and technical information to provide, secure and operate their services; their retention practices apply.</p>
 <p>Further information: <a href="https://vercel.com/legal/privacy-notice">Vercel Privacy Notice</a> · <a href="https://openrouter.ai/privacy">OpenRouter Privacy Policy</a>.</p>
 <h3>4.3 Voice dictation — Groq</h3>
@@ -335,7 +335,7 @@
 <li>**Vercel:** Hosting the API proxy and processing associated requests and technical information.</li>
 <li>**Groq:** Processing AI prompts and relevant study context through GroqCloud.</li>
 <li>**Groq:** Processing audio for speech-to-text conversion.</li>
-<li>**OpenRouter and its selected model providers:** Processing practice-test prompts and PDF page images with Google's Gemma 4 26B A4B model.</li>
+<li>**OpenRouter and its selected model providers:** Processing practice-test prompts and PDF page images together with Google's Gemma 4 26B A4B model.</li>
 <li>**Web3Forms:** Processing contact form submissions for delivery.</li>
 <li>**Magister:** Providing the calendar feed accessed through the user's personal calendar link.</li>
 <li>**Other infrastructure providers:** Supporting the website's hosting, delivery, security and operation.</li>

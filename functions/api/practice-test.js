@@ -1,4 +1,4 @@
-const MAX_MATERIAL = 30000;
+const MAX_MATERIAL = 100000;
 const ALLOWED_COUNTS = new Set([5, 10, 15, 20]);
 const ALLOWED_TYPES = new Set(["multiple_choice", "true_false", "fill_blank", "open"]);
 // Groq credentials stay on the Vercel proxy.
@@ -109,7 +109,7 @@ async function generateWithAi(body, env = {}) {
 
 export async function onRequestPost({ request, env }) {
   const contentLength = Number(request.headers.get("content-length") || 0);
-  if (contentLength > 150000) return json({ code: "REQUEST_TOO_LARGE" }, 413);
+  if (contentLength > 500000) return json({ code: "REQUEST_TOO_LARGE" }, 413);
   let body;
   try { body = await request.json(); } catch { return json({ code: "INVALID_JSON" }, 400); }
   const error = validateRequest(body);

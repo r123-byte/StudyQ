@@ -1,17 +1,16 @@
-// Groq credentials stay on the Vercel proxy.
-const GROQ_PROXY_URL = "https://studyq-nu.vercel.app/api/proxy?path=groq/chat/completions";
-const TEST_GENERATION_MODEL = "openai/gpt-oss-120b";
+// Eden AI credentials stay on the Vercel proxy.
+const EDENAI_PROXY_URL = "https://studyq-nu.vercel.app/api/proxy?path=edenai/chat/completions";
+const TEST_GENERATION_MODEL = "gemma-4-26b-a4b-it";
 const STORAGE_KEY = "studystack-practice-test-history-v1";
 const MAX_MATERIAL = 30000;
 const MAX_FILE_BYTES = 15 * 1024 * 1024;
 const PDFJS_URL = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs";
 const PDF_WORKER_URL = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.mjs";
-const PADDLE_OCR_URL = "https://cdn.jsdelivr.net/npm/@paddleocr/paddleocr-js@0.4.2/+esm";
 
 const translations = {
   en: {
     back:"Home", eyebrow:"Study tools", title:"Practice Test", subtitle:"Turn your notes into a practice exam. Answer at your own pace and review what to work on next.", removeFile:"Remove",
-    setupTitle:"Build a practice test", setupSub:"Add notes, choose your settings, and generate questions.", private:"Saved on this device", materialLabel:"Study material", dropTitle:"Drop a PDF here or click to choose", dropSub:"PDF only · up to 15 MB · text is extracted in your browser", materialPlaceholder:"Paste or type your notes here…", materialHint:"Use clear notes, textbook excerpts, or summaries.",
+    setupTitle:"Build a practice test", setupSub:"Add notes, choose your settings, and generate questions.", private:"Saved on this device", materialLabel:"Study material", dropTitle:"Drop a PDF here or click to choose", dropSub:"PDF only · up to 15 MB · pages are converted to images for AI text extraction", materialPlaceholder:"Paste or type your notes here…", materialHint:"Use clear notes, textbook excerpts, or summaries.",
     subject:"Subject", subjectPlaceholder:"e.g. Biology", testTitle:"Test title", titlePlaceholder:"Suggested from subject", difficulty:"Difficulty", easy:"Easy", medium:"Medium", hard:"Hard", mixed:"Mixed", questionCount:"Number of questions", questionTypes:"Question types (choose at least one)", mc:"Multiple choice", tf:"True / false", fill:"Fill in the blanks", open:"Open questions", timeLimit:"Time limit (minutes, optional)", options:"Options", shuffle:"Shuffle question order", hints:"Show hints", explanations:"Show explanations after", generate:"Generate test", generating:"Generating and checking your questions…", history:"Test history", savedTests:"Saved tests", noHistory:"Your saved tests will appear here.",
     previous:"Previous", next:"Next", submit:"Submit test", results:"Results", backToSetup:"Practice Test home", retry:"Retry test", newTest:"Generate another test", confirmSubmit:"Some questions are unanswered. Submit anyway?", expired:"Time is up. Your answers are being submitted.",
     needText:"Add study material before generating a test.", needSubject:"Enter a subject first.", chooseType:"Choose at least one question type.", tooLong:"Your material is over the 30,000 character limit. Shorten it before generating; nothing was cut off.", badFile:"Choose a PDF file no larger than 15 MB.", noPdfText:"No readable text was found in this PDF. Scanned-page OCR may not have returned text.", pdfError:"Could not read this PDF. Try another file or paste the text.", extracting:"Extracting PDF text…", apiError:"Could not generate the test. Please try again.", 
@@ -20,7 +19,7 @@ const translations = {
   },
   nl: {
     back:"Home", eyebrow:"Studietools", title:"Oefentoets", subtitle:"Maak van je aantekeningen een oefentoets. Beantwoord vragen op je eigen tempo en zie wat je nog kunt oefenen.", removeFile:"Verwijderen",
-    setupTitle:"Maak een oefentoets", setupSub:"Voeg leerstof toe, kies je instellingen en genereer vragen.", private:"Op dit apparaat opgeslagen", materialLabel:"Leerstof", dropTitle:"Sleep een pdf hierheen of klik om te kiezen", dropSub:"Alleen pdf · maximaal 15 MB · tekst wordt in je browser uitgelezen", materialPlaceholder:"Plak of typ hier je aantekeningen…", materialHint:"Gebruik duidelijke aantekeningen, tekstboekfragmenten of samenvattingen.",
+    setupTitle:"Maak een oefentoets", setupSub:"Voeg leerstof toe, kies je instellingen en genereer vragen.", private:"Op dit apparaat opgeslagen", materialLabel:"Leerstof", dropTitle:"Sleep een pdf hierheen of klik om te kiezen", dropSub:"Alleen pdf · maximaal 15 MB · pagina’s worden als afbeelding uitgelezen door AI", materialPlaceholder:"Plak of typ hier je aantekeningen…", materialHint:"Gebruik duidelijke aantekeningen, tekstboekfragmenten of samenvattingen.",
     subject:"Vak", subjectPlaceholder:"bijv. Biologie", testTitle:"Titel van de toets", titlePlaceholder:"Wordt voorgesteld op basis van je vak", difficulty:"Moeilijkheid", easy:"Makkelijk", medium:"Gemiddeld", hard:"Moeilijk", mixed:"Gemengd", questionCount:"Aantal vragen", questionTypes:"Vraagtypen (kies minstens één)", mc:"Meerkeuze", tf:"Waar / niet waar", fill:"Invulvragen", open:"Open vragen", timeLimit:"Tijdslimiet (minuten, optioneel)", options:"Opties", shuffle:"Vragen door elkaar", hints:"Hints tonen", explanations:"Uitleg na afloop tonen", generate:"Oefentoets maken", generating:"Vragen genereren en controleren…", history:"Toetsgeschiedenis", savedTests:"Bewaarde toetsen", noHistory:"Je bewaarde toetsen verschijnen hier.",
     previous:"Vorige", next:"Volgende", submit:"Toets inleveren", results:"Resultaat", backToSetup:"Terug naar Oefentoets", retry:"Opnieuw maken", newTest:"Nieuwe oefentoets maken", confirmSubmit:"Er zijn nog onbeantwoorde vragen. Toch inleveren?", expired:"De tijd is om. Je antwoorden worden ingeleverd.",
     needText:"Voeg eerst leerstof toe.", needSubject:"Vul eerst een vak in.", chooseType:"Kies minstens één vraagtype.", tooLong:"Je leerstof is langer dan 30.000 tekens. Maak het korter; er is niets afgekapt.", badFile:"Kies een pdf-bestand van maximaal 15 MB.", noPdfText:"Er is geen leesbare tekst gevonden in deze pdf. De OCR op gescande pagina’s heeft mogelijk geen tekst opgeleverd.", pdfError:"Deze pdf kon niet worden uitgelezen. Probeer een ander bestand of plak de tekst.", extracting:"Pdf-tekst uitlezen…", apiError:"De oefentoets kon niet worden gemaakt. Probeer het opnieuw.", 
@@ -52,7 +51,7 @@ let pdfjsPromise = null;
 
 function t(key) { return translations[language][key] || translations.en[key] || key; }
 const i18nAliases = {"calc.backHome":"back","pt.eyebrow":"eyebrow","pt.title":"title","pt.subtitle":"subtitle","setup.material":"materialLabel","setup.settings":"options","setup.tabPdf":"tabPdf","setup.tabPaste":"tabPaste","setup.tabManual":"tabManual","setup.dropTitle":"dropTitle","setup.dropHint":"dropSub","setup.pastePlaceholder":"materialPlaceholder","setup.manualPlaceholder":"materialPlaceholder","setup.pasteBtn":"pasteBtn","setup.subject":"subject","setup.name":"testTitle","setup.nameHint":"titlePlaceholder","setup.difficulty":"difficulty","setup.easy":"easy","setup.medium":"medium","setup.hard":"hard","setup.mixed":"mixed","setup.count":"questionCount","setup.types":"questionTypes","type.mc":"mc","type.tf":"tf","type.open":"open","type.fill":"fill","setup.typesHint":"typesHint","setup.options":"options","setup.timeLimit":"timeLimit","setup.minutes":"minutes","setup.shuffle":"shuffle","setup.hints":"hints","setup.explanations":"explanations","setup.tooLong":"tooLong","generate.notice":"generationNotice","generate.btn":"generate","generate.loading":"generating","history.title":"history","history.saved":"savedTests","history.hint":"historyHint","generating.title":"generating","generating.step1":"generating","generating.cancel":"backToSetup","test.prev":"previous","test.next":"next","test.submit":"submit","results.score":"score","results.estimatedGrade":"grade","results.gradeNote":"gradeNote","results.topics":"topics","results.review":"results","results.retry":"retry","results.newTest":"newTest","results.back":"backToSetup","footer.madeBy":"footerMadeBy","footer.note":"footerNote","dialog.cancel":"cancel","dialog.ok":"continue","language.english":"english","language.dutch":"dutch"};
-const extraText = {en:{tabPdf:"PDF",tabPaste:"Paste",tabManual:"Type",pasteBtn:"Paste from clipboard",typesHint:"Choose at least one type. Open questions are reviewed by you.",historyHint:"Saved locally in this browser.",generationNotice:"Your notes are sent to Groq through our Vercel proxy to generate this test. They aren't saved to an account.",footerMadeBy:"· made by students, for students",footerNote:"No account · everything stays in your browser",cancel:"Cancel",continue:"Continue",english:"English",dutch:"Nederlands"},nl:{tabPdf:"PDF",tabPaste:"Plakken",tabManual:"Typen",pasteBtn:"Plakken vanaf klembord",typesHint:"Kies minstens één type. Open vragen kijk je zelf na.",historyHint:"Lokaal opgeslagen in deze browser.",generationNotice:"Je aantekeningen worden via onze Vercel-proxy naar Groq gestuurd om deze toets te maken. Ze worden niet aan een account opgeslagen.",footerMadeBy:"· gemaakt door studenten, voor studenten",footerNote:"Geen account · alles blijft in je browser",cancel:"Annuleren",continue:"Doorgaan",english:"English",dutch:"Nederlands"}};
+const extraText = {en:{tabPdf:"PDF",tabPaste:"Paste",tabManual:"Type",pasteBtn:"Paste from clipboard",typesHint:"Choose at least one type. Open questions are reviewed by you.",historyHint:"Saved locally in this browser.",generationNotice:"Your notes and uploaded page images are sent to Eden AI through our Vercel proxy for extraction and test generation.",footerMadeBy:"· made by students, for students",footerNote:"No account · everything stays in your browser",cancel:"Cancel",continue:"Continue",english:"English",dutch:"Nederlands"},nl:{tabPdf:"PDF",tabPaste:"Plakken",tabManual:"Typen",pasteBtn:"Plakken vanaf klembord",typesHint:"Kies minstens één type. Open vragen kijk je zelf na.",historyHint:"Lokaal opgeslagen in deze browser.",generationNotice:"Je aantekeningen en afbeeldingen van pdf-pagina’s worden via onze Vercel-proxy naar Eden AI gestuurd voor tekstherkenning en het maken van de toets.",footerMadeBy:"· gemaakt door studenten, voor studenten",footerNote:"Geen account · alles blijft in je browser",cancel:"Annuleren",continue:"Doorgaan",english:"English",dutch:"Nederlands"}};
 function loadHistory() {
   try {
     const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
@@ -105,37 +104,40 @@ function createId() { return "pt_" + Date.now().toString(36) + "_" + Math.random
 function pick(obj, key, fallback = "") { return typeof obj?.[key] === "string" ? obj[key].trim() : fallback; }
 function escapeHtml(value) { return String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c])); }
 
-let paddleOcrModulePromise;
-let paddleOcrEnginePromise;
-let paddleOcrLanguage = "";
-async function getPaddleOcrEngine() {
-  const nextLanguage = language === "nl" ? "nl" : "en";
-  if (!paddleOcrModulePromise) {
-    paddleOcrModulePromise = import(PADDLE_OCR_URL).catch(error => {
-      paddleOcrModulePromise = null;
-      throw error;
+async function extractPdfPageWithAi(page, pageNo, totalPages) {
+  const image = await pdfPageAsDataUrl(page);
+  els.drop.querySelector("strong").textContent = `${language === "nl" ? "Tekst herkennen op pagina" : "Reading page"} ${pageNo}/${totalPages}…`;
+  els.pdfStatus.textContent = els.drop.querySelector("strong").textContent;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 70000);
+  let response;
+  try {
+    response = await fetch(EDENAI_PROXY_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      signal: controller.signal,
+      body: JSON.stringify({
+        model: TEST_GENERATION_MODEL,
+        messages: [{ role: "user", content: [
+          { type: "text", text: `Transcribe all readable text from this document page. Preserve headings, lists, equations, and table rows as plain text. Do not summarize or add commentary. The document language may be English or Dutch. This is page ${pageNo} of ${totalPages}.` },
+          { type: "image_url", image_url: { url: image } }
+        ] }],
+        max_tokens: 4000
+      })
     });
+  } catch (error) {
+    if (error.name === "AbortError") throw new Error("AI_TIMEOUT");
+    throw new Error("PDF_AI_ERROR");
+  } finally { clearTimeout(timeout); }
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    if (response.status === 429) throw new Error("AI_RATE_LIMIT");
+    if ([401, 403, 503].includes(response.status)) throw new Error("AI_PROXY_CONFIG");
+    throw new Error("PDF_AI_ERROR");
   }
-  if (!paddleOcrEnginePromise || paddleOcrLanguage !== nextLanguage) {
-    const previousEngine = paddleOcrEnginePromise;
-    paddleOcrLanguage = nextLanguage;
-    paddleOcrEnginePromise = paddleOcrModulePromise.then(({ PaddleOCR }) => PaddleOCR.create({
-      lang: nextLanguage,
-      ocrVersion: "PP-OCRv6",
-      ortOptions: { backend: "auto" }
-    })).catch(error => {
-      paddleOcrEnginePromise = null;
-      paddleOcrLanguage = "";
-      throw error;
-    });
-    if (previousEngine) previousEngine.then(engine => engine.dispose()).catch(() => {});
-  }
-  return paddleOcrEnginePromise;
-}
-async function readScannedPdfPage(page, ocr) {
-  const image = await pdfPageAsBlob(page);
-  const [result] = await ocr.predict(image);
-  return Array.isArray(result?.items) ? result.items.map(item => item.text || "").filter(Boolean).join("\n") : "";
+  const text = payload.choices?.[0]?.message?.content;
+  if (typeof text !== "string") throw new Error("PDF_AI_ERROR");
+  return text.trim();
 }
 
 function parseModelJson(answer) {
@@ -157,16 +159,15 @@ function buildTestQuestion(settings, material) {
   ].join("\n\n");
 }
 
-async function pdfPageAsBlob(page) {
+async function pdfPageAsDataUrl(page) {
   const base = page.getViewport({ scale:1 });
-  // PDF.js uses 72 points per inch. Render near 300 DPI, with a pixel cap to
-  // keep large-format scans from exhausting browser memory.
-  const scale = Math.min(300 / 72, 3000 / base.width, 3600 / base.height, Math.sqrt(10000000 / (base.width * base.height)));
+  // Render at a readable resolution with a pixel cap to limit request size.
+  const scale = Math.min(200 / 72, 2400 / base.width, 3000 / base.height, Math.sqrt(4000000 / (base.width * base.height)));
   const viewport = page.getViewport({ scale });
   const canvas = document.createElement("canvas");
   canvas.width = Math.ceil(viewport.width); canvas.height = Math.ceil(viewport.height);
   await page.render({ canvasContext:canvas.getContext("2d"), viewport }).promise;
-  const image = await new Promise((resolve, reject) => canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error("Could not rasterize the scanned page.")), "image/png"));
+  const image = canvas.toDataURL("image/jpeg", 0.82);
   canvas.width = 0; canvas.height = 0;
   return image;
 }
@@ -181,7 +182,6 @@ async function readPdf(file) {
   els.pdfStatus.hidden = false;
   els.pdfStatus.textContent = t("extracting");
   els.drop.querySelector("strong").textContent = t("extracting");
-  let ocrEngine = null;
   let documentPdf = null;
   try {
     if (!pdfjsPromise) pdfjsPromise = import(PDFJS_URL);
@@ -189,25 +189,10 @@ async function readPdf(file) {
     pdfjs.GlobalWorkerOptions.workerSrc = PDF_WORKER_URL;
     documentPdf = await pdfjs.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise;
     const pages = [];
-    let ocrCurrentPage = 0;
     for (let pageNo = 1; pageNo <= documentPdf.numPages; pageNo++) {
       const page = await documentPdf.getPage(pageNo);
-      const content = await page.getTextContent();
-      let pageText = content.items.map(item => `${item.str || ""}${item.hasEOL ? "\n" : " "}`).join("").replace(/[ \t]+/g," ").replace(/ *\n */g,"\n").trim();
-      if (pageText.length < 24) pageText = "";
-      if (!pageText) {
-        if (pageNo > 12) throw new Error("SCAN_TOO_LONG");
-        ocrCurrentPage = pageNo;
-        els.drop.querySelector("strong").textContent = `${language === "nl" ? "Tekst herkennen op pagina" : "Reading text on page"} ${pageNo}/${documentPdf.numPages}…`;
-        if (!ocrEngine) {
-          els.pdfStatus.textContent = language === "nl" ? "PaddleOCR en taalmodellen laden…" : "Loading PaddleOCR and language models…";
-          ocrEngine = await getPaddleOcrEngine();
-        }
-        const progress = `${language === "nl" ? "Tekst herkennen op pagina" : "Recognizing scanned page"} ${ocrCurrentPage}/${documentPdf.numPages}…`;
-        els.drop.querySelector("strong").textContent = progress;
-        els.pdfStatus.textContent = progress;
-        pageText = await readScannedPdfPage(page, ocrEngine);
-      }
+      if (pageNo > 12) throw new Error("SCAN_TOO_LONG");
+      const pageText = await extractPdfPageWithAi(page, pageNo, documentPdf.numPages);
       pages.push(pageText);
     }
     const extracted = pages.join("\n\n").replace(/[ \t]+/g, " ").trim();
@@ -227,7 +212,7 @@ async function readPdf(file) {
     els.pdfStatus.hidden = true;
     els.drop.querySelector("strong").textContent = t("dropTitle");
     const fallback = language === "nl" ? "Deze pdf kon niet worden uitgelezen. Probeer een andere pdf of plak de tekst." : "Could not read this PDF. Try another file or paste the text.";
-    const detail = error.message === "SCAN_TOO_LONG" ? (language === "nl" ? "Deze scan bevat meer dan 12 pagina's. Splits de pdf en upload de delen apart." : "This scan has more than 12 pages. Split the PDF and upload the parts separately.") : `${fallback} (${error.message || "unknown error"})`;
+    const detail = error.message === "SCAN_TOO_LONG" ? (language === "nl" ? "Deze pdf bevat meer dan 12 pagina’s. Splits de pdf en upload de delen apart." : "This PDF has more than 12 pages. Split it and upload the parts separately.") : ["AI_PROXY_CONFIG", "AI_TIMEOUT", "AI_RATE_LIMIT"].includes(error.message) ? displayError(error) : `${fallback} (${error.message || "unknown error"})`;
     showNotice(error.message === "NO_TEXT" ? t("noPdfText") : error.message === "TOO_LONG" ? t("tooLong") : detail);
   } finally {
     if (documentPdf) await documentPdf.destroy().catch(() => {});
@@ -285,10 +270,11 @@ function validateTestData(data, settings) {
   return { title: pick(data, "title", settings.title).slice(0, 100), subject: pick(data, "subject", settings.subject).slice(0, 80), questions };
 }
 function displayError(error) {
-  if (error.message === "AI_PROXY_CONFIG") return language === "nl" ? "De Groq-proxy is niet ingesteld. Voeg GROQ_API_KEY toe aan het Vercel-project en deploy opnieuw." : "The Groq proxy is not configured. Add GROQ_API_KEY to the Vercel project and redeploy.";
-  if (error.message === "AI_RATE_LIMIT") return language === "nl" ? "De Groq-limiet is bereikt. Controleer je Groq-account." : "The Groq rate limit was reached. Check your Groq account.";
+  if (error.message === "AI_PROXY_CONFIG") return language === "nl" ? "De Eden AI-proxy is niet ingesteld. Voeg EDENAI_API_KEY toe aan het Vercel-project en deploy opnieuw." : "The Eden AI proxy is not configured. Add EDENAI_API_KEY to the Vercel project and redeploy.";
+  if (error.message === "AI_RATE_LIMIT") return language === "nl" ? "De Eden AI-limiet is bereikt. Controleer je Eden AI-account." : "The Eden AI rate limit was reached. Check your Eden AI account.";
   if (error.message === "AI_TIMEOUT") return language === "nl" ? "Het maken van de toets duurde te lang. Probeer minder leerstof of minder vragen." : "Test generation timed out. Try using less material or fewer questions.";
-  if (error.message === "AI_PROXY_UNAVAILABLE" || error.message.startsWith("AI_UPSTREAM_ERROR")) return language === "nl" ? "De Groq-proxy is tijdelijk niet beschikbaar. Probeer het straks opnieuw." : "The Groq proxy is temporarily unavailable. Please try again shortly.";
+  if (error.message === "AI_PROXY_UNAVAILABLE" || error.message.startsWith("AI_UPSTREAM_ERROR")) return language === "nl" ? "De Eden AI-proxy is tijdelijk niet beschikbaar. Probeer het straks opnieuw." : "The Eden AI proxy is temporarily unavailable. Please try again shortly.";
+  if (error.message === "PDF_AI_ERROR") return language === "nl" ? "Eden AI kon deze pagina niet uitlezen. Probeer een andere pdf of plak de tekst." : "Eden AI could not read this page. Try another PDF or paste the text.";
   if (error.message === "AI_INVALID_RESPONSE") return language === "nl" ? "De AI gaf geen geldige toets terug. Probeer het opnieuw of kies minder vragen." : "The AI returned an invalid test. Try again or choose fewer questions.";
   if (error.message === "INVALID_REQUEST") return language === "nl" ? "Controleer je instellingen en probeer het opnieuw." : "Check your settings and try again.";
   if (error.message === "INSUFFICIENT_SOURCE") return language === "nl" ? "Er staan niet genoeg verschillende feiten in je leerstof voor dit aantal vraagtypen. Voeg meer tekst toe of kies minder vragen." : "There are not enough distinct facts in this material for the selected question types. Add more notes or choose fewer questions.";
@@ -312,12 +298,10 @@ async function generateTest() {
     const timeout = setTimeout(() => controller.abort(), 55000);
     let generated;
     try {
-      const response = await fetch(GROQ_PROXY_URL, { method:"POST", headers:{"Content-Type":"application/json"}, signal:controller.signal, body:JSON.stringify({
+      const response = await fetch(EDENAI_PROXY_URL, { method:"POST", headers:{"Content-Type":"application/json"}, signal:controller.signal, body:JSON.stringify({
         model:TEST_GENERATION_MODEL,
         messages:[{ role:"user", content:buildTestQuestion(settings, els.material.value.trim()) }],
-        reasoning_effort:"low",
-        max_completion_tokens:8192,
-        response_format:{ type:"json_object" }
+        max_tokens:8192
       }) });
       const payload = await response.json().catch(() => ({}));
       if (!response.ok) {

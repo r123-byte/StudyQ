@@ -271,10 +271,10 @@
 <li><a href="https://vercel.com/legal/privacy-notice">Vercel Privacy Notice</a></li>
 <li><a href="https://groq.com/privacy-policy">Groq Privacy Policy</a></li>
 </ul>
-<h3>4.2 Practice test generation and PDF extraction — Vercel and OpenRouter</h3>
-<p>When you generate a practice test, your notes and settings are sent through the Vercel API proxy to OpenRouter for processing with Dots3-Note Preview. When you upload a PDF, its pages are rendered as images in your browser and attached directly to the test-generation request. The model reads those images and creates questions from them. If OpenRouter fails, the request falls back to Groq's Qwen 3.8 27B. Groq accepts up to three images per request; for PDFs with more pages, the fallback reads images in batches and generates the test from that text.</p>
-<p>These requests are initiated by you. StudyTools stores saved tests in your browser and does not intentionally maintain a central database of uploaded PDFs, extracted text or generated tests. Vercel, OpenRouter, Groq and their model providers may process request data and technical information to provide, secure and operate their services; their retention practices apply.</p>
-<p>Further information: <a href="https://vercel.com/legal/privacy-notice">Vercel Privacy Notice</a> · <a href="https://openrouter.ai/privacy">OpenRouter Privacy Policy</a>.</p>
+<h3>4.2 Practice test generation and PDF extraction — local OCR and Groq</h3>
+<p>When you upload a PDF, StudyTools reads selectable text in your browser. For scanned pages, it renders each page locally and uses Tesseract.js in your browser to recognize the text. The page images are not sent to the test-generation model. Tesseract.js and its language data may be downloaded from their CDN when first needed, while OCR processing runs on your device.</p>
+<p>When you generate a practice test, your notes, extracted PDF text and test settings are sent through the Vercel API proxy to Groq for processing with the same OpenAI GPT-OSS 120B model used by the Test Week Planner. These requests are initiated by you. StudyTools stores saved tests in your browser and does not intentionally maintain a central database of uploaded PDFs, extracted text or generated tests. Vercel and Groq may process request data and technical information to provide, secure and operate their services; their retention practices apply.</p>
+<p>Further information: <a href="https://vercel.com/legal/privacy-notice">Vercel Privacy Notice</a> · <a href="https://groq.com/privacy-policy">Groq Privacy Policy</a> · <a href="https://github.com/naptha/tesseract.js">Tesseract.js</a>.</p>
 <h3>4.3 Voice dictation — Groq</h3>
 <p>When you activate voice dictation, your audio is transmitted to the Groq API for speech-to-text processing using a Whisper model.</p>
 <p>The resulting transcription may then be used by the relevant StudyTools feature. If you submit that transcription to the AI planner, the text and relevant study context may also be sent through the API proxy for AI processing.</p>
@@ -335,8 +335,8 @@
 <li>**Vercel:** Hosting the API proxy and processing associated requests and technical information.</li>
 <li>**Groq:** Processing AI prompts and relevant study context through GroqCloud.</li>
 <li>**Groq:** Processing audio for speech-to-text conversion.</li>
-<li>**Groq:** Acting as a fallback for practice-test generation and reading PDF pages when OpenRouter is unavailable.</li>
-<li>**OpenRouter and its selected model providers:** Processing practice-test prompts and PDF page images with Dots3-Note Preview.</li>
+<li>**Groq:** Processing practice-test prompts and extracted PDF text using OpenAI GPT-OSS 120B.</li>
+<li>**Tesseract.js CDN:** Delivering the OCR library, worker and language data to the browser; scanned-page OCR processing itself runs on the user's device.</li>
 <li>**Web3Forms:** Processing contact form submissions for delivery.</li>
 <li>**Magister:** Providing the calendar feed accessed through the user's personal calendar link.</li>
 <li>**Other infrastructure providers:** Supporting the website's hosting, delivery, security and operation.</li>
@@ -353,7 +353,7 @@
 <ul>
 <li>**Local browser data:** Generally remains until deleted by the user, removed by a feature or cleared through browser settings.</li>
 <li>**AI planner requests:** May be subject to processing, logging or retention by Vercel and Groq.</li>
-<li>**Practice test requests and PDF images:** May be subject to processing, logging or retention by Vercel, OpenRouter and its selected model provider, or by Groq if fallback is used.</li>
+<li>**Practice test requests and extracted PDF text:** May be subject to processing, logging or retention by Vercel and Groq. PDF page images are processed locally for OCR and are not included in the AI request.</li>
 <li>**Voice recordings and transcriptions:** Subject to Groq's applicable data-handling practices and settings, as well as any subsequent processing of the transcription.</li>
 <li>**Contact form submissions:** May be retained by Web3Forms or the configured recipient for as long as necessary to handle the enquiry and meet applicable obligations.</li>
 <li>**Magister calendar links and imported data:** Processed in the browser according to the calendar feature's implementation. The calendar service may retain request logs under its applicable practices.</li>

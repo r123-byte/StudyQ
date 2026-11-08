@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <script>
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && Element.prototype.animate) {
+      document.documentElement.classList.add('intro-pending');
+    }
+  </script>
+  <link rel="stylesheet" href="../page-intro.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Practice Test · StudyStack</title>
+  <link rel="stylesheet" href="../footer.css">
+  <link rel="stylesheet" href="../theme.css">
+  <link rel="icon" type="image/png" href="../favicon.png">
+  <link rel="apple-touch-icon" href="../favicon.png">
+  <meta name="description" content="StudyStack Practice Test — upload your study material and generate a practice exam with AI, then get it marked automatically.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sofia+Pro:wght@400;500;600;700;800;900&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="practice-test.css">
+  <link rel="stylesheet" href="../animations.css">
+</head>
+<body>
+  <svg class="flag-sprite" aria-hidden="true" focusable="false">
+    <symbol id="flag-nl" viewBox="0 0 20 14">
+      <path fill="#ae1c28" d="M0 0h20v4.67H0z"></path>
+      <path fill="#fff" d="M0 4.67h20v4.66H0z"></path>
+      <path fill="#21468b" d="M0 9.33h20V14H0z"></path>
+    </symbol>
+  </svg>
+
+  <svg class="liquid-glass-filter" aria-hidden="true" focusable="false">
+    <filter id="practice-glass-distortion" x="-24%" y="-24%" width="148%" height="148%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.008 0.012" numOctaves="2" seed="8" result="glass-noise" />
+      <feGaussianBlur in="glass-noise" stdDeviation="1.15" result="soft-glass-noise" />
+      <feDisplacementMap in="SourceGraphic" in2="soft-glass-noise" scale="26" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </svg>
+  <div class="wrapper">
+    <main class="page">
+      <header class="top-bar">
+        <a href="../index.html" class="brand">
+          <div class="brand-icon" aria-hidden="true"><img src="../logo/logo.png" alt=""></div>
+          Study<span>Stack</span>
+        </a>
+        <div class="header-actions">
+          <a href="../index.html" class="back-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
+            <span data-i18n="calc.backHome">Terug naar home</span>
+          </a>
+          <div class="language-switcher language-picker" id="language-picker">
+            <button class="language-trigger" id="language-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Language: Nederlands">
+              <img class="language-flag" src="../assets/flag-netherlands.svg" alt="">
+              <span id="language-current">Nederlands</span>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+            </button>
+            <div class="language-menu" id="language-menu" role="menu" aria-label="Choose language" hidden>
+              <button class="language-option" type="button" role="menuitemradio" aria-checked="false" data-language="en"><img class="language-flag" src="../assets/flag-england.svg" alt=""><span data-i18n="language.english">English</span></button>
+              <button class="language-option" type="button" role="menuitemradio" aria-checked="true" data-language="nl"><img class="language-flag" src="../assets/flag-netherlands.svg" alt=""><span data-i18n="language.dutch">Nederlands</span></button>
+            </div>
+            <select id="language-select" class="sr-only" aria-label="Language"><option value="en">English</option><option value="nl">Nederlands</option></select>
+          </div>
+        </div>
+      </header>
+
+      <div class="pt-main" id="ptMain">
+        <div class="pt-head">
+          <p class="pt-eyebrow" data-i18n="pt.eyebrow">LEREN</p>
+          <h1 data-i18n="pt.title">Oefentoets</h1>
+          <p class="pt-sub" data-i18n="pt.subtitle">Plak of upload je lesstof, laat er een oefentoets van maken en krijg hem automatisch nagekeken.</p>
+        </div>
+
+        <!-- ================= SETUP ================= -->
+        <section class="pt-view active" id="setup-view">
+          <textarea id="study-material" class="sr-only" aria-hidden="true" tabindex="-1"></textarea>
+          <div class="pt-layout">
+            <div class="pt-col">
+              <section class="pt-card">
+                <h2 class="pt-card-title" data-i18n="setup.material">Lesstof</h2>
+
+                <div class="pt-tabs" role="tablist">
+                  <button class="pt-tab is-active" type="button" role="tab" aria-selected="true" data-tab="pdf" data-i18n="setup.tabPdf">PDF</button>
+                  <button class="pt-tab" type="button" role="tab" aria-selected="false" data-tab="paste" data-i18n="setup.tabPaste">Plakken</button>
+                  <button class="pt-tab" type="button" role="tab" aria-selected="false" data-tab="manual" data-i18n="setup.tabManual">Typen</button>
+                </div>
+
+                <div class="pt-tabpanel" data-panel="pdf">
+                  <label class="pt-dropzone" id="dropzone" for="pdfInput">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4m0 0 4 4m-4-4L8 8"></path><path d="M20 16v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2"></path></svg>
+                    <strong data-i18n="setup.dropTitle">Sleep hier een PDF of klik om te kiezen</strong>
+                    <span data-i18n="setup.dropHint">Maximaal 15 MB · tekst wordt lokaal uitgelezen</span>
+                    <input type="file" id="pdf-file" accept="application/pdf,.pdf" hidden>
+                  </label>
+                  <p class="pt-status" id="pdfStatus" hidden></p>
+                  <div class="pt-file-row" id="file-row" hidden><span id="file-name"></span><button class="pt-btn pt-btn--ghost pt-btn--small" type="button" id="remove-file">× <span data-i18n="removeFile">Verwijderen</span></button></div>
+                </div>
+
+                <div class="pt-tabpanel" data-panel="paste" hidden>
+                  <textarea class="pt-textarea material-editor" id="pasteArea" rows="9" data-i18n-placeholder="setup.pastePlaceholder" placeholder="Plak hier je lesstof, samenvatting of aantekeningen..."></textarea>
+                  <button class="pt-btn pt-btn--ghost pt-btn--small" type="button" id="clipboardBtn" data-i18n="setup.pasteBtn">Plakken vanaf klembord</button>
+                </div>
+
+                <div class="pt-tabpanel" data-panel="manual" hidden>
+                  <textarea class="pt-textarea material-editor" id="manualArea" rows="9" data-i18n-placeholder="setup.manualPlaceholder" placeholder="Typ hier je lesstof..."></textarea>
+                </div>
+
+                <div class="pt-meta">
+                  <span id="char-count">0 / 30,000</span>
+                  <span class="pt-meta-warn" id="materialWarn" hidden data-i18n="setup.tooLong">Je lesstof is te lang en wordt niet ingekort. Verwijder een stuk.</span>
+                </div>
+              </section>
+            </div>
+
+            <div class="pt-col">
+              <section class="pt-card">
+                <h2 class="pt-card-title" data-i18n="setup.settings">Instellingen</h2>
+
+                <div class="pt-field">
+                  <label class="pt-label" for="in-subject" data-i18n="setup.subject">Vak</label>
+                  <input class="pt-input" id="subject" type="text" maxlength="60" placeholder="Bijv. Aardrijkskunde">
+                </div>
+
+                <div class="pt-field">
+                  <label class="pt-label" for="in-title" data-i18n="setup.name">Titel</label>
+                  <input class="pt-input" id="test-title" type="text" maxlength="90">
+                  <p class="pt-help" data-i18n="setup.nameHint">Automatisch voorgesteld, je kunt het aanpassen.</p>
+                </div>
+
+                <div class="pt-field">
+                  <span class="pt-label" data-i18n="setup.difficulty">Niveau</span>
+                  <div class="pt-seg" data-field="difficulty" role="group">
+                    <button type="button" data-value="easy" data-i18n="setup.easy">Makkelijk</button>
+                    <button type="button" data-value="medium" class="is-active" data-i18n="setup.medium">Normaal</button>
+                    <button type="button" data-value="hard" data-i18n="setup.hard">Moeilijk</button>
+                    <button type="button" data-value="mixed" data-i18n="setup.mixed">Gemengd</button>
+                  </div>
+                  <select id="difficulty" class="sr-only" aria-hidden="true" tabindex="-1"><option value="easy">easy</option><option value="medium" selected>medium</option><option value="hard">hard</option><option value="mixed">mixed</option></select>
+                </div>
+
+                <div class="pt-field">
+                  <span class="pt-label" data-i18n="setup.count">Aantal vragen</span>
+                  <div class="pt-seg" data-field="count" role="group">
+                    <button type="button" data-value="5">5</button>
+                    <button type="button" data-value="10" class="is-active">10</button>
+                    <button type="button" data-value="15">15</button>
+                    <button type="button" data-value="20">20</button>
+                  </div>
+                  <select id="question-count" class="sr-only" aria-hidden="true" tabindex="-1"><option>5</option><option selected>10</option><option>15</option><option>20</option></select>
+                </div>
+
+                <div class="pt-field">
+                  <span class="pt-label" data-i18n="setup.types">Vraagtypes</span>
+                  <div class="pt-chips" id="typeChips">
+                    <label class="pt-chip"><input type="checkbox" name="qtype" value="multiple_choice" checked><span data-i18n="type.mc">Meerkeuze</span></label>
+                    <label class="pt-chip"><input type="checkbox" name="qtype" value="true_false" checked><span data-i18n="type.tf">Waar / onwaar</span></label>
+                    <label class="pt-chip"><input type="checkbox" name="qtype" value="open"><span data-i18n="type.open">Open</span></label>
+                    <label class="pt-chip"><input type="checkbox" name="qtype" value="fill_blank"><span data-i18n="type.fill">Invullen</span></label>
+                  </div>
+                  <p class="pt-help" data-i18n="setup.typesHint">Kies minimaal één type. Open vragen worden door jou zelf nagekeken.</p>
+                </div>
+
+                <div class="pt-field">
+                  <span class="pt-label" data-i18n="setup.options">Opties</span>
+                  <label class="pt-check"><input type="checkbox" id="opt-time"><span data-i18n="setup.timeLimit">Tijdslimiet</span><input class="pt-input pt-input--tiny" id="time-limit" type="number" min="1" max="180" value="20" disabled><span class="pt-check-suffix" data-i18n="setup.minutes">min</span></label>
+                  <label class="pt-check"><input type="checkbox" id="shuffle"><span data-i18n="setup.shuffle">Vragen door elkaar</span></label>
+                  <label class="pt-check"><input type="checkbox" id="show-hints"><span data-i18n="setup.hints">Hints tonen</span></label>
+                  <label class="pt-check"><input type="checkbox" id="show-explanations" checked><span data-i18n="setup.explanations">Uitleg na inleveren</span></label>
+                </div>
+              </section>
+            </div>
+          </div>
+
+          <div class="pt-actions">
+            <p class="pt-note" data-i18n="generate.notice">Je lesstof wordt alleen naar onze eigen Cloudflare Worker gestuurd om de toets te maken. Er wordt niets op een account opgeslagen.</p>
+            <button class="pt-btn pt-btn--primary" type="button" id="generate-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v3M12 18v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M3 12h3M18 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"></path></svg>
+              <span data-i18n="generate.btn">Toets genereren</span>
+            </button>
+            <div class="pt-loader" id="loader" hidden><span class="pt-spinner" aria-hidden="true"></span><span data-i18n="generate.loading">Vragen genereren…</span></div>
+          </div>
+
+          <p class="pt-error" id="notice" hidden></p>
+
+          <section class="pt-section" id="history-section">
+            <div class="pt-section-head">
+              <h2 data-i18n="history.title">Eerdere toetsen</h2>
+              <span class="pt-help" data-i18n="history.hint">Lokaal opgeslagen in deze browser.</span>
+            </div>
+            <div class="pt-history-title"><span data-i18n="history.saved">Bewaarde toetsen</span><span id="history-count" class="pt-count">0</span></div>
+            <div id="history-list" class="pt-history"></div>
+          </section>
+        </section>
+
+        <!-- ================= GENERATING ================= -->
+        <section class="pt-view" id="view-generating" hidden>
+          <div class="pt-card pt-center">
+            <div class="pt-spinner" aria-hidden="true"></div>
+            <h2 data-i18n="generating.title">Je toets wordt gemaakt…</h2>
+            <p class="pt-help" id="genStep" data-i18n="generating.step1">Lesstof controleren</p>
+            <button class="pt-btn pt-btn--ghost" type="button" id="btnCancelGen" data-i18n="generating.cancel">Annuleren</button>
+          </div>
+        </section>
+
+        <!-- ================= TEST ================= -->
+        <section class="pt-view" id="exam-view" hidden>
+          <div class="pt-testbar">
+            <div class="pt-testbar-main">
+              <h2 id="exam-title"></h2>
+              <p class="pt-help" id="question-position"></p>
+            </div>
+            <div class="pt-timer" id="timer" hidden></div>
+          </div>
+
+          <div class="pt-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-wrap">
+            <div class="pt-progress-bar" id="progress-fill"></div>
+          </div>
+
+          <div class="pt-qnav" id="question-nav"></div>
+
+          <div class="pt-card pt-question" id="question-card"></div>
+
+          <div class="pt-testnav">
+            <button class="pt-btn pt-btn--ghost" type="button" id="prev-btn" data-i18n="test.prev">Vorige</button>
+            <span class="pt-help" id="answeredCount"></span>
+            <button class="pt-btn pt-btn--ghost" type="button" id="next-btn" data-i18n="test.next">Volgende</button>
+            <button class="pt-btn pt-btn--primary" type="button" id="submit-btn" data-i18n="test.submit">Inleveren</button>
+          </div>
+        </section>
+
+        <!-- ================= RESULTS ================= -->
+        <section class="pt-view" id="results-view" hidden>
+          <div class="pt-score" id="score-summary">
+            <div class="pt-ring" id="scoreRing" style="--pct:0">
+              <div class="pt-ring-inner">
+                <strong id="scorePct">0%</strong>
+                <span data-i18n="results.score">score</span>
+              </div>
+            </div>
+            <div class="pt-score-body">
+              <h2 id="result-subtitle"></h2>
+              <p class="pt-help" id="result-date"></p>
+              <p class="pt-grade"><span data-i18n="results.estimatedGrade">Geschat cijfer</span></p>
+              <p class="pt-help pt-help--tight" data-i18n="results.gradeNote">Dit is een schatting op basis van je score, geen officieel schoolcijfer.</p>
+              <p class="pt-points-line" id="resultPoints"></p>
+            </div>
+          </div>
+
+          <div class="pt-actions pt-actions--inline">
+            <button class="pt-btn pt-btn--primary" type="button" id="retry-btn" data-i18n="results.retry">Opnieuw proberen</button>
+            <button class="pt-btn pt-btn--ghost" type="button" id="new-test-btn" data-i18n="results.newTest">Nieuwe toets maken</button>
+            <button class="pt-btn pt-btn--ghost" type="button" id="back-to-home" data-i18n="results.back">Terug naar Oefentoets</button>
+          </div>
+
+          <section class="pt-section">
+            <h2 class="pt-section-title" data-i18n="results.topics">Verbeterpunten</h2>
+            <div id="improve-box" class="pt-topic"></div>
+          </section>
+
+          <section class="pt-section">
+            <h2 class="pt-section-title" data-i18n="results.review">Nakijken</h2>
+            <div id="result-list" class="pt-results"></div>
+          </section>
+        </section>
+      </div>
+
+      <footer class="footer">
+        <div class="footer-left">
+          <strong>StudyStack</strong>
+          <span data-i18n="footer.madeBy">· gemaakt door studenten, voor studenten</span>
+        </div>
+        <div class="footer-right">
+          <span data-i18n="footer.note">Geen account · alles blijft in je browser</span>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <dialog class="pt-dialog" id="confirmDialog">
+    <p id="confirmText"></p>
+    <div class="pt-dialog-actions">
+      <button class="pt-btn pt-btn--ghost" type="button" value="cancel" data-i18n="dialog.cancel">Annuleren</button>
+      <button class="pt-btn pt-btn--primary" type="button" value="ok" data-i18n="dialog.ok">Doorgaan</button>
+    </div>
+  </dialog>
+
+  <!-- GLOBAL FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <a href="../index.html" class="footer-logo">
+          <img src="../logo/logo.png" alt="StudyStack Logo">
+          <span>StudyStack</span>
+        </a>
+        <p data-footer-i18n="description">Made by students, for students. Free tools to help you study smarter, stay focused, and ace your tests.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4 data-footer-i18n="tools">Tools</h4>
+          <a href="../calculator/index.html" data-footer-i18n="calculator">Grade Calculator</a>
+          <a href="../pomodoro/index.html" data-footer-i18n="pomodoro">Pomodoro Timer</a>
+          <a href="../planner/index.html" data-footer-i18n="planner">Testweek Planner</a>
+          <a href="../vocab/index.html" data-footer-i18n="vocab">Woordtrainer</a>
+          <a href="../flashcards/index.html" data-footer-i18n="flashcards">Flashcards</a>
+        </div>
+        <div class="footer-col">
+          <h4 data-footer-i18n="support">Support</h4>
+          <a href="../index.html" data-footer-i18n="home">Home</a>
+          <a href="../contact/index.html" data-footer-i18n="contact">Contact Us</a>
+          <a href="../privacy/index.html" data-footer-i18n="privacy">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p data-footer-i18n="copyright">&copy; 2026 StudyStack. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../js/practice-test.js"></script>
+  <script src="../page-intro.js"></script>
+  <script src="../js/footer-i18n.js"></script>
+</body>
+</html>

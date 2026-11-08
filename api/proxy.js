@@ -59,6 +59,34 @@ export default async function handler(req) {
     });
   }
 
+  // Cloudflare Workers AI route used by Practice Test. Credentials stay in Vercel.
+  if (path.startsWith("cloudflare/ai/run/")) {
+    const model = path.slice("cloudflare/ai/run/".length);
+    if (!/^@cf\/[a-zA-Z0-9._-]+\/[a-zA-Z0-9._-]+$/.test(model)) {
+      return new Response(JSON.stringify({ error: { message: "Invalid Cloudflare model path." } }), {
+        status: 400, headers: { "Content-Type": "application/json", ...corsHeaders }
+      });
+    }
+    if (!process.env.CLOUDFLARE_ACCOUNT_ID || !process.env.CLOUDFLARE_API_TOKEN) {
+      return new Response(JSON.stringify({ error: { message: "Cloudflare Workers AI is not configured on the server." } }), {
+        status: 503, headers: { "Content-Type": "application/json", ...corsHeaders }
+      });
+    }
+    const target = `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ACCOUNT_ID}/ai/run/${model}`;
+    const upstream = await fetch(target, {
+      method: "POST",
+      headers: {
+        "Content-Type": req.headers.get("content-type") || "application/json",
+        "Authorization": `Bearer ${process.env.CLOUDFLARE_API_TOKEN}`
+      },
+      body: req.body
+    });
+    return new Response(upstream.body, {
+      status: upstream.status,
+      headers: { "Content-Type": upstream.headers.get("Content-Type") || "application/json", ...corsHeaders }
+    });
+  }
+
   return new Response(
     JSON.stringify({ status: "ok", message: "StudyStack Vercel proxy is running." }),
     { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }

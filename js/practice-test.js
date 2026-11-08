@@ -1,10 +1,12 @@
-// Same Vercel proxy host as the Testweek Planner, routed to Cloudflare Workers AI.
-const API_URL = "https://studyq-nu.vercel.app/api/proxy?path=cloudflare/ai/run/@cf/moondream/moondream3.1-9B-A2B";
+// Groq credentials stay on the Vercel proxy.
+const GROQ_PROXY_URL = "https://studyq-nu.vercel.app/api/proxy?path=groq/chat/completions";
+const TEST_GENERATION_MODEL = "openai/gpt-oss-120b";
 const STORAGE_KEY = "studystack-practice-test-history-v1";
 const MAX_MATERIAL = 30000;
 const MAX_FILE_BYTES = 15 * 1024 * 1024;
 const PDFJS_URL = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs";
 const PDF_WORKER_URL = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.mjs";
+const TESSERACT_URL = "https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.esm.min.js";
 
 const translations = {
   en: {
@@ -49,7 +51,7 @@ let pdfjsPromise = null;
 
 function t(key) { return translations[language][key] || translations.en[key] || key; }
 const i18nAliases = {"calc.backHome":"back","pt.eyebrow":"eyebrow","pt.title":"title","pt.subtitle":"subtitle","setup.material":"materialLabel","setup.settings":"options","setup.tabPdf":"tabPdf","setup.tabPaste":"tabPaste","setup.tabManual":"tabManual","setup.dropTitle":"dropTitle","setup.dropHint":"dropSub","setup.pastePlaceholder":"materialPlaceholder","setup.manualPlaceholder":"materialPlaceholder","setup.pasteBtn":"pasteBtn","setup.subject":"subject","setup.name":"testTitle","setup.nameHint":"titlePlaceholder","setup.difficulty":"difficulty","setup.easy":"easy","setup.medium":"medium","setup.hard":"hard","setup.mixed":"mixed","setup.count":"questionCount","setup.types":"questionTypes","type.mc":"mc","type.tf":"tf","type.open":"open","type.fill":"fill","setup.typesHint":"typesHint","setup.options":"options","setup.timeLimit":"timeLimit","setup.minutes":"minutes","setup.shuffle":"shuffle","setup.hints":"hints","setup.explanations":"explanations","setup.tooLong":"tooLong","generate.notice":"generationNotice","generate.btn":"generate","generate.loading":"generating","history.title":"history","history.saved":"savedTests","history.hint":"historyHint","generating.title":"generating","generating.step1":"generating","generating.cancel":"backToSetup","test.prev":"previous","test.next":"next","test.submit":"submit","results.score":"score","results.estimatedGrade":"grade","results.gradeNote":"gradeNote","results.topics":"topics","results.review":"results","results.retry":"retry","results.newTest":"newTest","results.back":"backToSetup","footer.madeBy":"footerMadeBy","footer.note":"footerNote","dialog.cancel":"cancel","dialog.ok":"continue","language.english":"english","language.dutch":"dutch"};
-const extraText = {en:{tabPdf:"PDF",tabPaste:"Paste",tabManual:"Type",pasteBtn:"Paste from clipboard",typesHint:"Choose at least one type. Open questions are reviewed by you.",historyHint:"Saved locally in this browser.",generationNotice:"Your notes are sent to Cloudflare Workers AI through our Vercel proxy to generate this test. They aren't saved to an account.",footerMadeBy:"· made by students, for students",footerNote:"No account · everything stays in your browser",cancel:"Cancel",continue:"Continue",english:"English",dutch:"Nederlands"},nl:{tabPdf:"PDF",tabPaste:"Plakken",tabManual:"Typen",pasteBtn:"Plakken vanaf klembord",typesHint:"Kies minstens één type. Open vragen kijk je zelf na.",historyHint:"Lokaal opgeslagen in deze browser.",generationNotice:"Je aantekeningen worden via onze Vercel-proxy naar Cloudflare Workers AI gestuurd om deze toets te maken. Ze worden niet aan een account opgeslagen.",footerMadeBy:"· gemaakt door studenten, voor studenten",footerNote:"Geen account · alles blijft in je browser",cancel:"Annuleren",continue:"Doorgaan",english:"English",dutch:"Nederlands"}};
+const extraText = {en:{tabPdf:"PDF",tabPaste:"Paste",tabManual:"Type",pasteBtn:"Paste from clipboard",typesHint:"Choose at least one type. Open questions are reviewed by you.",historyHint:"Saved locally in this browser.",generationNotice:"Your notes are sent to Groq through our Vercel proxy to generate this test. They aren't saved to an account.",footerMadeBy:"· made by students, for students",footerNote:"No account · everything stays in your browser",cancel:"Cancel",continue:"Continue",english:"English",dutch:"Nederlands"},nl:{tabPdf:"PDF",tabPaste:"Plakken",tabManual:"Typen",pasteBtn:"Plakken vanaf klembord",typesHint:"Kies minstens één type. Open vragen kijk je zelf na.",historyHint:"Lokaal opgeslagen in deze browser.",generationNotice:"Je aantekeningen worden via onze Vercel-proxy naar Groq gestuurd om deze toets te maken. Ze worden niet aan een account opgeslagen.",footerMadeBy:"· gemaakt door studenten, voor studenten",footerNote:"Geen account · alles blijft in je browser",cancel:"Annuleren",continue:"Doorgaan",english:"English",dutch:"Nederlands"}};
 function loadHistory() {
   try {
     const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
@@ -102,24 +104,18 @@ function createId() { return "pt_" + Date.now().toString(36) + "_" + Math.random
 function pick(obj, key, fallback = "") { return typeof obj?.[key] === "string" ? obj[key].trim() : fallback; }
 function escapeHtml(value) { return String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c])); }
 
-async function askMoondream(input, signal) {
-  let response;
+let tesseractPromise;
+async function readScannedPdfPage(page) {
+  if (!tesseractPromise) tesseractPromise = import(TESSERACT_URL);
+  const { createWorker } = await tesseractPromise;
+  const worker = await createWorker(language === "nl" ? "nld" : "eng");
   try {
-    response = await fetch(API_URL, { method:"POST", headers:{"Content-Type":"application/json"}, signal, body:JSON.stringify(input) });
-  } catch (error) {
-    if (error.name === "AbortError") throw new Error("AI_TIMEOUT");
-    throw new Error("AI_PROXY_UNAVAILABLE");
+    const image = await pdfPageAsDataUrl(page);
+    const { data } = await worker.recognize(image);
+    return data.text || "";
+  } finally {
+    await worker.terminate();
   }
-  const payload = await response.json().catch(() => ({}));
-  if (!response.ok) {
-    if (response.status === 429) throw new Error("AI_RATE_LIMIT");
-    if ([401,403,503].includes(response.status)) throw new Error("AI_PROXY_CONFIG");
-    const detail = payload.errors?.[0]?.message || payload.error?.message;
-    throw new Error(detail ? `AI_UPSTREAM_ERROR: ${detail}` : "AI_UPSTREAM_ERROR");
-  }
-  const answer = payload.result?.answer;
-  if (typeof answer !== "string" || !answer.trim()) throw new Error("AI_INVALID_RESPONSE");
-  return answer.trim();
 }
 
 function parseModelJson(answer) {
@@ -173,7 +169,7 @@ async function readPdf(file) {
       if (!pageText) {
         if (pageNo > 12) throw new Error("SCAN_TOO_LONG");
         els.drop.querySelector("strong").textContent = `${language === "nl" ? "Tekst herkennen op pagina" : "Reading text on page"} ${pageNo}/${documentPdf.numPages}…`;
-        pageText = await askMoondream({ task:"query", image:await pdfPageAsDataUrl(page), question:"Transcribe all visible document text verbatim. Preserve headings, numbers, equations, and reading order. Return only the text, without commentary.", reasoning:false, max_tokens:2048 });
+        pageText = await readScannedPdfPage(page);
       }
       pages.push(pageText);
     }
@@ -191,7 +187,7 @@ async function readPdf(file) {
   } catch (error) {
     els.fileRow.hidden = true;
     els.drop.querySelector("strong").textContent = t("dropTitle");
-    showNotice(error.message === "NO_TEXT" ? t("noPdfText") : error.message === "TOO_LONG" ? t("tooLong") : error.message === "SCAN_TOO_LONG" ? (language === "nl" ? "Deze scan bevat meer dan 12 pagina's. Splits de pdf en upload de delen apart." : "This scan has more than 12 pages. Split the PDF and upload the parts separately.") : error.message === "AI_PROXY_CONFIG" ? displayError(error) : error.message === "AI_TIMEOUT" ? displayError(error) : t("pdfError"));
+    showNotice(error.message === "NO_TEXT" ? t("noPdfText") : error.message === "TOO_LONG" ? t("tooLong") : error.message === "SCAN_TOO_LONG" ? (language === "nl" ? "Deze scan bevat meer dan 12 pagina's. Splits de pdf en upload de delen apart." : "This scan has more than 12 pages. Split the PDF and upload the parts separately.") : t("pdfError"));
   }
 }
 function formatBytes(bytes) { return bytes < 1048576 ? `${Math.ceil(bytes / 1024)} KB` : `${(bytes / 1048576).toFixed(1)} MB`; }
@@ -245,10 +241,10 @@ function validateTestData(data, settings) {
   return { title: pick(data, "title", settings.title).slice(0, 100), subject: pick(data, "subject", settings.subject).slice(0, 80), questions };
 }
 function displayError(error) {
-  if (error.message === "AI_PROXY_CONFIG") return language === "nl" ? "Cloudflare Workers AI is niet ingesteld in de Vercel-proxy. Voeg CLOUDFLARE_ACCOUNT_ID en CLOUDFLARE_API_TOKEN toe en deploy opnieuw." : "Cloudflare Workers AI is not configured in the Vercel proxy. Add CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN, then redeploy.";
-  if (error.message === "AI_RATE_LIMIT") return language === "nl" ? "De Cloudflare AI-limiet of het tegoed is bereikt. Controleer je Cloudflare-account." : "The Cloudflare AI limit or balance was reached. Check your Cloudflare account.";
+  if (error.message === "AI_PROXY_CONFIG") return language === "nl" ? "De Groq-proxy is niet ingesteld. Voeg GROQ_API_KEY toe aan het Vercel-project en deploy opnieuw." : "The Groq proxy is not configured. Add GROQ_API_KEY to the Vercel project and redeploy.";
+  if (error.message === "AI_RATE_LIMIT") return language === "nl" ? "De Groq-limiet is bereikt. Controleer je Groq-account." : "The Groq rate limit was reached. Check your Groq account.";
   if (error.message === "AI_TIMEOUT") return language === "nl" ? "Het maken van de toets duurde te lang. Probeer minder leerstof of minder vragen." : "Test generation timed out. Try using less material or fewer questions.";
-  if (error.message === "AI_PROXY_UNAVAILABLE" || error.message.startsWith("AI_UPSTREAM_ERROR")) return language === "nl" ? "De Cloudflare AI-proxy is tijdelijk niet beschikbaar. Probeer het straks opnieuw." : "The Cloudflare AI proxy is temporarily unavailable. Please try again shortly.";
+  if (error.message === "AI_PROXY_UNAVAILABLE" || error.message.startsWith("AI_UPSTREAM_ERROR")) return language === "nl" ? "De Groq-proxy is tijdelijk niet beschikbaar. Probeer het straks opnieuw." : "The Groq proxy is temporarily unavailable. Please try again shortly.";
   if (error.message === "AI_INVALID_RESPONSE") return language === "nl" ? "De AI gaf geen geldige toets terug. Probeer het opnieuw of kies minder vragen." : "The AI returned an invalid test. Try again or choose fewer questions.";
   if (error.message === "INVALID_REQUEST") return language === "nl" ? "Controleer je instellingen en probeer het opnieuw." : "Check your settings and try again.";
   if (error.message === "INSUFFICIENT_SOURCE") return language === "nl" ? "Er staan niet genoeg verschillende feiten in je leerstof voor dit aantal vraagtypen. Voeg meer tekst toe of kies minder vragen." : "There are not enough distinct facts in this material for the selected question types. Add more notes or choose fewer questions.";
@@ -272,7 +268,22 @@ async function generateTest() {
     const timeout = setTimeout(() => controller.abort(), 55000);
     let generated;
     try {
-      const answer = await askMoondream({ task:"query", question:buildTestQuestion(settings, els.material.value.trim()), reasoning:false, temperature:.2, max_tokens:8192 }, controller.signal);
+      const response = await fetch(GROQ_PROXY_URL, { method:"POST", headers:{"Content-Type":"application/json"}, signal:controller.signal, body:JSON.stringify({
+        model:TEST_GENERATION_MODEL,
+        messages:[{ role:"user", content:buildTestQuestion(settings, els.material.value.trim()) }],
+        reasoning_effort:"low",
+        max_completion_tokens:8192,
+        response_format:{ type:"json_object" }
+      }) });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        if (response.status === 429) throw new Error("AI_RATE_LIMIT");
+        if ([401,403,503].includes(response.status)) throw new Error("AI_PROXY_CONFIG");
+        const detail = payload.error?.message || payload.errors?.[0]?.message;
+        throw new Error(detail ? `AI_UPSTREAM_ERROR: ${detail}` : "AI_UPSTREAM_ERROR");
+      }
+      const answer = payload.choices?.[0]?.message?.content;
+      if (typeof answer !== "string" || !answer.trim()) throw new Error("AI_INVALID_RESPONSE");
       generated = validateTestData(parseModelJson(answer), settings);
     } finally { clearTimeout(timeout); }
     const questions = settings.shuffle ? shuffleArray(generated.questions) : generated.questions;

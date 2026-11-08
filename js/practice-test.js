@@ -6,7 +6,10 @@ const MAX_MATERIAL = 30000;
 const MAX_FILE_BYTES = 15 * 1024 * 1024;
 const PDFJS_URL = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs";
 const PDF_WORKER_URL = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.mjs";
-const TESSERACT_URL = "https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.esm.min.js";
+const TESSERACT_URL = "https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.esm.min.js";
+const TESSERACT_WORKER_URL = "https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/worker.min.js";
+const TESSERACT_CORE_URL = "https://cdn.jsdelivr.net/npm/tesseract.js-core@5.1.1";
+const TESSERACT_DATA_URL = "https://tessdata.projectnaptha.com/4.0.0";
 
 const translations = {
   en: {
@@ -34,7 +37,7 @@ const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selec
 const els = {
   lang: $("#language-select"), setup: $("#setup-view"), exam: $("#exam-view"), results: $("#results-view"),
   material: $("#study-material"), subject: $("#subject"), title: $("#test-title"), difficulty: $("#difficulty"), count: $("#question-count"),
-  time: $("#time-limit"), pdf: $("#pdf-file"), drop: $("#dropzone"), fileRow: $("#file-row"), fileName: $("#file-name"), notice: $("#notice"), loader: $("#loader"),
+  time: $("#time-limit"), pdf: $("#pdf-file"), drop: $("#dropzone"), pdfStatus: $("#pdfStatus"), fileRow: $("#file-row"), fileName: $("#file-name"), notice: $("#notice"), loader: $("#loader"),
   generate: $("#generate-btn"), history: $("#history-list"), historyCount: $("#history-count"), charCount: $("#char-count"), card: $("#question-card"), timer: $("#timer"),
   pos: $("#question-position"), examTitle: $("#exam-title"), progress: $("#progress-fill"), prev: $("#prev-btn"), next: $("#next-btn"), submit: $("#submit-btn"),
   scoreSummary: $("#score-summary"), resultSub: $("#result-subtitle"), resultDate: $("#result-date"), resultList: $("#result-list"), improve: $("#improve-box"),
@@ -106,17 +109,11 @@ function pick(obj, key, fallback = "") { return typeof obj?.[key] === "string" ?
 function escapeHtml(value) { return String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c])); }
 
 let tesseractPromise;
-async function readScannedPdfPage(page) {
+async function readScannedPdfPage(page, worker) {
   if (!tesseractPromise) tesseractPromise = import(TESSERACT_URL);
-  const { createWorker } = await tesseractPromise;
-  const worker = await createWorker(language === "nl" ? "nld" : "eng");
-  try {
-    const image = await pdfPageAsDataUrl(page);
-    const { data } = await worker.recognize(image);
-    return data.text || "";
-  } finally {
-    await worker.terminate();
-  }
+  const image = await pdfPageAsDataUrl(page);
+  const { data } = await worker.recognize(image);
+  return data.text || "";
 }
 
 function parseModelJson(answer) {
@@ -140,11 +137,11 @@ function buildTestQuestion(settings, material) {
 
 async function pdfPageAsDataUrl(page) {
   const base = page.getViewport({ scale:1 });
-  const viewport = page.getViewport({ scale:Math.min(1.55, 1150 / base.width) });
+  const viewport = page.getViewport({ scale:Math.min(2.1, 1500 / base.width) });
   const canvas = document.createElement("canvas");
   canvas.width = Math.ceil(viewport.width); canvas.height = Math.ceil(viewport.height);
   await page.render({ canvasContext:canvas.getContext("2d"), viewport }).promise;
-  const image = canvas.toDataURL("image/jpeg", .76);
+  const image = canvas.toDataURL("image/png");
   canvas.width = 0; canvas.height = 0;
   return image;
 }
@@ -156,21 +153,41 @@ async function readPdf(file) {
   hideNotice();
   els.fileName.textContent = `${file.name} · ${formatBytes(file.size)}`;
   els.fileRow.hidden = false;
+  els.pdfStatus.hidden = false;
+  els.pdfStatus.textContent = t("extracting");
   els.drop.querySelector("strong").textContent = t("extracting");
+  let ocrWorker = null;
+  let documentPdf = null;
   try {
     if (!pdfjsPromise) pdfjsPromise = import(PDFJS_URL);
     const pdfjs = await pdfjsPromise;
     pdfjs.GlobalWorkerOptions.workerSrc = PDF_WORKER_URL;
-    const documentPdf = await pdfjs.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise;
+    documentPdf = await pdfjs.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise;
     const pages = [];
     for (let pageNo = 1; pageNo <= documentPdf.numPages; pageNo++) {
       const page = await documentPdf.getPage(pageNo);
       const content = await page.getTextContent();
       let pageText = content.items.map(item => item.str || "").join(" ").replace(/[ \t]+/g," ").trim();
+      if (pageText.length < 24) pageText = "";
       if (!pageText) {
         if (pageNo > 12) throw new Error("SCAN_TOO_LONG");
         els.drop.querySelector("strong").textContent = `${language === "nl" ? "Tekst herkennen op pagina" : "Reading text on page"} ${pageNo}/${documentPdf.numPages}…`;
-        pageText = await readScannedPdfPage(page);
+        if (!ocrWorker) {
+          const { createWorker } = await (tesseractPromise ||= import(TESSERACT_URL));
+          els.pdfStatus.textContent = language === "nl" ? "OCR-engine en taalgegevens laden…" : "Loading OCR engine and language data…";
+          ocrWorker = await createWorker(language === "nl" ? "nld" : "eng", 1, {
+            workerPath:TESSERACT_WORKER_URL, corePath:TESSERACT_CORE_URL, langPath:TESSERACT_DATA_URL,
+            logger:message => {
+              if (message.status === "recognizing text" && Number.isFinite(message.progress)) {
+                const percent = Math.round(message.progress * 100);
+                const progress = `${language === "nl" ? "Tekst herkennen op pagina" : "Reading scanned page"} ${pageNo}/${documentPdf.numPages} · ${percent}%`;
+                els.drop.querySelector("strong").textContent = progress;
+                els.pdfStatus.textContent = progress;
+              }
+            }
+          });
+        }
+        pageText = await readScannedPdfPage(page, ocrWorker);
       }
       pages.push(pageText);
     }
@@ -185,15 +202,23 @@ async function readPdf(file) {
     else els.material.value = extracted;
     updateCharCount();
     els.drop.querySelector("strong").textContent = file.name;
+    els.pdfStatus.textContent = language === "nl" ? `${extracted.length.toLocaleString()} tekens uitgelezen.` : `${extracted.length.toLocaleString()} characters extracted.`;
   } catch (error) {
     els.fileRow.hidden = true;
+    els.pdfStatus.hidden = true;
     els.drop.querySelector("strong").textContent = t("dropTitle");
-    showNotice(error.message === "NO_TEXT" ? t("noPdfText") : error.message === "TOO_LONG" ? t("tooLong") : error.message === "SCAN_TOO_LONG" ? (language === "nl" ? "Deze scan bevat meer dan 12 pagina's. Splits de pdf en upload de delen apart." : "This scan has more than 12 pages. Split the PDF and upload the parts separately.") : t("pdfError"));
+    const fallback = language === "nl" ? "Deze pdf kon niet worden uitgelezen. Probeer een andere pdf of plak de tekst." : "Could not read this PDF. Try another file or paste the text.";
+    const detail = error.message === "SCAN_TOO_LONG" ? (language === "nl" ? "Deze scan bevat meer dan 12 pagina's. Splits de pdf en upload de delen apart." : "This scan has more than 12 pages. Split the PDF and upload the parts separately.") : `${fallback} (${error.message || "unknown error"})`;
+    showNotice(error.message === "NO_TEXT" ? t("noPdfText") : error.message === "TOO_LONG" ? t("tooLong") : error.message === "SCAN_TOO_LONG" ? detail : detail);
+  } finally {
+    if (ocrWorker) await ocrWorker.terminate().catch(() => {});
+    if (documentPdf) await documentPdf.destroy().catch(() => {});
   }
 }
 function formatBytes(bytes) { return bytes < 1048576 ? `${Math.ceil(bytes / 1024)} KB` : `${(bytes / 1048576).toFixed(1)} MB`; }
 function removePdf() {
   if (pdfText) els.material.value = els.material.value.replace(pdfText, "").trim();
+  els.pdfStatus.hidden = true; els.pdfStatus.textContent = "";
   pdfText = ""; els.pdf.value = ""; els.fileRow.hidden = true; els.drop.querySelector("strong").textContent = t("dropTitle"); updateCharCount();
 }
 

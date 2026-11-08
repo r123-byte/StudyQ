@@ -44,12 +44,30 @@ function buildPrompt(body) {
 function validateAiResult(value, settings) {
   if (!value || typeof value !== "object" || !Array.isArray(value.questions) || value.questions.length !== Number(settings.count)) return false;
   return value.questions.every(q => {
-    if (!q || !settings.types.includes(q.type) || typeof q.question !== "string" || q.question.trim().length < 5) return false;
+    if (!q || !settings.types.includes(normalizeQuestionType(q.type)) || typeof q.question !== "string" || q.question.trim().length < 5) return false;
     if (q.type === "multiple_choice") return Array.isArray(q.options) && q.options.length === 4 && q.options.every(x => typeof x === "string" && x.trim()) && Number.isInteger(q.correct_answer) && q.correct_answer >= 0 && q.correct_answer <= 3;
     if (q.type === "true_false") return typeof q.correct_answer === "boolean";
     if (q.type === "fill_blank") return Array.isArray(q.accepted_answers) && q.accepted_answers.length > 0 && q.accepted_answers.every(x => typeof x === "string" && x.trim());
     return Array.isArray(q.marking_criteria) && q.marking_criteria.length > 0 && q.marking_criteria.every(x => typeof x === "string" && x.trim());
   });
+}
+
+function normalizeQuestionType(type) {
+  const value = String(type || "").toLowerCase().replace(/[\s-]+/g, "_");
+  if (["multiple_choice", "multiplechoice", "mc"].includes(value)) return "multiple_choice";
+  if (["true_false", "truefalse", "tf"].includes(value)) return "true_false";
+  if (["fill_blank", "fill_in_the_blank", "fill_in_blanks", "fillintheblank"].includes(value)) return "fill_blank";
+  if (["open", "open_question", "short_answer"].includes(value)) return "open";
+  return value;
+}
+
+function parseAiJson(content) {
+  const cleaned = content.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "").trim();
+  const start = cleaned.indexOf("{");
+  const end = cleaned.lastIndexOf("}");
+  if (start < 0 || end <= start) throw new Error("AI_INVALID_RESPONSE");
+  try { return JSON.parse(cleaned.slice(start, end + 1)); }
+  catch { throw new Error("AI_INVALID_RESPONSE"); }
 }
 
 async function generateWithAi(body, env = {}) {
@@ -83,10 +101,9 @@ async function generateWithAi(body, env = {}) {
   }
   const content = payload?.result?.answer;
   if (typeof content !== "string") throw new Error("AI_INVALID_RESPONSE");
-  let result;
-  try { result = JSON.parse(content.replace(/^```(?:json)?\s*|\s*```$/g, "").trim()); }
-  catch { throw new Error("AI_INVALID_RESPONSE"); }
+  const result = parseAiJson(content);
   if (!validateAiResult(result, body.settings)) throw new Error("AI_INVALID_RESPONSE");
+  result.questions.forEach(question => { question.type = normalizeQuestionType(question.type); });
   return { mode: "ai", title: result.title || body.settings.title, subject: result.subject || body.settings.subject, questions: result.questions };
 }
 

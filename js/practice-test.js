@@ -6,10 +6,7 @@ const MAX_MATERIAL = 30000;
 const MAX_FILE_BYTES = 15 * 1024 * 1024;
 const PDFJS_URL = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs";
 const PDF_WORKER_URL = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.mjs";
-const TESSERACT_URL = "https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.esm.min.js";
-const TESSERACT_WORKER_URL = "https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/worker.min.js";
-const TESSERACT_CORE_URL = "https://cdn.jsdelivr.net/npm/tesseract.js-core@5.1.1";
-const TESSERACT_DATA_URL = "https://tessdata.projectnaptha.com/4.0.0";
+const PADDLE_OCR_URL = "https://cdn.jsdelivr.net/npm/@paddleocr/paddleocr-js@0.4.2/+esm";
 
 const translations = {
   en: {
@@ -108,12 +105,37 @@ function createId() { return "pt_" + Date.now().toString(36) + "_" + Math.random
 function pick(obj, key, fallback = "") { return typeof obj?.[key] === "string" ? obj[key].trim() : fallback; }
 function escapeHtml(value) { return String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c])); }
 
-let tesseractPromise;
-async function readScannedPdfPage(page, worker) {
-  if (!tesseractPromise) tesseractPromise = import(TESSERACT_URL);
+let paddleOcrModulePromise;
+let paddleOcrEnginePromise;
+let paddleOcrLanguage = "";
+async function getPaddleOcrEngine() {
+  const nextLanguage = language === "nl" ? "nl" : "en";
+  if (!paddleOcrModulePromise) {
+    paddleOcrModulePromise = import(PADDLE_OCR_URL).catch(error => {
+      paddleOcrModulePromise = null;
+      throw error;
+    });
+  }
+  if (!paddleOcrEnginePromise || paddleOcrLanguage !== nextLanguage) {
+    const previousEngine = paddleOcrEnginePromise;
+    paddleOcrLanguage = nextLanguage;
+    paddleOcrEnginePromise = paddleOcrModulePromise.then(({ PaddleOCR }) => PaddleOCR.create({
+      lang: nextLanguage,
+      ocrVersion: "PP-OCRv6",
+      ortOptions: { backend: "auto" }
+    })).catch(error => {
+      paddleOcrEnginePromise = null;
+      paddleOcrLanguage = "";
+      throw error;
+    });
+    if (previousEngine) previousEngine.then(engine => engine.dispose()).catch(() => {});
+  }
+  return paddleOcrEnginePromise;
+}
+async function readScannedPdfPage(page, ocr) {
   const image = await pdfPageAsBlob(page);
-  const { data } = await worker.recognize(image);
-  return data.text || "";
+  const [result] = await ocr.predict(image);
+  return Array.isArray(result?.items) ? result.items.map(item => item.text || "").filter(Boolean).join("\n") : "";
 }
 
 function parseModelJson(answer) {
@@ -159,7 +181,7 @@ async function readPdf(file) {
   els.pdfStatus.hidden = false;
   els.pdfStatus.textContent = t("extracting");
   els.drop.querySelector("strong").textContent = t("extracting");
-  let ocrWorker = null;
+  let ocrEngine = null;
   let documentPdf = null;
   try {
     if (!pdfjsPromise) pdfjsPromise = import(PDFJS_URL);
@@ -177,23 +199,14 @@ async function readPdf(file) {
         if (pageNo > 12) throw new Error("SCAN_TOO_LONG");
         ocrCurrentPage = pageNo;
         els.drop.querySelector("strong").textContent = `${language === "nl" ? "Tekst herkennen op pagina" : "Reading text on page"} ${pageNo}/${documentPdf.numPages}…`;
-        if (!ocrWorker) {
-          const { createWorker } = await (tesseractPromise ||= import(TESSERACT_URL));
-          els.pdfStatus.textContent = language === "nl" ? "OCR-engine en taalgegevens laden…" : "Loading OCR engine and language data…";
-          ocrWorker = await createWorker(language === "nl" ? "nld" : "eng", 1, {
-            workerPath:TESSERACT_WORKER_URL, corePath:TESSERACT_CORE_URL, langPath:TESSERACT_DATA_URL,
-            logger:message => {
-              if (message.status === "recognizing text" && Number.isFinite(message.progress)) {
-                const percent = Math.round(message.progress * 100);
-                const progress = `${language === "nl" ? "Tekst herkennen op pagina" : "Reading scanned page"} ${ocrCurrentPage}/${documentPdf.numPages} · ${percent}%`;
-                els.drop.querySelector("strong").textContent = progress;
-                els.pdfStatus.textContent = progress;
-              }
-            }
-          });
-          await ocrWorker.setParameters({ tessedit_pageseg_mode:"3", preserve_interword_spaces:"1" });
+        if (!ocrEngine) {
+          els.pdfStatus.textContent = language === "nl" ? "PaddleOCR en taalmodellen laden…" : "Loading PaddleOCR and language models…";
+          ocrEngine = await getPaddleOcrEngine();
         }
-        pageText = await readScannedPdfPage(page, ocrWorker);
+        const progress = `${language === "nl" ? "Tekst herkennen op pagina" : "Recognizing scanned page"} ${ocrCurrentPage}/${documentPdf.numPages}…`;
+        els.drop.querySelector("strong").textContent = progress;
+        els.pdfStatus.textContent = progress;
+        pageText = await readScannedPdfPage(page, ocrEngine);
       }
       pages.push(pageText);
     }
@@ -217,7 +230,6 @@ async function readPdf(file) {
     const detail = error.message === "SCAN_TOO_LONG" ? (language === "nl" ? "Deze scan bevat meer dan 12 pagina's. Splits de pdf en upload de delen apart." : "This scan has more than 12 pages. Split the PDF and upload the parts separately.") : `${fallback} (${error.message || "unknown error"})`;
     showNotice(error.message === "NO_TEXT" ? t("noPdfText") : error.message === "TOO_LONG" ? t("tooLong") : detail);
   } finally {
-    if (ocrWorker) await ocrWorker.terminate().catch(() => {});
     if (documentPdf) await documentPdf.destroy().catch(() => {});
   }
 }

@@ -111,7 +111,7 @@ function escapeHtml(value) { return String(value ?? "").replace(/[&<>"']/g, c =>
 let tesseractPromise;
 async function readScannedPdfPage(page, worker) {
   if (!tesseractPromise) tesseractPromise = import(TESSERACT_URL);
-  const image = await pdfPageAsDataUrl(page);
+  const image = await pdfPageAsBlob(page);
   const { data } = await worker.recognize(image);
   return data.text || "";
 }
@@ -135,13 +135,16 @@ function buildTestQuestion(settings, material) {
   ].join("\n\n");
 }
 
-async function pdfPageAsDataUrl(page) {
+async function pdfPageAsBlob(page) {
   const base = page.getViewport({ scale:1 });
-  const viewport = page.getViewport({ scale:Math.min(2.1, 1500 / base.width) });
+  // PDF.js uses 72 points per inch. Render near 300 DPI, with a pixel cap to
+  // keep large-format scans from exhausting browser memory.
+  const scale = Math.min(300 / 72, 3000 / base.width, 3600 / base.height, Math.sqrt(10000000 / (base.width * base.height)));
+  const viewport = page.getViewport({ scale });
   const canvas = document.createElement("canvas");
   canvas.width = Math.ceil(viewport.width); canvas.height = Math.ceil(viewport.height);
   await page.render({ canvasContext:canvas.getContext("2d"), viewport }).promise;
-  const image = canvas.toDataURL("image/png");
+  const image = await new Promise((resolve, reject) => canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error("Could not rasterize the scanned page.")), "image/png"));
   canvas.width = 0; canvas.height = 0;
   return image;
 }
@@ -164,13 +167,15 @@ async function readPdf(file) {
     pdfjs.GlobalWorkerOptions.workerSrc = PDF_WORKER_URL;
     documentPdf = await pdfjs.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise;
     const pages = [];
+    let ocrCurrentPage = 0;
     for (let pageNo = 1; pageNo <= documentPdf.numPages; pageNo++) {
       const page = await documentPdf.getPage(pageNo);
       const content = await page.getTextContent();
-      let pageText = content.items.map(item => item.str || "").join(" ").replace(/[ \t]+/g," ").trim();
+      let pageText = content.items.map(item => `${item.str || ""}${item.hasEOL ? "\n" : " "}`).join("").replace(/[ \t]+/g," ").replace(/ *\n */g,"\n").trim();
       if (pageText.length < 24) pageText = "";
       if (!pageText) {
         if (pageNo > 12) throw new Error("SCAN_TOO_LONG");
+        ocrCurrentPage = pageNo;
         els.drop.querySelector("strong").textContent = `${language === "nl" ? "Tekst herkennen op pagina" : "Reading text on page"} ${pageNo}/${documentPdf.numPages}…`;
         if (!ocrWorker) {
           const { createWorker } = await (tesseractPromise ||= import(TESSERACT_URL));
@@ -180,12 +185,13 @@ async function readPdf(file) {
             logger:message => {
               if (message.status === "recognizing text" && Number.isFinite(message.progress)) {
                 const percent = Math.round(message.progress * 100);
-                const progress = `${language === "nl" ? "Tekst herkennen op pagina" : "Reading scanned page"} ${pageNo}/${documentPdf.numPages} · ${percent}%`;
+                const progress = `${language === "nl" ? "Tekst herkennen op pagina" : "Reading scanned page"} ${ocrCurrentPage}/${documentPdf.numPages} · ${percent}%`;
                 els.drop.querySelector("strong").textContent = progress;
                 els.pdfStatus.textContent = progress;
               }
             }
           });
+          await ocrWorker.setParameters({ tessedit_pageseg_mode:"3", preserve_interword_spaces:"1" });
         }
         pageText = await readScannedPdfPage(page, ocrWorker);
       }
@@ -209,7 +215,7 @@ async function readPdf(file) {
     els.drop.querySelector("strong").textContent = t("dropTitle");
     const fallback = language === "nl" ? "Deze pdf kon niet worden uitgelezen. Probeer een andere pdf of plak de tekst." : "Could not read this PDF. Try another file or paste the text.";
     const detail = error.message === "SCAN_TOO_LONG" ? (language === "nl" ? "Deze scan bevat meer dan 12 pagina's. Splits de pdf en upload de delen apart." : "This scan has more than 12 pages. Split the PDF and upload the parts separately.") : `${fallback} (${error.message || "unknown error"})`;
-    showNotice(error.message === "NO_TEXT" ? t("noPdfText") : error.message === "TOO_LONG" ? t("tooLong") : error.message === "SCAN_TOO_LONG" ? detail : detail);
+    showNotice(error.message === "NO_TEXT" ? t("noPdfText") : error.message === "TOO_LONG" ? t("tooLong") : detail);
   } finally {
     if (ocrWorker) await ocrWorker.terminate().catch(() => {});
     if (documentPdf) await documentPdf.destroy().catch(() => {});

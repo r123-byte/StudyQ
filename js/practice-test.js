@@ -37,7 +37,8 @@ const els = {
   time: $("#time-limit"), pdf: $("#pdf-file"), drop: $("#dropzone"), fileRow: $("#file-row"), fileName: $("#file-name"), notice: $("#notice"), loader: $("#loader"),
   generate: $("#generate-btn"), history: $("#history-list"), historyCount: $("#history-count"), charCount: $("#char-count"), card: $("#question-card"), timer: $("#timer"),
   pos: $("#question-position"), examTitle: $("#exam-title"), progress: $("#progress-fill"), prev: $("#prev-btn"), next: $("#next-btn"), submit: $("#submit-btn"),
-  scoreSummary: $("#score-summary"), resultSub: $("#result-subtitle"), resultDate: $("#result-date"), resultList: $("#result-list"), improve: $("#improve-box")
+  scoreSummary: $("#score-summary"), resultSub: $("#result-subtitle"), resultDate: $("#result-date"), resultList: $("#result-list"), improve: $("#improve-box"),
+  questionNav: $("#question-nav"), answeredCount: $("#answeredCount")
 };
 let language = "en";
 let history = loadHistory();
@@ -344,8 +345,25 @@ function renderQuestion() {
     textarea.addEventListener("input", () => recordAnswer(q.id, textarea.value)); card.append(textarea);
   }
   if (currentTest.settings.showHints && q.hint) { const hint = document.createElement("div"); hint.className = "question-hint"; hint.innerHTML = `<strong>${escapeHtml(t("hint"))}:</strong> ${escapeHtml(q.hint)}`; card.append(hint); }
+  renderQuestionNav();
 }
-function recordAnswer(id, answer) { currentTest.answers[id] = answer; saveCurrent(); }
+function renderQuestionNav() {
+  if (!currentTest || !els.questionNav) return;
+  const answered = currentTest.questions.reduce((total, question) => total + (currentTest.answers[question.id] !== undefined && currentTest.answers[question.id] !== "" ? 1 : 0), 0);
+  els.answeredCount.textContent = language === "nl" ? `${answered} van ${currentTest.questions.length} beantwoord` : `${answered} of ${currentTest.questions.length} answered`;
+  els.questionNav.replaceChildren();
+  currentTest.questions.forEach((question, index) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = String(index + 1);
+    button.setAttribute("aria-label", `${t("question")} ${index + 1}`);
+    if (index === currentIndex) { button.classList.add("is-current"); button.setAttribute("aria-current", "step"); }
+    if (currentTest.answers[question.id] !== undefined && currentTest.answers[question.id] !== "") button.classList.add("is-answered");
+    button.addEventListener("click", () => { currentIndex = index; renderQuestion(); window.scrollTo({ top: 0, behavior: "smooth" }); });
+    els.questionNav.append(button);
+  });
+}
+function recordAnswer(id, answer) { currentTest.answers[id] = answer; saveCurrent(); renderQuestionNav(); }
 function startTimer() {
   clearInterval(countdown); countdown = null;
   if (!currentTest.expiresAt) { els.timer.hidden = true; return; }

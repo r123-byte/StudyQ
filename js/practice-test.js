@@ -15,6 +15,8 @@ const TESSERACT_URL = "https://cdn.jsdelivr.net/npm/tesseract.js@7.0.0/+esm";
 const TESSERACT_WORKER_URL = "https://cdn.jsdelivr.net/npm/tesseract.js@7.0.0/dist/worker.min.js";
 const TESSERACT_CORE_URL = "https://cdn.jsdelivr.net/npm/tesseract.js-core@7.0.0";
 const TESSERACT_LANG_URL = "https://tessdata.projectnaptha.com/4.0.0";
+const OPEN_GRADER_MODULE_URL = "https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2";
+const OPEN_GRADER_MODEL = "Xenova/all-MiniLM-L6-v2";
 
 const translations = {
   en: {
@@ -23,7 +25,7 @@ const translations = {
     subject:"Subject", subjectPlaceholder:"e.g. Biology", testTitle:"Test title", titlePlaceholder:"Suggested from subject", difficulty:"Difficulty", easy:"Easy", medium:"Medium", hard:"Hard", mixed:"Mixed", questionCount:"Number of questions", questionTypes:"Question types (choose at least one)", mc:"Multiple choice", tf:"True / false", fill:"Fill in the blanks", open:"Open questions", timeLimit:"Time limit (minutes, optional)", options:"Options", shuffle:"Shuffle question order", hints:"Show hints", explanations:"Show explanations after", generate:"Generate test", generating:"Generating and checking your questions…", history:"Test history", savedTests:"Saved tests", noHistory:"Your saved tests will appear here.",
     previous:"Previous", next:"Next", submit:"Submit test", results:"Results", backToSetup:"Practice Test home", retry:"Retry test", newTest:"Generate another test", exportLabel:"Download your test", exportPdf:"Print / save as PDF", exportWord:"Download Word", exportPopupError:"Could not open the print window. Allow pop-ups and try again.", exportError:"Could not create the Word document. Please try again.", confirmSubmit:"Some questions are unanswered. Submit anyway?", expired:"Time is up. Your answers are being submitted.",
     needText:"Add study material or upload a PDF before generating a test.", needSubject:"Enter a subject first.", chooseType:"Choose at least one question type.", tooLong:"Your material is over the 100,000 character limit. Shorten it before generating; nothing was cut off.", badFile:"Choose a PDF file no larger than 50 MB and 100 pages.", tooManyPages:"This PDF has more than 100 pages. Split it into smaller files and try again.", pdfError:"Could not read this PDF. Try another file or paste the text.", extracting:"Reading PDF pages on this device…", apiError:"Could not generate the test. Please try again.", 
-    malformed:"The test service returned an unexpected format. Please try again.", countError:"The requested number of valid questions could not be created from these notes. Try fewer questions.", question:"Question", points:"points", hint:"Hint", answer:"Your answer", correctAnswer:"Correct answer", explanation:"Explanation", feedback:"Feedback", criteria:"What earns marks", unanswered:"Unanswered", correct:"Correct", incorrect:"Incorrect", partial:"Partially correct", pending:"Needs review", score:"Score", percent:"of total", grade:"Estimated grade", gradeNote:"An estimate based only on automatically marked questions; it is not an official school grade.", correctCount:"Correct", incorrectCount:"Incorrect", pendingCount:"Open answers to review", topics:"Topics to improve", noTopics:"Great work — no lost-mark topics to review.", openPending:"Open answers are not automatically graded. Review them against the criteria below. They are excluded from this provisional score.", started:"In progress", completed:"Completed", remove:"Delete saved test", deleteConfirm:"Delete this saved test? This cannot be undone.",
+    malformed:"The test service returned an unexpected format. Please try again.", countError:"The requested number of valid questions could not be created from these notes. Try fewer questions.", question:"Question", points:"points", hint:"Hint", answer:"Your answer", correctAnswer:"Correct answer", explanation:"Explanation", feedback:"Feedback", criteria:"What earns marks", unanswered:"Unanswered", correct:"Correct", incorrect:"Incorrect", partial:"Partially correct", pending:"Needs review", score:"Score", percent:"of total", grade:"Estimated grade", gradeNote:"An estimate that can make mistakes. Review open-answer scores against the rubric; this is not an official school grade.", correctCount:"Correct", incorrectCount:"Incorrect", pendingCount:"Open answers to review", topics:"Topics to improve", noTopics:"Great work — no lost-mark topics to review.", openPending:"Some open answers still need manual review and are excluded from this provisional score.", graderPrivacy:"Open answers are checked on this device against the marking criteria. The model downloads once (about 23 MB) and is cached in your browser; your answer is not sent to an AI service. Meaning matching is most reliable for English.", graderLoading:"Loading the local answer grader… this may take a moment the first time.", graderWorking:"Checking open answers on this device…", graderProgress:"Downloading the local answer grader", graderLoadError:"The local answer grader could not finish. Check your connection and try again.", graderFallback:"The local grader could not finish. Finish the test with open answers marked for manual review instead?", semanticMatch:"Semantic match", rubricTerms:"Rubric terms found", localGradeDisclosure:"Open answers were graded on this device using semantic similarity and rubric-term coverage. Treat the scores as estimates, review them against the rubric, and note the model is most reliable for English.", localGradeUnavailable:"Open answers could not be graded automatically and are marked for manual review.", missingCriteria:"Criteria to review", openPlaceholder:"Write up to 5 sentences…", englishName:"English", dutchName:"Nederlands",
     qType:{multiple_choice:"Multiple choice",true_false:"True / false",fill_blank:"Fill in the blanks",open:"Open question"}, trueLabel:"True", falseLabel:"False", minutes:"min", seconds:"sec", more:"More", less:"Less"
   },
   nl: {
@@ -32,7 +34,7 @@ const translations = {
     subject:"Vak", subjectPlaceholder:"bijv. Biologie", testTitle:"Titel van de toets", titlePlaceholder:"Wordt voorgesteld op basis van je vak", difficulty:"Moeilijkheid", easy:"Makkelijk", medium:"Gemiddeld", hard:"Moeilijk", mixed:"Gemengd", questionCount:"Aantal vragen", questionTypes:"Vraagtypen (kies minstens één)", mc:"Meerkeuze", tf:"Waar / niet waar", fill:"Invulvragen", open:"Open vragen", timeLimit:"Tijdslimiet (minuten, optioneel)", options:"Opties", shuffle:"Vragen door elkaar", hints:"Hints tonen", explanations:"Uitleg na afloop tonen", generate:"Oefentoets maken", generating:"Vragen genereren en controleren…", history:"Toetsgeschiedenis", savedTests:"Bewaarde toetsen", noHistory:"Je bewaarde toetsen verschijnen hier.",
     previous:"Vorige", next:"Volgende", submit:"Toets inleveren", results:"Resultaat", backToSetup:"Terug naar Oefentoets", retry:"Opnieuw maken", newTest:"Nieuwe oefentoets maken", exportLabel:"Download je oefentoets", exportPdf:"Afdrukken / opslaan als pdf", exportWord:"Download Word", exportPopupError:"Het afdrukvenster kon niet worden geopend. Sta pop-ups toe en probeer opnieuw.", exportError:"Het Word-document kon niet worden gemaakt. Probeer het opnieuw.", confirmSubmit:"Er zijn nog onbeantwoorde vragen. Toch inleveren?", expired:"De tijd is om. Je antwoorden worden ingeleverd.",
     needText:"Voeg leerstof toe of upload een pdf.", needSubject:"Vul eerst een vak in.", chooseType:"Kies minstens één vraagtype.", tooLong:"Je leerstof is langer dan 100.000 tekens. Maak het korter; er is niets afgekapt.", badFile:"Kies een pdf-bestand van maximaal 50 MB en 100 pagina’s.", tooManyPages:"Deze pdf heeft meer dan 100 pagina’s. Splits het bestand op en probeer het opnieuw.", pdfError:"Deze pdf kon niet worden uitgelezen. Probeer een andere pdf of plak de tekst.", extracting:"Pdf-pagina’s worden op dit apparaat gelezen…", apiError:"De oefentoets kon niet worden gemaakt. Probeer het opnieuw.", 
-    malformed:"De toetsservice gaf een onverwacht formaat. Probeer het opnieuw.", countError:"Er konden niet genoeg geldige vragen uit deze leerstof worden gemaakt. Kies minder vragen.", question:"Vraag", points:"punten", hint:"Hint", answer:"Jouw antwoord", correctAnswer:"Goed antwoord", explanation:"Uitleg", feedback:"Feedback", criteria:"Punten verdien je met", unanswered:"Niet beantwoord", correct:"Goed", incorrect:"Niet goed", partial:"Gedeeltelijk goed", pending:"Zelf nakijken", score:"Score", percent:"van totaal", grade:"Geschat cijfer", gradeNote:"Een schatting op basis van automatisch nagekeken vragen; dit is geen officieel schoolcijfer.", correctCount:"Goed", incorrectCount:"Fout", pendingCount:"Open vragen ter controle", topics:"Onderwerpen om te oefenen", noTopics:"Goed gedaan — er zijn geen verloren punten om te herhalen.", openPending:"Open antwoorden worden niet automatisch nagekeken. Beoordeel ze aan de hand van de criteria hieronder. Ze tellen niet mee in deze voorlopige score.", started:"Bezig", completed:"Afgerond", remove:"Verwijder bewaarde toets", deleteConfirm:"Deze bewaarde toets verwijderen? Dit kan niet ongedaan worden gemaakt.",
+    malformed:"De toetsservice gaf een onverwacht formaat. Probeer het opnieuw.", countError:"Er konden niet genoeg geldige vragen uit deze leerstof worden gemaakt. Kies minder vragen.", question:"Vraag", points:"punten", hint:"Hint", answer:"Jouw antwoord", correctAnswer:"Goed antwoord", explanation:"Uitleg", feedback:"Feedback", criteria:"Punten verdien je met", unanswered:"Niet beantwoord", correct:"Goed", incorrect:"Niet goed", partial:"Gedeeltelijk goed", pending:"Zelf nakijken", score:"Score", percent:"van totaal", grade:"Geschat cijfer", gradeNote:"Een schatting die fouten kan bevatten. Controleer open antwoorden aan de hand van de criteria; dit is geen officieel schoolcijfer.", correctCount:"Goed", incorrectCount:"Fout", pendingCount:"Open vragen ter controle", topics:"Onderwerpen om te oefenen", noTopics:"Goed gedaan — er zijn geen verloren punten om te herhalen.", openPending:"Sommige open antwoorden moeten nog handmatig worden nagekeken en tellen niet mee in deze voorlopige score.", graderPrivacy:"Open antwoorden worden op dit apparaat vergeleken met de beoordelingscriteria. Het model wordt eenmalig gedownload (ongeveer 23 MB) en in je browser opgeslagen; je antwoord wordt niet naar een AI-service gestuurd. Betekenisovereenkomst is het betrouwbaarst voor Engelse antwoorden.", graderLoading:"De lokale nakijkhulp wordt geladen… dit kan de eerste keer even duren.", graderWorking:"Open antwoorden worden op dit apparaat nagekeken…", graderProgress:"De lokale nakijkhulp downloaden", graderLoadError:"De lokale nakijkhulp kon niet afronden. Controleer je verbinding en probeer het opnieuw.", graderFallback:"De lokale nakijkhulp kon niet afronden. De toets afronden en open antwoorden handmatig laten nakijken?", semanticMatch:"Semantische overeenkomst", rubricTerms:"Beoordelingstermen gevonden", localGradeDisclosure:"Open antwoorden zijn op dit apparaat beoordeeld op betekenis en beoordelingswoorden. Zie de scores als schattingen, controleer ze met de criteria en houd er rekening mee dat het model het betrouwbaarst is voor Engels.", localGradeUnavailable:"Open antwoorden konden niet automatisch worden beoordeeld en moeten handmatig worden nagekeken.", missingCriteria:"Criteria om te herhalen", openPlaceholder:"Schrijf maximaal 5 zinnen…", englishName:"Engels", dutchName:"Nederlands",
     qType:{multiple_choice:"Meerkeuze",true_false:"Waar / niet waar",fill_blank:"Invulvraag",open:"Open vraag"}, trueLabel:"Waar", falseLabel:"Niet waar", minutes:"min", seconds:"sec", more:"Meer", less:"Minder"
   }
 };
@@ -65,11 +67,12 @@ let pdfWizardCompleted = false;
 let pdfWizardOcrDone = false;
 let pdfWizardOcrStatus = "";
 let pdfWizardFileName = "";
+let openAnswerExtractorPromise = null;
 const groqRateState = { tokenLimit: DEFAULT_GROQ_TPM_LIMIT, remainingTokens: null, tokenResetAt: 0, remainingRequests: null, lastRequestAt: 0 };
 
 function t(key) { return translations[language][key] || translations.en[key] || key; }
 const i18nAliases = {"calc.backHome":"back","pt.eyebrow":"eyebrow","pt.title":"title","pt.subtitle":"subtitle","setup.material":"materialLabel","setup.settings":"options","setup.tabPdf":"tabPdf","setup.tabPaste":"tabPaste","setup.tabManual":"tabManual","setup.dropTitle":"dropTitle","setup.dropHint":"dropSub","setup.pastePlaceholder":"materialPlaceholder","setup.manualPlaceholder":"materialPlaceholder","setup.pasteBtn":"pasteBtn","setup.subject":"subject","setup.name":"testTitle","setup.nameHint":"titlePlaceholder","setup.difficulty":"difficulty","setup.easy":"easy","setup.medium":"medium","setup.hard":"hard","setup.mixed":"mixed","setup.count":"questionCount","setup.types":"questionTypes","type.mc":"mc","type.tf":"tf","type.open":"open","type.fill":"fill","setup.typesHint":"typesHint","setup.options":"options","setup.timeLimit":"timeLimit","setup.minutes":"minutes","setup.shuffle":"shuffle","setup.hints":"hints","setup.explanations":"explanations","setup.tooLong":"tooLong","generate.notice":"generationNotice","generate.btn":"generate","generate.loading":"generating","history.title":"history","history.saved":"savedTests","history.hint":"historyHint","generating.title":"generating","generating.step1":"generating","generating.cancel":"backToSetup","test.prev":"previous","test.next":"next","test.submit":"submit","results.score":"score","results.estimatedGrade":"grade","results.gradeNote":"gradeNote","results.exportLabel":"exportLabel","results.exportPdf":"exportPdf","results.exportWord":"exportWord","results.topics":"topics","results.review":"results","results.retry":"retry","results.newTest":"newTest","results.back":"backToSetup","footer.madeBy":"footerMadeBy","footer.note":"footerNote","dialog.cancel":"cancel","dialog.ok":"continue","language.english":"english","language.dutch":"dutch"};
-const extraText = {en:{tabPdf:"PDF",tabPaste:"Paste",tabManual:"Type",pasteBtn:"Paste from clipboard",typesHint:"Choose at least one type. Open questions are reviewed by you.",historyHint:"Saved locally in this browser.",generationNotice:"Your notes and extracted PDF text are sent to an AI service to generate the test.",footerMadeBy:"· made by students, for students",footerNote:"No account · everything stays in your browser",cancel:"Cancel",continue:"Continue",english:"English",dutch:"Nederlands"},nl:{tabPdf:"PDF",tabPaste:"Plakken",tabManual:"Typen",pasteBtn:"Plakken vanaf klembord",typesHint:"Kies minstens één type. Open vragen kijk je zelf na.",historyHint:"Lokaal opgeslagen in deze browser.",generationNotice:"Je aantekeningen en uitgelezen pdf-tekst worden naar een AI-service gestuurd om de toets te maken.",footerMadeBy:"· gemaakt door studenten, voor studenten",footerNote:"Geen account · alles blijft in je browser",cancel:"Annuleren",continue:"Doorgaan",english:"English",dutch:"Nederlands"}};
+const extraText = {en:{tabPdf:"PDF",tabPaste:"Paste",tabManual:"Type",pasteBtn:"Paste from clipboard",typesHint:"Choose at least one type. Open answers get an on-device estimated grade.",historyHint:"Saved locally in this browser.",generationNotice:"Your notes and extracted PDF text are sent to an AI service to generate the test.",footerMadeBy:"· made by students, for students",footerNote:"No account · everything stays in your browser",cancel:"Cancel",continue:"Continue",english:"English",dutch:"Nederlands"},nl:{tabPdf:"PDF",tabPaste:"Plakken",tabManual:"Typen",pasteBtn:"Plakken vanaf klembord",typesHint:"Kies minstens één type. Open antwoorden krijgen een geschatte beoordeling op dit apparaat.",historyHint:"Lokaal opgeslagen in deze browser.",generationNotice:"Je aantekeningen en uitgelezen pdf-tekst worden naar een AI-service gestuurd om de toets te maken.",footerMadeBy:"· gemaakt door studenten, voor studenten",footerNote:"Geen account · alles blijft in je browser",cancel:"Annuleren",continue:"Doorgaan",english:"English",dutch:"Nederlands"}};
 function loadHistory() {
   try {
     const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
@@ -785,8 +788,9 @@ function renderQuestion() {
       const text = document.createElement("span"); text.textContent = value ? t("trueLabel") : t("falseLabel"); labelEl.append(input, text); list.append(labelEl);
     }); card.append(list);
   } else {
-    const textarea = document.createElement("textarea"); textarea.className = "answer-text"; textarea.setAttribute("aria-label", t("answer")); textarea.placeholder = q.type === "open" ? (language === "nl" ? "Schrijf je uitleg…" : "Write your explanation…") : (language === "nl" ? "Vul je antwoord in…" : "Type your answer…"); textarea.value = typeof saved === "string" ? saved : "";
+    const textarea = document.createElement("textarea"); textarea.className = "answer-text"; textarea.setAttribute("aria-label", t("answer")); textarea.placeholder = q.type === "open" ? t("openPlaceholder") : (language === "nl" ? "Vul je antwoord in…" : "Type your answer…"); textarea.value = typeof saved === "string" ? saved : "";
     textarea.addEventListener("input", () => recordAnswer(q.id, textarea.value)); card.append(textarea);
+    if (q.type === "open") appendText(card,"p","pt-grader-note",t("graderPrivacy"));
   }
   if (currentTest.settings.showHints && q.hint) { const hint = document.createElement("div"); hint.className = "question-hint"; hint.innerHTML = `<strong>${escapeHtml(t("hint"))}:</strong> ${escapeHtml(q.hint)}`; card.append(hint); }
   renderQuestionNav();
@@ -838,21 +842,144 @@ function autoGrade(q, answer) {
   }
   return { points: null, status: "pending" };
 }
+async function loadOpenAnswerExtractor(onProgress) {
+  if (!openAnswerExtractorPromise) {
+    openAnswerExtractorPromise = (async () => {
+      const { env, pipeline } = await import(OPEN_GRADER_MODULE_URL);
+      env.allowLocalModels = false;
+      env.useBrowserCache = true;
+      return pipeline("feature-extraction", OPEN_GRADER_MODEL, {
+        quantized: true,
+        progress_callback: onProgress
+      });
+    })().catch(error => {
+      openAnswerExtractorPromise = null;
+      throw error;
+    });
+  }
+  return openAnswerExtractorPromise;
+}
+function rubricKeywords(text) {
+  const stopWords = new Set("about after again against all also am an and any are as at be because been before being between both but by can could did do does doing down during each few for from further had has have having he her here hers herself him himself his how i if in into is it its itself just me more most my myself no nor not of off on once only or other our ours ourselves out over own same she should so some such than that the their theirs them themselves then there these they this those through to too under until up very was we were what when where which while who whom why will with would you your yours yourself yourselves a an the above below into onto upon without within during across toward towards".split(/\s+/));
+  const words = normalizeAnswer(text).match(/[a-z0-9]{3,}/g) || [];
+  return [...new Set(words.filter(word => !stopWords.has(word)))];
+}
+function cosineSimilarity(left, right) {
+  let dot = 0, leftNorm = 0, rightNorm = 0;
+  for (let i = 0; i < left.length; i++) {
+    dot += left[i] * right[i];
+    leftNorm += left[i] * left[i];
+    rightNorm += right[i] * right[i];
+  }
+  return leftNorm && rightNorm ? dot / Math.sqrt(leftNorm * rightNorm) : 0;
+}
+async function gradeOpenAnswers(onProgress) {
+  const openQuestions = currentTest.questions.filter(question =>
+    question.type === "open" && String(currentTest.answers[question.id] || "").trim()
+  );
+  if (!openQuestions.length) return {};
+
+  const criteria = openQuestions.flatMap(question =>
+    question.marking_criteria.map(criterion => ({ question, criterion }))
+  );
+  const texts = [...criteria.map(item => item.criterion), ...openQuestions.map(question => String(currentTest.answers[question.id]).trim())];
+  const extractor = await loadOpenAnswerExtractor(onProgress);
+  onProgress?.({ status: "inference" });
+  const output = await extractor(texts, { pooling: "mean", normalize: true, truncation: true, batch_size: 8 });
+  const dimensions = output.data.length / texts.length;
+  if (!Number.isInteger(dimensions) || dimensions < 1) throw new Error("LOCAL_GRADER_INVALID_OUTPUT");
+  const vectors = texts.map((_, index) => output.data.slice(index * dimensions, (index + 1) * dimensions));
+  const answerOffset = criteria.length;
+  const marks = {};
+  let criterionVectorIndex = 0;
+
+  openQuestions.forEach((question, questionIndex) => {
+    const answerVector = vectors[answerOffset + questionIndex];
+    const answerTokens = new Set(rubricKeywords(String(currentTest.answers[question.id])));
+    let semanticTotal = 0, keywordMatches = 0, keywordCount = 0;
+    const missing = [];
+
+    question.marking_criteria.forEach(criterion => {
+      const criterionVector = vectors[criterionVectorIndex++];
+      const similarity = Math.max(0, Math.min(1, cosineSimilarity(criterionVector, answerVector)));
+      const keywords = rubricKeywords(criterion);
+      const matches = keywords.filter(word => answerTokens.has(word)).length;
+      const keywordRatio = keywords.length ? matches / keywords.length : 1;
+      const criterionScore = similarity * 0.7 + keywordRatio * 0.3;
+      semanticTotal += similarity;
+      keywordMatches += matches;
+      keywordCount += keywords.length;
+      if (criterionScore < 0.5) missing.push(criterion);
+    });
+
+    const semanticSimilarity = semanticTotal / question.marking_criteria.length;
+    const keywordRatio = keywordCount ? keywordMatches / keywordCount : 1;
+    const scoreRatio = Math.max(0, Math.min(1, semanticSimilarity * 0.7 + keywordRatio * 0.3));
+    const points = Math.round(scoreRatio * question.max_points * 2) / 2;
+    marks[question.id] = {
+      points,
+      status: scoreRatio >= 0.75 ? "correct" : scoreRatio >= 0.4 ? "partial" : "incorrect",
+      similarity: Math.round(semanticSimilarity * 100),
+      keywordMatches,
+      keywordCount,
+      missing
+    };
+  });
+  return marks;
+}
+function setGraderStatus(message = "") {
+  const status = $("#grader-status");
+  if (!status) return;
+  status.textContent = message;
+  status.hidden = !message;
+}
 async function submitTest(auto = false) {
   if (!currentTest || submitting) return;
   const unanswered = currentTest.questions.filter(q => currentTest.answers[q.id] === undefined || currentTest.answers[q.id] === "");
   if (unanswered.length && !auto && !window.confirm(t("confirmSubmit"))) return;
   submitting = true; els.submit.disabled = true; clearInterval(countdown); countdown = null;
+  setGraderStatus("");
+  let openMarks = {};
+  const hasAnsweredOpen = currentTest.questions.some(q => q.type === "open" && String(currentTest.answers[q.id] || "").trim());
+  if (hasAnsweredOpen) {
+    setGraderStatus(t("graderLoading"));
+    try {
+      openMarks = await gradeOpenAnswers(progress => {
+        if (progress?.status === "progress" && Number.isFinite(progress.progress)) {
+          setGraderStatus(`${t("graderProgress")}… ${Math.round(progress.progress)}%`);
+        } else if (progress?.status === "initiate" || progress?.status === "download") {
+          setGraderStatus(t("graderLoading"));
+        } else if (progress?.status === "inference") {
+          setGraderStatus(t("graderWorking"));
+        }
+      });
+    } catch (error) {
+      console.error("Local open-answer grading failed.", error);
+      setGraderStatus(t("graderLoadError"));
+      if (!window.confirm(t("graderFallback"))) {
+        submitting = false; els.submit.disabled = false;
+        if (!auto) startTimer();
+        return;
+      }
+      openMarks = {};
+    }
+  }
+
   const marks = {};
   currentTest.questions.forEach(q => {
-    if (q.type === "open") marks[q.id] = { points: null, status: "pending" };
-    else marks[q.id] = autoGrade(q, currentTest.answers[q.id]);
+    if (q.type === "open") {
+      const answer = String(currentTest.answers[q.id] || "").trim();
+      marks[q.id] = openMarks[q.id] || (answer
+        ? { points: null, status: "pending" }
+        : { points: 0, status: "incorrect", missing: q.marking_criteria });
+    } else marks[q.id] = autoGrade(q, currentTest.answers[q.id]);
   });
   const scoreable = currentTest.questions.filter(q => marks[q.id].points !== null);
   const maxScore = currentTest.questions.reduce((sum, q) => sum + (q.type === "open" ? q.max_points : q.points), 0);
-  const scoredMax = scoreable.reduce((sum, q) => sum + q.points, 0);
+  const scoredMax = scoreable.reduce((sum, q) => sum + (q.type === "open" ? q.max_points : q.points), 0);
   const earned = scoreable.reduce((sum, q) => sum + marks[q.id].points, 0);
-  currentTest.status = "completed"; currentTest.result = { marks, earned, maxScore, scoredMax, completedAt: Date.now() };
+  currentTest.status = "completed"; currentTest.result = { marks, earned, maxScore, scoredMax, completedAt: Date.now(), gradingMode: Object.values(marks).some(mark => mark.status === "pending") ? "manual" : "local" };
+  setGraderStatus("");
   saveCurrent(); renderResults(currentTest); showView("results");
   submitting = false; els.submit.disabled = false;
 }
@@ -861,6 +988,8 @@ function estimatedGrade(percent) { return Math.max(1, Math.min(10, Math.round((1
 function appendText(parent, tag, className, text) { const node = document.createElement(tag); if (className) node.className = className; node.textContent = text; parent.append(node); return node; }
 function renderResults(test) {
   const result = test.result; const hasAutoScore = Number(result.scoredMax) > 0; const percent = hasAutoScore ? Math.round(result.earned / result.scoredMax * 100) : 0;
+  const hasLocalOpenGrades = Object.values(result.marks).some(mark => Number.isFinite(mark.similarity));
+  const hasPendingOpenGrades = Object.values(result.marks).some(mark => mark.status === "pending");
   els.scoreSummary.replaceChildren();
   const summary = document.createElement("div"); summary.className = "pt-result-summary";
   appendText(summary,"h2","pt-result-title",`${test.title} · ${test.subject}`);
@@ -872,7 +1001,8 @@ function renderResults(test) {
   summary.append(grade);
   appendText(summary,"p","pt-points-line",`${result.earned} / ${result.scoredMax || 0} ${t("points")}`);
   if (hasAutoScore) appendText(summary,"p","pt-result-percent",`${t("score")}: ${percent}% ${t("percent")}`);
-  else appendText(summary,"p","pt-result-percent",t("openPending"));
+  if (hasLocalOpenGrades) appendText(summary,"p","pt-grade-note",t("localGradeDisclosure"));
+  if (hasPendingOpenGrades) appendText(summary,"p","pt-result-percent",t("openPending"));
   appendText(summary,"p","pt-grade-note",t("gradeNote"));
   els.scoreSummary.append(summary);
   els.resultList.replaceChildren();
@@ -889,8 +1019,12 @@ function renderResults(test) {
     if (q.type === "fill_blank") appendText(card,"p","result-line",`${t("correctAnswer")}: ${q.accepted_answers.join(" · ")}`);
     if (q.type === "open") {
       appendText(card,"p","result-line",`${t("criteria")}: ${q.marking_criteria.join(" · ")}`);
+      if (Number.isFinite(mark.similarity)) {
+        appendText(card,"p","result-line",`${t("semanticMatch")}: ${mark.similarity}%`);
+        appendText(card,"p","result-line",`${t("rubricTerms")}: ${mark.keywordMatches} / ${mark.keywordCount}`);
+      }
       if (mark.feedback) appendText(card,"p","result-line",`${t("feedback")}: ${mark.feedback}`);
-      if (mark.missing?.length) appendText(card,"p","result-line",`${t("less")}: ${mark.missing.join(" · ")}`);
+      if (mark.missing?.length) appendText(card,"p","result-line",`${t("missingCriteria")}: ${mark.missing.join(" · ")}`);
     }
     if (test.settings.showExplanations && q.explanation) appendText(card,"div","result-explain",`${t("explanation")}: ${q.explanation}`);
     els.resultList.append(card);

@@ -284,6 +284,23 @@
     </div>
   </dialog>
 
+  <dialog class="pdf-wizard" id="pdfWizard" aria-labelledby="pdfWizardTitle">
+    <div class="pdf-wizard-shell">
+      <div class="pdf-wizard-topline"><span class="pdf-wizard-mark" aria-hidden="true">✦</span><span id="pdfWizardStep">Step 1 of 6</span><button class="pdf-wizard-skip" id="pdfWizardSkip" type="button">Use current setup</button></div>
+      <div class="pdf-wizard-progress" aria-hidden="true"><span id="pdfWizardProgress"></span></div>
+      <p class="pdf-wizard-eyebrow" id="pdfWizardFile">Preparing your PDF</p>
+      <h2 id="pdfWizardTitle">Let’s set up your practice test</h2>
+      <p class="pdf-wizard-subtitle" id="pdfWizardSubtitle">Answer a few quick questions while your PDF is read on this device.</p>
+      <section class="pdf-wizard-question" aria-live="polite" aria-atomic="true">
+        <h3 id="pdfWizardQuestion"></h3>
+        <div id="pdfWizardControl"></div>
+        <p class="pdf-wizard-error" id="pdfWizardError" role="alert" hidden></p>
+      </section>
+      <div class="pdf-wizard-ocr"><span class="pt-spinner" id="pdfWizardSpinner" aria-hidden="true"></span><div><strong id="pdfWizardOcrTitle">Reading your PDF locally…</strong><p id="pdfWizardOcrStatus">OCR keeps running while you answer.</p></div></div>
+      <div class="pdf-wizard-actions"><button class="pt-btn pt-btn--ghost" id="pdfWizardBack" type="button">Back</button><button class="pt-btn pt-btn--primary" id="pdfWizardNext" type="button">Continue</button></div>
+    </div>
+  </dialog>
+
   <!-- GLOBAL FOOTER -->
   <footer class="site-footer">
     <div class="footer-container">

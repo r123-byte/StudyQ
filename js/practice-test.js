@@ -54,6 +54,13 @@ let countdown = null;
 let pdfText = "";
 let pdfjsPromise = null;
 let tesseractModulePromise = null;
+let pdfWizardResolver = null;
+let pdfWizardData = null;
+let pdfWizardStepIndex = 0;
+let pdfWizardCompleted = false;
+let pdfWizardOcrDone = false;
+let pdfWizardOcrStatus = "";
+let pdfWizardFileName = "";
 
 function t(key) { return translations[language][key] || translations.en[key] || key; }
 const i18nAliases = {"calc.backHome":"back","pt.eyebrow":"eyebrow","pt.title":"title","pt.subtitle":"subtitle","setup.material":"materialLabel","setup.settings":"options","setup.tabPdf":"tabPdf","setup.tabPaste":"tabPaste","setup.tabManual":"tabManual","setup.dropTitle":"dropTitle","setup.dropHint":"dropSub","setup.pastePlaceholder":"materialPlaceholder","setup.manualPlaceholder":"materialPlaceholder","setup.pasteBtn":"pasteBtn","setup.subject":"subject","setup.name":"testTitle","setup.nameHint":"titlePlaceholder","setup.difficulty":"difficulty","setup.easy":"easy","setup.medium":"medium","setup.hard":"hard","setup.mixed":"mixed","setup.count":"questionCount","setup.types":"questionTypes","type.mc":"mc","type.tf":"tf","type.open":"open","type.fill":"fill","setup.typesHint":"typesHint","setup.options":"options","setup.timeLimit":"timeLimit","setup.minutes":"minutes","setup.shuffle":"shuffle","setup.hints":"hints","setup.explanations":"explanations","setup.tooLong":"tooLong","generate.notice":"generationNotice","generate.btn":"generate","generate.loading":"generating","history.title":"history","history.saved":"savedTests","history.hint":"historyHint","generating.title":"generating","generating.step1":"generating","generating.cancel":"backToSetup","test.prev":"previous","test.next":"next","test.submit":"submit","results.score":"score","results.estimatedGrade":"grade","results.gradeNote":"gradeNote","results.topics":"topics","results.review":"results","results.retry":"retry","results.newTest":"newTest","results.back":"backToSetup","footer.madeBy":"footerMadeBy","footer.note":"footerNote","dialog.cancel":"cancel","dialog.ok":"continue","language.english":"english","language.dutch":"dutch"};
@@ -300,6 +307,7 @@ async function readPdf(file) {
   els.pdfStatus.hidden = false;
   els.pdfStatus.textContent = t("extracting");
   els.drop.querySelector("strong").textContent = t("extracting");
+  const questionnairePromise = startPdfQuestionnaire(file);
   let documentPdf = null;
   let ocrWorker = null;
   try {
@@ -317,12 +325,17 @@ async function readPdf(file) {
         const progress = `${language === "nl" ? "Gescande pagina lokaal herkennen" : "Reading scanned page on this device"} ${pageNo}/${documentPdf.numPages}…`;
         els.drop.querySelector("strong").textContent = progress;
         els.pdfStatus.textContent = progress;
+        setPdfWizardStatus(progress);
         if (!ocrWorker) {
-          els.pdfStatus.textContent = language === "nl" ? "Lokale OCR en taalgegevens laden…" : "Loading on-device OCR and language data…";
+          const loading = language === "nl" ? "Lokale OCR en taalgegevens laden…" : "Loading on-device OCR and language data…";
+          els.pdfStatus.textContent = loading;
+          setPdfWizardStatus(loading);
           ocrWorker = await getTesseractWorker(message => {
             if (message.status === "recognizing text") {
               const percent = Math.round((message.progress || 0) * 100);
-              els.pdfStatus.textContent = `${progress} ${percent}%`;
+              const current = `${progress} ${percent}%`;
+              els.pdfStatus.textContent = current;
+              setPdfWizardStatus(current);
             }
           });
         }
@@ -333,6 +346,7 @@ async function readPdf(file) {
         const progress = `${language === "nl" ? "Tekst lokaal uitlezen" : "Reading text on this device"} ${pageNo}/${documentPdf.numPages}…`;
         els.drop.querySelector("strong").textContent = progress;
         els.pdfStatus.textContent = progress;
+        setPdfWizardStatus(progress);
       }
       pages.push(pageText);
       const partialText = pages.filter(Boolean).join("\n\n");
@@ -342,12 +356,16 @@ async function readPdf(file) {
     if (!pages.length) throw new Error("PDF_NO_PAGES");
     const extracted = pages.filter(Boolean).join("\n\n").trim();
     if (!extracted) throw new Error("NO_TEXT");
+    finishPdfQuestionnaire(true);
+    const questionnaireAnswers = await questionnairePromise;
+    if (questionnaireAnswers) applyPdfWizardData();
     pdfText = extracted;
     els.material.value = existingMaterial ? `${existingMaterial}\n\n${extracted}` : extracted;
     updateCharCount();
     els.drop.querySelector("strong").textContent = file.name;
     els.pdfStatus.textContent = language === "nl" ? `${extracted.length.toLocaleString()} tekens lokaal uitgelezen.` : `${extracted.length.toLocaleString()} characters read on this device.`;
   } catch (error) {
+    finishPdfQuestionnaire(false);
     els.fileRow.hidden = true;
     els.pdfStatus.hidden = true;
     els.drop.querySelector("strong").textContent = t("dropTitle");
@@ -364,6 +382,196 @@ function removePdf() {
   els.pdfStatus.hidden = true; els.pdfStatus.textContent = "";
   if (pdfText) els.material.value = els.material.value.replace(pdfText, "").trim();
   pdfText = ""; els.pdf.value = ""; els.fileRow.hidden = true; els.drop.querySelector("strong").textContent = t("dropTitle"); updateCharCount();
+}
+
+const pdfWizardTypes = [
+  ["multiple_choice", "mc"], ["true_false", "tf"], ["open", "open"], ["fill_blank", "fill"]
+];
+const pdfWizardSteps = ["subject", "title", "count", "difficulty", "types", "options"];
+function wizardText(en, nl) { return language === "nl" ? nl : en; }
+
+function closePdfWizard(result) {
+  const dialog = $("#pdfWizard");
+  if (dialog.open) dialog.close();
+  const resolve = pdfWizardResolver;
+  pdfWizardResolver = null;
+  if (resolve) resolve(result);
+  $("#generate-btn").focus({ preventScroll: true });
+}
+
+function applyPdfWizardData() {
+  if (!pdfWizardData) return;
+  els.subject.value = pdfWizardData.subject.trim();
+  els.title.value = pdfWizardData.title.trim() || (els.subject.value ? `${els.subject.value} — ${language === "nl" ? "Oefentoets" : "Practice Test"}` : "");
+  els.title.dataset.edited = pdfWizardData.title.trim() ? "true" : "";
+  els.count.value = String(pdfWizardData.count);
+  els.difficulty.value = pdfWizardData.difficulty;
+  $$('.pt-seg[data-field="count"], .pt-seg[data-field="difficulty"]').forEach(group => {
+    group.querySelectorAll("button[data-value]").forEach(button => {
+      const active = button.dataset.value === (group.dataset.field === "count" ? els.count.value : els.difficulty.value);
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
+  });
+  $$('input[name="qtype"]').forEach(input => {
+    input.checked = pdfWizardData.types.includes(input.value);
+    input.closest(".pt-chip").classList.toggle("is-selected", input.checked);
+  });
+  $("#shuffle").checked = pdfWizardData.shuffle;
+  $("#show-hints").checked = pdfWizardData.showHints;
+  $("#show-explanations").checked = pdfWizardData.showExplanations;
+  $("#opt-time").checked = pdfWizardData.timeEnabled;
+  els.time.value = String(pdfWizardData.timeLimit);
+  els.time.disabled = !pdfWizardData.timeEnabled;
+}
+
+function setPdfWizardStatus(status, done = false) {
+  pdfWizardOcrStatus = status;
+  if (done) pdfWizardOcrDone = true;
+  const dialog = $("#pdfWizard");
+  if (!dialog.open) return;
+  $("#pdfWizardOcrStatus").textContent = status;
+  $(".pdf-wizard-ocr", dialog).classList.toggle("is-done", pdfWizardOcrDone);
+  $("#pdfWizardOcrTitle").textContent = pdfWizardOcrDone
+    ? wizardText("PDF reading is complete", "De pdf is uitgelezen")
+    : wizardText("Reading your PDF on this device…", "Pdf wordt op dit apparaat gelezen…");
+  if (pdfWizardOcrDone && pdfWizardCompleted) closePdfWizard(pdfWizardData);
+}
+
+function createWizardChoice(label, value, selected, onClick, multi = false) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = `pdf-wizard-option${multi ? " pdf-wizard-option--check" : ""}`;
+  button.textContent = label;
+  button.dataset.value = String(value);
+  button.setAttribute("aria-pressed", String(selected));
+  button.addEventListener("click", () => onClick(value));
+  return button;
+}
+
+function renderPdfWizard() {
+  const dialog = $("#pdfWizard");
+  if (!dialog.open || !pdfWizardData) return;
+  const step = pdfWizardSteps[pdfWizardStepIndex];
+  const count = pdfWizardSteps.length;
+  const heading = $("#pdfWizardQuestion");
+  const control = $("#pdfWizardControl");
+  const error = $("#pdfWizardError");
+  control.replaceChildren(); error.hidden = true;
+  $("#pdfWizardStep").textContent = wizardText(`Step ${pdfWizardStepIndex + 1} of ${count}`, `Stap ${pdfWizardStepIndex + 1} van ${count}`);
+  $("#pdfWizardProgress").style.width = `${((pdfWizardStepIndex + 1) / count) * 100}%`;
+  $("#pdfWizardFile").textContent = `${wizardText("PDF setup", "Pdf instellen")} · ${pdfWizardFileName}`;
+  $("#pdfWizardTitle").textContent = wizardText("Let’s set up your practice test", "Laten we je oefentoets instellen");
+  $("#pdfWizardSubtitle").textContent = wizardText("Answer a few quick questions while your PDF is read on this device.", "Beantwoord een paar vragen terwijl de pdf op dit apparaat wordt uitgelezen.");
+  $("#pdfWizardOcrStatus").textContent = pdfWizardOcrStatus;
+
+  if (step === "subject") {
+    heading.textContent = wizardText("What subject is this PDF for?", "Voor welk vak is deze pdf?");
+    const input = document.createElement("input"); input.className = "pt-input"; input.id = "pdfWizardAnswer"; input.maxLength = 60; input.autocomplete = "off"; input.placeholder = wizardText("e.g. Biology", "bijv. Biologie"); input.value = pdfWizardData.subject;
+    input.addEventListener("input", () => { pdfWizardData.subject = input.value; }); control.append(input);
+  } else if (step === "title") {
+    heading.textContent = wizardText("What should we call your test?", "Welke titel krijgt je oefentoets?");
+    const input = document.createElement("input"); input.className = "pt-input"; input.id = "pdfWizardAnswer"; input.maxLength = 90; input.placeholder = wizardText("Optional — suggested from the subject", "Optioneel — voorgesteld op basis van het vak"); input.value = pdfWizardData.title;
+    input.addEventListener("input", () => { pdfWizardData.title = input.value; }); control.append(input);
+  } else if (step === "count") {
+    heading.textContent = wizardText("How many questions do you want?", "Hoeveel vragen wil je?");
+    const choices = document.createElement("div"); choices.className = "pdf-wizard-options";
+    [5, 10, 15, 20].forEach(value => choices.append(createWizardChoice(String(value), value, pdfWizardData.count === value, choice => { pdfWizardData.count = choice; renderPdfWizard(); })));
+    control.append(choices);
+  } else if (step === "difficulty") {
+    heading.textContent = wizardText("Choose the difficulty", "Kies de moeilijkheidsgraad");
+    const choices = document.createElement("div"); choices.className = "pdf-wizard-options";
+    [["easy", "easy"], ["medium", "medium"], ["hard", "hard"], ["mixed", "mixed"]].forEach(([value, key]) => choices.append(createWizardChoice(t(key), value, pdfWizardData.difficulty === value, choice => { pdfWizardData.difficulty = choice; renderPdfWizard(); })));
+    control.append(choices);
+  } else if (step === "types") {
+    heading.textContent = wizardText("Which question types should it include?", "Welke soorten vragen wil je?");
+    const choices = document.createElement("div"); choices.className = "pdf-wizard-options";
+    pdfWizardTypes.forEach(([value, key]) => choices.append(createWizardChoice(t(key), value, pdfWizardData.types.includes(value), choice => {
+      pdfWizardData.types = pdfWizardData.types.includes(choice) ? pdfWizardData.types.filter(type => type !== choice) : [...pdfWizardData.types, choice];
+      renderPdfWizard();
+    }, true)));
+    control.append(choices);
+  } else {
+    heading.textContent = wizardText("A few finishing options", "Nog een paar opties");
+    const choices = document.createElement("div"); choices.className = "pdf-wizard-options";
+    [["shuffle", "Shuffle question order", "Vragen door elkaar"], ["showHints", "Show hints", "Hints tonen"], ["showExplanations", "Show explanations after the test", "Uitleg tonen na de toets"]].forEach(([key, en, nl]) => choices.append(createWizardChoice(wizardText(en, nl), key, pdfWizardData[key], selected => { pdfWizardData[key] = !pdfWizardData[key]; renderPdfWizard(); }, true)));
+    control.append(choices);
+    const timeRow = document.createElement("label"); timeRow.className = "pdf-wizard-time";
+    const timeCheck = document.createElement("input"); timeCheck.type = "checkbox"; timeCheck.checked = pdfWizardData.timeEnabled; timeCheck.addEventListener("change", () => { pdfWizardData.timeEnabled = timeCheck.checked; renderPdfWizard(); });
+    const timeLabel = document.createElement("span"); timeLabel.textContent = wizardText("Add a time limit", "Tijdslimiet instellen");
+    const timeInput = document.createElement("input"); timeInput.className = "pt-input"; timeInput.type = "number"; timeInput.min = "1"; timeInput.max = "180"; timeInput.value = String(pdfWizardData.timeLimit); timeInput.disabled = !pdfWizardData.timeEnabled; timeInput.setAttribute("aria-label", wizardText("Time limit in minutes", "Tijdslimiet in minuten"));
+    timeInput.addEventListener("input", () => { pdfWizardData.timeLimit = Math.max(1, Math.min(180, Number(timeInput.value) || 20)); });
+    timeRow.append(timeCheck, timeLabel, timeInput); control.append(timeRow);
+  }
+
+  $("#pdfWizardBack").hidden = pdfWizardStepIndex === 0;
+  $("#pdfWizardNext").hidden = false;
+  $("#pdfWizardNext").textContent = pdfWizardStepIndex === count - 1 ? wizardText("Finish setup", "Instellen afronden") : wizardText("Continue", "Verder");
+  $("#pdfWizardSkip").textContent = wizardText("Use current setup", "Huidige instellingen gebruiken");
+  $("#pdfWizardBack").textContent = wizardText("Back", "Terug");
+  $(".pdf-wizard-ocr", dialog).classList.toggle("is-done", pdfWizardOcrDone);
+  $("#pdfWizardOcrTitle").textContent = pdfWizardOcrDone ? wizardText("PDF reading is complete", "De pdf is uitgelezen") : wizardText("Reading your PDF on this device…", "Pdf wordt op dit apparaat gelezen…");
+  requestAnimationFrame(() => $("#pdfWizardAnswer")?.focus({ preventScroll: true }) || control.querySelector("button")?.focus({ preventScroll: true }));
+}
+
+function startPdfQuestionnaire(file) {
+  const dialog = $("#pdfWizard");
+  pdfWizardData = {
+    subject: els.subject.value,
+    title: els.title.value,
+    count: Number(els.count.value) || 10,
+    difficulty: els.difficulty.value || "medium",
+    types: selectedTypes().length ? selectedTypes() : ["multiple_choice"],
+    shuffle: $("#shuffle").checked,
+    showHints: $("#show-hints").checked,
+    showExplanations: $("#show-explanations").checked,
+    timeEnabled: $("#opt-time").checked,
+    timeLimit: Math.max(1, Math.min(180, Number(els.time.value) || 20))
+  };
+  pdfWizardStepIndex = 0; pdfWizardCompleted = false; pdfWizardOcrDone = false;
+  pdfWizardFileName = file.name;
+  pdfWizardOcrStatus = wizardText("OCR keeps running while you answer.", "OCR gaat door terwijl je antwoordt.");
+  $("#pdfWizardFile").textContent = file.name;
+  const promise = new Promise(resolve => { pdfWizardResolver = resolve; });
+  renderPdfWizard();
+  dialog.showModal();
+  renderPdfWizard();
+  return promise;
+}
+
+function finishPdfQuestionnaire(success) {
+  if (!success) pdfWizardCompleted = false;
+  setPdfWizardStatus(success
+    ? wizardText("PDF text is ready. Finish the questions to continue.", "De pdf-tekst is klaar. Rond de vragen af om verder te gaan.")
+    : wizardText("PDF reading stopped. You can still use the current setup.", "Het uitlezen is gestopt. Je kunt de huidige instellingen gebruiken."), true);
+  if (!success) closePdfWizard(null);
+}
+
+function wirePdfWizard() {
+  $("#pdfWizardBack").addEventListener("click", () => { if (pdfWizardStepIndex > 0) { pdfWizardStepIndex--; renderPdfWizard(); } });
+  $("#pdfWizardNext").addEventListener("click", () => {
+    const step = pdfWizardSteps[pdfWizardStepIndex];
+    const error = $("#pdfWizardError");
+    if (step === "subject" && !pdfWizardData.subject.trim()) {
+      error.textContent = wizardText("Enter a subject to continue.", "Vul een vak in om verder te gaan."); error.hidden = false; $("#pdfWizardAnswer").focus(); return;
+    }
+    if (step === "types" && !pdfWizardData.types.length) {
+      error.textContent = wizardText("Choose at least one question type.", "Kies minstens één vraagtype."); error.hidden = false; return;
+    }
+    if (pdfWizardStepIndex < pdfWizardSteps.length - 1) { pdfWizardStepIndex++; renderPdfWizard(); return; }
+    pdfWizardCompleted = true; applyPdfWizardData();
+    if (pdfWizardOcrDone) closePdfWizard(pdfWizardData);
+    else {
+      $("#pdfWizardProgress").style.width = "100%";
+      $("#pdfWizardStep").textContent = wizardText("Setup complete", "Instellen afgerond");
+      $("#pdfWizardQuestion").textContent = wizardText("Your settings are ready", "Je instellingen zijn klaar");
+      $("#pdfWizardControl").replaceChildren();
+      $("#pdfWizardSubtitle").textContent = wizardText("The PDF is still being read. This screen will continue when it’s ready.", "De pdf wordt nog uitgelezen. Dit scherm gaat verder zodra dat klaar is.");
+      $("#pdfWizardBack").hidden = true; $("#pdfWizardNext").hidden = true;
+    }
+  });
+  $("#pdfWizardSkip").addEventListener("click", () => closePdfWizard(null));
+  $("#pdfWizard").addEventListener("cancel", event => { event.preventDefault(); closePdfWizard(null); });
 }
 
 function validateForm() {
@@ -622,6 +830,7 @@ function resetForRetry() {
 function newTest() { clearInterval(countdown); countdown=null; currentTest=null; els.material.value=""; $$(".material-editor").forEach(input=>input.value=""); els.subject.value=""; els.title.value=""; els.time.value="20"; $("#opt-time").checked=false; els.time.disabled=true; removePdf(); updateCharCount(); hideNotice(); showView("setup"); window.scrollTo({top:0,behavior:"smooth"}); }
 
 function wireEvents() {
+  wirePdfWizard();
   els.lang.addEventListener("change", () => applyLanguage(els.lang.value));
   const languageTrigger=$("#language-trigger"),languageMenu=$("#language-menu");
   const setLanguageMenuOpen=open=>{languageMenu.hidden=!open;languageTrigger.setAttribute("aria-expanded",String(open));if(open){const selected=$(".language-option[aria-checked='true']");(selected||$(".language-option")).focus();}};

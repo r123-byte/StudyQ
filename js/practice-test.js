@@ -21,7 +21,7 @@ const translations = {
     back:"Home", eyebrow:"Study tools", title:"Practice Test", subtitle:"Turn your notes into a practice exam. Answer at your own pace and review what to work on next.", removeFile:"Remove",
     setupTitle:"Build a practice test", setupSub:"Add notes, choose your settings, and generate questions.", private:"Saved on this device", materialLabel:"Study material", dropTitle:"Drop a PDF here or click to choose", dropSub:"PDF only · up to 50 MB and 100 pages · scanned pages are read on this device", materialPlaceholder:"Paste or type your notes here…", materialHint:"Use clear notes, textbook excerpts, or summaries.",
     subject:"Subject", subjectPlaceholder:"e.g. Biology", testTitle:"Test title", titlePlaceholder:"Suggested from subject", difficulty:"Difficulty", easy:"Easy", medium:"Medium", hard:"Hard", mixed:"Mixed", questionCount:"Number of questions", questionTypes:"Question types (choose at least one)", mc:"Multiple choice", tf:"True / false", fill:"Fill in the blanks", open:"Open questions", timeLimit:"Time limit (minutes, optional)", options:"Options", shuffle:"Shuffle question order", hints:"Show hints", explanations:"Show explanations after", generate:"Generate test", generating:"Generating and checking your questions…", history:"Test history", savedTests:"Saved tests", noHistory:"Your saved tests will appear here.",
-    previous:"Previous", next:"Next", submit:"Submit test", results:"Results", backToSetup:"Practice Test home", retry:"Retry test", newTest:"Generate another test", confirmSubmit:"Some questions are unanswered. Submit anyway?", expired:"Time is up. Your answers are being submitted.",
+    previous:"Previous", next:"Next", submit:"Submit test", results:"Results", backToSetup:"Practice Test home", retry:"Retry test", newTest:"Generate another test", exportLabel:"Download your test", exportPdf:"Print / save as PDF", exportWord:"Download Word", exportPopupError:"Could not open the print window. Allow pop-ups and try again.", exportError:"Could not create the Word document. Please try again.", confirmSubmit:"Some questions are unanswered. Submit anyway?", expired:"Time is up. Your answers are being submitted.",
     needText:"Add study material or upload a PDF before generating a test.", needSubject:"Enter a subject first.", chooseType:"Choose at least one question type.", tooLong:"Your material is over the 100,000 character limit. Shorten it before generating; nothing was cut off.", badFile:"Choose a PDF file no larger than 50 MB and 100 pages.", tooManyPages:"This PDF has more than 100 pages. Split it into smaller files and try again.", pdfError:"Could not read this PDF. Try another file or paste the text.", extracting:"Reading PDF pages on this device…", apiError:"Could not generate the test. Please try again.", 
     malformed:"The test service returned an unexpected format. Please try again.", countError:"The requested number of valid questions could not be created from these notes. Try fewer questions.", question:"Question", points:"points", hint:"Hint", answer:"Your answer", correctAnswer:"Correct answer", explanation:"Explanation", feedback:"Feedback", criteria:"What earns marks", unanswered:"Unanswered", correct:"Correct", incorrect:"Incorrect", partial:"Partially correct", pending:"Needs review", score:"Score", percent:"of total", grade:"Estimated grade", gradeNote:"An estimate based only on automatically marked questions; it is not an official school grade.", correctCount:"Correct", incorrectCount:"Incorrect", pendingCount:"Open answers to review", topics:"Topics to improve", noTopics:"Great work — no lost-mark topics to review.", openPending:"Open answers are not automatically graded. Review them against the criteria below. They are excluded from this provisional score.", started:"In progress", completed:"Completed", remove:"Delete saved test", deleteConfirm:"Delete this saved test? This cannot be undone.",
     qType:{multiple_choice:"Multiple choice",true_false:"True / false",fill_blank:"Fill in the blanks",open:"Open question"}, trueLabel:"True", falseLabel:"False", minutes:"min", seconds:"sec", more:"More", less:"Less"
@@ -30,7 +30,7 @@ const translations = {
     back:"Home", eyebrow:"Studietools", title:"Oefentoets", subtitle:"Maak van je aantekeningen een oefentoets. Beantwoord vragen op je eigen tempo en zie wat je nog kunt oefenen.", removeFile:"Verwijderen",
     setupTitle:"Maak een oefentoets", setupSub:"Voeg leerstof toe, kies je instellingen en genereer vragen.", private:"Op dit apparaat opgeslagen", materialLabel:"Leerstof", dropTitle:"Sleep een pdf hierheen of klik om te kiezen", dropSub:"Alleen pdf · maximaal 50 MB en 100 pagina’s · gescande pagina’s worden op dit apparaat gelezen", materialPlaceholder:"Plak of typ hier je aantekeningen…", materialHint:"Gebruik duidelijke aantekeningen, tekstboekfragmenten of samenvattingen.",
     subject:"Vak", subjectPlaceholder:"bijv. Biologie", testTitle:"Titel van de toets", titlePlaceholder:"Wordt voorgesteld op basis van je vak", difficulty:"Moeilijkheid", easy:"Makkelijk", medium:"Gemiddeld", hard:"Moeilijk", mixed:"Gemengd", questionCount:"Aantal vragen", questionTypes:"Vraagtypen (kies minstens één)", mc:"Meerkeuze", tf:"Waar / niet waar", fill:"Invulvragen", open:"Open vragen", timeLimit:"Tijdslimiet (minuten, optioneel)", options:"Opties", shuffle:"Vragen door elkaar", hints:"Hints tonen", explanations:"Uitleg na afloop tonen", generate:"Oefentoets maken", generating:"Vragen genereren en controleren…", history:"Toetsgeschiedenis", savedTests:"Bewaarde toetsen", noHistory:"Je bewaarde toetsen verschijnen hier.",
-    previous:"Vorige", next:"Volgende", submit:"Toets inleveren", results:"Resultaat", backToSetup:"Terug naar Oefentoets", retry:"Opnieuw maken", newTest:"Nieuwe oefentoets maken", confirmSubmit:"Er zijn nog onbeantwoorde vragen. Toch inleveren?", expired:"De tijd is om. Je antwoorden worden ingeleverd.",
+    previous:"Vorige", next:"Volgende", submit:"Toets inleveren", results:"Resultaat", backToSetup:"Terug naar Oefentoets", retry:"Opnieuw maken", newTest:"Nieuwe oefentoets maken", exportLabel:"Download je oefentoets", exportPdf:"Afdrukken / opslaan als pdf", exportWord:"Download Word", exportPopupError:"Het afdrukvenster kon niet worden geopend. Sta pop-ups toe en probeer opnieuw.", exportError:"Het Word-document kon niet worden gemaakt. Probeer het opnieuw.", confirmSubmit:"Er zijn nog onbeantwoorde vragen. Toch inleveren?", expired:"De tijd is om. Je antwoorden worden ingeleverd.",
     needText:"Voeg leerstof toe of upload een pdf.", needSubject:"Vul eerst een vak in.", chooseType:"Kies minstens één vraagtype.", tooLong:"Je leerstof is langer dan 100.000 tekens. Maak het korter; er is niets afgekapt.", badFile:"Kies een pdf-bestand van maximaal 50 MB en 100 pagina’s.", tooManyPages:"Deze pdf heeft meer dan 100 pagina’s. Splits het bestand op en probeer het opnieuw.", pdfError:"Deze pdf kon niet worden uitgelezen. Probeer een andere pdf of plak de tekst.", extracting:"Pdf-pagina’s worden op dit apparaat gelezen…", apiError:"De oefentoets kon niet worden gemaakt. Probeer het opnieuw.", 
     malformed:"De toetsservice gaf een onverwacht formaat. Probeer het opnieuw.", countError:"Er konden niet genoeg geldige vragen uit deze leerstof worden gemaakt. Kies minder vragen.", question:"Vraag", points:"punten", hint:"Hint", answer:"Jouw antwoord", correctAnswer:"Goed antwoord", explanation:"Uitleg", feedback:"Feedback", criteria:"Punten verdien je met", unanswered:"Niet beantwoord", correct:"Goed", incorrect:"Niet goed", partial:"Gedeeltelijk goed", pending:"Zelf nakijken", score:"Score", percent:"van totaal", grade:"Geschat cijfer", gradeNote:"Een schatting op basis van automatisch nagekeken vragen; dit is geen officieel schoolcijfer.", correctCount:"Goed", incorrectCount:"Fout", pendingCount:"Open vragen ter controle", topics:"Onderwerpen om te oefenen", noTopics:"Goed gedaan — er zijn geen verloren punten om te herhalen.", openPending:"Open antwoorden worden niet automatisch nagekeken. Beoordeel ze aan de hand van de criteria hieronder. Ze tellen niet mee in deze voorlopige score.", started:"Bezig", completed:"Afgerond", remove:"Verwijder bewaarde toets", deleteConfirm:"Deze bewaarde toets verwijderen? Dit kan niet ongedaan worden gemaakt.",
     qType:{multiple_choice:"Meerkeuze",true_false:"Waar / niet waar",fill_blank:"Invulvraag",open:"Open vraag"}, trueLabel:"Waar", falseLabel:"Niet waar", minutes:"min", seconds:"sec", more:"Meer", less:"Minder"
@@ -40,12 +40,12 @@ const translations = {
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
 const els = {
-  lang: $("#language-select"), setup: $("#setup-view"), exam: $("#exam-view"), results: $("#results-view"),
+  setup: $("#setup-view"), exam: $("#exam-view"), results: $("#results-view"),
   material: $("#study-material"), subject: $("#subject"), title: $("#test-title"), difficulty: $("#difficulty"), count: $("#question-count"),
   time: $("#time-limit"), pdf: $("#pdf-file"), drop: $("#dropzone"), pdfStatus: $("#pdfStatus"), fileRow: $("#file-row"), fileName: $("#file-name"), notice: $("#notice"), loader: $("#loader"),
   generate: $("#generate-btn"), history: $("#history-list"), historyCount: $("#history-count"), charCount: $("#char-count"), card: $("#question-card"), timer: $("#timer"),
   pos: $("#question-position"), examTitle: $("#exam-title"), progress: $("#progress-fill"), prev: $("#prev-btn"), next: $("#next-btn"), submit: $("#submit-btn"),
-  scoreSummary: $("#score-summary"), resultSub: $("#result-subtitle"), resultDate: $("#result-date"), resultList: $("#result-list"), improve: $("#improve-box"),
+  scoreSummary: $("#score-summary"), resultList: $("#result-list"), improve: $("#improve-box"),
   questionNav: $("#question-nav"), answeredCount: $("#answeredCount")
 };
 let language = "en";
@@ -68,7 +68,7 @@ let pdfWizardFileName = "";
 const groqRateState = { tokenLimit: DEFAULT_GROQ_TPM_LIMIT, remainingTokens: null, tokenResetAt: 0, remainingRequests: null, lastRequestAt: 0 };
 
 function t(key) { return translations[language][key] || translations.en[key] || key; }
-const i18nAliases = {"calc.backHome":"back","pt.eyebrow":"eyebrow","pt.title":"title","pt.subtitle":"subtitle","setup.material":"materialLabel","setup.settings":"options","setup.tabPdf":"tabPdf","setup.tabPaste":"tabPaste","setup.tabManual":"tabManual","setup.dropTitle":"dropTitle","setup.dropHint":"dropSub","setup.pastePlaceholder":"materialPlaceholder","setup.manualPlaceholder":"materialPlaceholder","setup.pasteBtn":"pasteBtn","setup.subject":"subject","setup.name":"testTitle","setup.nameHint":"titlePlaceholder","setup.difficulty":"difficulty","setup.easy":"easy","setup.medium":"medium","setup.hard":"hard","setup.mixed":"mixed","setup.count":"questionCount","setup.types":"questionTypes","type.mc":"mc","type.tf":"tf","type.open":"open","type.fill":"fill","setup.typesHint":"typesHint","setup.options":"options","setup.timeLimit":"timeLimit","setup.minutes":"minutes","setup.shuffle":"shuffle","setup.hints":"hints","setup.explanations":"explanations","setup.tooLong":"tooLong","generate.notice":"generationNotice","generate.btn":"generate","generate.loading":"generating","history.title":"history","history.saved":"savedTests","history.hint":"historyHint","generating.title":"generating","generating.step1":"generating","generating.cancel":"backToSetup","test.prev":"previous","test.next":"next","test.submit":"submit","results.score":"score","results.estimatedGrade":"grade","results.gradeNote":"gradeNote","results.topics":"topics","results.review":"results","results.retry":"retry","results.newTest":"newTest","results.back":"backToSetup","footer.madeBy":"footerMadeBy","footer.note":"footerNote","dialog.cancel":"cancel","dialog.ok":"continue","language.english":"english","language.dutch":"dutch"};
+const i18nAliases = {"calc.backHome":"back","pt.eyebrow":"eyebrow","pt.title":"title","pt.subtitle":"subtitle","setup.material":"materialLabel","setup.settings":"options","setup.tabPdf":"tabPdf","setup.tabPaste":"tabPaste","setup.tabManual":"tabManual","setup.dropTitle":"dropTitle","setup.dropHint":"dropSub","setup.pastePlaceholder":"materialPlaceholder","setup.manualPlaceholder":"materialPlaceholder","setup.pasteBtn":"pasteBtn","setup.subject":"subject","setup.name":"testTitle","setup.nameHint":"titlePlaceholder","setup.difficulty":"difficulty","setup.easy":"easy","setup.medium":"medium","setup.hard":"hard","setup.mixed":"mixed","setup.count":"questionCount","setup.types":"questionTypes","type.mc":"mc","type.tf":"tf","type.open":"open","type.fill":"fill","setup.typesHint":"typesHint","setup.options":"options","setup.timeLimit":"timeLimit","setup.minutes":"minutes","setup.shuffle":"shuffle","setup.hints":"hints","setup.explanations":"explanations","setup.tooLong":"tooLong","generate.notice":"generationNotice","generate.btn":"generate","generate.loading":"generating","history.title":"history","history.saved":"savedTests","history.hint":"historyHint","generating.title":"generating","generating.step1":"generating","generating.cancel":"backToSetup","test.prev":"previous","test.next":"next","test.submit":"submit","results.score":"score","results.estimatedGrade":"grade","results.gradeNote":"gradeNote","results.exportLabel":"exportLabel","results.exportPdf":"exportPdf","results.exportWord":"exportWord","results.topics":"topics","results.review":"results","results.retry":"retry","results.newTest":"newTest","results.back":"backToSetup","footer.madeBy":"footerMadeBy","footer.note":"footerNote","dialog.cancel":"cancel","dialog.ok":"continue","language.english":"english","language.dutch":"dutch"};
 const extraText = {en:{tabPdf:"PDF",tabPaste:"Paste",tabManual:"Type",pasteBtn:"Paste from clipboard",typesHint:"Choose at least one type. Open questions are reviewed by you.",historyHint:"Saved locally in this browser.",generationNotice:"Your notes and extracted PDF text are sent to an AI service to generate the test.",footerMadeBy:"· made by students, for students",footerNote:"No account · everything stays in your browser",cancel:"Cancel",continue:"Continue",english:"English",dutch:"Nederlands"},nl:{tabPdf:"PDF",tabPaste:"Plakken",tabManual:"Typen",pasteBtn:"Plakken vanaf klembord",typesHint:"Kies minstens één type. Open vragen kijk je zelf na.",historyHint:"Lokaal opgeslagen in deze browser.",generationNotice:"Je aantekeningen en uitgelezen pdf-tekst worden naar een AI-service gestuurd om de toets te maken.",footerMadeBy:"· gemaakt door studenten, voor studenten",footerNote:"Geen account · alles blijft in je browser",cancel:"Annuleren",continue:"Doorgaan",english:"English",dutch:"Nederlands"}};
 function loadHistory() {
   try {
@@ -83,20 +83,23 @@ function persist() {
 function applyLanguage(next) {
   language = translations[next] ? next : "en";
   document.documentElement.lang = language;
-  els.lang.value = language;
   $$('[data-i18n]').forEach(node => {
     const key = node.dataset.i18n;
     const alias = i18nAliases[key] || key;
     node.textContent = extraText[language][alias] || t(alias);
   });
-  $$('[data-i18n-placeholder]').forEach(node => { const key=node.dataset.i18nPlaceholder; node.placeholder=t(key==="setup.pastePlaceholder"||key==="setup.manualPlaceholder"?"materialPlaceholder":key); });
+  $$('[data-i18n-placeholder]').forEach(node => { const key=node.dataset.i18nPlaceholder; node.placeholder=t(key==="setup.pastePlaceholder"||key==="setup.manualPlaceholder"?"materialPlaceholder":key);   });
   const current = $("#language-current"); if (current) current.textContent = language === "nl" ? "Nederlands" : "English";
-  const trigger = $("#language-trigger"); if (trigger) trigger.setAttribute("aria-label", `Language: ${current.textContent}`);
-  $$(".language-option").forEach(button => button.setAttribute("aria-checked", String(button.dataset.language === language)));
   const flag = $("#language-trigger .language-flag"); if (flag) flag.src = language === "nl" ? "../assets/flag-netherlands.svg" : "../assets/flag-england.svg";
+  const trigger = $("#language-trigger");
+  if (trigger) trigger.setAttribute("aria-label", `Language: ${current.textContent}`);
+  const menu = $("#language-menu");
+  if (menu) menu.setAttribute("aria-label", language === "nl" ? "Kies een taal" : "Choose language");
+  $$(".language-option").forEach(option => option.setAttribute("aria-checked", String(option.dataset.language === language)));
   try { localStorage.setItem("studystack-language", language); } catch {}
   renderHistory();
   if (currentTest && els.exam.classList.contains("active")) renderQuestion();
+  if (currentTest && els.results.classList.contains("active") && currentTest.result) renderResults(currentTest);
 }
 function showView(name) {
   [els.setup, els.exam, els.results].forEach(view => { view.classList.remove("active"); view.hidden = true; });
@@ -757,6 +760,7 @@ function renderQuestion() {
   els.examTitle.textContent = `${currentTest.title} · ${currentTest.subject}`;
   els.pos.textContent = `${t("question")} ${currentIndex + 1} ${language === "nl" ? "van" : "of"} ${currentTest.questions.length}`;
   els.progress.style.width = `${((currentIndex + 1) / currentTest.questions.length) * 100}%`;
+  $("#progress-wrap").setAttribute("aria-valuenow", String(Math.round((currentIndex + 1) / currentTest.questions.length * 100)));
   els.prev.disabled = currentIndex === 0; els.next.disabled = currentIndex === currentTest.questions.length - 1;
   els.submit.hidden = currentIndex !== currentTest.questions.length - 1;
   const card = els.card; card.replaceChildren();
@@ -799,7 +803,11 @@ function renderQuestionNav() {
     button.setAttribute("aria-label", `${t("question")} ${index + 1}`);
     if (index === currentIndex) { button.classList.add("is-current"); button.setAttribute("aria-current", "step"); }
     if (currentTest.answers[question.id] !== undefined && currentTest.answers[question.id] !== "") button.classList.add("is-answered");
-    button.addEventListener("click", () => { currentIndex = index; renderQuestion(); window.scrollTo({ top: 0, behavior: "smooth" }); });
+    button.addEventListener("click", () => {
+      currentIndex = index;
+      renderQuestion();
+      els.questionNav.querySelector('[aria-current="step"]')?.focus({ preventScroll: true });
+    });
     els.questionNav.append(button);
   });
 }
@@ -853,11 +861,20 @@ function estimatedGrade(percent) { return Math.max(1, Math.min(10, Math.round((1
 function appendText(parent, tag, className, text) { const node = document.createElement(tag); if (className) node.className = className; node.textContent = text; parent.append(node); return node; }
 function renderResults(test) {
   const result = test.result; const hasAutoScore = Number(result.scoredMax) > 0; const percent = hasAutoScore ? Math.round(result.earned / result.scoredMax * 100) : 0;
-  els.scoreSummary.replaceChildren(); els.scoreSummary.style.setProperty("--score", `${percent * 3.6}deg`);
-  const ring = document.createElement("div"); ring.className = "score-ring"; const inner = document.createElement("span"); inner.textContent = hasAutoScore ? `${percent}%` : "—"; ring.append(inner);
-  const copy = document.createElement("div"); copy.className = "score-copy"; appendText(copy,"h2",null,`${result.earned} / ${result.scoredMax || 0} ${t("points")}`); if (hasAutoScore) appendText(copy,"p",null,`${t("grade")}: ${estimatedGrade(percent)} / 10`); else appendText(copy,"p",null,t("openPending")); appendText(copy,"p","grade-note",t("gradeNote"));
-  els.scoreSummary.append(ring,copy);
-  els.resultSub.textContent = `${test.title} · ${test.subject}`; els.resultDate.textContent = formatDate(result.completedAt);
+  els.scoreSummary.replaceChildren();
+  const summary = document.createElement("div"); summary.className = "pt-result-summary";
+  appendText(summary,"h2","pt-result-title",`${test.title} · ${test.subject}`);
+  appendText(summary,"p","pt-result-date",formatDate(result.completedAt));
+  const grade = document.createElement("div"); grade.className = "pt-grade-medallion";
+  appendText(grade,"span","pt-grade-label",t("grade"));
+  appendText(grade,"strong","pt-grade-value",hasAutoScore ? String(estimatedGrade(percent)) : "—");
+  appendText(grade,"span","pt-grade-scale","/ 10");
+  summary.append(grade);
+  appendText(summary,"p","pt-points-line",`${result.earned} / ${result.scoredMax || 0} ${t("points")}`);
+  if (hasAutoScore) appendText(summary,"p","pt-result-percent",`${t("score")}: ${percent}% ${t("percent")}`);
+  else appendText(summary,"p","pt-result-percent",t("openPending"));
+  appendText(summary,"p","pt-grade-note",t("gradeNote"));
+  els.scoreSummary.append(summary);
   els.resultList.replaceChildren();
   const misses = [];
   test.questions.forEach((q,i) => {
@@ -880,6 +897,65 @@ function renderResults(test) {
     if (mark.status === "incorrect" || mark.status === "partial" || mark.status === "pending") misses.push(q.topic || test.subject);
   });
   const topics = [...new Set(misses)]; els.improve.replaceChildren(); appendText(els.improve,"h3",null,t("topics")); appendText(els.improve,"p",null,topics.length ? topics.join(" · ") : t("noTopics"));
+}
+
+function exportFilename(test) {
+  const name = String(test.title || test.subject || "practice-test")
+    .replace(/[<>:"/\\|?*\u0000-\u001f]/g, "-")
+    .trim()
+    .slice(0, 80);
+  return name || "practice-test";
+}
+function buildExportDocument(test) {
+  const questions = test.questions.map((question, index) => {
+    const type = translations[language].qType[question.type] || question.type;
+    const points = question.type === "open" ? question.max_points : question.points;
+    let response = "";
+    if (question.type === "multiple_choice") {
+      response = `<ol class="choices" type="A">${question.options.map(option => `<li>${escapeHtml(option)}</li>`).join("")}</ol>`;
+    } else if (question.type === "true_false") {
+      response = `<p class="choices">${escapeHtml(t("trueLabel"))} &nbsp; &#9633; &nbsp;&nbsp; ${escapeHtml(t("falseLabel"))} &nbsp; &#9633;</p>`;
+    } else {
+      response = `<div class="answer-lines"></div>`;
+    }
+    return `<section class="question"><p class="question-meta">${escapeHtml(t("question"))} ${index + 1} · ${escapeHtml(type)} · ${escapeHtml(String(points))} ${escapeHtml(t("points"))}</p><h2>${escapeHtml(question.question)}</h2>${response}</section>`;
+  }).join("");
+  const lang = language === "nl" ? "nl" : "en";
+  return `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><title>${escapeHtml(test.title)}</title><style>
+    @page{size:A4;margin:18mm}body{font-family:Calibri,Arial,sans-serif;color:#172554;line-height:1.55}header{margin-bottom:28px;padding-bottom:14px;border-bottom:2px solid #2563eb}h1{margin:0 0 4px;font-size:24pt}header p{margin:0;color:#475569}.question{break-inside:avoid;margin:0 0 28px}.question-meta{margin:0;color:#2563eb;font-size:10pt;font-weight:bold}.question h2{margin:6px 0 12px;font-size:14pt;white-space:pre-wrap}.choices{padding-left:28px}.choices li{padding:3px 0}.answer-lines{height:88px;border-bottom:1px solid #cbd5e1;background:repeating-linear-gradient(to bottom,transparent 0,transparent 28px,#cbd5e1 29px,#cbd5e1 30px)}
+  </style></head><body><header><h1>${escapeHtml(test.title)}</h1><p>${escapeHtml(test.subject)}</p></header>${questions}</body></html>`;
+}
+function printTest() {
+  if (!currentTest) return;
+  const printWindow = window.open("", "_blank");
+  if (!printWindow) { showNotice(t("exportPopupError")); return; }
+  printWindow.opener = null;
+  printWindow.document.open();
+  printWindow.document.write(buildExportDocument(currentTest));
+  printWindow.document.close();
+  setTimeout(() => {
+    if (printWindow.closed) return;
+    printWindow.focus();
+    printWindow.print();
+  }, 250);
+}
+function downloadWordDocument() {
+  if (!currentTest) return;
+  let url;
+  try {
+    const documentBlob = new Blob([buildExportDocument(currentTest)], { type: "application/msword;charset=utf-8" });
+    url = URL.createObjectURL(documentBlob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${exportFilename(currentTest)}.doc`;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  } catch {
+    if (url) URL.revokeObjectURL(url);
+    showNotice(t("exportError"));
+  }
 }
 function formatStudentAnswer(q, answer) {
   if (answer === undefined || answer === "") return "";
@@ -910,14 +986,40 @@ function newTest() { clearInterval(countdown); countdown=null; currentTest=null;
 
 function wireEvents() {
   wirePdfWizard();
-  els.lang.addEventListener("change", () => applyLanguage(els.lang.value));
-  const languageTrigger=$("#language-trigger"),languageMenu=$("#language-menu");
-  const setLanguageMenuOpen=open=>{languageMenu.hidden=!open;languageTrigger.setAttribute("aria-expanded",String(open));if(open){const selected=$(".language-option[aria-checked='true']");(selected||$(".language-option")).focus();}};
+  const languagePicker=$("#language-picker"),languageTrigger=$("#language-trigger"),languageMenu=$("#language-menu");
+  const languageOptions=$$(".language-option",languageMenu);
+  const setLanguageMenuOpen=open=>{
+    languageTrigger.setAttribute("aria-expanded",String(open));
+    languageMenu.hidden=!open;
+    if(open){
+      const selected=languageOptions.find(option=>option.dataset.language===language);
+      (selected||languageOptions[0]).focus();
+    }
+  };
   languageTrigger.addEventListener("click",()=>setLanguageMenuOpen(languageMenu.hidden));
-  $$(".language-option").forEach(button=>button.addEventListener("click",event=>{event.preventDefault();event.stopPropagation();applyLanguage(button.dataset.language);setLanguageMenuOpen(false);languageTrigger.focus();}));
-  document.addEventListener("click",event=>{if(!$("#language-picker").contains(event.target))setLanguageMenuOpen(false);});
-  document.addEventListener("keydown",event=>{if(event.key==="Escape"&&!languageMenu.hidden){setLanguageMenuOpen(false);languageTrigger.focus();}});
-  document.addEventListener("pointermove",event=>{if(event.pointerType==="touch")return;const surface=event.target.closest(".pt-card,.pt-check,.pt-chip,.pt-seg,.pt-tabs,.pt-btn,.language-picker,.language-menu,.answer-choice");if(!surface)return;const rect=surface.getBoundingClientRect();surface.style.setProperty("--light-x",`${(event.clientX-rect.left)/rect.width*100}%`);surface.style.setProperty("--light-y",`${(event.clientY-rect.top)/rect.height*100}%`);});
+  languageOptions.forEach(option=>option.addEventListener("click",()=>{
+    applyLanguage(option.dataset.language);
+    setLanguageMenuOpen(false);
+    languageTrigger.focus();
+  }));
+  languageMenu.addEventListener("keydown",event=>{
+    const currentIndex=languageOptions.indexOf(document.activeElement);
+    let nextIndex;
+    if(event.key==="ArrowDown")nextIndex=(currentIndex+1)%languageOptions.length;
+    else if(event.key==="ArrowUp")nextIndex=(currentIndex-1+languageOptions.length)%languageOptions.length;
+    else if(event.key==="Home")nextIndex=0;
+    else if(event.key==="End")nextIndex=languageOptions.length-1;
+    else if(event.key==="Escape"){
+      setLanguageMenuOpen(false);
+      languageTrigger.focus();
+      event.preventDefault();
+      return;
+    }else return;
+    event.preventDefault();
+    languageOptions[nextIndex].focus();
+  });
+  document.addEventListener("click",event=>{if(!languagePicker.contains(event.target))setLanguageMenuOpen(false);});
+  document.addEventListener("pointermove",event=>{if(event.pointerType==="touch")return;const surface=event.target.closest(".pt-card,.pt-check,.pt-chip,.pt-seg,.pt-tabs,.pt-btn,.language-picker,.answer-choice");if(!surface)return;const rect=surface.getBoundingClientRect();surface.style.setProperty("--light-x",`${(event.clientX-rect.left)/rect.width*100}%`);surface.style.setProperty("--light-y",`${(event.clientY-rect.top)/rect.height*100}%`);});
   $$(".pt-tab").forEach(tab=>tab.addEventListener("click",()=>{
     $$(".pt-tab").forEach(item=>{const active=item===tab; item.classList.toggle("is-active",active); item.setAttribute("aria-selected",String(active));});
     $$(".pt-tabpanel").forEach(panel=>panel.hidden=panel.dataset.panel!==tab.dataset.tab);
@@ -951,6 +1053,10 @@ function wireEvents() {
   $("#back-to-home").addEventListener("click", () => { currentTest=null; showView("setup"); });
   $("#retry-btn").addEventListener("click", resetForRetry);
   $("#new-test-btn").addEventListener("click", newTest);
+  $$("[data-export-format]").forEach(button => button.addEventListener("click", () => {
+    if (button.dataset.exportFormat === "pdf") printTest();
+    else if (button.dataset.exportFormat === "word") downloadWordDocument();
+  }));
   $$(".glass").forEach(card => {
     card.addEventListener("pointermove", event => {
       if (event.pointerType === "touch") return;

@@ -21,7 +21,8 @@ export default async function handler(req) {
   const corsHeaders = {
     "Access-Control-Allow-Origin": corsOrigin,
     "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type"
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Expose-Headers": "Retry-After, X-RateLimit-Limit-Requests, X-RateLimit-Limit-Tokens, X-RateLimit-Remaining-Requests, X-RateLimit-Remaining-Tokens, X-RateLimit-Reset-Requests, X-RateLimit-Reset-Tokens"
   };
 
   // Handle preflight
@@ -50,12 +51,16 @@ export default async function handler(req) {
       body: req.body
     });
 
+    const responseHeaders = new Headers(corsHeaders);
+    responseHeaders.set("Content-Type", upstream.headers.get("Content-Type") || "application/json");
+    ["retry-after", "x-ratelimit-limit-requests", "x-ratelimit-limit-tokens", "x-ratelimit-remaining-requests", "x-ratelimit-remaining-tokens", "x-ratelimit-reset-requests", "x-ratelimit-reset-tokens"].forEach(name => {
+      const value = upstream.headers.get(name);
+      if (value) responseHeaders.set(name, value);
+    });
+
     return new Response(upstream.body, {
       status: upstream.status,
-      headers: {
-        "Content-Type": upstream.headers.get("Content-Type") || "application/json",
-        ...corsHeaders
-      }
+      headers: responseHeaders
     });
   }
 

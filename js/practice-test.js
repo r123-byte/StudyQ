@@ -4,7 +4,11 @@ const STORAGE_KEY = "studystack-practice-test-history-v1";
 const MAX_MATERIAL = 100000;
 const MAX_FILE_BYTES = 50 * 1024 * 1024;
 const MAX_PDF_PAGES = 100;
-const MAX_SINGLE_REQUEST_CHARS = 18000;
+const MAX_SINGLE_REQUEST_CHARS = 9000;
+const MAX_QUESTIONS_PER_REQUEST = 5;
+// Conservative baseline for Groq's published Free plan; live TPM headers override this estimate.
+const MIN_REQUEST_INTERVAL_MS = 2100;
+const DEFAULT_GROQ_TPM_LIMIT = 8000;
 const PDFJS_URL = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs";
 const PDF_WORKER_URL = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.mjs";
 const TESSERACT_URL = "https://cdn.jsdelivr.net/npm/tesseract.js@7.0.0/+esm";
@@ -61,6 +65,7 @@ let pdfWizardCompleted = false;
 let pdfWizardOcrDone = false;
 let pdfWizardOcrStatus = "";
 let pdfWizardFileName = "";
+const groqRateState = { tokenLimit: DEFAULT_GROQ_TPM_LIMIT, remainingTokens: null, tokenResetAt: 0, remainingRequests: null, lastRequestAt: 0 };
 
 function t(key) { return translations[language][key] || translations.en[key] || key; }
 const i18nAliases = {"calc.backHome":"back","pt.eyebrow":"eyebrow","pt.title":"title","pt.subtitle":"subtitle","setup.material":"materialLabel","setup.settings":"options","setup.tabPdf":"tabPdf","setup.tabPaste":"tabPaste","setup.tabManual":"tabManual","setup.dropTitle":"dropTitle","setup.dropHint":"dropSub","setup.pastePlaceholder":"materialPlaceholder","setup.manualPlaceholder":"materialPlaceholder","setup.pasteBtn":"pasteBtn","setup.subject":"subject","setup.name":"testTitle","setup.nameHint":"titlePlaceholder","setup.difficulty":"difficulty","setup.easy":"easy","setup.medium":"medium","setup.hard":"hard","setup.mixed":"mixed","setup.count":"questionCount","setup.types":"questionTypes","type.mc":"mc","type.tf":"tf","type.open":"open","type.fill":"fill","setup.typesHint":"typesHint","setup.options":"options","setup.timeLimit":"timeLimit","setup.minutes":"minutes","setup.shuffle":"shuffle","setup.hints":"hints","setup.explanations":"explanations","setup.tooLong":"tooLong","generate.notice":"generationNotice","generate.btn":"generate","generate.loading":"generating","history.title":"history","history.saved":"savedTests","history.hint":"historyHint","generating.title":"generating","generating.step1":"generating","generating.cancel":"backToSetup","test.prev":"previous","test.next":"next","test.submit":"submit","results.score":"score","results.estimatedGrade":"grade","results.gradeNote":"gradeNote","results.topics":"topics","results.review":"results","results.retry":"retry","results.newTest":"newTest","results.back":"backToSetup","footer.madeBy":"footerMadeBy","footer.note":"footerNote","dialog.cancel":"cancel","dialog.ok":"continue","language.english":"english","language.dutch":"dutch"};
@@ -165,36 +170,103 @@ function pdfPageTextItems(content) {
   return cleanPdfText(content.items.map(item => `${item.str || ""}${item.hasEOL ? "\n" : " "}`).join(""));
 }
 
-async function requestGroqCompletion(messages) {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 55000);
-  let response;
-  try {
-    response = await fetch(GROQ_PROXY_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      signal: controller.signal,
-      body: JSON.stringify({
-        model: TEST_GENERATION_MODEL,
-        messages,
-        reasoning_effort: "low",
-        max_completion_tokens: 8192,
-        response_format: { type: "json_object" }
-      })
-    });
-  } catch (error) {
-    if (error.name === "AbortError") throw new Error("AI_TIMEOUT");
-    throw new Error("AI_PROXY_UNAVAILABLE");
-  } finally { clearTimeout(timeout); }
-  const payload = await response.json().catch(() => ({}));
-  if (!response.ok) {
-    if (response.status === 429) throw new Error("AI_RATE_LIMIT");
-    if ([401, 403, 503].includes(response.status)) throw new Error("AI_PROXY_CONFIG");
-    throw new Error("AI_UPSTREAM_ERROR");
+function parseGroqDuration(value) {
+  if (!value) return 0;
+  const numeric = Number(value);
+  if (Number.isFinite(numeric)) return Math.max(0, numeric * 1000);
+  let milliseconds = 0;
+  for (const match of value.matchAll(/([\d.]+)\s*(ms|h|m|s)/gi)) {
+    const amount = Number(match[1]);
+    const unit = match[2].toLowerCase();
+    milliseconds += amount * (unit === "h" ? 3600000 : unit === "m" ? 60000 : unit === "s" ? 1000 : 1);
   }
-  const content = payload.choices?.[0]?.message?.content;
-  if (typeof content !== "string" || !content.trim()) throw new Error("AI_INVALID_RESPONSE");
-  return content.trim();
+  return milliseconds;
+}
+
+function recordGroqRateHeaders(headers) {
+  const tokenLimitHeader = headers.get("x-ratelimit-limit-tokens");
+  const remainingTokensHeader = headers.get("x-ratelimit-remaining-tokens");
+  const remainingRequestsHeader = headers.get("x-ratelimit-remaining-requests");
+  const tokenLimit = tokenLimitHeader === null ? NaN : Number(tokenLimitHeader);
+  const remainingTokens = remainingTokensHeader === null ? NaN : Number(remainingTokensHeader);
+  const remainingRequests = remainingRequestsHeader === null ? NaN : Number(remainingRequestsHeader);
+  const tokenReset = parseGroqDuration(headers.get("x-ratelimit-reset-tokens"));
+  if (Number.isFinite(tokenLimit) && tokenLimit > 0) groqRateState.tokenLimit = tokenLimit;
+  groqRateState.remainingTokens = Number.isFinite(remainingTokens) ? remainingTokens : null;
+  groqRateState.remainingRequests = Number.isFinite(remainingRequests) ? remainingRequests : null;
+  groqRateState.tokenResetAt = tokenReset ? Date.now() + tokenReset : 0;
+}
+
+const sleep = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
+
+async function waitForGroqCapacity(estimatedTokens, onWait) {
+  if (groqRateState.remainingRequests === 0) throw new Error("AI_DAILY_LIMIT");
+  let delay = Math.max(0, MIN_REQUEST_INTERVAL_MS - (Date.now() - groqRateState.lastRequestAt));
+  if (groqRateState.remainingTokens !== null && groqRateState.remainingTokens < estimatedTokens) {
+    const resetDelay = Math.max(0, groqRateState.tokenResetAt - Date.now());
+    delay = Math.max(delay, resetDelay + 250);
+  }
+  if (delay > 0) {
+    onWait?.(Math.ceil(delay / 1000));
+    await sleep(delay);
+    groqRateState.remainingTokens = null;
+  }
+}
+
+async function requestGroqCompletion(messages, questionCount, onWait) {
+  const prompt = messages.map(message => message.content || "").join("\n");
+  const estimatedInputTokens = Math.ceil(prompt.length / 3);
+  const requestedCompletionTokens = Math.min(3500, 500 + questionCount * 350);
+  const maxCompletionTokens = Math.min(requestedCompletionTokens, Math.max(700, Math.floor(groqRateState.tokenLimit * 0.9) - estimatedInputTokens));
+  const estimatedTokens = estimatedInputTokens + maxCompletionTokens;
+  const requestBody = JSON.stringify({
+    model: TEST_GENERATION_MODEL,
+    messages,
+    reasoning_effort: "low",
+    max_completion_tokens: maxCompletionTokens,
+    response_format: { type: "json_object" }
+  });
+  let lastError;
+
+  for (let attempt = 0; attempt < 4; attempt++) {
+    await waitForGroqCapacity(estimatedTokens, onWait);
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 55000);
+    let response;
+    try {
+      response = await fetch(GROQ_PROXY_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        signal: controller.signal,
+        body: requestBody
+      });
+    } catch (error) {
+      if (error.name === "AbortError") throw new Error("AI_TIMEOUT");
+      throw new Error("AI_PROXY_UNAVAILABLE");
+    } finally { clearTimeout(timeout); }
+    groqRateState.lastRequestAt = Date.now();
+    recordGroqRateHeaders(response.headers);
+    const payload = await response.json().catch(() => ({}));
+    if (response.status === 429) {
+      if (groqRateState.remainingRequests === 0) throw new Error("AI_DAILY_LIMIT");
+      const retryAfter = parseGroqDuration(response.headers.get("retry-after")) || Math.min(30000, 1500 * (2 ** attempt));
+      if (attempt === 3 || retryAfter > 60000) throw new Error("AI_RATE_LIMIT");
+      lastError = new Error("AI_RATE_LIMIT");
+      onWait?.(Math.ceil(retryAfter / 1000));
+      await sleep(retryAfter + Math.floor(Math.random() * 300));
+      groqRateState.remainingTokens = null;
+      continue;
+    }
+    if (!response.ok) {
+      if ([401, 403, 503].includes(response.status)) throw new Error("AI_PROXY_CONFIG");
+      if (response.status === 413) throw new Error("AI_REQUEST_TOO_LARGE");
+      throw new Error("AI_UPSTREAM_ERROR");
+    }
+    const content = payload.choices?.[0]?.message?.content;
+    if (typeof content !== "string" || !content.trim()) throw new Error("AI_INVALID_RESPONSE");
+    return content.trim();
+  }
+  throw lastError || new Error("AI_RATE_LIMIT");
 }
 
 function splitMaterial(material, batchCount) {
@@ -242,9 +314,11 @@ function distributeTypes(settings) {
 }
 
 async function generateTestWithGroq(settings, material, onBatchProgress) {
-  const batchCount = material.length <= MAX_SINGLE_REQUEST_CHARS
-    ? 1
-    : Math.min(settings.count, Math.ceil(material.length / MAX_SINGLE_REQUEST_CHARS));
+  const batchCount = Math.min(settings.count, Math.max(
+    Math.ceil(material.length / MAX_SINGLE_REQUEST_CHARS),
+    Math.ceil(settings.count / MAX_QUESTIONS_PER_REQUEST),
+    1
+  ));
   const chunks = batchCount === 1 ? [material] : splitMaterial(material, batchCount);
   const questionAllocations = distributeQuestions(settings.count, chunks);
   const typePlan = distributeTypes(settings);
@@ -259,10 +333,10 @@ async function generateTestWithGroq(settings, material, onBatchProgress) {
     typePlan.slice(typeOffset, typeOffset + count).forEach(type => { typeCounts[type] = (typeCounts[type] || 0) + 1; });
     typeOffset += count;
     const batchSettings = { ...settings, count, typeCounts, types: settings.types.filter(type => typeCounts[type]) };
-    onBatchProgress?.(index + 1, chunks.length);
+    onBatchProgress?.(index + 1, chunks.length, 0);
     const answer = await requestGroqCompletion([
       { role: "user", content: buildTestQuestion(batchSettings, chunks[index]) }
-    ]);
+    ], count, seconds => onBatchProgress?.(index + 1, chunks.length, seconds));
     const generated = validateTestData(parseModelJson(answer), batchSettings);
     const actualTypeCounts = {};
     generated.questions.forEach(question => { actualTypeCounts[question.type] = (actualTypeCounts[question.type] || 0) + 1; });
@@ -620,7 +694,9 @@ function validateTestData(data, settings) {
 }
 function displayError(error) {
   if (error.message === "AI_PROXY_CONFIG") return language === "nl" ? "De AI-service is niet ingesteld. Controleer de API-sleutel in Vercel en deploy opnieuw." : "The AI service is not configured. Check its API key in Vercel and redeploy.";
-  if (error.message === "AI_RATE_LIMIT") return language === "nl" ? "De AI-service heeft de gebruikslimiet bereikt. Probeer het later opnieuw." : "The AI service has reached its usage limit. Try again later.";
+  if (error.message === "AI_RATE_LIMIT") return language === "nl" ? "De AI-service is nog steeds tijdelijk druk na automatisch wachten. Probeer het later opnieuw." : "The AI service is still rate limited after automatic retries. Please try again later.";
+  if (error.message === "AI_DAILY_LIMIT") return language === "nl" ? "De dagelijkse limiet van de AI-service is bereikt. Probeer het later opnieuw." : "The AI service has reached its daily request limit. Please try again later.";
+  if (error.message === "AI_REQUEST_TOO_LARGE") return language === "nl" ? "Een deel van de leerstof is te groot voor de AI-service. Kort de leerstof in en probeer het opnieuw." : "A section of the study material is too large for the AI service. Shorten the material and try again.";
   if (error.message === "AI_TIMEOUT") return language === "nl" ? "Het maken van de toets duurde te lang. Probeer minder leerstof of minder vragen." : "Test generation timed out. Try using less material or fewer questions.";
   if (error.message === "AI_PROXY_UNAVAILABLE" || error.message.startsWith("AI_UPSTREAM_ERROR")) return language === "nl" ? "De AI-service is tijdelijk niet beschikbaar. Probeer het straks opnieuw." : "The AI service is temporarily unavailable. Please try again shortly.";
   if (error.message === "AI_INVALID_RESPONSE") return language === "nl" ? "De AI gaf geen geldige toets terug. Probeer het opnieuw of kies minder vragen." : "The AI returned an invalid test. Try again or choose fewer questions.";
@@ -642,8 +718,11 @@ async function generateTest() {
   hideNotice(); setBusy(true);
   const settings = formSettings();
   try {
-    const generated = await generateTestWithGroq(settings, els.material.value.trim(), (batch, total) => {
-      if (total > 1) {
+    const generated = await generateTestWithGroq(settings, els.material.value.trim(), (batch, total, waitSeconds) => {
+      if (waitSeconds > 0) {
+        const loaderLabel = els.loader.querySelector('[data-i18n="generate.loading"]');
+        if (loaderLabel) loaderLabel.textContent = language === "nl" ? `Wachten op capaciteit (${waitSeconds} sec)…` : `Waiting for available capacity (${waitSeconds}s)…`;
+      } else if (total > 1) {
         const loaderLabel = els.loader.querySelector('[data-i18n="generate.loading"]');
         if (loaderLabel) loaderLabel.textContent = language === "nl" ? `Vragen maken (deel ${batch} van ${total})…` : `Generating questions (part ${batch} of ${total})…`;
       }

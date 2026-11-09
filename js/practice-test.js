@@ -1021,7 +1021,18 @@ function renderResults(test) {
       }
       if (mark.feedback) appendText(card,"p","result-line",`${t("feedback")}: ${mark.feedback}`);
     }
-    if (test.settings.showExplanations && q.explanation) appendText(card,"div","result-explain",`${t("explanation")}: ${q.explanation}`);
+    if (test.settings.showExplanations && q.explanation) {
+      const explanation = document.createElement("section");
+      explanation.className = "result-explain";
+      explanation.setAttribute("aria-label", t("explanation"));
+      appendText(explanation,"h4","result-explain-title",t("explanation"));
+      const content = document.createElement("div");
+      content.className = "result-explain-content";
+      String(q.explanation).split(/\n+/).map(paragraph => paragraph.trim()).filter(Boolean)
+        .forEach(paragraph => appendText(content,"p",null,paragraph));
+      explanation.append(content);
+      card.append(explanation);
+    }
     els.resultList.append(card);
     if (mark.status === "incorrect" || mark.status === "partial" || mark.status === "pending") misses.push(q.topic || test.subject);
   });

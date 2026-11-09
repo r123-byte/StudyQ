@@ -218,6 +218,11 @@ body { background:radial-gradient(circle at 12% 16%,rgba(177,211,250,.34),transp
 .pt-grader-loading-card p { margin:0; font-size:1rem; font-weight:700; line-height:1.5; }
 .pt-grader-spinner { display:block; box-sizing:border-box; width:48px; height:48px; border:5px solid rgba(59,130,246,.2); border-top-color:#2563eb; border-right-color:#60a5fa; border-radius:50%; animation:pt-spin .8s linear infinite!important; will-change:transform; }
 .question-hint,.result-explain { margin-top:1.2rem; padding:.8rem 1rem; border:1px solid rgba(255,255,255,.92); border-radius:14px; color:#475569; background:rgba(255,255,255,.5); box-shadow:inset 0 1px 1px #fff; -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px); font-size:.9rem; }
+.result-explain { border-left:3px solid rgba(59,130,246,.62); }
+.result-explain-title { margin:0 0 .45rem; color:#1e3a8a; font-size:.95rem; font-weight:800; letter-spacing:.01em; }
+.result-explain-content { color:#475569; line-height:1.65; }
+.result-explain-content p { margin:.35rem 0 0; }
+.result-explain-content p:first-child { margin-top:0; }
 .pt-results { display:grid; gap:.8rem; }
 .result-question { padding:1.2rem 1.4rem; border:1px solid rgba(255,255,255,.92); border-radius:18px; background:linear-gradient(145deg,rgba(255,255,255,.72),rgba(231,241,253,.5)); box-shadow:inset 0 1px 1px #fff,0 10px 22px -18px rgba(37,91,158,.4); -webkit-backdrop-filter:blur(16px) saturate(160%); backdrop-filter:blur(16px) saturate(160%); }
 .result-question h3 { margin:.85rem 0; color:#1e293b; line-height:1.4; }

@@ -17,6 +17,10 @@ const TESSERACT_CORE_URL = "https://cdn.jsdelivr.net/npm/tesseract.js-core@7.0.0
 const TESSERACT_LANG_URL = "https://tessdata.projectnaptha.com/4.0.0";
 const OPEN_GRADER_MODULE_URL = "https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2/+esm";
 const OPEN_GRADER_MODEL = "Xenova/all-MiniLM-L6-v2";
+// Similarity is mapped to partial credit so paraphrases need not match the key verbatim.
+const OPEN_GRADER_PARTIAL_CREDIT_FLOOR = 0.2;
+const OPEN_GRADER_FULL_CREDIT_SIMILARITY = 0.6;
+const OPEN_GRADER_PASS_THRESHOLD = 0.65;
 
 const translations = {
   en: {
@@ -25,7 +29,7 @@ const translations = {
     subject:"Subject", subjectPlaceholder:"e.g. Biology", testTitle:"Test title", titlePlaceholder:"Suggested from subject", difficulty:"Difficulty", easy:"Easy", medium:"Medium", hard:"Hard", mixed:"Mixed", questionCount:"Number of questions", questionTypes:"Question types (choose at least one)", mc:"Multiple choice", tf:"True / false", fill:"Fill in the blanks", open:"Open questions", timeLimit:"Time limit (minutes, optional)", options:"Options", shuffle:"Shuffle question order", hints:"Show hints", explanations:"Show explanations after", generate:"Generate test", generating:"Generating and checking your questions…", history:"Test history", savedTests:"Saved tests", noHistory:"Your saved tests will appear here.",
     previous:"Previous", next:"Next", submit:"Submit test", results:"Results", backToSetup:"Practice Test home", retry:"Retry test", newTest:"Generate another test", exportLabel:"Download your test", exportPdf:"Print / save as PDF", exportWord:"Download Word", exportPopupError:"Could not open the print window. Allow pop-ups and try again.", exportError:"Could not create the Word document. Please try again.", confirmSubmit:"Some questions are unanswered. Submit anyway?", expired:"Time is up. Your answers are being submitted.",
     needText:"Add study material or upload a PDF before generating a test.", needSubject:"Enter a subject first.", chooseType:"Choose at least one question type.", tooLong:"Your material is over the 100,000 character limit. Shorten it before generating; nothing was cut off.", badFile:"Choose a PDF file no larger than 50 MB and 100 pages.", tooManyPages:"This PDF has more than 100 pages. Split it into smaller files and try again.", pdfError:"Could not read this PDF. Try another file or paste the text.", extracting:"Reading PDF pages on this device…", apiError:"Could not generate the test. Please try again.", 
-    malformed:"The test service returned an unexpected format. Please try again.", countError:"The requested number of valid questions could not be created from these notes. Try fewer questions.", question:"Question", points:"points", hint:"Hint", answer:"Your answer", correctAnswer:"Correct answer", explanation:"Explanation", feedback:"Feedback", criteria:"What earns marks", unanswered:"Unanswered", correct:"Correct", incorrect:"Incorrect", partial:"Partially correct", pending:"Needs review", score:"Score", percent:"of total", grade:"Estimated grade", gradeNote:"An estimate that can make mistakes. Review open-answer scores against the rubric; this is not an official school grade.", correctCount:"Correct", incorrectCount:"Incorrect", pendingCount:"Open answers to review", topics:"Topics to improve", noTopics:"Great work — no lost-mark topics to review.", openPending:"Some open answers still need manual review and are excluded from this provisional score.", graderPrivacy:"Open answers are checked on this device against the marking criteria. The model downloads once (about 23 MB) and is cached in your browser; your answer is not sent to an AI service. Meaning matching is most reliable for English.", graderLoading:"Loading the local answer grader… this may take a moment the first time.", graderWorking:"Checking open answers on this device…", graderProgress:"Downloading the local answer grader", graderLoadError:"The local answer grader could not finish. Check your connection and try again.", graderFallback:"The local grader could not finish. Finish the test with open answers marked for manual review instead?", semanticMatch:"Semantic similarity", localGradeDisclosure:"Open answers were compared on this device with their marking criteria using semantic similarity. Treat the scores as estimates, review them against the rubric, and note the model is most reliable for English.", localGradeUnavailable:"Open answers could not be graded automatically and are marked for manual review.", openPlaceholder:"Write up to 5 sentences…", englishName:"English", dutchName:"Nederlands",
+    malformed:"The test service returned an unexpected format. Please try again.", countError:"The requested number of valid questions could not be created from these notes. Try fewer questions.", question:"Question", points:"points", hint:"Hint", answer:"Your answer", correctAnswer:"Correct answer", explanation:"Explanation", feedback:"Feedback", criteria:"What earns marks", unanswered:"Unanswered", correct:"Correct", incorrect:"Incorrect", partial:"Partially correct", pending:"Needs review", score:"Score", percent:"of total", grade:"Estimated grade", gradeNote:"An estimate that can make mistakes. Review open-answer scores against the rubric; this is not an official school grade.", correctCount:"Correct", incorrectCount:"Incorrect", pendingCount:"Open answers to review", topics:"Topics to improve", noTopics:"Great work — no lost-mark topics to review.", openPending:"Some open answers still need manual review and are excluded from this provisional score.", graderPrivacy:"Open answers are checked on this device against the marking criteria. The model downloads once (about 23 MB) and is cached in your browser; your answer is not sent to an AI service. Meaning matching is most reliable for English.", graderLoading:"Loading the local answer grader… this may take a moment the first time.", graderWorking:"Checking open answers on this device…", graderProgress:"Downloading the local answer grader", graderLoadError:"The local answer grader could not finish. Check your connection and try again.", graderFallback:"The local grader could not finish. Finish the test with open answers marked for manual review instead?", semanticMatch:"Rubric alignment", localGradeDisclosure:"Open answers are compared on this device with each marking criterion. Similar ideas earn partial credit; exact wording is not required. Treat the score as an estimate and review it against the rubric. The model is most reliable for English.", localGradeUnavailable:"Open answers could not be graded automatically and are marked for manual review.", openPlaceholder:"Write up to 5 sentences…", englishName:"English", dutchName:"Nederlands",
     qType:{multiple_choice:"Multiple choice",true_false:"True / false",fill_blank:"Fill in the blanks",open:"Open question"}, trueLabel:"True", falseLabel:"False", minutes:"min", seconds:"sec", more:"More", less:"Less"
   },
   nl: {
@@ -34,7 +38,7 @@ const translations = {
     subject:"Vak", subjectPlaceholder:"bijv. Biologie", testTitle:"Titel van de toets", titlePlaceholder:"Wordt voorgesteld op basis van je vak", difficulty:"Moeilijkheid", easy:"Makkelijk", medium:"Gemiddeld", hard:"Moeilijk", mixed:"Gemengd", questionCount:"Aantal vragen", questionTypes:"Vraagtypen (kies minstens één)", mc:"Meerkeuze", tf:"Waar / niet waar", fill:"Invulvragen", open:"Open vragen", timeLimit:"Tijdslimiet (minuten, optioneel)", options:"Opties", shuffle:"Vragen door elkaar", hints:"Hints tonen", explanations:"Uitleg na afloop tonen", generate:"Oefentoets maken", generating:"Vragen genereren en controleren…", history:"Toetsgeschiedenis", savedTests:"Bewaarde toetsen", noHistory:"Je bewaarde toetsen verschijnen hier.",
     previous:"Vorige", next:"Volgende", submit:"Toets inleveren", results:"Resultaat", backToSetup:"Terug naar Oefentoets", retry:"Opnieuw maken", newTest:"Nieuwe oefentoets maken", exportLabel:"Download je oefentoets", exportPdf:"Afdrukken / opslaan als pdf", exportWord:"Download Word", exportPopupError:"Het afdrukvenster kon niet worden geopend. Sta pop-ups toe en probeer opnieuw.", exportError:"Het Word-document kon niet worden gemaakt. Probeer het opnieuw.", confirmSubmit:"Er zijn nog onbeantwoorde vragen. Toch inleveren?", expired:"De tijd is om. Je antwoorden worden ingeleverd.",
     needText:"Voeg leerstof toe of upload een pdf.", needSubject:"Vul eerst een vak in.", chooseType:"Kies minstens één vraagtype.", tooLong:"Je leerstof is langer dan 100.000 tekens. Maak het korter; er is niets afgekapt.", badFile:"Kies een pdf-bestand van maximaal 50 MB en 100 pagina’s.", tooManyPages:"Deze pdf heeft meer dan 100 pagina’s. Splits het bestand op en probeer het opnieuw.", pdfError:"Deze pdf kon niet worden uitgelezen. Probeer een andere pdf of plak de tekst.", extracting:"Pdf-pagina’s worden op dit apparaat gelezen…", apiError:"De oefentoets kon niet worden gemaakt. Probeer het opnieuw.", 
-    malformed:"De toetsservice gaf een onverwacht formaat. Probeer het opnieuw.", countError:"Er konden niet genoeg geldige vragen uit deze leerstof worden gemaakt. Kies minder vragen.", question:"Vraag", points:"punten", hint:"Hint", answer:"Jouw antwoord", correctAnswer:"Goed antwoord", explanation:"Uitleg", feedback:"Feedback", criteria:"Punten verdien je met", unanswered:"Niet beantwoord", correct:"Goed", incorrect:"Niet goed", partial:"Gedeeltelijk goed", pending:"Zelf nakijken", score:"Score", percent:"van totaal", grade:"Geschat cijfer", gradeNote:"Een schatting die fouten kan bevatten. Controleer open antwoorden aan de hand van de criteria; dit is geen officieel schoolcijfer.", correctCount:"Goed", incorrectCount:"Fout", pendingCount:"Open vragen ter controle", topics:"Onderwerpen om te oefenen", noTopics:"Goed gedaan — er zijn geen verloren punten om te herhalen.", openPending:"Sommige open antwoorden moeten nog handmatig worden nagekeken en tellen niet mee in deze voorlopige score.", graderPrivacy:"Open antwoorden worden op dit apparaat vergeleken met de beoordelingscriteria. Het model wordt eenmalig gedownload (ongeveer 23 MB) en in je browser opgeslagen; je antwoord wordt niet naar een AI-service gestuurd. Betekenisovereenkomst is het betrouwbaarst voor Engelse antwoorden.", graderLoading:"De lokale nakijkhulp wordt geladen… dit kan de eerste keer even duren.", graderWorking:"Open antwoorden worden op dit apparaat nagekeken…", graderProgress:"De lokale nakijkhulp downloaden", graderLoadError:"De lokale nakijkhulp kon niet afronden. Controleer je verbinding en probeer het opnieuw.", graderFallback:"De lokale nakijkhulp kon niet afronden. De toets afronden en open antwoorden handmatig laten nakijken?", semanticMatch:"Semantische overeenkomst", localGradeDisclosure:"Open antwoorden zijn op dit apparaat met de beoordelingscriteria vergeleken op basis van betekenis. Zie de scores als schattingen, controleer ze met de criteria en houd er rekening mee dat het model het betrouwbaarst is voor Engels.", localGradeUnavailable:"Open antwoorden konden niet automatisch worden beoordeeld en moeten handmatig worden nagekeken.", openPlaceholder:"Schrijf maximaal 5 zinnen…", englishName:"Engels", dutchName:"Nederlands",
+    malformed:"De toetsservice gaf een onverwacht formaat. Probeer het opnieuw.", countError:"Er konden niet genoeg geldige vragen uit deze leerstof worden gemaakt. Kies minder vragen.", question:"Vraag", points:"punten", hint:"Hint", answer:"Jouw antwoord", correctAnswer:"Goed antwoord", explanation:"Uitleg", feedback:"Feedback", criteria:"Punten verdien je met", unanswered:"Niet beantwoord", correct:"Goed", incorrect:"Niet goed", partial:"Gedeeltelijk goed", pending:"Zelf nakijken", score:"Score", percent:"van totaal", grade:"Geschat cijfer", gradeNote:"Een schatting die fouten kan bevatten. Controleer open antwoorden aan de hand van de criteria; dit is geen officieel schoolcijfer.", correctCount:"Goed", incorrectCount:"Fout", pendingCount:"Open vragen ter controle", topics:"Onderwerpen om te oefenen", noTopics:"Goed gedaan — er zijn geen verloren punten om te herhalen.", openPending:"Sommige open antwoorden moeten nog handmatig worden nagekeken en tellen niet mee in deze voorlopige score.", graderPrivacy:"Open antwoorden worden op dit apparaat vergeleken met de beoordelingscriteria. Het model wordt eenmalig gedownload (ongeveer 23 MB) en in je browser opgeslagen; je antwoord wordt niet naar een AI-service gestuurd. Betekenisovereenkomst is het betrouwbaarst voor Engelse antwoorden.", graderLoading:"De lokale nakijkhulp wordt geladen… dit kan de eerste keer even duren.", graderWorking:"Open antwoorden worden op dit apparaat nagekeken…", graderProgress:"De lokale nakijkhulp downloaden", graderLoadError:"De lokale nakijkhulp kon niet afronden. Controleer je verbinding en probeer het opnieuw.", graderFallback:"De lokale nakijkhulp kon niet afronden. De toets afronden en open antwoorden handmatig laten nakijken?", semanticMatch:"Overeenkomst met criteria", localGradeDisclosure:"Open antwoorden worden op dit apparaat vergeleken met elk beoordelingscriterium. Antwoorden met dezelfde strekking krijgen deelpunten; de formulering hoeft niet exact overeen te komen. Zie de score als schatting en controleer deze met de criteria. Het model werkt het betrouwbaarst voor Engels.", localGradeUnavailable:"Open antwoorden konden niet automatisch worden beoordeeld en moeten handmatig worden nagekeken.", openPlaceholder:"Schrijf maximaal 5 zinnen…", englishName:"Engels", dutchName:"Nederlands",
     qType:{multiple_choice:"Meerkeuze",true_false:"Waar / niet waar",fill_blank:"Invulvraag",open:"Open vraag"}, trueLabel:"Waar", falseLabel:"Niet waar", minutes:"min", seconds:"sec", more:"Meer", less:"Minder"
   }
 };
@@ -871,16 +875,36 @@ class LocalAnswerGrader {
     const output = await this.extractor(text, { pooling: "mean", normalize: true, truncation: true });
     return output.data;
   }
-  async grade(studentAnswer, referenceAnswer, passThreshold = 0.7) {
+  async grade(studentAnswer, referenceAnswers, passThreshold = OPEN_GRADER_PASS_THRESHOLD) {
     await this.init();
     if (!studentAnswer || studentAnswer.trim().length < 3) {
-      return { score: 0, passed: false, message: "Answer too short." };
+      return { score: 0, similarity: 0, passed: false, message: "Answer too short." };
     }
-    const studentVector = await this.getEmbedding(studentAnswer);
-    const referenceVector = await this.getEmbedding(referenceAnswer);
-    const score = this.cosineSimilarity(studentVector, referenceVector);
-    const normalizedScore = Math.max(0, Math.min(1, Number(score.toFixed(2))));
-    return { score: normalizedScore, passed: normalizedScore >= passThreshold };
+    const references = referenceAnswers.filter(reference => typeof reference === "string" && reference.trim());
+    if (!references.length) throw new Error("LOCAL_GRADER_MISSING_REFERENCE");
+    const output = await this.extractor([studentAnswer, ...references], {
+      pooling: "mean",
+      normalize: true,
+      truncation: true,
+      batch_size: 8
+    });
+    const dimensions = output.data.length / (references.length + 1);
+    if (!Number.isInteger(dimensions) || dimensions < 1) throw new Error("LOCAL_GRADER_INVALID_OUTPUT");
+    const vectorAt = index => output.data.slice(index * dimensions, (index + 1) * dimensions);
+    const studentVector = vectorAt(0);
+    const similarities = references.map((_, index) =>
+      Math.max(0, Math.min(1, this.cosineSimilarity(studentVector, vectorAt(index + 1))))
+    );
+    const similarity = similarities.reduce((total, value) => total + value, 0) / similarities.length;
+    const score = Math.max(0, Math.min(1,
+      (similarity - OPEN_GRADER_PARTIAL_CREDIT_FLOOR) /
+      (OPEN_GRADER_FULL_CREDIT_SIMILARITY - OPEN_GRADER_PARTIAL_CREDIT_FLOOR)
+    ));
+    return {
+      score: Number(score.toFixed(2)),
+      similarity: Number(similarity.toFixed(2)),
+      passed: score >= passThreshold
+    };
   }
 }
 async function gradeOpenAnswers(onProgress) {
@@ -895,13 +919,13 @@ async function gradeOpenAnswers(onProgress) {
   const marks = {};
   for (const question of openQuestions) {
     const answer = String(currentTest.answers[question.id]).trim();
-    const referenceAnswer = [question.explanation, ...question.marking_criteria].filter(Boolean).join(". ");
-    const result = await localAnswerGrader.grade(answer, referenceAnswer);
+    const result = await localAnswerGrader.grade(answer, question.marking_criteria);
     const points = Math.round(result.score * question.max_points * 2) / 2;
     marks[question.id] = {
       points,
       status: result.passed ? "correct" : points > 0 ? "partial" : "incorrect",
-      similarity: Math.round(result.score * 100)
+      similarity: Math.round(result.similarity * 100),
+      rubricScore: Math.round(result.score * 100)
     };
   }
   return marks;

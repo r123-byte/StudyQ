@@ -32,6 +32,57 @@ export default async function handler(req) {
 
   const path = url.searchParams.get("path") || "";
 
+  // ── Route: ?path=openrouter/chat/completions ────────────
+  if (path === "openrouter/chat/completions") {
+    if (req.method !== "POST") {
+      return new Response(JSON.stringify({ error: { message: "POST is required." } }), {
+        status: 405,
+        headers: { "Content-Type": "application/json", ...corsHeaders }
+      });
+    }
+    if (!process.env.OPENROUTER_API_KEY) {
+      return new Response(JSON.stringify({ error: { message: "OpenRouter API key is not configured." } }), {
+        status: 503,
+        headers: { "Content-Type": "application/json", ...corsHeaders }
+      });
+    }
+    const requestBody = await req.json().catch(() => null);
+    if (!requestBody || !Array.isArray(requestBody.messages)) {
+      return new Response(JSON.stringify({ error: { message: "A JSON chat request is required." } }), {
+        status: 400,
+        headers: { "Content-Type": "application/json", ...corsHeaders }
+      });
+    }
+    requestBody.model = "liquid/lfm-3-1.7b:free";
+    requestBody.max_tokens = Math.min(2400, Math.max(1, Number(requestBody.max_tokens) || 2400));
+    const serializedRequestBody = JSON.stringify(requestBody);
+    if (serializedRequestBody.length > 50000) {
+      return new Response(JSON.stringify({ error: { message: "The grading request is too large." } }), {
+        status: 413,
+        headers: { "Content-Type": "application/json", ...corsHeaders }
+      });
+    }
+    const upstream = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": req.headers.get("content-type") || "application/json",
+        "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`
+      },
+      body: serializedRequestBody
+    });
+
+    const responseHeaders = new Headers(corsHeaders);
+    responseHeaders.set("Content-Type", upstream.headers.get("Content-Type") || "application/json");
+    ["retry-after"].forEach(name => {
+      const value = upstream.headers.get(name);
+      if (value) responseHeaders.set(name, value);
+    });
+    return new Response(upstream.body, {
+      status: upstream.status,
+      headers: responseHeaders
+    });
+  }
+
   // ── Route: ?path=groq/* ────────────
   if (path.startsWith("groq/")) {
     if (!process.env.GROQ_API_KEY) {

@@ -378,7 +378,7 @@
                     <label class="pt-chip"><input type="checkbox" name="qtype" value="open"><span data-i18n="type.open">Open</span></label>
                     <label class="pt-chip"><input type="checkbox" name="qtype" value="fill_blank"><span data-i18n="type.fill">Invullen</span></label>
                   </div>
-                  <p class="pt-help" data-i18n="setup.typesHint">Kies minimaal één type. Open vragen worden door AI nagekeken en kunnen deelpunten opleveren.</p>
+                  <p class="pt-help" data-i18n="setup.typesHint">Kies minstens één type. Open antwoorden worden nagekeken aan de hand van de criteria en kunnen deelpunten opleveren.</p>
                 </div>
 
                 <div class="pt-field">
@@ -447,8 +447,6 @@
             <button class="pt-btn pt-btn--ghost" type="button" id="next-btn" data-i18n="test.next">Volgende</button>
             <button class="pt-btn pt-btn--primary" type="button" id="submit-btn" data-i18n="test.submit">Inleveren</button>
           </div>
-          <p class="pt-grader-status" id="grader-status" role="status" aria-live="polite" hidden></p>
-
           <div class="pt-download-actions">
             <p data-i18n="results.exportLabel">Download je oefentoets</p>
             <button class="pt-btn pt-btn--ghost" type="button" data-export-format="pdf">
@@ -506,6 +504,13 @@
         </div>
       </footer>
     </main>
+  </div>
+
+  <div class="pt-grader-loading" id="grader-loading-screen" role="status" aria-live="polite" aria-busy="false" hidden>
+    <div class="pt-grader-loading-card">
+      <span class="pt-grader-spinner" aria-hidden="true"></span>
+      <p data-grader-loading-text>Je antwoorden worden nagekeken…</p>
+    </div>
   </div>
 
   <dialog class="pt-dialog" id="confirmDialog">
@@ -605,7 +610,7 @@
           "type.tf": "True / false",
           "type.open": "Open",
           "type.fill": "Fill in the blanks",
-          "setup.typesHint": "Choose at least one type. Open answers are graded by AI and may earn partial credit.",
+          "setup.typesHint": "Choose at least one type. Open answers are checked against the marking criteria and may earn partial credit.",
           "setup.options": "Options",
           "setup.timeLimit": "Time limit",
           "setup.minutes": "min",
@@ -685,7 +690,7 @@
           "type.tf": "Waar / onwaar",
           "type.open": "Open",
           "type.fill": "Invullen",
-          "setup.typesHint": "Kies minstens één type. Open antwoorden worden door AI nagekeken en kunnen deelpunten opleveren.",
+          "setup.typesHint": "Kies minstens één type. Open antwoorden worden nagekeken aan de hand van de criteria en kunnen deelpunten opleveren.",
           "setup.options": "Opties",
           "setup.timeLimit": "Tijdslimiet",
           "setup.minutes": "min",

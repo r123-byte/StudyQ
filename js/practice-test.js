@@ -26,7 +26,7 @@ const translations = {
     subject:"Subject", subjectPlaceholder:"e.g. Biology", testTitle:"Test title", titlePlaceholder:"Suggested from subject", difficulty:"Difficulty", easy:"Easy", medium:"Medium", hard:"Hard", mixed:"Mixed", questionCount:"Number of questions", questionTypes:"Question types (choose at least one)", mc:"Multiple choice", tf:"True / false", fill:"Fill in the blanks", open:"Open questions", timeLimit:"Time limit (minutes, optional)", options:"Options", shuffle:"Shuffle question order", hints:"Show hints", explanations:"Show explanations after", generate:"Generate test", generating:"Generating and checking your questions…", history:"Test history", savedTests:"Saved tests", noHistory:"Your saved tests will appear here.",
     previous:"Previous", next:"Next", submit:"Submit test", results:"Results", backToSetup:"Practice Test home", retry:"Retry test", newTest:"Generate another test", exportLabel:"Download your test", exportPdf:"Print / save as PDF", exportWord:"Download Word", exportPopupError:"Could not open the print window. Allow pop-ups and try again.", exportError:"Could not create the Word document. Please try again.", confirmSubmit:"Some questions are unanswered. Submit anyway?", expired:"Time is up. Your answers are being submitted.",
     needText:"Add study material or upload a PDF before generating a test.", needSubject:"Enter a subject first.", chooseType:"Choose at least one question type.", tooLong:"Your material is over the 100,000 character limit. Shorten it before generating; nothing was cut off.", badFile:"Choose a PDF file no larger than 50 MB and 100 pages.", tooManyPages:"This PDF has more than 100 pages. Split it into smaller files and try again.", pdfError:"Could not read this PDF. Try another file or paste the text.", extracting:"Reading PDF pages on this device…", apiError:"Could not generate the test. Please try again.", 
-    malformed:"The test service returned an unexpected format. Please try again.", countError:"The requested number of valid questions could not be created from these notes. Try fewer questions.", question:"Question", points:"points", hint:"Hint", answer:"Your answer", correctAnswer:"Correct answer", explanation:"Explanation", feedback:"Feedback", criteria:"What earns marks", unanswered:"Unanswered", correct:"Correct", incorrect:"Incorrect", partial:"Partially correct", pending:"Needs review", score:"Score", percent:"of total", grade:"Estimated grade", gradeNote:"An estimate that can make mistakes. Review open-answer scores against the rubric; this is not an official school grade.", correctCount:"Correct", incorrectCount:"Incorrect", pendingCount:"Open answers to review", topics:"Topics to improve", noTopics:"Great work — no lost-mark topics to review.", openPending:"Some open answers still need manual review and are excluded from this provisional score.", graderPrivacy:"Open answers are sent through StudyQ’s proxy to OpenRouter for grading with LiquidAI LFM3-1.7B. They are not sent to the test-generation model. Similar ideas can earn partial credit, but check the result against the rubric.", graderLoading:"Checking open answers with LiquidAI…", graderWorking:"LiquidAI is grading your open answers…", graderLoadError:"OpenRouter grading failed. Check your connection and try again.", graderConfigError:"OpenRouter is not configured for this app. Set OPENROUTER_API_KEY on the proxy service and redeploy.", graderRateLimit:"OpenRouter is temporarily rate-limiting grading. Try submitting again in a moment.", graderRequestTooLarge:"The answers are too long to send for grading. Shorten them and try again.", graderFallback:"Automatic grading is unavailable. Finish the test with open answers marked for manual review instead?", semanticMatch:"AI rubric score", aiGradeDisclosure:"Open answers were graded by LiquidAI through OpenRouter. Scores are estimates: compare them with the marking criteria.", openPlaceholder:"Write up to 5 sentences…", englishName:"English", dutchName:"Nederlands",
+    malformed:"The test service returned an unexpected format. Please try again.", countError:"The requested number of valid questions could not be created from these notes. Try fewer questions.", question:"Question", points:"points", hint:"Hint", answer:"Your answer", correctAnswer:"Correct answer", explanation:"Explanation", feedback:"Feedback", criteria:"What earns marks", unanswered:"Unanswered", correct:"Correct", incorrect:"Incorrect", partial:"Partially correct", pending:"Needs review", score:"Score", percent:"of total", grade:"Estimated grade", gradeNote:"An estimate that can make mistakes. Review open-answer scores against the rubric; this is not an official school grade.", correctCount:"Correct", incorrectCount:"Incorrect", pendingCount:"Open answers to review", topics:"Topics to improve", noTopics:"Great work — no lost-mark topics to review.", openPending:"Some open answers still need manual review and are excluded from this provisional score.", graderPrivacy:"Open answers are checked against the marking criteria. Similar ideas can earn partial credit; review the feedback and score.", graderLoading:"Checking your answers…", graderLoadError:"Your answers could not be checked. Please try again.", graderConfigError:"Answer checking is temporarily unavailable.", graderRateLimit:"Answer checking is temporarily busy. Try submitting again in a moment.", graderRequestTooLarge:"The answers are too long to check. Shorten them and try again.", graderFallback:"Answer checking is unavailable. Finish the test with open answers marked for manual review instead?", semanticMatch:"Marking criteria match", checkedGradeDisclosure:"Open answers were checked against the marking criteria. Scores are estimates; review them against the rubric.", openPlaceholder:"Write up to 5 sentences…", englishName:"English", dutchName:"Nederlands",
     qType:{multiple_choice:"Multiple choice",true_false:"True / false",fill_blank:"Fill in the blanks",open:"Open question"}, trueLabel:"True", falseLabel:"False", minutes:"min", seconds:"sec", more:"More", less:"Less"
   },
   nl: {
@@ -35,7 +35,7 @@ const translations = {
     subject:"Vak", subjectPlaceholder:"bijv. Biologie", testTitle:"Titel van de toets", titlePlaceholder:"Wordt voorgesteld op basis van je vak", difficulty:"Moeilijkheid", easy:"Makkelijk", medium:"Gemiddeld", hard:"Moeilijk", mixed:"Gemengd", questionCount:"Aantal vragen", questionTypes:"Vraagtypen (kies minstens één)", mc:"Meerkeuze", tf:"Waar / niet waar", fill:"Invulvragen", open:"Open vragen", timeLimit:"Tijdslimiet (minuten, optioneel)", options:"Opties", shuffle:"Vragen door elkaar", hints:"Hints tonen", explanations:"Uitleg na afloop tonen", generate:"Oefentoets maken", generating:"Vragen genereren en controleren…", history:"Toetsgeschiedenis", savedTests:"Bewaarde toetsen", noHistory:"Je bewaarde toetsen verschijnen hier.",
     previous:"Vorige", next:"Volgende", submit:"Toets inleveren", results:"Resultaat", backToSetup:"Terug naar Oefentoets", retry:"Opnieuw maken", newTest:"Nieuwe oefentoets maken", exportLabel:"Download je oefentoets", exportPdf:"Afdrukken / opslaan als pdf", exportWord:"Download Word", exportPopupError:"Het afdrukvenster kon niet worden geopend. Sta pop-ups toe en probeer opnieuw.", exportError:"Het Word-document kon niet worden gemaakt. Probeer het opnieuw.", confirmSubmit:"Er zijn nog onbeantwoorde vragen. Toch inleveren?", expired:"De tijd is om. Je antwoorden worden ingeleverd.",
     needText:"Voeg leerstof toe of upload een pdf.", needSubject:"Vul eerst een vak in.", chooseType:"Kies minstens één vraagtype.", tooLong:"Je leerstof is langer dan 100.000 tekens. Maak het korter; er is niets afgekapt.", badFile:"Kies een pdf-bestand van maximaal 50 MB en 100 pagina’s.", tooManyPages:"Deze pdf heeft meer dan 100 pagina’s. Splits het bestand op en probeer het opnieuw.", pdfError:"Deze pdf kon niet worden uitgelezen. Probeer een andere pdf of plak de tekst.", extracting:"Pdf-pagina’s worden op dit apparaat gelezen…", apiError:"De oefentoets kon niet worden gemaakt. Probeer het opnieuw.", 
-    malformed:"De toetsservice gaf een onverwacht formaat. Probeer het opnieuw.", countError:"Er konden niet genoeg geldige vragen uit deze leerstof worden gemaakt. Kies minder vragen.", question:"Vraag", points:"punten", hint:"Hint", answer:"Jouw antwoord", correctAnswer:"Goed antwoord", explanation:"Uitleg", feedback:"Feedback", criteria:"Punten verdien je met", unanswered:"Niet beantwoord", correct:"Goed", incorrect:"Niet goed", partial:"Gedeeltelijk goed", pending:"Zelf nakijken", score:"Score", percent:"van totaal", grade:"Geschat cijfer", gradeNote:"Een schatting die fouten kan bevatten. Controleer open antwoorden aan de hand van de criteria; dit is geen officieel schoolcijfer.", correctCount:"Goed", incorrectCount:"Fout", pendingCount:"Open vragen ter controle", topics:"Onderwerpen om te oefenen", noTopics:"Goed gedaan — er zijn geen verloren punten om te herhalen.", openPending:"Sommige open antwoorden moeten nog handmatig worden nagekeken en tellen niet mee in deze voorlopige score.", graderPrivacy:"Open antwoorden worden via de StudyQ-proxy naar OpenRouter gestuurd en beoordeeld door LiquidAI LFM3-1.7B. Ze worden niet naar het toetsgeneratiemodel gestuurd. Antwoorden met dezelfde strekking kunnen deelpunten krijgen; controleer de beoordeling met de criteria.", graderLoading:"Open antwoorden worden beoordeeld door LiquidAI…", graderWorking:"LiquidAI beoordeelt je open antwoorden…", graderLoadError:"Nakijken via OpenRouter is mislukt. Controleer je verbinding en probeer het opnieuw.", graderConfigError:"OpenRouter is niet geconfigureerd voor deze app. Stel OPENROUTER_API_KEY in op de proxyserver en deploy opnieuw.", graderRateLimit:"OpenRouter beperkt het aantal beoordelingsverzoeken tijdelijk. Probeer het over een moment opnieuw.", graderRequestTooLarge:"De antwoorden zijn te lang om te laten nakijken. Maak ze korter en probeer het opnieuw.", graderFallback:"Automatisch nakijken is niet beschikbaar. De toets afronden en open antwoorden handmatig laten nakijken?", semanticMatch:"AI-beoordelingsscore", aiGradeDisclosure:"Open antwoorden zijn beoordeeld door LiquidAI via OpenRouter. Scores zijn schattingen: controleer ze met de beoordelingscriteria.", openPlaceholder:"Schrijf maximaal 5 zinnen…", englishName:"Engels", dutchName:"Nederlands",
+    malformed:"De toetsservice gaf een onverwacht formaat. Probeer het opnieuw.", countError:"Er konden niet genoeg geldige vragen uit deze leerstof worden gemaakt. Kies minder vragen.", question:"Vraag", points:"punten", hint:"Hint", answer:"Jouw antwoord", correctAnswer:"Goed antwoord", explanation:"Uitleg", feedback:"Feedback", criteria:"Punten verdien je met", unanswered:"Niet beantwoord", correct:"Goed", incorrect:"Niet goed", partial:"Gedeeltelijk goed", pending:"Zelf nakijken", score:"Score", percent:"van totaal", grade:"Geschat cijfer", gradeNote:"Een schatting die fouten kan bevatten. Controleer open antwoorden aan de hand van de criteria; dit is geen officieel schoolcijfer.", correctCount:"Goed", incorrectCount:"Fout", pendingCount:"Open vragen ter controle", topics:"Onderwerpen om te oefenen", noTopics:"Goed gedaan — er zijn geen verloren punten om te herhalen.", openPending:"Sommige open antwoorden moeten nog handmatig worden nagekeken en tellen niet mee in deze voorlopige score.", graderPrivacy:"Open antwoorden worden gecontroleerd aan de hand van de beoordelingscriteria. Antwoorden met dezelfde strekking kunnen deelpunten krijgen; controleer de feedback en score.", graderLoading:"Je antwoorden worden nagekeken…", graderLoadError:"Je antwoorden konden niet worden nagekeken. Probeer het opnieuw.", graderConfigError:"Automatisch nakijken is tijdelijk niet beschikbaar.", graderRateLimit:"Automatisch nakijken is tijdelijk druk. Probeer het over een moment opnieuw.", graderRequestTooLarge:"De antwoorden zijn te lang om na te kijken. Maak ze korter en probeer het opnieuw.", graderFallback:"Automatisch nakijken is niet beschikbaar. De toets afronden en open antwoorden handmatig laten nakijken?", semanticMatch:"Overeenkomst met criteria", checkedGradeDisclosure:"Open antwoorden zijn gecontroleerd aan de hand van de beoordelingscriteria. Scores zijn schattingen; controleer ze met de criteria.", openPlaceholder:"Schrijf maximaal 5 zinnen…", englishName:"Engels", dutchName:"Nederlands",
     qType:{multiple_choice:"Meerkeuze",true_false:"Waar / niet waar",fill_blank:"Invulvraag",open:"Open vraag"}, trueLabel:"Waar", falseLabel:"Niet waar", minutes:"min", seconds:"sec", more:"Meer", less:"Minder"
   }
 };
@@ -72,7 +72,7 @@ const groqRateState = { tokenLimit: DEFAULT_GROQ_TPM_LIMIT, remainingTokens: nul
 
 function t(key) { return translations[language][key] || translations.en[key] || key; }
 const i18nAliases = {"calc.backHome":"back","pt.eyebrow":"eyebrow","pt.title":"title","pt.subtitle":"subtitle","setup.material":"materialLabel","setup.settings":"options","setup.tabPdf":"tabPdf","setup.tabPaste":"tabPaste","setup.tabManual":"tabManual","setup.dropTitle":"dropTitle","setup.dropHint":"dropSub","setup.pastePlaceholder":"materialPlaceholder","setup.manualPlaceholder":"materialPlaceholder","setup.pasteBtn":"pasteBtn","setup.subject":"subject","setup.name":"testTitle","setup.nameHint":"titlePlaceholder","setup.difficulty":"difficulty","setup.easy":"easy","setup.medium":"medium","setup.hard":"hard","setup.mixed":"mixed","setup.count":"questionCount","setup.types":"questionTypes","type.mc":"mc","type.tf":"tf","type.open":"open","type.fill":"fill","setup.typesHint":"typesHint","setup.options":"options","setup.timeLimit":"timeLimit","setup.minutes":"minutes","setup.shuffle":"shuffle","setup.hints":"hints","setup.explanations":"explanations","setup.tooLong":"tooLong","generate.notice":"generationNotice","generate.btn":"generate","generate.loading":"generating","history.title":"history","history.saved":"savedTests","history.hint":"historyHint","generating.title":"generating","generating.step1":"generating","generating.cancel":"backToSetup","test.prev":"previous","test.next":"next","test.submit":"submit","results.score":"score","results.estimatedGrade":"grade","results.gradeNote":"gradeNote","results.exportLabel":"exportLabel","results.exportPdf":"exportPdf","results.exportWord":"exportWord","results.topics":"topics","results.review":"results","results.retry":"retry","results.newTest":"newTest","results.back":"backToSetup","footer.madeBy":"footerMadeBy","footer.note":"footerNote","dialog.cancel":"cancel","dialog.ok":"continue","language.english":"english","language.dutch":"dutch"};
-const extraText = {en:{tabPdf:"PDF",tabPaste:"Paste",tabManual:"Type",pasteBtn:"Paste from clipboard",typesHint:"Choose at least one type. Open answers are graded by AI and may earn partial credit.",historyHint:"Saved locally in this browser.",generationNotice:"Your notes and extracted PDF text are sent to an AI service to generate the test.",footerMadeBy:"· made by students, for students",footerNote:"No account · test history saved locally",cancel:"Cancel",continue:"Continue",english:"English",dutch:"Nederlands"},nl:{tabPdf:"PDF",tabPaste:"Plakken",tabManual:"Typen",pasteBtn:"Plakken vanaf klembord",typesHint:"Kies minstens één type. Open antwoorden worden door AI nagekeken en kunnen deelpunten opleveren.",historyHint:"Lokaal opgeslagen in deze browser.",generationNotice:"Je aantekeningen en uitgelezen pdf-tekst worden naar een AI-service gestuurd om de toets te maken.",footerMadeBy:"· gemaakt door studenten, voor studenten",footerNote:"Geen account · toetsgeschiedenis lokaal opgeslagen",cancel:"Annuleren",continue:"Doorgaan",english:"English",dutch:"Nederlands"}};
+const extraText = {en:{tabPdf:"PDF",tabPaste:"Paste",tabManual:"Type",pasteBtn:"Paste from clipboard",typesHint:"Choose at least one type. Open answers are checked against the marking criteria and may earn partial credit.",historyHint:"Saved locally in this browser.",generationNotice:"Your notes and extracted PDF text are sent to an AI service to generate the test.",footerMadeBy:"· made by students, for students",footerNote:"No account · test history saved locally",cancel:"Cancel",continue:"Continue",english:"English",dutch:"Nederlands"},nl:{tabPdf:"PDF",tabPaste:"Plakken",tabManual:"Typen",pasteBtn:"Plakken vanaf klembord",typesHint:"Kies minstens één type. Open antwoorden worden nagekeken aan de hand van de criteria en kunnen deelpunten opleveren.",historyHint:"Lokaal opgeslagen in deze browser.",generationNotice:"Je aantekeningen en uitgelezen pdf-tekst worden naar een AI-service gestuurd om de toets te maken.",footerMadeBy:"· gemaakt door studenten, voor studenten",footerNote:"Geen account · toetsgeschiedenis lokaal opgeslagen",cancel:"Annuleren",continue:"Doorgaan",english:"English",dutch:"Nederlands"}};
 function loadHistory() {
   try {
     const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
@@ -895,13 +895,12 @@ function autoGrade(q, answer) {
   }
   return { points: null, status: "pending" };
 }
-async function gradeOpenAnswers(onProgress, answers) {
+async function gradeOpenAnswers(answers) {
   const openQuestions = currentTest.questions.filter(question =>
     question.type === "open" && String(answers[question.id] || "").trim()
   );
   if (!openQuestions.length) return {};
 
-  onProgress?.({ status: "inference" });
   const result = await requestOpenRouterGrading(openQuestions, answers);
   if (!Array.isArray(result.marks)) throw new Error("GRADER_INVALID_RESPONSE");
   const marks = {};
@@ -922,11 +921,13 @@ async function gradeOpenAnswers(onProgress, answers) {
   if (Object.keys(marks).length !== openQuestions.length) throw new Error("GRADER_INVALID_RESPONSE");
   return marks;
 }
-function setGraderStatus(message = "") {
-  const status = $("#grader-status");
-  if (!status) return;
-  status.textContent = message;
-  status.hidden = !message;
+function setGraderLoading(loading) {
+  const screen = $("#grader-loading-screen");
+  if (!screen) return;
+  screen.hidden = !loading;
+  screen.setAttribute("aria-busy", String(loading));
+  const label = $("[data-grader-loading-text]", screen);
+  if (label) label.textContent = t("graderLoading");
 }
 async function submitTest(auto = false) {
   if (!currentTest || submitting) return;
@@ -935,15 +936,12 @@ async function submitTest(auto = false) {
   submitting = true; els.submit.disabled = true; clearInterval(countdown); countdown = null;
   const submittedAnswers = { ...currentTest.answers };
   renderQuestion();
-  setGraderStatus("");
   let openMarks = {};
   const hasAnsweredOpen = currentTest.questions.some(q => q.type === "open" && String(submittedAnswers[q.id] || "").trim());
   if (hasAnsweredOpen) {
-    setGraderStatus(t("graderLoading"));
+    setGraderLoading(true);
     try {
-      openMarks = await gradeOpenAnswers(({ status } = {}) => {
-        if (status === "inference") setGraderStatus(t("graderWorking"));
-      }, submittedAnswers);
+      openMarks = await gradeOpenAnswers(submittedAnswers);
     } catch (error) {
       console.error("OpenRouter open-answer grading failed.", error);
       const errorMessage = error.message === "GRADER_PROXY_CONFIG"
@@ -953,8 +951,8 @@ async function submitTest(auto = false) {
           : error.message === "GRADER_REQUEST_TOO_LARGE"
             ? t("graderRequestTooLarge")
           : t("graderLoadError");
-      setGraderStatus(errorMessage);
-      if (!window.confirm(t("graderFallback"))) {
+      setGraderLoading(false);
+      if (!window.confirm(`${errorMessage}\n\n${t("graderFallback")}`)) {
         submitting = false; renderQuestion();
         if (!auto) startTimer();
         return;
@@ -978,7 +976,7 @@ async function submitTest(auto = false) {
   const scoredMax = scoreable.reduce((sum, q) => sum + (q.type === "open" ? q.max_points : q.points), 0);
   const earned = scoreable.reduce((sum, q) => sum + marks[q.id].points, 0);
   currentTest.status = "completed"; currentTest.result = { marks, earned, maxScore, scoredMax, completedAt: Date.now(), gradingMode: Object.values(marks).some(mark => mark.status === "pending") ? "manual" : "automatic" };
-  setGraderStatus("");
+  setGraderLoading(false);
   saveCurrent(); renderResults(currentTest); showView("results");
   submitting = false; els.submit.disabled = false;
 }
@@ -987,7 +985,7 @@ function estimatedGrade(percent) { return Math.max(1, Math.min(10, Math.round((1
 function appendText(parent, tag, className, text) { const node = document.createElement(tag); if (className) node.className = className; node.textContent = text; parent.append(node); return node; }
 function renderResults(test) {
   const result = test.result; const hasAutoScore = Number(result.scoredMax) > 0; const percent = hasAutoScore ? Math.round(result.earned / result.scoredMax * 100) : 0;
-  const hasAiOpenGrades = Object.values(result.marks).some(mark => Number.isFinite(mark.rubricScore));
+  const hasCheckedOpenGrades = Object.values(result.marks).some(mark => Number.isFinite(mark.rubricScore));
   const hasPendingOpenGrades = Object.values(result.marks).some(mark => mark.status === "pending");
   els.scoreSummary.replaceChildren();
   const summary = document.createElement("div"); summary.className = "pt-result-summary";
@@ -1000,7 +998,7 @@ function renderResults(test) {
   summary.append(grade);
   appendText(summary,"p","pt-points-line",`${result.earned} / ${result.scoredMax || 0} ${t("points")}`);
   if (hasAutoScore) appendText(summary,"p","pt-result-percent",`${t("score")}: ${percent}% ${t("percent")}`);
-  if (hasAiOpenGrades) appendText(summary,"p","pt-grade-note",t("aiGradeDisclosure"));
+  if (hasCheckedOpenGrades) appendText(summary,"p","pt-grade-note",t("checkedGradeDisclosure"));
   if (hasPendingOpenGrades) appendText(summary,"p","pt-result-percent",t("openPending"));
   appendText(summary,"p","pt-grade-note",t("gradeNote"));
   els.scoreSummary.append(summary);

@@ -153,8 +153,6 @@
   };
   const aiTimetableEmpty = document.getElementById("ai-timetable-empty");
   const aiTimetableContent = document.getElementById("ai-timetable-content");
-  const aiFocusToggle = document.getElementById("ai-focus-toggle");
-
   const aiBridge = document.getElementById("ai-bridge");
   const aiBridgeValue = document.getElementById("ai-bridge-value");
   const aiBridgeStart = document.getElementById("ai-bridge-start");
@@ -248,10 +246,6 @@
     } catch (e) {}
     return "single";
   }
-  function setFocusPreference(v) {
-    try { localStorage.setItem(FOCUS_KEY, v); } catch (e) {}
-  }
-
   function readBridgeBlock() {
     try {
       const raw = localStorage.getItem(BRIDGE_KEY);
@@ -1064,25 +1058,6 @@
   aiTabs.forEach(function (tab) {
     tab.addEventListener("click", function() { setAiTab(tab.dataset.aiTab); });
   });
-
-  /* ============================================================
-     FOCUS TOGGLE
-     ============================================================ */
-  function reflectFocusToggle() {
-    if (!aiFocusToggle) return;
-    const focus = getFocusPreference();
-    aiFocusToggle.querySelectorAll("button").forEach(function (b) {
-      b.classList.toggle("active", b.dataset.focus === focus);
-    });
-  }
-  if (aiFocusToggle) {
-    aiFocusToggle.querySelectorAll("button").forEach(function (b) {
-      b.addEventListener("click", function() {
-        setFocusPreference(b.dataset.focus);
-        reflectFocusToggle();
-      });
-    });
-  }
 
   /* ============================================================
      UI FLOW

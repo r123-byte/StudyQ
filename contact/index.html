@@ -1,18 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
-  <script>
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && Element.prototype.animate) {
-      document.documentElement.classList.add('intro-pending');
-    }
-  </script>
-  <link rel="stylesheet" href="../page-intro.css">
+  <script src="../js/site-navigation-state.js?v=8"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact | StudyTools</title>
+  <title>Contact | StudyStack</title>
   <link rel="stylesheet" href="../footer.css">
   <link rel="stylesheet" href="../theme.css">
-  <meta name="description" content="Have a question, found a bug, or have an idea? Send us a message.">
+  <meta name="description" content="Heb je een vraag, een bug gevonden of een idee? Stuur ons een bericht.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Sofia+Pro:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
@@ -455,6 +450,11 @@
       .radio-pill { padding: .62rem .35rem; font-size: .76rem; line-height: 1.2; }
     }
   </style>
+  <link rel="stylesheet" href="../site-navigation.css?v=13">
+  <link rel="stylesheet" href="../page-intro.css?v=5">
+  <link rel="stylesheet" href="../site-ui-consistency.css?v=7">
+  <script src="../js/site-navigation.js?v=7" defer></script>
+  <script src="../page-intro.js?v=8" defer></script>
 </head>
 <body>
   <!-- SVG Filter for Liquid Glass Distortion -->
@@ -477,17 +477,17 @@
         </a>
         <a href="../index.html" class="back-link">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
-          <span>Back to home</span>
+          <span>Terug naar start</span>
         </a>
       </header>
 
       <!-- Central Branding -->
       <div class="contact-hero">
         <div class="contact-logo">
-          <img src="../logo/logo.png" alt="StudyTools Logo">
+          <img src="../logo/logo.png" alt="StudyStack Logo">
         </div>
-        <h1 class="contact-title">Contact StudyTools</h1>
-        <p class="contact-subtitle">Have a question, found a bug, or have an idea? Send us a message.</p>
+        <h1 class="contact-title">Contacteer StudyStack</h1>
+        <p class="contact-subtitle">Heb je een vraag, een bug gevonden of een idee? Stuur ons een bericht.</p>
       </div>
 
       <!-- Contact Form -->
@@ -497,52 +497,52 @@
         
         <!-- Field 1: Topic (Liquid Glass Segmented Control) -->
         <div class="form-group" id="group-topic">
-          <label class="form-label">What is this about? *</label>
+          <label class="form-label">Waar gaat het over? *</label>
           
           <div class="segmented-container">
             <div class="glass-indicator"></div>
             <div class="radio-group">
               <label class="radio-label">
                 <input type="radio" name="topic" value="Bug report" checked>
-                <span class="radio-pill">Bug report</span>
+                <span class="radio-pill">Bug melden</span>
               </label>
               <label class="radio-label">
                 <input type="radio" name="topic" value="Feature suggestion">
-                <span class="radio-pill">Feature suggestion</span>
+                <span class="radio-pill">Functie voorstel</span>
               </label>
               <label class="radio-label">
                 <input type="radio" name="topic" value="General questions">
-                <span class="radio-pill">General questions</span>
+                <span class="radio-pill">Algemene vragen</span>
               </label>
             </div>
           </div>
           
-          <div class="error-msg">Please select a topic.</div>
+          <div class="error-msg">Kies een onderwerp.</div>
         </div>
 
         <!-- Field 2: Name -->
         <div class="form-group">
-          <label class="form-label" for="name">Your Name <span>(Optional)</span></label>
-          <input type="text" id="name" name="name" class="form-control" placeholder="Jane Doe">
+          <label class="form-label" for="name">Je naam <span>(Optioneel)</span></label>
+          <input type="text" id="name" name="name" class="form-control" placeholder="Jan de Vries">
         </div>
 
         <!-- Field 3: Email -->
         <div class="form-group">
-          <label class="form-label" for="email">Your Email <span>(Optional)</span></label>
-          <input type="email" id="email" name="email" class="form-control" placeholder="jane@example.com">
+          <label class="form-label" for="email">Je e-mailadres <span>(Optioneel)</span></label>
+          <input type="email" id="email" name="email" class="form-control" placeholder="jan@example.com">
         </div>
 
         <!-- Field 4: Message -->
         <div class="form-group" id="group-message">
-          <label class="form-label" for="message">Your Message *</label>
-          <textarea id="message" name="message" class="form-control" placeholder="How can we help you?"></textarea>
-          <div class="error-msg">Please enter your message.</div>
+          <label class="form-label" for="message">Je bericht *</label>
+          <textarea id="message" name="message" class="form-control" placeholder="Hoe kunnen we helpen?"></textarea>
+          <div class="error-msg">Vul je bericht in.</div>
         </div>
 
         <!-- Submit Button -->
         <button type="submit" class="btn-submit">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"></path><path d="M22 2 11 13"></path></svg>
-          Send Message
+          Bericht versturen
         </button>
       </form>
 
@@ -551,8 +551,8 @@
         <div class="success-icon">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
         </div>
-        <h2 class="success-title">Message sent successfully!</h2>
-        <p class="success-text">Thank you for reaching out. We will get back to you shortly.</p>
+        <h2 class="success-title">Bericht succesvol verzonden!</h2>
+        <p class="success-text">Bedankt voor je bericht. We nemen binnenkort contact met je op.</p>
       </div>
 
     </main>
@@ -599,7 +599,6 @@
     })();
   </script>
   <script src="contact.js"></script>
-  <script src="../page-intro.js"></script>
 
   <!-- Global Footer -->
   <footer class="site-footer">
@@ -609,27 +608,27 @@
           <img src="../logo/logo.png" alt="StudyStack Logo">
           <span>StudyStack</span>
         </a>
-        <p data-footer-i18n="description">Made by students, for students. Free tools to help you study smarter, stay focused, and ace your tests.</p>
+        <p data-footer-i18n="description">Gemaakt door scholieren, voor scholieren. Gratis hulpmiddelen om slimmer te leren, geconcentreerd te blijven en je toetsen te halen.</p>
       </div>
       <div class="footer-links">
         <div class="footer-col">
-          <h4 data-footer-i18n="tools">Tools</h4>
-          <a href="../calculator/index.html" data-footer-i18n="calculator">Grade Calculator</a>
-          <a href="../pomodoro/index.html" data-footer-i18n="pomodoro">Pomodoro Timer</a>
-          <a href="../planner/index.html" data-footer-i18n="planner">Testweek Planner</a>
+          <h4 data-footer-i18n="tools">Hulpmiddelen</h4>
+          <a href="../calculator/index.html" data-footer-i18n="calculator">Cijfercalculator</a>
+          <a href="../pomodoro/index.html" data-footer-i18n="pomodoro">Pomodoro-timer</a>
+          <a href="../planner/index.html" data-footer-i18n="planner">Toetsweekplanner</a>
           <a href="../vocab/index.html" data-footer-i18n="vocab">Woordtrainer</a>
           <a href="../flashcards/index.html" data-footer-i18n="flashcards">Flashcards</a>
         </div>
         <div class="footer-col">
-          <h4 data-footer-i18n="support">Support</h4>
-          <a href="../index.html" data-footer-i18n="home">Home</a>
-          <a href="../contact/index.html" data-footer-i18n="contact">Contact Us</a>
-          <a href="../privacy/index.html" data-footer-i18n="privacy">Privacy Policy</a>
+          <h4 data-footer-i18n="support">Ondersteuning</h4>
+          <a href="../index.html" data-footer-i18n="home">Startpagina</a>
+          <a href="../contact/index.html" data-footer-i18n="contact">Contact</a>
+          <a href="../privacy/index.html" data-footer-i18n="privacy">Privacyverklaring</a>
         </div>
       </div>
     </div>
     <div class="footer-bottom">
-      <p data-footer-i18n="copyright">&copy; 2026 StudyStack. All rights reserved.</p>
+      <p data-footer-i18n="copyright">&copy; 2026 StudyStack. Alle rechten voorbehouden.</p>
     </div>
   </footer>
   <script src="../js/footer-i18n.js"></script>

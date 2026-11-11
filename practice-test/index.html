@@ -1,12 +1,7 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <script>
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && Element.prototype.animate) {
-      document.documentElement.classList.add('intro-pending');
-    }
-  </script>
-  <link rel="stylesheet" href="../page-intro.css">
+  <script src="../js/site-navigation-state.js?v=8"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Practice Test · StudyStack</title>
@@ -18,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Sofia+Pro:wght@400;500;600;700;800;900&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="practice-test.css">
+  <link rel="stylesheet" href="practice-test.css?v=14">
   <link rel="stylesheet" href="../animations.css">
   <!--
     Language switcher — EXACT homepage liquid-glass look + sizing.
@@ -237,8 +232,19 @@
       .language-picker, .language-picker::after, .language-option, .language-switcher, .language-switcher::after { transition: none; }
     }
   </style>
+  <link rel="stylesheet" href="../site-navigation.css?v=13">
+  <link rel="stylesheet" href="../page-intro.css?v=5">
+  <link rel="stylesheet" href="../site-ui-consistency.css?v=7">
+  <script src="../js/site-navigation.js?v=7" defer></script>
+  <script src="../page-intro.js?v=8" defer></script>
 </head>
 <body>
+  <svg aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden;">
+    <filter id="calculator-glass-distortion" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.008 0.012" numOctaves="2" seed="8" result="glass-noise"></feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="glass-noise" scale="18" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap>
+    </filter>
+  </svg>
   <svg class="flag-sprite" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden;">
     <symbol id="flag-nl" viewBox="0 0 20 14">
       <path fill="#ae1c28" d="M0 0h20v4.67H0z"></path>
@@ -266,12 +272,12 @@
             <span data-i18n="calc.backHome">Terug naar home</span>
           </a>
           <div class="language-switcher language-picker" id="language-picker">
-            <button class="language-trigger" id="language-trigger" type="button" aria-haspopup="menu" aria-controls="language-menu" aria-expanded="false" aria-label="Language: Nederlands">
+            <button class="language-trigger" id="language-trigger" type="button" aria-haspopup="menu" aria-controls="language-menu" aria-expanded="false" aria-label="Taal: Nederlands">
               <img class="language-flag" src="../assets/flag-netherlands.svg" alt="">
               <span id="language-current">Nederlands</span>
               <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
             </button>
-            <div class="language-menu" id="language-menu" role="menu" aria-label="Choose language" hidden>
+            <div class="language-menu" id="language-menu" role="menu" aria-label="Kies een taal" hidden>
               <button class="language-option" type="button" role="menuitemradio" aria-checked="false" data-language="en">
                 <img class="language-flag" src="../assets/flag-england.svg" alt="">
                 <span data-i18n="language.english">English</span>
@@ -523,18 +529,18 @@
 
   <dialog class="pdf-wizard" id="pdfWizard" aria-labelledby="pdfWizardTitle">
     <div class="pdf-wizard-shell">
-      <div class="pdf-wizard-topline"><span class="pdf-wizard-mark" aria-hidden="true">✦</span><span id="pdfWizardStep">Step 1 of 6</span><button class="pdf-wizard-skip" id="pdfWizardSkip" type="button">Use current setup</button></div>
+      <div class="pdf-wizard-topline"><span class="pdf-wizard-mark" aria-hidden="true">✦</span><span id="pdfWizardStep">Stap 1 van 6</span><button class="pdf-wizard-skip" id="pdfWizardSkip" type="button">Huidige instellingen gebruiken</button></div>
       <div class="pdf-wizard-progress" aria-hidden="true"><span id="pdfWizardProgress"></span></div>
-      <p class="pdf-wizard-eyebrow" id="pdfWizardFile">Preparing your PDF</p>
-      <h2 id="pdfWizardTitle">Let’s set up your practice test</h2>
-      <p class="pdf-wizard-subtitle" id="pdfWizardSubtitle">Answer a few quick questions while your PDF is read on this device.</p>
+      <p class="pdf-wizard-eyebrow" id="pdfWizardFile">Je PDF wordt voorbereid</p>
+      <h2 id="pdfWizardTitle">Laten we je oefentoets instellen</h2>
+      <p class="pdf-wizard-subtitle" id="pdfWizardSubtitle">Beantwoord een paar vragen terwijl je PDF op dit apparaat wordt uitgelezen.</p>
       <section class="pdf-wizard-question" aria-live="polite" aria-atomic="true">
         <h3 id="pdfWizardQuestion"></h3>
         <div id="pdfWizardControl"></div>
         <p class="pdf-wizard-error" id="pdfWizardError" role="alert" hidden></p>
       </section>
-      <div class="pdf-wizard-ocr"><span class="pt-spinner" id="pdfWizardSpinner" aria-hidden="true"></span><div><strong id="pdfWizardOcrTitle">Reading your PDF locally…</strong><p id="pdfWizardOcrStatus">OCR keeps running while you answer.</p></div></div>
-      <div class="pdf-wizard-actions"><button class="pt-btn pt-btn--ghost" id="pdfWizardBack" type="button">Back</button><button class="pt-btn pt-btn--primary" id="pdfWizardNext" type="button">Continue</button></div>
+      <div class="pdf-wizard-ocr"><span class="pt-spinner" id="pdfWizardSpinner" aria-hidden="true"></span><div><strong id="pdfWizardOcrTitle">Je PDF wordt lokaal gelezen…</strong><p id="pdfWizardOcrStatus">OCR blijft draaien terwijl je antwoordt.</p></div></div>
+      <div class="pdf-wizard-actions"><button class="pt-btn pt-btn--ghost" id="pdfWizardBack" type="button">Terug</button><button class="pt-btn pt-btn--primary" id="pdfWizardNext" type="button">Doorgaan</button></div>
     </div>
   </dialog>
 
@@ -546,32 +552,31 @@
           <img src="../logo/logo.png" alt="StudyStack Logo">
           <span>StudyStack</span>
         </a>
-        <p data-footer-i18n="description">Made by students, for students. Free tools to help you study smarter, stay focused, and ace your tests.</p>
+        <p data-footer-i18n="description">Gemaakt door scholieren, voor scholieren. Gratis hulpmiddelen om slimmer te leren, geconcentreerd te blijven en je toetsen te halen.</p>
       </div>
       <div class="footer-links">
         <div class="footer-col">
-          <h4 data-footer-i18n="tools">Tools</h4>
-          <a href="../calculator/index.html" data-footer-i18n="calculator">Grade Calculator</a>
-          <a href="../pomodoro/index.html" data-footer-i18n="pomodoro">Pomodoro Timer</a>
-          <a href="../planner/index.html" data-footer-i18n="planner">Testweek Planner</a>
+          <h4 data-footer-i18n="tools">Hulpmiddelen</h4>
+          <a href="../calculator/index.html" data-footer-i18n="calculator">Cijfercalculator</a>
+          <a href="../pomodoro/index.html" data-footer-i18n="pomodoro">Pomodoro-timer</a>
+          <a href="../planner/index.html" data-footer-i18n="planner">Toetsweekplanner</a>
           <a href="../vocab/index.html" data-footer-i18n="vocab">Woordtrainer</a>
           <a href="../flashcards/index.html" data-footer-i18n="flashcards">Flashcards</a>
         </div>
         <div class="footer-col">
-          <h4 data-footer-i18n="support">Support</h4>
-          <a href="../index.html" data-footer-i18n="home">Home</a>
-          <a href="../contact/index.html" data-footer-i18n="contact">Contact Us</a>
-          <a href="../privacy/index.html" data-footer-i18n="privacy">Privacy Policy</a>
+          <h4 data-footer-i18n="support">Ondersteuning</h4>
+          <a href="../index.html" data-footer-i18n="home">Startpagina</a>
+          <a href="../contact/index.html" data-footer-i18n="contact">Contact</a>
+          <a href="../privacy/index.html" data-footer-i18n="privacy">Privacyverklaring</a>
         </div>
       </div>
     </div>
     <div class="footer-bottom">
-      <p data-footer-i18n="copyright">&copy; 2026 StudyStack. All rights reserved.</p>
+      <p data-footer-i18n="copyright">&copy; 2026 StudyStack. Alle rechten voorbehouden.</p>
     </div>
   </footer>
 
   <script src="../js/practice-test.js"></script>
-  <script src="../page-intro.js"></script>
   <script src="../js/footer-i18n.js"></script>
 
   <!-- Initialize translated copy from the saved language; practice-test.js owns picker interactions. -->

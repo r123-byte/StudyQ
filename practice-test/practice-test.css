@@ -188,6 +188,9 @@ body { background:radial-gradient(circle at 12% 16%,rgba(177,211,250,.34),transp
 .pt-head { animation:pt-rise-in .52s cubic-bezier(.2,.75,.25,1) both; }
 .pt-card { animation:pt-rise-in .46s cubic-bezier(.2,.75,.25,1) both; }
 .pt-col:nth-child(2) .pt-card { animation-delay:.07s; }
+html.site-intro-pending .pt-view.active,
+html.site-intro-pending .pt-head,
+html.site-intro-pending .pt-card { animation:none !important; }
 .pt-ring { animation:pt-ring-in .65s cubic-bezier(.2,.8,.2,1) both; }
 .pt-progress-bar { transition:width .35s cubic-bezier(.2,.8,.2,1); }
 .pt-spinner { animation:pt-spin .8s linear infinite; }
@@ -603,10 +606,42 @@ body::before {
 .pt-seg:has(button.is-active)::before,.pt-tabs:has(.pt-tab.is-active)::before {
   border:1px solid rgba(255,255,255,.98)!important;
   border-radius:999px!important;
-  background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(225,238,253,.76))!important;
-  box-shadow:inset 1px 1px 1px #fff,inset -1px -1px 1px rgba(255,255,255,.5),0 5px 15px -8px rgba(20,70,120,.42),0 0 0 1px rgba(37,99,235,.14)!important;
+  background:linear-gradient(145deg,rgba(239,248,255,.94),rgba(194,222,251,.78))!important;
+  box-shadow:inset 1px 1px 1px #fff,inset -1px -1px 1px rgba(255,255,255,.52),inset 0 0 18px rgba(125,183,239,.2),0 5px 15px -8px rgba(34,89,150,.4),0 0 0 1px rgba(74,145,215,.26),0 0 22px -6px rgba(78,151,224,.36)!important;
 }
 .pt-seg button.is-active,.pt-tabs .pt-tab.is-active { color:#2563eb!important; }
+.pt-seg[data-field="difficulty"]:has(button[data-value="easy"].is-active) {
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.95),inset 0 -1px 1px rgba(255,255,255,.35),0 12px 28px -16px rgba(15,45,80,.35),0 0 0 1px rgba(34,197,94,.18),0 0 20px -8px rgba(34,197,94,.3)!important;
+}
+.pt-seg[data-field="difficulty"]:has(button[data-value="easy"].is-active)::before {
+  background:linear-gradient(145deg,rgba(240,253,244,.96),rgba(187,247,208,.78))!important;
+  box-shadow:inset 1px 1px 1px #fff,inset -1px -1px 1px rgba(255,255,255,.52),inset 0 0 18px rgba(74,222,128,.22),0 5px 15px -8px rgba(22,101,52,.4),0 0 0 1px rgba(34,197,94,.3),0 0 22px -6px rgba(34,197,94,.48)!important;
+}
+.pt-seg[data-field="difficulty"]:has(button[data-value="easy"].is-active) button.is-active { color:#15803d!important; }
+.pt-seg[data-field="difficulty"]:has(button[data-value="medium"].is-active) {
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.95),inset 0 -1px 1px rgba(255,255,255,.35),0 12px 28px -16px rgba(15,45,80,.35),0 0 0 1px rgba(245,158,11,.2),0 0 20px -8px rgba(245,158,11,.34)!important;
+}
+.pt-seg[data-field="difficulty"]:has(button[data-value="medium"].is-active)::before {
+  background:linear-gradient(145deg,rgba(255,251,235,.96),rgba(253,230,138,.78))!important;
+  box-shadow:inset 1px 1px 1px #fff,inset -1px -1px 1px rgba(255,255,255,.52),inset 0 0 18px rgba(251,191,36,.22),0 5px 15px -8px rgba(146,64,14,.4),0 0 0 1px rgba(245,158,11,.3),0 0 22px -6px rgba(245,158,11,.5)!important;
+}
+.pt-seg[data-field="difficulty"]:has(button[data-value="medium"].is-active) button.is-active { color:#b45309!important; }
+.pt-seg[data-field="difficulty"]:has(button[data-value="hard"].is-active) {
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.95),inset 0 -1px 1px rgba(255,255,255,.35),0 12px 28px -16px rgba(15,45,80,.35),0 0 0 1px rgba(244,63,94,.2),0 0 20px -8px rgba(244,63,94,.34)!important;
+}
+.pt-seg[data-field="difficulty"]:has(button[data-value="hard"].is-active)::before {
+  background:linear-gradient(145deg,rgba(255,241,242,.96),rgba(254,205,211,.8))!important;
+  box-shadow:inset 1px 1px 1px #fff,inset -1px -1px 1px rgba(255,255,255,.52),inset 0 0 18px rgba(251,113,133,.22),0 5px 15px -8px rgba(159,18,57,.4),0 0 0 1px rgba(244,63,94,.3),0 0 22px -6px rgba(244,63,94,.5)!important;
+}
+.pt-seg[data-field="difficulty"]:has(button[data-value="hard"].is-active) button.is-active { color:#be123c!important; }
+.pt-seg[data-field="difficulty"]:has(button[data-value="mixed"].is-active) {
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.95),inset 0 -1px 1px rgba(255,255,255,.35),0 12px 28px -16px rgba(15,45,80,.35),0 0 0 1px rgba(139,92,246,.2),0 0 20px -8px rgba(139,92,246,.34)!important;
+}
+.pt-seg[data-field="difficulty"]:has(button[data-value="mixed"].is-active)::before {
+  background:linear-gradient(145deg,rgba(245,243,255,.96),rgba(221,214,254,.8))!important;
+  box-shadow:inset 1px 1px 1px #fff,inset -1px -1px 1px rgba(255,255,255,.52),inset 0 0 18px rgba(167,139,250,.22),0 5px 15px -8px rgba(91,33,182,.4),0 0 0 1px rgba(139,92,246,.3),0 0 22px -6px rgba(139,92,246,.5)!important;
+}
+.pt-seg[data-field="difficulty"]:has(button[data-value="mixed"].is-active) button.is-active { color:#6d28d9!important; }
 @media (prefers-reduced-transparency:reduce) {
   .page,.wrapper>.page,body>.wrapper>.page,.back-link {
     background:#fff!important;
@@ -739,4 +774,90 @@ body { margin:0!important; padding:1.25rem!important; }
 }
 @media (prefers-reduced-motion:reduce) {
   .language-picker,.language-picker::after,.language-option { transition:none!important; }
+}
+
+/* Use the calculator's glass segmented control for the practice-test tabs. */
+.pt-tabs {
+  position:relative!important;
+  display:flex!important;
+  overflow:hidden!important;
+  isolation:isolate;
+  gap:0!important;
+  padding:.38rem!important;
+  border:1px solid rgba(255,255,255,.88)!important;
+  border-radius:999px!important;
+  background:linear-gradient(145deg,rgba(224,239,255,.66),rgba(238,247,255,.46))!important;
+  box-shadow:inset 0 1px 2px rgba(255,255,255,.96),inset 0 -1px 1px rgba(164,205,250,.28),0 12px 28px -18px rgba(32,92,160,.32),0 0 0 1px rgba(61,139,218,.24),0 0 0 3px rgba(83,155,228,.12),0 0 28px -8px rgba(76,151,229,.3)!important;
+  -webkit-backdrop-filter:url(#calculator-glass-distortion) blur(24px) saturate(190%)!important;
+  backdrop-filter:url(#calculator-glass-distortion) blur(24px) saturate(190%)!important;
+}
+.pt-tabs:hover {
+  border-color:rgba(255,255,255,.92)!important;
+  box-shadow:inset 0 1px 2px rgba(255,255,255,.96),inset 0 -1px 1px rgba(164,205,250,.28),0 12px 28px -18px rgba(32,92,160,.32),0 0 0 1px rgba(61,139,218,.24),0 0 0 3px rgba(83,155,228,.12),0 0 28px -8px rgba(76,151,229,.3)!important;
+  animation:none!important;
+  transition:none!important;
+}
+.pt-tabs::after { display:none!important; }
+.pt-tabs::before {
+  content:""!important;
+  position:absolute!important;
+  z-index:0!important;
+  inset:.38rem auto .38rem .38rem!important;
+  width:calc((100% - .76rem)/3)!important;
+  border:1px solid rgba(255,255,255,.96)!important;
+  border-radius:999px!important;
+  background:linear-gradient(145deg,rgba(239,248,255,.9),rgba(194,222,251,.72))!important;
+  -webkit-backdrop-filter:url(#calculator-glass-distortion) blur(14px) saturate(195%)!important;
+  backdrop-filter:url(#calculator-glass-distortion) blur(14px) saturate(195%)!important;
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.98),inset 0 0 18px rgba(125,183,239,.22),0 5px 14px -8px rgba(34,89,150,.4),0 0 0 1px rgba(74,145,215,.28),0 0 22px -6px rgba(78,151,224,.42)!important;
+  pointer-events:none!important;
+  animation:none!important;
+  transition:transform 320ms cubic-bezier(.2,.8,.2,1)!important;
+  will-change:transform;
+}
+.pt-tabs:has(.pt-tab:nth-child(2).is-active)::before { transform:translateX(100%)!important; }
+.pt-tabs:has(.pt-tab:nth-child(3).is-active)::before { transform:translateX(200%)!important; }
+.pt-tabs .pt-tab {
+  position:relative!important;
+  z-index:1!important;
+  flex:1 1 0!important;
+  min-width:0;
+  border:1px solid transparent!important;
+  border-radius:999px!important;
+  color:#475569!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  animation:none!important;
+  transition:none!important;
+}
+.pt-tabs .pt-tab:hover {
+  color:#475569!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  transform:none!important;
+}
+.pt-tabs .pt-tab.is-active {
+  color:#174f87!important;
+  background:transparent!important;
+  border-color:transparent!important;
+  box-shadow:none!important;
+}
+@media (prefers-reduced-motion:reduce) {
+  .pt-tabs::before { transition:none!important; }
+}
+@media (prefers-reduced-transparency:reduce) {
+  .pt-tabs {
+    border-color:#bfdbfe!important;
+    background:#eff6ff!important;
+    box-shadow:inset 0 1px 0 #fff,0 2px 6px rgba(15,23,42,.12)!important;
+    -webkit-backdrop-filter:none!important;
+    backdrop-filter:none!important;
+  }
+  .pt-tabs::before {
+    border-color:#bfdbfe!important;
+    background:#fff!important;
+    box-shadow:inset 0 1px 0 #fff,0 2px 6px rgba(15,23,42,.12)!important;
+    -webkit-backdrop-filter:none!important;
+    backdrop-filter:none!important;
+  }
 }

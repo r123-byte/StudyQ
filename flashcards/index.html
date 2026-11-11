@@ -1,12 +1,7 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <script>
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && Element.prototype.animate) {
-      document.documentElement.classList.add('intro-pending');
-    }
-  </script>
-  <link rel="stylesheet" href="../page-intro.css">
+  <script src="../js/site-navigation-state.js?v=8"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Flashcards – Leer met spaced repetition | StudyStack</title>
@@ -1627,6 +1622,12 @@
       .card-row-actions [data-action="delete"]:focus-visible { animation: none; }
     }
   </style>
+  <link rel="stylesheet" href="../language-switcher.css">
+  <link rel="stylesheet" href="../site-navigation.css?v=13">
+  <link rel="stylesheet" href="../page-intro.css?v=5">
+  <link rel="stylesheet" href="../site-ui-consistency.css?v=7">
+  <script src="../js/site-navigation.js?v=7" defer></script>
+  <script src="../page-intro.js?v=8" defer></script>
 </head>
 <body>
   <svg aria-hidden="true" width="0" height="0" style="position:absolute;overflow:hidden" focusable="false">
@@ -1652,15 +1653,27 @@
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
             <span data-i18n="fc.backHome">Terug naar home</span>
           </a>
-          <label class="language-switcher">
-            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c2.5 2.5 3.5 5.5 3.5 9s-1 6.5-3.5 9c-2.5-2.5-3.5-5.5-3.5-9S9.5 5.5 12 3Z"></path></svg>
-            <span data-i18n="language.label">Taal</span>
-            <select id="language-select" aria-label="Language">
+          <div class="language-switcher language-picker" id="language-picker">
+            <button class="language-trigger" id="language-trigger" type="button" aria-haspopup="menu" aria-controls="language-menu" aria-expanded="false" aria-label="Taal: Nederlands">
+              <img class="language-flag" src="../assets/flag-netherlands.svg" alt="">
+              <span id="language-current">Nederlands</span>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+            </button>
+            <div class="language-menu" id="language-menu" role="menu" aria-label="Kies een taal" hidden>
+              <button class="language-option" type="button" role="menuitemradio" aria-checked="false" data-language="en">
+                <img class="language-flag" src="../assets/flag-england.svg" alt="">
+                <span>English</span>
+              </button>
+              <button class="language-option" type="button" role="menuitemradio" aria-checked="true" data-language="nl">
+                <img class="language-flag" src="../assets/flag-netherlands.svg" alt="">
+                <span>Nederlands</span>
+              </button>
+            </div>
+            <select id="language-select" class="language-sync-select" aria-label="Language" tabindex="-1" aria-hidden="true">
               <option value="en">English</option>
               <option value="nl">Nederlands</option>
             </select>
-            <svg class="language-chevron" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor"><path d="m6 9 6 6 6-6"></path></svg>
-          </label>
+          </div>
         </div>
       </header>
 
@@ -2072,7 +2085,7 @@
     })();
   </script>
   <script src="flashcards.js"></script>
-  <script src="../page-intro.js"></script>
+  <script src="../js/language-picker.js"></script>
 
   <!-- GLOBAL FOOTER -->
   <footer class="site-footer">
@@ -2082,27 +2095,27 @@
           <img src="../logo/logo.png" alt="StudyStack Logo">
           <span>StudyStack</span>
         </a>
-        <p data-footer-i18n="description">Made by students, for students. Free tools to help you study smarter, stay focused, and ace your tests.</p>
+        <p data-footer-i18n="description">Gemaakt door scholieren, voor scholieren. Gratis hulpmiddelen om slimmer te leren, geconcentreerd te blijven en je toetsen te halen.</p>
       </div>
       <div class="footer-links">
         <div class="footer-col">
-          <h4 data-footer-i18n="tools">Tools</h4>
-          <a href="../calculator/index.html" data-footer-i18n="calculator">Grade Calculator</a>
-          <a href="../pomodoro/index.html" data-footer-i18n="pomodoro">Pomodoro Timer</a>
-          <a href="../planner/index.html" data-footer-i18n="planner">Testweek Planner</a>
+          <h4 data-footer-i18n="tools">Hulpmiddelen</h4>
+          <a href="../calculator/index.html" data-footer-i18n="calculator">Cijfercalculator</a>
+          <a href="../pomodoro/index.html" data-footer-i18n="pomodoro">Pomodoro-timer</a>
+          <a href="../planner/index.html" data-footer-i18n="planner">Toetsweekplanner</a>
           <a href="../vocab/index.html" data-footer-i18n="vocab">Woordtrainer</a>
           <a href="../flashcards/index.html" data-footer-i18n="flashcards">Flashcards</a>
         </div>
         <div class="footer-col">
-          <h4 data-footer-i18n="support">Support</h4>
-          <a href="../index.html" data-footer-i18n="home">Home</a>
-          <a href="../contact/index.html" data-footer-i18n="contact">Contact Us</a>
-          <a href="../privacy/index.html" data-footer-i18n="privacy">Privacy Policy</a>
+          <h4 data-footer-i18n="support">Ondersteuning</h4>
+          <a href="../index.html" data-footer-i18n="home">Startpagina</a>
+          <a href="../contact/index.html" data-footer-i18n="contact">Contact</a>
+          <a href="../privacy/index.html" data-footer-i18n="privacy">Privacyverklaring</a>
         </div>
       </div>
     </div>
     <div class="footer-bottom">
-      <p data-footer-i18n="copyright">&copy; 2026 StudyStack. All rights reserved.</p>
+      <p data-footer-i18n="copyright">&copy; 2026 StudyStack. Alle rechten voorbehouden.</p>
     </div>
   </footer>
   <script src="../js/footer-i18n.js"></script>

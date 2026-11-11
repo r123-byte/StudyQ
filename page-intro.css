@@ -1,6 +1,24 @@
-/* Keep animated page blocks in their starting state until page-intro.js
-   attaches the Web Animations API animation. This prevents a full-size flash. */
-.intro-pending .page > *:not(.page-decor) {
+html.site-intro-pending .page .hero,
+html.site-intro-pending .page .hero-content > *,
+html.site-intro-pending .page .hero-visual,
+html.site-intro-pending .page .tool-card,
+html.site-intro-pending .page .pt-head,
+html.site-intro-pending .page .pt-card,
+html.site-intro-pending .page .timer-options,
+html.site-intro-pending .page .timer-card,
+html.site-intro-pending .page .setup-card,
+html.site-intro-pending .page .example-card,
+html.site-intro-pending .page .section-header,
+html.site-intro-pending .page .plan-card,
+html.site-intro-pending .page .ai-chat-shell,
+html.site-intro-pending .page .deck-view.active,
+html.site-intro-pending .page .contact-hero,
+html.site-intro-pending .page .contact-form,
+html.site-intro-pending .page .privacy-content,
+html.site-intro-pending .page .grade-list,
+html.site-intro-pending .page .result-card,
+html.site-intro-pending .page .comparison-card {
   opacity: 0;
-  transform: translateY(18px) scale(0.96);
+  transform: translate3d(0, 30px, 0) scale(.96);
+  filter: blur(5px);
 }

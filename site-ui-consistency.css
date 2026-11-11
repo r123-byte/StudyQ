@@ -1,0 +1,165 @@
+.top-bar .brand {
+  gap: .65rem !important;
+  font-size: 1.35rem !important;
+  letter-spacing: -.03em !important;
+}
+
+.top-bar .brand-icon,
+.top-bar .brand-mark {
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 42px !important;
+  width: 42px !important;
+  height: 42px !important;
+  margin-right: 0 !important;
+  overflow: visible !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.top-bar .brand-icon img,
+.top-bar .brand-mark img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  transform: scale(2.15) !important;
+  transition: none !important;
+}
+
+.app-sidebar .brand-mark {
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 42px !important;
+  width: 42px !important;
+  height: 42px !important;
+  margin-right: 0 !important;
+  overflow: hidden !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.app-sidebar .brand-mark img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  transform: scale(2.15) !important;
+}
+
+.site-sidebar-brand img {
+  object-fit: contain;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  transform: scale(2.15) !important;
+}
+
+.pt-tabs,
+.modal-tabs,
+.ai-tabs,
+.segmented,
+.study-segmented,
+.segmented-container,
+.timer-options,
+.session-options {
+  border-color: rgba(255, 255, 255, .88) !important;
+  background: linear-gradient(145deg, rgba(224, 239, 255, .66), rgba(238, 247, 255, .46)) !important;
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, .96),
+    inset 0 -1px 1px rgba(164, 205, 250, .28),
+    0 12px 28px -18px rgba(32, 92, 160, .32),
+    0 0 0 1px rgba(61, 139, 218, .24),
+    0 0 0 3px rgba(83, 155, 228, .12),
+    0 0 28px -8px rgba(76, 151, 229, .3) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
+  backdrop-filter: blur(24px) saturate(190%) !important;
+}
+
+.pt-tab,
+.modal-tab,
+.ai-tab,
+.segmented > button,
+.study-segmented > button {
+  background: transparent !important;
+}
+
+.pt-tab.is-active,
+.modal-tab.active,
+.ai-tab.active,
+.segmented > button.active,
+.study-segmented > button.active {
+  border-color: rgba(255, 255, 255, .94) !important;
+  background: linear-gradient(145deg, rgba(239, 248, 255, .92), rgba(194, 222, 251, .76)) !important;
+  color: #174f87 !important;
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, .98),
+    inset 0 0 18px rgba(125, 183, 239, .22),
+    0 5px 14px -8px rgba(34, 89, 150, .4),
+    0 0 0 1px rgba(74, 145, 215, .28),
+    0 0 22px -6px rgba(78, 151, 224, .42) !important;
+}
+
+.session-preset {
+  border-color: rgba(190, 218, 248, .78) !important;
+  background: linear-gradient(145deg, rgba(239, 248, 255, .88), rgba(215, 234, 255, .66)) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(180%) !important;
+  backdrop-filter: blur(14px) saturate(180%) !important;
+}
+
+.session-options {
+  gap: .4rem !important;
+  padding: .38rem !important;
+  border: 1px solid rgba(255, 255, 255, .88) !important;
+  border-radius: 999px !important;
+}
+
+.session-preset.active {
+  border-color: rgba(255, 255, 255, .94) !important;
+  background: linear-gradient(145deg, rgba(205, 229, 255, .96), rgba(145, 190, 239, .84)) !important;
+  color: #174f87 !important;
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, .98),
+    0 5px 14px -8px rgba(34, 89, 150, .4),
+    0 0 0 1px rgba(74, 145, 215, .28),
+    0 0 22px -6px rgba(78, 151, 224, .42) !important;
+}
+
+.session-overlay.session-break .session-preset.active {
+  background: linear-gradient(145deg, rgba(213, 245, 224, .96), rgba(160, 220, 181, .82)) !important;
+  color: #17613a !important;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .pt-tabs,
+  .modal-tabs,
+  .ai-tabs,
+  .segmented,
+  .study-segmented,
+  .segmented-container,
+  .timer-options,
+  .session-options,
+  .top-bar .brand-icon,
+  .top-bar .brand-mark {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    background: rgba(239, 246, 255, .97) !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .app-sidebar .brand-mark {
+    flex-basis: 36px !important;
+    width: 36px !important;
+    height: 36px !important;
+  }
+}

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 280" role="img" aria-labelledby="title desc">
+  <title id="title">StudyQ connected gradient wordmark</title>
+  <desc id="desc">A compact StudyQ wordmark in Sofia Pro with a continuous navy-to-blue gradient.</desc>
+  <defs>
+    <linearGradient id="studyqGradient" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#101C35"/>
+      <stop offset="0.48" stop-color="#173E86"/>
+      <stop offset="1" stop-color="#1687E8"/>
+    </linearGradient>
+  </defs>
+  <g font-family="'Sofia Pro', SofiaPro, 'Sofia Pro Soft', Avenir Next, Inter, ui-sans-serif, system-ui, sans-serif" font-weight="700" letter-spacing="-9">
+    <text x="28" y="205" font-size="184" fill="url(#studyqGradient)">StudyQ</text>
+  </g>
+  <!-- integrated Q tail, kept close to the wordmark -->
+  <path d="M783 198 C804 211 821 224 840 240" fill="none" stroke="#1687E8" stroke-width="19" stroke-linecap="round"/>
+  <path d="M846 52 l6 14 14 6-14 6-6 14-6-14-14-6 14-6z" fill="#2EA5F5"/>
+</svg>

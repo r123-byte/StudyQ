@@ -17,17 +17,17 @@
   };
   const links = [
     { group: "start", items: [
-      { key: "home", href: "index.html", tone: "", icon: '<path d="m3 10 9-7 9 7"></path><path d="M5 9v11h14V9M9 20v-6h6v6"></path>' }
+      { key: "home", href: "", tone: "", icon: '<path d="m3 10 9-7 9 7"></path><path d="M5 9v11h14V9M9 20v-6h6v6"></path>' }
     ] },
     { group: "study", items: [
-      { key: "calc", href: "calculator/index.html", tone: "tone-blue", icon: '<rect x="5" y="2.5" width="14" height="19" rx="2"></rect><path d="M8 6h8M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"></path>' },
-      { key: "word", href: "vocab/index.html", tone: "tone-peach", icon: '<path d="m5 8 6 6M4 14l6-6 2-3M2 5h12M7 2h1M22 22l-5-10-5 10M14 18h6"></path>' },
-      { key: "flashcards", href: "flashcards/index.html", tone: "tone-lilac", icon: '<rect x="3" y="6" width="14" height="15" rx="2"></rect><path d="M7 6V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-2"></path>' },
-      { key: "practiceTest", href: "practice-test/index.html", tone: "tone-blue", icon: '<path d="M8 4H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3"></path><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="m8 13 2 2 5-5"></path>' }
+      { key: "calc", href: "calculator/", tone: "tone-blue", icon: '<rect x="5" y="2.5" width="14" height="19" rx="2"></rect><path d="M8 6h8M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"></path>' },
+      { key: "word", href: "vocab/", tone: "tone-peach", icon: '<path d="m5 8 6 6M4 14l6-6 2-3M2 5h12M7 2h1M22 22l-5-10-5 10M14 18h6"></path>' },
+      { key: "flashcards", href: "flashcards/", tone: "tone-lilac", icon: '<rect x="3" y="6" width="14" height="15" rx="2"></rect><path d="M7 6V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-2"></path>' },
+      { key: "practiceTest", href: "practice-test/", tone: "tone-blue", icon: '<path d="M8 4H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3"></path><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="m8 13 2 2 5-5"></path>' }
     ] },
     { group: "focusPlan", items: [
-      { key: "pomo", href: "pomodoro/index.html", tone: "tone-mint", icon: '<circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2 2M9 2h6M12 2v3M19 5l-1.5 1.5M5 5l1.5 1.5"></path>' },
-      { key: "planner", href: "planner/index.html", tone: "tone-sand", icon: '<rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18M9 15l2 2 4-4"></path>' }
+      { key: "pomo", href: "pomodoro/", tone: "tone-mint", icon: '<circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2 2M9 2h6M12 2v3M19 5l-1.5 1.5M5 5l1.5 1.5"></path>' },
+      { key: "planner", href: "planner/", tone: "tone-sand", icon: '<rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18M9 15l2 2 4-4"></path>' }
     ] }
   ];
 
@@ -68,7 +68,7 @@
     nav.setAttribute("aria-label", "StudyStack navigation");
     const brand = document.createElement("a");
     brand.className = "site-sidebar-brand";
-    brand.href = new URL("index.html", siteRoot).href;
+    brand.href = siteRoot.href;
     brand.innerHTML = '<img src="' + new URL("logo/logo.png", siteRoot).href + '" alt=""><span>Study<span>Stack</span></span>';
     const header = document.createElement("div");
     header.className = "site-sidebar-header";

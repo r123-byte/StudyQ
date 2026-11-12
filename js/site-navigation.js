@@ -69,7 +69,7 @@
     const brand = document.createElement("a");
     brand.className = "site-sidebar-brand";
     brand.href = siteRoot.href;
-    brand.innerHTML = '<img src="' + new URL("logo/logo.png", siteRoot).href + '" alt=""><span>StudyQ</span>';
+    brand.innerHTML = '<img src="' + new URL("logo/logo.png", siteRoot).href + '" alt=""><span class="brand-wordmark">Study<span class="brand-q">Q</span></span>';
     const header = document.createElement("div");
     header.className = "site-sidebar-header";
     header.appendChild(brand);

@@ -63,7 +63,7 @@
       if (document.documentElement.lang !== language) {
         document.documentElement.lang = language;
         try {
-          localStorage.setItem("studystack-language", language);
+          localStorage.setItem("StudyQ-language", language);
         } catch (error) {
           console.warn("Unable to save the selected language.", error);
         }
@@ -108,7 +108,7 @@
 
     let savedLanguage = document.documentElement.lang;
     try {
-      savedLanguage = localStorage.getItem("studystack-language") || savedLanguage || "nl";
+      savedLanguage = localStorage.getItem("StudyQ-language") || savedLanguage || "nl";
     } catch (error) {
       console.warn("Unable to read the saved language.", error);
     }

@@ -14,7 +14,7 @@
       home: "Home",
       contact: "Contact Us",
       privacy: "Privacy Policy",
-      copyright: "© 2026 StudyStack. All rights reserved."
+      copyright: "© 2026 StudyQ. All rights reserved."
     },
     nl: {
       description: "Gemaakt door scholieren, voor scholieren. Gratis hulpmiddelen om slimmer te leren, geconcentreerd te blijven en je toetsen te halen.",
@@ -28,7 +28,7 @@
       home: "Startpagina",
       contact: "Contact",
       privacy: "Privacyverklaring",
-      copyright: "© 2026 StudyStack. Alle rechten voorbehouden."
+      copyright: "© 2026 StudyQ. Alle rechten voorbehouden."
     }
   };
 

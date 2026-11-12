@@ -4,21 +4,22 @@
   <script src="../js/site-navigation-state.js?v=8"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gratis toetsweekplanner en studieplanning | StudyStack</title>
+  <title>Gratis toetsweekplanner en studieplanning | StudyQ</title>
   <link rel="canonical" href="https://studyq-nu.vercel.app/planner/">
   <link rel="stylesheet" href="../footer.css">
   <link rel="icon" type="image/png" href="../favicon.png">
   <link rel="apple-touch-icon" href="../favicon.png">
+  <link rel="manifest" href="../favicon_io/site.webmanifest">
   <meta name="description" content="Plan je toetsen en huiswerk, importeer je rooster en maak een persoonlijk studieplan met deze gratis toetsweekplanner.">
   <meta name="robots" content="index,follow,max-image-preview:large">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="StudyQ">
-  <meta property="og:title" content="Gratis toetsweekplanner en studieplanning | StudyStack">
+  <meta property="og:title" content="Gratis toetsweekplanner en studieplanning | StudyQ">
   <meta property="og:description" content="Plan je toetsen en huiswerk, importeer je rooster en maak een persoonlijk studieplan met deze gratis toetsweekplanner.">
   <meta property="og:url" content="https://studyq-nu.vercel.app/planner/">
   <meta property="og:image" content="https://studyq-nu.vercel.app/assets/homepage.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Gratis toetsweekplanner en studieplanning | StudyStack">
+  <meta name="twitter:title" content="Gratis toetsweekplanner en studieplanning | StudyQ">
   <meta name="twitter:description" content="Plan je toetsen en huiswerk, importeer je rooster en maak een persoonlijk studieplan met deze gratis toetsweekplanner.">
   <meta name="twitter:image" content="https://studyq-nu.vercel.app/assets/homepage.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2375,7 +2376,7 @@
   <link rel="stylesheet" href="../site-ui-consistency.css?v=7">
   <script src="../js/site-navigation.js?v=7" defer></script>
   <script src="../page-intro.js?v=8" defer></script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Gratis toetsweekplanner en studieplanning | StudyStack", "applicationCategory": "EducationalApplication", "operatingSystem": "Web", "isAccessibleForFree": true, "inLanguage": "nl-NL", "url": "https://studyq-nu.vercel.app/planner/", "description": "Plan je toetsen en huiswerk, importeer je rooster en maak een persoonlijk studieplan met deze gratis toetsweekplanner.", "publisher": {"@type": "Organization", "name": "StudyQ", "url": "https://studyq-nu.vercel.app/"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Gratis toetsweekplanner en studieplanning | StudyQ", "url": "https://studyq-nu.vercel.app/planner/", "inLanguage": "nl-NL", "applicationCategory": "EducationalApplication", "operatingSystem": "Web", "isAccessibleForFree": true, "description": "Plan je toetsen en huiswerk, importeer je rooster en maak een persoonlijk studieplan met deze gratis toetsweekplanner.", "publisher": {"@type": "Organization", "name": "StudyQ", "url": "https://studyq-nu.vercel.app/"}}</script>
   </head>
 <body>
   <div class="wrapper">
@@ -3357,7 +3358,7 @@
         }
       };
 
-      let currentLanguage = localStorage.getItem('studystack-language') || 'nl';
+      let currentLanguage = localStorage.getItem('StudyQ-language') || 'nl';
       function t(key) {
         return (translations[currentLanguage] && translations[currentLanguage][key]) || translations.nl[key] || key;
       }
@@ -3365,8 +3366,8 @@
       /* ============================================================
          SHARED STATE — bi-directional bridge between Pomodoro and AI
       ============================================================ */
-      const BRIDGE_KEY = 'studystack-planner-active-ai-block';
-      const PROGRESS_KEY = 'studystack-planner-completed-progress';
+      const BRIDGE_KEY = 'StudyQ-planner-active-ai-block';
+      const PROGRESS_KEY = 'StudyQ-planner-completed-progress';
 
       // The shape of a bridge block:
       // { id, day, timeBlock, subject, action, minutes, startedAt, source: 'ai' }
@@ -3447,11 +3448,11 @@
       ============================================================ */
       const state = { tests: [], importedEvents: [], hasImported: false };
 
-      const STORAGE_KEY = 'studystack-planner-tests';
-      const HISTORY_KEY = 'studystack-planner-history';
-      const AMBIENT_KEY = 'studystack-planner-ambient';
-      const SOUND_KEY = 'studystack-planner-sound';
-      const HOMEWORK_KEY = 'studystack-planner-homework';
+      const STORAGE_KEY = 'StudyQ-planner-tests';
+      const HISTORY_KEY = 'StudyQ-planner-history';
+      const AMBIENT_KEY = 'StudyQ-planner-ambient';
+      const SOUND_KEY = 'StudyQ-planner-sound';
+      const HOMEWORK_KEY = 'StudyQ-planner-homework';
 
       let studyHistory = {};
 
@@ -3497,7 +3498,7 @@
         saveHomework();
         renderHomeworkList();
         try {
-          window.dispatchEvent(new CustomEvent('studystack:homework-changed'));
+          window.dispatchEvent(new CustomEvent('StudyQ:homework-changed'));
         } catch (e) {}
         return task;
       }
@@ -3507,7 +3508,7 @@
         saveHomework();
         renderHomeworkList();
         try {
-          window.dispatchEvent(new CustomEvent('studystack:homework-changed'));
+          window.dispatchEvent(new CustomEvent('StudyQ:homework-changed'));
         } catch (e) {}
       }
 
@@ -3979,7 +3980,7 @@
 
       function parseAiTimetableBlocks() {
         try {
-          const raw = localStorage.getItem('studystack-planner-ai-timetable');
+          const raw = localStorage.getItem('StudyQ-planner-ai-timetable');
           if (!raw) return [];
           const rows = JSON.parse(raw);
           if (!Array.isArray(rows) || rows.length < 2) return [];
@@ -4019,7 +4020,7 @@
         // Which blocks are already done?
         let doneSigs = new Set();
         try {
-          const raw = localStorage.getItem('studystack-planner-completed-progress');
+          const raw = localStorage.getItem('StudyQ-planner-completed-progress');
           const progress = raw ? JSON.parse(raw) : [];
           if (Array.isArray(progress)) {
             progress.forEach(function (p) {
@@ -4031,7 +4032,7 @@
 
         // Prefer the active bridge block if it exists and isn't done
         try {
-          const rawActive = localStorage.getItem('studystack-planner-active-ai-block');
+          const rawActive = localStorage.getItem('StudyQ-planner-active-ai-block');
           if (rawActive) {
             const active = JSON.parse(rawActive);
             const activeSig = ((active.day || '') + '||' + (active.timeBlock || '')).toLowerCase();
@@ -4370,7 +4371,7 @@
           countEl.hidden = n === 0;
         }
         refreshCount();
-        window.addEventListener('studystack:homework-changed', refreshCount);
+        window.addEventListener('StudyQ:homework-changed', refreshCount);
       }
 
       /* ============================================================
@@ -4682,8 +4683,8 @@
           setTimeout(updatePill, 0);
         });
 
-        window.__studystackIsWebcal = isWebcal;
-        window.__studystackWebcalToHttps = function (value) {
+        window.__StudyQIsWebcal = isWebcal;
+        window.__StudyQWebcalToHttps = function (value) {
           const s = String(value || '').trim();
           if (!isWebcal(s)) return s;
           return s.replace(/^webcal:\/\//i, 'https://');
@@ -4694,7 +4695,7 @@
         const rawUrl = document.getElementById('ics-url').value.trim();
         if (!rawUrl) return;
 
-        if (typeof window.__studystackIsWebcal === 'function' && window.__studystackIsWebcal(rawUrl)) {
+        if (typeof window.__StudyQIsWebcal === 'function' && window.__StudyQIsWebcal(rawUrl)) {
           const openInCalendar = window.confirm(
             currentLanguage === 'en'
               ? 'This is a webcal:// subscription link. Do you want to open it in your calendar app (Apple Calendar, Google Calendar, Outlook)?\n\nClick OK to open it, or Cancel to import the tests here anyway.'
@@ -4706,8 +4707,8 @@
           }
         }
 
-        const url = (typeof window.__studystackWebcalToHttps === 'function')
-          ? window.__studystackWebcalToHttps(rawUrl)
+        const url = (typeof window.__StudyQWebcalToHttps === 'function')
+          ? window.__StudyQWebcalToHttps(rawUrl)
           : rawUrl;
 
         try {
@@ -4887,7 +4888,7 @@
           bridge: bridgeBlock
         });
       }
-      window.studystackStartAiBlock = startSessionFromBridge;
+      window.StudyQStartAiBlock = startSessionFromBridge;
 
       function startSession(opts) {
         const focusMin = opts.focusMin || 25;
@@ -5373,9 +5374,9 @@
           // Also clear the bridge block since the block was completed
           if (session.bridge) {
             writeBridgeBlock(null);
-            if (window.studystackRefreshBridge) window.studystackRefreshBridge();
+            if (window.StudyQRefreshBridge) window.StudyQRefreshBridge();
             try {
-              window.dispatchEvent(new CustomEvent('studystack:bridge-changed'));
+              window.dispatchEvent(new CustomEvent('StudyQ:bridge-changed'));
             } catch (e) {}
           }
         }
@@ -5399,7 +5400,7 @@
           renderTests();
           renderPlan();
           renderRecommendation();
-          if (window.studystackRefreshProgress) window.studystackRefreshProgress();
+          if (window.StudyQRefreshProgress) window.StudyQRefreshProgress();
         });
       }
 
@@ -5456,14 +5457,14 @@
       }
 
       function redrawTimetable() {
-        if (typeof window.studystackExtractMarkdownTable !== 'function') return;
+        if (typeof window.StudyQExtractMarkdownTable !== 'function') return;
         try {
-          const raw = localStorage.getItem('studystack-planner-ai-timetable');
+          const raw = localStorage.getItem('StudyQ-planner-ai-timetable');
           if (!raw) return;
           const rows = JSON.parse(raw);
           if (!Array.isArray(rows) || rows.length === 0) return;
-          if (typeof window.studystackRefreshBridge === 'function') {
-            window.studystackRefreshBridge();
+          if (typeof window.StudyQRefreshBridge === 'function') {
+            window.StudyQRefreshBridge();
           }
         } catch (e) {}
       }
@@ -5486,7 +5487,7 @@
         });
         languageSelect.value = currentLanguage;
         languageSelect.setAttribute('aria-label', t('language.label'));
-        localStorage.setItem('studystack-language', currentLanguage);
+        localStorage.setItem('StudyQ-language', currentLanguage);
         renderTests();
         renderPlan();
         renderRecommendation();
@@ -5500,17 +5501,17 @@
          ============================================================ */
       function performFactoryReset() {
         const keysToClear = [
-          'studystack-planner-tests',
-          'studystack-planner-history',
-          'studystack-planner-ambient',
-          'studystack-planner-sound',
-          'studystack-planner-homework',
-          'studystack-planner-ai-output',
-          'studystack-planner-ai-timetable',
-          'studystack-planner-ai-focus',
-          'studystack-planner-active-ai-block',
-          'studystack-planner-completed-progress',
-          'studystack-planner-conversation-history'
+          'StudyQ-planner-tests',
+          'StudyQ-planner-history',
+          'StudyQ-planner-ambient',
+          'StudyQ-planner-sound',
+          'StudyQ-planner-homework',
+          'StudyQ-planner-ai-output',
+          'StudyQ-planner-ai-timetable',
+          'StudyQ-planner-ai-focus',
+          'StudyQ-planner-active-ai-block',
+          'StudyQ-planner-completed-progress',
+          'StudyQ-planner-conversation-history'
         ];
 
         keysToClear.forEach(function(key) {
@@ -5523,18 +5524,18 @@
         studyHistory = {};
         homeworkTasks = [];
 
-        if (typeof window.studystackRefreshBridge === 'function') {
-          window.studystackRefreshBridge();
+        if (typeof window.StudyQRefreshBridge === 'function') {
+          window.StudyQRefreshBridge();
         }
-        if (typeof window.studystackRefreshProgress === 'function') {
-          window.studystackRefreshProgress();
+        if (typeof window.StudyQRefreshProgress === 'function') {
+          window.StudyQRefreshProgress();
         }
-        if (typeof window.studystackResetAiPlanner === 'function') {
-          window.studystackResetAiPlanner();
+        if (typeof window.StudyQResetAiPlanner === 'function') {
+          window.StudyQResetAiPlanner();
         }
 
-        if (typeof window.studystackClearMemory === 'function') {
-          window.studystackClearMemory();
+        if (typeof window.StudyQClearMemory === 'function') {
+          window.StudyQClearMemory();
         }
 
         document.querySelectorAll('.fill-panel').forEach(function(panel) { panel.remove(); });
@@ -5575,13 +5576,13 @@
          When the AI generates a new schedule, refresh the study
          plan card and recommendation block immediately.
          ============================================================ */
-      window.addEventListener('studystack:ai-plan-updated', function () {
+      window.addEventListener('StudyQ:ai-plan-updated', function () {
         renderPlan();
         renderRecommendation();
       });
 
       // Also react when the Pomodoro bridge block changes
-      window.addEventListener('studystack:bridge-changed', function () {
+      window.addEventListener('StudyQ:bridge-changed', function () {
         renderPlan();
       });
       setInterval(function() {
@@ -5896,7 +5897,7 @@
           stopStreamTracks();
         });
 
-        window.studystackMicState = function () {
+        window.StudyQMicState = function () {
           return { recording: isRecording, processing: isProcessing };
         };
 
@@ -5913,8 +5914,8 @@
     <div class="footer-container">
       <div class="footer-brand">
         <a href="../" class="footer-logo">
-          <img src="../logo/logo.png" alt="StudyStack Logo">
-          <span>StudyStack</span>
+          <img src="../logo/logo.png" alt="StudyQ Logo">
+          <span>StudyQ</span>
         </a>
         <p data-footer-i18n="description">Gemaakt door scholieren, voor scholieren. Gratis hulpmiddelen om slimmer te leren, geconcentreerd te blijven en je toetsen te halen.</p>
       </div>
@@ -5930,13 +5931,14 @@
         <div class="footer-col">
           <h4 data-footer-i18n="support">Ondersteuning</h4>
           <a href="../" data-footer-i18n="home">Startpagina</a>
+          <a href="../about/">Over StudyQ</a>
           <a href="../contact/" data-footer-i18n="contact">Contact</a>
           <a href="../privacy/" data-footer-i18n="privacy">Privacyverklaring</a>
         </div>
       </div>
     </div>
     <div class="footer-bottom">
-      <p data-footer-i18n="copyright">&copy; 2026 StudyStack. Alle rechten voorbehouden.</p>
+      <p data-footer-i18n="copyright">&copy; 2026 StudyQ. Alle rechten voorbehouden.</p>
     </div>
   </footer>
   <script src="../js/footer-i18n.js"></script>

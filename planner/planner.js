@@ -1,5 +1,5 @@
 /* ============================================================
-   StudyStack — AI Planner (with bi-directional Pomodoro bridge)
+   StudyQ — AI Planner (with bi-directional Pomodoro bridge)
    Hardened per operational rules:
    1. Real-time injection + emoji enforcement
    2. Conditional study tables (no table on casual chat)
@@ -18,19 +18,19 @@
   const PROXY_URL = "https://studyq-nu.vercel.app/api/proxy?path=groq/chat/completions";
   const MODEL = "openai/gpt-oss-120b";
 
-  const STORAGE_KEY = "studystack-planner-tests";
-  const OUTPUT_KEY = "studystack-planner-ai-output";
-  const TIMETABLE_KEY = "studystack-planner-ai-timetable";
-  const FOCUS_KEY = "studystack-planner-ai-focus";
+  const STORAGE_KEY = "StudyQ-planner-tests";
+  const OUTPUT_KEY = "StudyQ-planner-ai-output";
+  const TIMETABLE_KEY = "StudyQ-planner-ai-timetable";
+  const FOCUS_KEY = "StudyQ-planner-ai-focus";
 
-  const BRIDGE_KEY = "studystack-planner-active-ai-block";
-  const PROGRESS_KEY = "studystack-planner-completed-progress";
+  const BRIDGE_KEY = "StudyQ-planner-active-ai-block";
+  const PROGRESS_KEY = "StudyQ-planner-completed-progress";
 
   /* ============================================================
      FIXED SYSTEM PROMPT
      ============================================================ */
   const SYSTEM_PROMPT = [
-    "You are StudyStack's study planner coach for secondary school students. You are warm, precise, and brief.",
+    "You are StudyQ's study planner coach for secondary school students. You are warm, precise, and brief.",
     "",
     "============================================================",
     "RULE PRIORITY (apply in this order when rules conflict)",
@@ -192,7 +192,7 @@
   }
 
   function currentLanguage() {
-    return localStorage.getItem("studystack-language") === "en" ? "en" : "nl";
+    return localStorage.getItem("StudyQ-language") === "en" ? "en" : "nl";
   }
 
   function readTestsFromStorage() {
@@ -221,7 +221,7 @@
      Reads the homework the student logged via the quick-add widget
      and normalises it for inclusion in CORE FACTS.
      ============================================================ */
-  const HOMEWORK_KEY = "studystack-planner-homework";
+  const HOMEWORK_KEY = "StudyQ-planner-homework";
 
   function readHomeworkFromStorage() {
     try {
@@ -271,7 +271,7 @@
     try { localStorage.setItem(PROGRESS_KEY, JSON.stringify(list)); } catch (e) {}
   }
 
-  const HISTORY_STORAGE_KEY = "studystack-planner-conversation-history";
+  const HISTORY_STORAGE_KEY = "StudyQ-planner-conversation-history";
   const MAX_HISTORY_TURNS = 12;        // 6 exchanges (6 user + 6 assistant)
   const MAX_HISTORY_CHARS = 6000;      // hard cap so prompts stay small
   const HISTORY_MAX_AGE_MS = 12 * 60 * 60 * 1000; // 12 hours
@@ -388,7 +388,7 @@
     // Debug: verify what the model is actually receiving (remove in production)
     try {
       console.log(
-        "[StudyStack] CORE FACTS — tests:",
+        "[StudyQ] CORE FACTS — tests:",
         tests.length,
         "| homework:",
         homework.length,
@@ -897,7 +897,7 @@
     // study plan card, recommendation block, and Pomodoro bridge without
     // waiting for a manual refresh.
     try {
-      window.dispatchEvent(new CustomEvent('studystack:ai-plan-updated', {
+      window.dispatchEvent(new CustomEvent('StudyQ:ai-plan-updated', {
         detail: { rows: rows, userMessage: userMessage || '' }
       }));
     } catch (e) {}
@@ -948,7 +948,7 @@
     renderTimetableFromCache();
     // Notify the page so the study plan card refreshes immediately
     try {
-      window.dispatchEvent(new CustomEvent('studystack:bridge-changed'));
+      window.dispatchEvent(new CustomEvent('StudyQ:bridge-changed'));
     } catch (e) {}
   }
 
@@ -995,9 +995,9 @@
     } catch (e) { return null; }
   }
 
-  window.studystackRefreshBridge = renderBridge;
-  window.studystackRefreshProgress = renderCompletedStrip;
-  window.studystackSetBridge = setBridge;
+  window.StudyQRefreshBridge = renderBridge;
+  window.StudyQRefreshProgress = renderCompletedStrip;
+  window.StudyQSetBridge = setBridge;
 
   if (aiBridgeClear) {
     aiBridgeClear.addEventListener("click", function() { clearBridge(); });
@@ -1014,8 +1014,8 @@
         ) + "</p>");
         return;
       }
-      if (typeof window.studystackStartAiBlock === "function") {
-        window.studystackStartAiBlock(block);
+      if (typeof window.StudyQStartAiBlock === "function") {
+        window.StudyQStartAiBlock(block);
       }
     });
   }
@@ -1347,9 +1347,9 @@
     if (first) setBridge(first);
   }
 
-  window.studystackFormatAiText = formatAiText;
-  window.studystackExtractMarkdownTable = extractMarkdownTable;
-  window.studystackResetAiPlanner = function () {
+  window.StudyQFormatAiText = formatAiText;
+  window.StudyQExtractMarkdownTable = extractMarkdownTable;
+  window.StudyQResetAiPlanner = function () {
     if (aiFeed) aiFeed.innerHTML = "";
     try {
       localStorage.removeItem(OUTPUT_KEY);
@@ -1372,7 +1372,7 @@
      refreshed immediately AND the page's own plan card should
      reflect the new schedule without a reload.
      ============================================================ */
-  window.addEventListener('studystack:ai-plan-updated', function () {
+  window.addEventListener('StudyQ:ai-plan-updated', function () {
     renderBridge();
     renderTimetableFromCache();
 
@@ -1385,15 +1385,15 @@
   /* ============================================================
      MEMORY CONTROLS (exposed for the inline planner script)
      ============================================================ */
-  window.studystackClearMemory = function () {
+  window.StudyQClearMemory = function () {
     clearConversationHistory();
     try { localStorage.removeItem(OUTPUT_KEY); } catch (e) {}
   };
 
-  window.studystackGetMemoryTurnCount = getMemoryTurnCount;
+  window.StudyQGetMemoryTurnCount = getMemoryTurnCount;
 
   // Debug helpers (remove after confirming the homework bridge works)
-  window.studystackReadHomework = readHomeworkFromStorage;
-  window.studystackReadTests = readTestsFromStorage;
+  window.StudyQReadHomework = readHomeworkFromStorage;
+  window.StudyQReadTests = readTestsFromStorage;
 
 })();

@@ -27,7 +27,7 @@
   }
 
   try {
-    if (localStorage.getItem("studystack-sidebar-collapsed") === "true") {
+    if (localStorage.getItem("StudyQ-sidebar-collapsed") === "true") {
       document.documentElement.classList.add("site-nav-collapsed");
     }
   } catch (error) {

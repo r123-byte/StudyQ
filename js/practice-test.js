@@ -3,7 +3,7 @@ const GROQ_PROXY_URL = `${AI_PROXY_BASE_URL}groq/chat/completions`;
 const TEST_GENERATION_MODEL = "openai/gpt-oss-120b";
 const OPEN_ANSWER_GRADING_MODEL = "liquid/lfm-3-1.7b:free";
 const OPEN_ANSWER_GRADING_URL = `${AI_PROXY_BASE_URL}openrouter/chat/completions`;
-const STORAGE_KEY = "studystack-practice-test-history-v1";
+const STORAGE_KEY = "StudyQ-practice-test-history-v1";
 const MAX_MATERIAL = 100000;
 const MAX_FILE_BYTES = 50 * 1024 * 1024;
 const MAX_PDF_PAGES = 100;
@@ -99,7 +99,7 @@ function applyLanguage(next) {
   const menu = $("#language-menu");
   if (menu) menu.setAttribute("aria-label", language === "nl" ? "Kies een taal" : "Choose language");
   $$(".language-option").forEach(option => option.setAttribute("aria-checked", String(option.dataset.language === language)));
-  try { localStorage.setItem("studystack-language", language); } catch {}
+  try { localStorage.setItem("StudyQ-language", language); } catch {}
   renderHistory();
   if (currentTest && els.exam.classList.contains("active")) renderQuestion();
   if (currentTest && els.results.classList.contains("active") && currentTest.result) renderResults(currentTest);
@@ -1206,5 +1206,5 @@ function wireEvents() {
   window.addEventListener("storage", event => { if (event.key === STORAGE_KEY) { history=loadHistory(); renderHistory(); } });
 }
 
-const savedLanguage = (() => { try { return localStorage.getItem("studystack-language") || "en"; } catch { return "en"; } })();
+const savedLanguage = (() => { try { return localStorage.getItem("StudyQ-language") || "en"; } catch { return "en"; } })();
 applyLanguage(savedLanguage); wireEvents(); updateCharCount(); renderHistory();

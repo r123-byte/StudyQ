@@ -4,22 +4,23 @@
   <script src="../js/site-navigation-state.js?v=8"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI oefentoets maken van je lesstof | StudyStack</title>
+  <title>AI oefentoets maken van je lesstof | StudyQ</title>
   <link rel="canonical" href="https://studyq-nu.vercel.app/practice-test/">
   <link rel="stylesheet" href="../footer.css">
   <link rel="stylesheet" href="../theme.css">
   <link rel="icon" type="image/png" href="../favicon.png">
   <link rel="apple-touch-icon" href="../favicon.png">
+  <link rel="manifest" href="../favicon_io/site.webmanifest">
   <meta name="description" content="Maak een oefentoets van je lesmateriaal en laat antwoorden automatisch nakijken. Gratis AI-oefentoets voor scholieren.">
   <meta name="robots" content="index,follow,max-image-preview:large">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="StudyQ">
-  <meta property="og:title" content="AI oefentoets maken van je lesstof | StudyStack">
+  <meta property="og:title" content="AI oefentoets maken van je lesstof | StudyQ">
   <meta property="og:description" content="Maak een oefentoets van je lesmateriaal en laat antwoorden automatisch nakijken. Gratis AI-oefentoets voor scholieren.">
   <meta property="og:url" content="https://studyq-nu.vercel.app/practice-test/">
   <meta property="og:image" content="https://studyq-nu.vercel.app/assets/homepage.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="AI oefentoets maken van je lesstof | StudyStack">
+  <meta name="twitter:title" content="AI oefentoets maken van je lesstof | StudyQ">
   <meta name="twitter:description" content="Maak een oefentoets van je lesmateriaal en laat antwoorden automatisch nakijken. Gratis AI-oefentoets voor scholieren.">
   <meta name="twitter:image" content="https://studyq-nu.vercel.app/assets/homepage.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -249,7 +250,7 @@
   <link rel="stylesheet" href="../site-ui-consistency.css?v=7">
   <script src="../js/site-navigation.js?v=7" defer></script>
   <script src="../page-intro.js?v=8" defer></script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "AI oefentoets maken van je lesstof | StudyStack", "applicationCategory": "EducationalApplication", "operatingSystem": "Web", "isAccessibleForFree": true, "inLanguage": "nl-NL", "url": "https://studyq-nu.vercel.app/practice-test/", "description": "Maak een oefentoets van je lesmateriaal en laat antwoorden automatisch nakijken. Gratis AI-oefentoets voor scholieren.", "publisher": {"@type": "Organization", "name": "StudyQ", "url": "https://studyq-nu.vercel.app/"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "AI oefentoets maken van je lesstof | StudyQ", "url": "https://studyq-nu.vercel.app/practice-test/", "inLanguage": "nl-NL", "applicationCategory": "EducationalApplication", "operatingSystem": "Web", "isAccessibleForFree": true, "description": "Maak een oefentoets van je lesmateriaal en laat antwoorden automatisch nakijken. Gratis AI-oefentoets voor scholieren.", "publisher": {"@type": "Organization", "name": "StudyQ", "url": "https://studyq-nu.vercel.app/"}}</script>
   </head>
 <body>
   <svg aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden;">
@@ -515,7 +516,7 @@
 
       <footer class="footer">
         <div class="footer-left">
-          <strong>StudyStack</strong>
+          <strong>StudyQ</strong>
           <span data-i18n="footer.madeBy">· gemaakt door studenten, voor studenten</span>
         </div>
         <div class="footer-right">
@@ -562,8 +563,8 @@
     <div class="footer-container">
       <div class="footer-brand">
         <a href="../" class="footer-logo">
-          <img src="../logo/logo.png" alt="StudyStack Logo">
-          <span>StudyStack</span>
+          <img src="../logo/logo.png" alt="StudyQ Logo">
+          <span>StudyQ</span>
         </a>
         <p data-footer-i18n="description">Gemaakt door scholieren, voor scholieren. Gratis hulpmiddelen om slimmer te leren, geconcentreerd te blijven en je toetsen te halen.</p>
       </div>
@@ -579,13 +580,14 @@
         <div class="footer-col">
           <h4 data-footer-i18n="support">Ondersteuning</h4>
           <a href="../" data-footer-i18n="home">Startpagina</a>
+          <a href="../about/">Over StudyQ</a>
           <a href="../contact/" data-footer-i18n="contact">Contact</a>
           <a href="../privacy/" data-footer-i18n="privacy">Privacyverklaring</a>
         </div>
       </div>
     </div>
     <div class="footer-bottom">
-      <p data-footer-i18n="copyright">&copy; 2026 StudyStack. Alle rechten voorbehouden.</p>
+      <p data-footer-i18n="copyright">&copy; 2026 StudyQ. Alle rechten voorbehouden.</p>
     </div>
   </footer>
 
@@ -770,7 +772,7 @@
       function applyLanguage(language) {
         var lang = translations[language] ? language : 'nl';
         document.documentElement.lang = lang;
-        document.title = lang === 'en' ? 'Practice Test · StudyStack' : 'Oefentoets · StudyStack';
+        document.title = lang === 'en' ? 'Practice Test · StudyQ' : 'Oefentoets · StudyQ';
 
         document.querySelectorAll('[data-i18n]').forEach(function (el) {
           var key = el.getAttribute('data-i18n');
@@ -790,13 +792,13 @@
           o.setAttribute('aria-checked', String(o.dataset.language === lang));
         });
 
-        try { localStorage.setItem('studystack-language', lang); } catch (e) {}
-        document.dispatchEvent(new CustomEvent('studystack:languagechange', { detail: { language: lang } }));
+        try { localStorage.setItem('StudyQ-language', lang); } catch (e) {}
+        document.dispatchEvent(new CustomEvent('StudyQ:languagechange', { detail: { language: lang } }));
       }
 
       // Initialise from saved preference (default Dutch, matching the HTML).
       var saved = 'nl';
-      try { saved = localStorage.getItem('studystack-language') || 'nl'; } catch (e) {}
+      try { saved = localStorage.getItem('StudyQ-language') || 'nl'; } catch (e) {}
       applyLanguage(saved);
     })();
   </script>

@@ -1,13 +1,13 @@
 /* ============================================================
-   StudyStack — Flashcards (3-step recall system)
+   StudyQ — Flashcards (3-step recall system)
    Practice → Test → Mastered, batch of 3 at a time.
    Uses flip card + self-rating. No typing.
    ============================================================ */
 (function () {
   "use strict";
 
-  const STORAGE_KEY = 'studystack-flashcards';
-  const LANG_KEY = 'studystack-language';
+  const STORAGE_KEY = 'StudyQ-flashcards';
+  const LANG_KEY = 'StudyQ-language';
   const BATCH_SIZE = 3;
   const MASTERY_THRESHOLD = 3;
 
@@ -1097,7 +1097,7 @@
     if (e.key === ' ') { e.preventDefault(); flipCard(); }
   });
 
-  window.studystackFlashcards = {
+  window.StudyQFlashcards = {
     getState: function () { return state; },
     save: save
   };

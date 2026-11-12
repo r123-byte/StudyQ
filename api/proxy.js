@@ -116,7 +116,7 @@ export default async function handler(req) {
   }
 
   return new Response(
-    JSON.stringify({ status: "ok", message: "StudyStack Vercel proxy is running." }),
+    JSON.stringify({ status: "ok", message: "StudyQ Vercel proxy is running." }),
     { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
   );
 }

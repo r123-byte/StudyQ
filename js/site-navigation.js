@@ -48,7 +48,7 @@
 
   const readLanguage = function () {
     try {
-      return localStorage.getItem("studystack-language") === "en" ? "en" : "nl";
+      return localStorage.getItem("StudyQ-language") === "en" ? "en" : "nl";
     } catch (error) {
       return "nl";
     }
@@ -65,11 +65,11 @@
   function makeSidebar() {
     const nav = document.createElement("aside");
     nav.className = "site-sidebar";
-    nav.setAttribute("aria-label", "StudyStack navigation");
+    nav.setAttribute("aria-label", "StudyQ navigation");
     const brand = document.createElement("a");
     brand.className = "site-sidebar-brand";
     brand.href = siteRoot.href;
-    brand.innerHTML = '<img src="' + new URL("logo/logo.png", siteRoot).href + '" alt=""><span>Study<span>Stack</span></span>';
+    brand.innerHTML = '<img src="' + new URL("logo/logo.png", siteRoot).href + '" alt=""><span>StudyQ</span>';
     const header = document.createElement("div");
     header.className = "site-sidebar-header";
     header.appendChild(brand);
@@ -148,13 +148,13 @@
   }
 
   let collapsed = false;
-  try { collapsed = localStorage.getItem("studystack-sidebar-collapsed") === "true"; } catch (error) {}
+  try { collapsed = localStorage.getItem("StudyQ-sidebar-collapsed") === "true"; } catch (error) {}
   function setCollapsed(value) {
     collapsed = value;
     document.body.classList.toggle("site-nav-collapsed", value);
     document.documentElement.classList.toggle("site-nav-collapsed", value);
     sidebar.classList.toggle("is-collapsed", value);
-    try { localStorage.setItem("studystack-sidebar-collapsed", String(value)); } catch (error) {}
+    try { localStorage.setItem("StudyQ-sidebar-collapsed", String(value)); } catch (error) {}
     updateLabels();
   }
   const toggleButton = sidebar.querySelector(".site-sidebar-toggle, .sidebar-toggle");
@@ -170,6 +170,6 @@
     if (event.target.closest(".language-option")) setTimeout(updateLabels, 0);
   });
   window.addEventListener("storage", function (event) {
-    if (event.key === "studystack-language") updateLabels();
+    if (event.key === "StudyQ-language") updateLabels();
   });
 })();

@@ -1,5 +1,5 @@
 /* ============================================================
-   StudyStack — Unified theme
+   StudyQ — Unified theme
    Aggressive override layer. Loaded last on every tool page
    to force the homepage design language across the whole site.
    ============================================================ */
@@ -42,7 +42,7 @@
 }
 
 /* ---------- 1. Kill all infinite animations globally ---------- */
-@keyframes _studystack_disabled_ {
+@keyframes _StudyQ_disabled_ {
   from { opacity: 1; }
   to   { opacity: 1; }
 }

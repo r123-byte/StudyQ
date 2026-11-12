@@ -11,8 +11,8 @@
 .brand .brand-wordmark img,
 .site-sidebar-brand .brand-wordmark img {
   display: block !important;
-  flex: 0 0 88px !important;
-  width: 88px !important;
+  flex: 0 0 108px !important;
+  width: 108px !important;
   height: auto !important;
   max-width: none !important;
   object-fit: contain !important;
@@ -21,8 +21,8 @@
 
 .footer-logo .brand-wordmark img {
   display: block !important;
-  flex: 0 0 100px !important;
-  width: 100px !important;
+  flex: 0 0 120px !important;
+  width: 120px !important;
   height: auto !important;
   max-width: none !important;
   object-fit: contain !important;

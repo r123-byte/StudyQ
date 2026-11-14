@@ -2,12 +2,8 @@
   "cleanUrls": true,
   "rewrites": [
     {
-      "source": "/stats/script.js",
-      "destination": "https://umami.is"
-    },
-    {
-      "source": "/stats/api/send",
-      "destination": "https://umami.is"
+      "source": "/stats/:match*",
+      "destination": "https://cloud.umami.is/:match*"
     }
   ],
   "redirects": [

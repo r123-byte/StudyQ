@@ -2822,9 +2822,9 @@
           </svg>
         </div>
         <div class="modal-explain-body">
-          <div class="modal-explain-title" data-i18n="planner.icsExplainTitle">What is an .ics file or link?</div>
+          <div class="modal-explain-title" data-i18n="planner.icsExplainTitle">Choose how to add your calendar</div>
           <div class="modal-explain-text" data-i18n="planner.icsExplainText">
-            An <strong>.ics file</strong> is a standard calendar file. Schools share one via Magister, Somtoday or Zermelo — download it and upload it here. A <strong>webcal://</strong> link is a live subscription: paste it once and any new test your school adds will appear automatically in Apple Calendar, Google Calendar or Outlook.
+            Upload an <strong>.ics file</strong> to import its test dates into StudyQ. A subscription link is private: StudyQ will try to read it, but some calendar services block this. If it fails, download the .ics file from your school and upload it instead.
           </div>
         </div>
       </div>
@@ -2901,18 +2901,20 @@
 
       <div class="modal-panel" id="panel-link">
         <div class="field-group">
-          <label class="field-label" for="ics-url" data-i18n="planner.linkLabel">Plak hier je agenda-link</label>
-          <input class="field-input" type="url" id="ics-url" placeholder="https://... or webcal://..." data-i18n-placeholder="planner.linkPlaceholder">
+          <label class="field-label" for="ics-url" data-i18n="planner.linkLabel">Paste a private .ics or calendar subscription link</label>
+          <input class="field-input" type="text" id="ics-url" inputmode="url" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="https://… or webcal://…" data-i18n-placeholder="planner.linkPlaceholder" aria-describedby="link-help link-status">
         </div>
-        <div class="field-hint" data-i18n="planner.linkHint">
-          Je school of agenda-app kan een abonnementslink geven. Plak hem hier om je rooster te importeren.
+        <div class="field-hint" id="link-help" data-i18n="planner.linkHint">
+          Only paste a link you trust. The link may grant access to your calendar. StudyQ tries to import its test dates; it does not keep the link.
         </div>
-        <div class="webcal-hint" id="webcal-detect" style="display:none;">
+        <div class="webcal-hint" id="webcal-detect" style="display:none;" role="status">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M20 6 9 17l-5-5"></path>
           </svg>
-          <span data-i18n="planner.webcalDetected">webcal:// detected — will open in your calendar app</span>
+          <span data-i18n="planner.webcalDetected">Subscription link detected — StudyQ will try to import it</span>
         </div>
+        <a class="field-hint" id="open-calendar-app" href="#" style="display:none; margin-top:0.65rem; font-weight:700;" data-i18n="planner.linkOpenApp">Open this subscription in your calendar app</a>
+        <div class="import-preview" id="link-status" role="status" aria-live="polite" hidden></div>
         <div class="modal-footer">
           <button class="btn btn-secondary" id="cancel-link" data-i18n="planner.cancel">Annuleren</button>
           <button class="btn btn-primary" id="parse-link" data-i18n="planner.importNow">Importeren</button>
@@ -2975,9 +2977,9 @@
           "planner.qaTime": "Time needed (min)",
           "planner.qaDifficulty": "Difficulty",
           "planner.qaAdd": "Add",
-          "planner.icsExplainTitle": "What is an .ics file or link?",
-          "planner.icsExplainText": "An <strong>.ics file</strong> is a standard calendar file. Schools share one via Magister, Somtoday or Zermelo — download it and upload it here. A <strong>webcal://</strong> link is a live subscription: paste it once and any new test your school adds will appear automatically in Apple Calendar, Google Calendar or Outlook.",
-          "planner.webcalDetected": "webcal:// detected — will open in your calendar app",
+          "planner.icsExplainTitle": "Choose how to add your calendar",
+          "planner.icsExplainText": "Upload an <strong>.ics file</strong> to import its test dates into StudyQ. A subscription link is private: StudyQ will try to read it, but some calendar services block this. If it fails, download the .ics file from your school and upload it instead.",
+          "planner.webcalDetected": "Subscription link detected — StudyQ will try to import it",
           "planner.quickAddExpand": "Expand",
           "planner.quickAddCollapse": "Collapse",
           "planner.planEmptyTitle": "Add a test first",
@@ -3020,9 +3022,14 @@
           "planner.dropHint": "or click to choose",
           "planner.uploadHint": "Your school usually shares an .ics file through Magister, Somtoday, or Zermelo.",
           "planner.importNow": "Import",
-          "planner.linkLabel": "Paste your calendar link here",
+          "planner.linkLabel": "Paste a private .ics or calendar subscription link",
           "planner.linkPlaceholder": "https://...",
-          "planner.linkHint": "Your school or calendar app can give you a subscription link. Paste it here to import your schedule.",
+          "planner.linkHint": "Only paste a link you trust. The link may grant access to your calendar. StudyQ tries to import its test dates; it does not keep the link.",
+          "planner.linkInvalid": "Enter a valid HTTPS or webcal calendar link.",
+          "planner.linkLoading": "Reading calendar…",
+          "planner.linkLoaded": "Calendar read. {events} events found; {tests} possible test dates detected.",
+          "planner.linkNoTests": "No possible test dates were found. You can still upload the .ics file or add a test manually.",
+          "planner.linkOpenApp": "Open this subscription in your calendar app",
           "planner.noTests": "No tests yet",
           "planner.noTestsHint": "Add a test to see your personal study plan.",
           "planner.daysRemaining": "days remaining",
@@ -3058,13 +3065,13 @@
           "planner.reasonConfidence": "You said you weren't confident about this material.",
           "planner.reasonWeight": "This test has a high weight.",
           "planner.reasonBalanced": "This is the best next step based on your current plan.",
-          "planner.importSuccess": "Calendar imported.",
+          "planner.importSuccess": "Calendar file read.",
           "planner.importEvents": "events found",
           "planner.importTestsFound": "possible test dates detected",
           "planner.importNoEvents": "No school events found in this file.",
           "planner.importError": "Could not read this file. Make sure it is a valid .ics file.",
-          "planner.importLinkError": "Could not load this link. Check the URL and try again.",
-          "planner.importLinkHint": "Note: importing from a link only works if the server allows it (CORS). If it fails, download the .ics file and upload it instead.",
+          "planner.importLinkError": "StudyQ could not read this calendar link. The provider may block browser access.",
+          "planner.importLinkHint": "Download the calendar as an .ics file from your school and use the .ics file tab. Your private link was not saved.",
           "planner.fillMarker": "Fill in",
           "planner.fillPanelTitle": "Add missing information",
           "planner.fillPanelHint": "This test came from your calendar. The calendar doesn't know how much material it covers or how well you know it yet. Fill this in so the study plan is accurate.",
@@ -3190,9 +3197,9 @@
           "planner.qaTime": "Tijd nodig (min)",
           "planner.qaDifficulty": "Moeilijkheid",
           "planner.qaAdd": "Toevoegen",
-          "planner.icsExplainTitle": "Wat is een .ics-bestand of link?",
-          "planner.icsExplainText": "Een <strong>.ics-bestand</strong> is een standaard agenda-bestand. Je school deelt er een via Magister, Somtoday of Zermelo — download het en upload het hier. Een <strong>webcal://</strong>-link is een live abonnement: plak hem één keer en nieuwe toetsen die je school toevoegt verschijnen automatisch in Apple Agenda, Google Agenda of Outlook.",
-          "planner.webcalDetected": "webcal:// herkend — opent in je agenda-app",
+          "planner.icsExplainTitle": "Kies hoe je je agenda toevoegt",
+          "planner.icsExplainText": "Upload een <strong>.ics-bestand</strong> om toetsdata in StudyQ te zetten. Een abonnementslink is privé: StudyQ probeert hem te lezen, maar sommige agenda's blokkeren dit. Lukt het niet? Download dan het .ics-bestand van je school en upload dat.",
+          "planner.webcalDetected": "Abonnementslink herkend — StudyQ probeert hem te importeren",
           "planner.quickAddExpand": "Uitklappen",
           "planner.quickAddCollapse": "Inklappen",
           "planner.planEmptyTitle": "Voeg eerst een toets toe",
@@ -3235,9 +3242,14 @@
           "planner.dropHint": "of klik om te kiezen",
           "planner.uploadHint": "Je school deelt meestal een .ics-bestand via Magister, Somtoday of Zermelo.",
           "planner.importNow": "Importeren",
-          "planner.linkLabel": "Plak hier je agenda-link",
+          "planner.linkLabel": "Plak een privé .ics- of agenda-abonnementslink",
           "planner.linkPlaceholder": "https://...",
-          "planner.linkHint": "Je school of agenda-app kan een abonnementslink geven. Plak hem hier om je rooster te importeren.",
+          "planner.linkHint": "Plak alleen een link die je vertrouwt. De link kan toegang geven tot je agenda. StudyQ probeert toetsdata te lezen en bewaart de link niet.",
+          "planner.linkInvalid": "Vul een geldige HTTPS- of webcal-agendalink in.",
+          "planner.linkLoading": "Agenda wordt gelezen…",
+          "planner.linkLoaded": "Agenda gelezen. {events} gebeurtenissen gevonden; {tests} mogelijke toetsdata herkend.",
+          "planner.linkNoTests": "Geen mogelijke toetsdata gevonden. Je kunt het .ics-bestand uploaden of zelf een toets toevoegen.",
+          "planner.linkOpenApp": "Open dit abonnement in je agenda-app",
           "planner.noTests": "Nog geen toetsen",
           "planner.noTestsHint": "Voeg een toets toe om je persoonlijke studieplan te zien.",
           "planner.daysRemaining": "dagen resterend",
@@ -3273,13 +3285,13 @@
           "planner.reasonConfidence": "Je gaf aan nog niet zeker te zijn over dit materiaal.",
           "planner.reasonWeight": "Deze toets heeft een hoge weging.",
           "planner.reasonBalanced": "Dit is de beste volgende stap op basis van je huidige planning.",
-          "planner.importSuccess": "Rooster geïmporteerd.",
+          "planner.importSuccess": "Agendabestand gelezen.",
           "planner.importEvents": "gebeurtenissen gevonden",
           "planner.importTestsFound": "mogelijke toetsdata herkend",
           "planner.importNoEvents": "Geen schoolgebeurtenissen gevonden in dit bestand.",
           "planner.importError": "Kon dit bestand niet lezen. Controleer of het een geldig .ics-bestand is.",
-          "planner.importLinkError": "Kon deze link niet laden. Controleer de URL en probeer opnieuw.",
-          "planner.importLinkHint": "Let op: importeren via een link werkt alleen als de server het toestaat (CORS). Lukt het niet, download dan het .ics-bestand en upload het.",
+          "planner.importLinkError": "StudyQ kon deze agendal link niet lezen. De aanbieder blokkeert mogelijk toegang vanuit de browser.",
+          "planner.importLinkHint": "Download het .ics-bestand bij je school en gebruik het tabblad .ics-bestand. Je privélink is niet opgeslagen.",
           "planner.fillMarker": "Invullen",
           "planner.fillPanelTitle": "Ontbrekende info toevoegen",
           "planner.fillPanelHint": "Deze toets komt uit je agenda. De agenda weet niet hoeveel stof het is of hoe goed je het al kent. Vul dit in zodat het studieplan klopt.",
@@ -4561,23 +4573,24 @@
       ============================================================ */
       function parseICS(text) {
         const events = [];
-        const unfolded = text.replace(/\r\n[ \t]/g, '').replace(/\n[ \t]/g, '');
+        const unfolded = String(text || '').replace(/\r\n[ \t]/g, '').replace(/\n[ \t]/g, '');
         const lines = unfolded.split(/\r?\n/);
         let current = null, inEvent = false;
         for (let i = 0; i < lines.length; i++) {
           const line = lines[i];
-          if (line.startsWith('BEGIN:VEVENT')) { inEvent = true; current = { summary: '', description: '', location: '', dtstart: '', dtend: '' }; continue; }
-          if (line.startsWith('END:VEVENT')) { if (current) events.push(current); current = null; inEvent = false; continue; }
+          if (/^BEGIN:VEVENT\s*$/i.test(line)) { inEvent = true; current = { summary: '', description: '', location: '', dtstart: '', dtend: '' }; continue; }
+          if (/^END:VEVENT\s*$/i.test(line)) { if (current) events.push(current); current = null; inEvent = false; continue; }
           if (!inEvent || !current) continue;
           const idx = line.indexOf(':');
           if (idx < 0) continue;
           const keyPart = line.substring(0, idx);
           const value = line.substring(idx + 1);
           const key = keyPart.split(';')[0].toUpperCase();
-          if (key === 'SUMMARY') current.summary = value;
-          else if (key === 'DESCRIPTION') current.description = value;
-          else if (key === 'LOCATION') current.location = value;
-          else if (key === 'DTSTART') current.dtstart = value;
+          const decoded = value.replace(/\\n/gi, ' ').replace(/\\,/g, ',').replace(/\\;/g, ';').replace(/\\\\/g, '\\');
+          if (key === 'SUMMARY') current.summary = decoded;
+          else if (key === 'DESCRIPTION') current.description = decoded;
+          else if (key === 'LOCATION') current.location = decoded;
+          else if (key === 'DTSTART') current.dtstart = decoded;
           else if (key === 'DTEND') current.dtend = value;
         }
         return events;
@@ -4590,6 +4603,7 @@
         const hour = m[4] ? parseInt(m[4], 10) : 9, minute = m[5] ? parseInt(m[5], 10) : 0, second = m[6] ? parseInt(m[6], 10) : 0;
         const isUTC = !!m[7];
         const dt = isUTC ? new Date(Date.UTC(year, month, day, hour, minute, second)) : new Date(year, month, day, hour, minute, second);
+        if (dt.getFullYear() !== year && !isUTC || (!isUTC && (dt.getMonth() !== month || dt.getDate() !== day))) return null;
         return isNaN(dt.getTime()) ? null : dt;
       }
       function detectTests(events) {
@@ -4601,7 +4615,7 @@
           if (!isTest) return;
           const dt = parseICSDate(ev.dtstart);
           if (!dt) return;
-          const rawSubject = (ev.summary || '').replace(/toets|proefwerk|pw|so|tentamen|examen|test|exam|repetitie/gi, '').trim() || (ev.summary || '');
+          const rawSubject = (ev.summary || '').replace(/\b(toets|proefwerk|pw|so|tentamen|examen|test|exam|repetitie)\b/gi, '').trim() || (ev.summary || '');
           detected.push({
             subject: sanitizeSubject(rawSubject).substring(0, 60),
             dateISO: dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0'),
@@ -4630,15 +4644,17 @@
       });
 
       function handleFile(file) {
+        if (!file || (!/\.ics$/i.test(file.name || '') && file.type !== 'text/calendar')) return;
         const reader = new FileReader();
         reader.onload = function(e) {
           uploadedFileText = e.target.result;
-          parseIcsBtn.disabled = false;
-          const events = parseICS(uploadedFileText);
+          const isCalendar = /BEGIN:VCALENDAR/i.test(String(uploadedFileText || ''));
+          const events = isCalendar ? parseICS(uploadedFileText) : [];
           const tests = detectTests(events);
+          parseIcsBtn.disabled = !isCalendar || tests.length === 0;
           const preview = document.createElement('div');
           preview.className = 'import-preview';
-          preview.innerHTML =
+          preview.innerHTML = isCalendar ?
             '<div><strong>' + t('planner.importSuccess') + '</strong> ' +
             events.length + ' ' + t('planner.importEvents') + ' · ' +
             tests.length + ' ' + t('planner.importTestsFound') + '.</div>' +
@@ -4646,7 +4662,8 @@
               ? '<ul>' + tests.slice(0, 6).map(function(tt) {
                   return '<li>' + escapeHtml(tt.subject) + ' — ' + tt.dateISO + ' ' + tt.time + '</li>';
                 }).join('') + '</ul>'
-              : '<div style="margin-top:0.4rem; color:#718da8;">' + t('planner.importNoEvents') + '</div>');
+              : '<div style="margin-top:0.4rem; color:#718da8;">' + t('planner.linkNoTests') + '</div>')
+            : '<div>' + t('planner.importError') + '</div>';
           const existing = panels.upload.querySelector('.import-preview');
           if (existing) existing.remove();
           panels.upload.insertBefore(preview, panels.upload.querySelector('.modal-footer'));
@@ -4657,33 +4674,16 @@
       parseIcsBtn.addEventListener('click', function() {
         if (!uploadedFileText) return;
         const events = parseICS(uploadedFileText);
-        const tests = detectTests(events);
-        state.importedEvents = events;
-        state.hasImported = true;
-        tests.forEach(function(tt) {
-          addTest({
-            id: uid(),
-            subject: tt.subject,
-            dateISO: tt.dateISO,
-            time: tt.time,
-            weight: 2,
-            chapters: '',
-            size: 'medium',
-            difficulty: 'normal',
-            studyLevel: 'started',
-            sessions: [],
-            completedVolume: 0,
-            confidence: null,
-            imported: true,
-            needsFill: true
-          });
-        });
-        closeModal();
+        if (!/BEGIN:VCALENDAR/i.test(String(uploadedFileText || '')) || !detectTests(events).length) return;
+        importCalendarEvents(events);
       });
 
       (function initWebcalSupport() {
         const urlInput = document.getElementById('ics-url');
         const detectPill = document.getElementById('webcal-detect');
+        const linkStatus = document.getElementById('link-status');
+        const importButton = document.getElementById('parse-link');
+        const openCalendarApp = document.getElementById('open-calendar-app');
 
         if (!urlInput) return;
 
@@ -4691,12 +4691,28 @@
           return /^webcal:\/\//i.test(String(value || '').trim());
         }
 
+        function normalizedCalendarUrl(value) {
+          const raw = String(value || '').trim();
+          const normalized = isWebcal(raw) ? raw.replace(/^webcal:/i, 'https:') : raw;
+          let parsed;
+          try { parsed = new URL(normalized); } catch (_) { return null; }
+          if (parsed.protocol !== 'https:' || !parsed.hostname || parsed.username || parsed.password) return null;
+          return parsed.href;
+        }
         function updatePill() {
-          if (isWebcal(urlInput.value)) {
-            detectPill.style.display = 'inline-flex';
-          } else {
-            detectPill.style.display = 'none';
-          }
+          detectPill.style.display = isWebcal(urlInput.value) ? 'inline-flex' : 'none';
+          openCalendarApp.style.display = isWebcal(urlInput.value) ? 'inline-block' : 'none';
+          openCalendarApp.href = isWebcal(urlInput.value) ? String(urlInput.value || '').trim() : '#';
+          linkStatus.hidden = true;
+          linkStatus.textContent = '';
+          importButton.disabled = !urlInput.value.trim();
+        }
+        function setStatus(message, error) {
+          linkStatus.hidden = false;
+          linkStatus.textContent = message;
+          linkStatus.style.borderColor = error ? '#fecaca' : '#bfdbfe';
+          linkStatus.style.background = error ? '#fff7f7' : '#eff6ff';
+          linkStatus.style.color = error ? '#b91c1c' : '#1d4ed8';
         }
 
         urlInput.addEventListener('input', updatePill);
@@ -4706,54 +4722,54 @@
         });
 
         window.__StudyQIsWebcal = isWebcal;
-        window.__StudyQWebcalToHttps = function (value) {
-          const s = String(value || '').trim();
-          if (!isWebcal(s)) return s;
-          return s.replace(/^webcal:\/\//i, 'https://');
-        };
+        window.__StudyQCalendarUrl = normalizedCalendarUrl;
+        window.__StudyQCalendarStatus = setStatus;
+        importButton.disabled = true;
       })();
 
-      document.getElementById('parse-link').addEventListener('click', async function() {
-        const rawUrl = document.getElementById('ics-url').value.trim();
-        if (!rawUrl) return;
-
-        if (typeof window.__StudyQIsWebcal === 'function' && window.__StudyQIsWebcal(rawUrl)) {
-          const openInCalendar = window.confirm(
-            currentLanguage === 'en'
-              ? 'This is a webcal:// subscription link. Do you want to open it in your calendar app (Apple Calendar, Google Calendar, Outlook)?\n\nClick OK to open it, or Cancel to import the tests here anyway.'
-              : 'Dit is een webcal:// abonnementslink. Wil je hem openen in je agenda-app (Apple Agenda, Google Agenda, Outlook)?\n\nKlik OK om te openen, of Annuleren om de toetsen hier alsnog te importeren.'
-          );
-          if (openInCalendar) {
-            window.location.href = rawUrl;
-            return;
-          }
-        }
-
-        const url = (typeof window.__StudyQWebcalToHttps === 'function')
-          ? window.__StudyQWebcalToHttps(rawUrl)
-          : rawUrl;
-
-        try {
-          const response = await fetch(url);
-          if (!response.ok) throw new Error('bad status');
-          const text = await response.text();
-          const events = parseICS(text);
-          const tests = detectTests(events);
-          state.importedEvents = events;
-          state.hasImported = true;
-          tests.forEach(function(tt) {
-            addTest({
-              id: uid(),
-              subject: tt.subject,
-              dateISO: tt.dateISO,
-              time: tt.time,
-              weight: 2, chapters: '', size: 'medium', difficulty: 'normal', studyLevel: 'started',
-              sessions: [], completedVolume: 0, confidence: null, imported: true, needsFill: true
-            });
+      function importCalendarEvents(events) {
+        if (!events.length) throw new Error('not-calendar');
+        const tests = detectTests(events);
+        state.importedEvents = events;
+        state.hasImported = true;
+        tests.forEach(function(tt) {
+          addTest({
+            id: uid(), subject: tt.subject, dateISO: tt.dateISO, time: tt.time,
+            weight: 2, chapters: '', size: 'medium', difficulty: 'normal', studyLevel: 'started',
+            sessions: [], completedVolume: 0, confidence: null, imported: true, needsFill: true
           });
-          closeModal();
+        });
+        if (tests.length) closeModal();
+        return { events: events.length, tests: tests.length };
+      }
+
+      document.getElementById('parse-link').addEventListener('click', async function() {
+        const urlInput = document.getElementById('ics-url');
+        const importButton = document.getElementById('parse-link');
+        const status = window.__StudyQCalendarStatus;
+        const url = window.__StudyQCalendarUrl(urlInput.value);
+        if (!url) {
+          status(t('planner.linkInvalid'), true);
+          urlInput.focus();
+          return;
+        }
+        importButton.disabled = true;
+        status(t('planner.linkLoading'), false);
+        try {
+          const response = await fetch(url, { headers: { Accept: 'text/calendar,text/plain;q=0.9,*/*;q=0.1' }, credentials: 'omit', mode: 'cors' });
+          if (!response.ok) throw new Error('bad-status');
+          const text = await response.text();
+          if (!/BEGIN:VCALENDAR/i.test(text)) throw new Error('not-calendar');
+          const events = parseICS(text);
+          const result = importCalendarEvents(events);
+          importButton.disabled = false;
+          status(t('planner.linkLoaded').replace('{events}', result.events).replace('{tests}', result.tests), false);
+          if (!result.tests) {
+            status(t('planner.linkNoTests'), false);
+          }
         } catch (err) {
-          alert(t('planner.importLinkError') + '\n\n' + t('planner.importLinkHint'));
+          importButton.disabled = false;
+          status(t('planner.importLinkError') + ' ' + t('planner.importLinkHint'), true);
         }
       });
 

@@ -33,6 +33,35 @@
   margin-left: 0 !important;
 }
 
+.seo-guide {
+  width: min(920px, calc(100% - 2rem));
+  margin: clamp(2rem, 5vw, 4rem) auto;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border: 1px solid rgba(255, 255, 255, .92);
+  border-radius: 24px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, .94), rgba(235, 243, 254, .78));
+  box-shadow: 0 18px 42px -32px rgba(36, 81, 140, .34), inset 0 1px 0 rgba(255, 255, 255, .96);
+  color: #334155;
+  font-family: 'Sofia Pro', system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.seo-guide h2,
+.seo-guide h3 {
+  color: #0f172a;
+  font-weight: 800;
+  letter-spacing: -.025em;
+  line-height: 1.25;
+}
+
+.seo-guide h2 { margin: 0 0 .8rem; font-size: clamp(1.35rem, 3vw, 1.8rem); }
+.seo-guide h3 { margin: 1.5rem 0 .5rem; font-size: 1.15rem; }
+.seo-guide p { margin: .55rem 0; }
+.seo-guide a { color: #1d4ed8; font-weight: 700; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.seo-guide a:hover { color: #1e40af; }
+.seo-guide .seo-related { display: flex; flex-wrap: wrap; align-items: baseline; gap: .35rem .8rem; margin-top: 1.25rem; }
+
 .top-bar .brand {
   gap: .65rem !important;
   font-size: 1.35rem !important;

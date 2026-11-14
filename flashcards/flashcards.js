@@ -20,7 +20,14 @@
       "fc.backHome": "Back to home",
       "fc.badge": "3-step recall · free",
       "fc.title": "Flashcards",
-      "fc.heroText": "Create decks, paste your vocabulary, and learn in 3 steps: practice, test, master.",
+      "fc.heroText": "Create flashcard decks, add cards or import them, and practise in three steps: review, test yourself, and master each card.",
+      "seo.guideTitle": "Create flashcard decks and practise actively",
+      "seo.guideIntro": "Add cards one at a time or import several lines at once. Put the front and back on one line, separated by an equals sign, tab or comma.",
+      "seo.reviewTitle": "Three steps for each card",
+      "seo.reviewText": "First review both sides, then test your recall by flipping the card and rate your answer. A card is mastered after three correct recalls; a wrong answer sends it back to practice.",
+      "seo.relatedLead": "Want to practise vocabulary or review study material?",
+      "seo.vocabLink": "Use the vocabulary trainer",
+      "seo.testLink": "Make a practice test",
       "fc.yourDecks": "Your decks",
       "fc.newDeck": "New deck",
       "fc.newDeckTitle": "New deck",
@@ -104,7 +111,14 @@
       "fc.backHome": "Terug naar startpagina",
       "fc.badge": "3-stappen · gratis",
       "fc.title": "Flashcards",
-      "fc.heroText": "Maak kaartensets, plak je woordjes en leer in 3 stappen: oefenen, toetsen en beheersen.",
+      "fc.heroText": "Maak kaartensets, voeg kaarten toe of importeer ze en oefen in drie stappen: eerst bekijken, jezelf testen en kaarten beheersen.",
+      "seo.guideTitle": "Maak kaartensets en oefen actief",
+      "seo.guideIntro": "Voeg kaarten één voor één toe of importeer meerdere regels tegelijk. Zet de voorkant en achterkant op één regel met bijvoorbeeld <em>=</em>, een tab of een komma ertussen.",
+      "seo.reviewTitle": "Drie stappen per kaart",
+      "seo.reviewText": "Bekijk eerst beide kanten, test daarna je herinnering door de kaart om te draaien en beoordeel je antwoord. Na drie goede herinneringen is de kaart beheerst; een fout antwoord brengt de kaart terug naar oefenen.",
+      "seo.relatedLead": "Verder oefenen met woordjes of lesstof?",
+      "seo.vocabLink": "Gebruik de woordtrainer",
+      "seo.testLink": "Maak een oefentoets",
       "fc.yourDecks": "Jouw kaartensets",
       "fc.newDeck": "Nieuwe kaartenset",
       "fc.newDeckTitle": "Nieuwe kaartenset",
@@ -998,7 +1012,7 @@
     document.querySelectorAll('[data-i18n]').forEach(function (el) {
       const key = el.dataset.i18n;
       const v = t(key);
-      if (key === 'fc.pasteHint' || key === 'fc.legendExplainText') el.innerHTML = v;
+      if (key === 'fc.pasteHint' || key === 'fc.legendExplainText' || key === 'seo.guideIntro') el.innerHTML = v;
       else el.textContent = v;
     });
     document.querySelectorAll('[data-i18n-placeholder]').forEach(function (el) {

@@ -620,7 +620,7 @@
   <link rel="stylesheet" href="../language-switcher.css">
   <link rel="stylesheet" href="../site-navigation.css?v=14">
   <link rel="stylesheet" href="../page-intro.css?v=5">
-  <link rel="stylesheet" href="../site-ui-consistency.css?v=9">
+  <link rel="stylesheet" href="../site-ui-consistency.css?v=10">
   <script src="../js/site-navigation.js?v=8" defer></script>
   <script src="../page-intro.js?v=8" defer></script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Gratis woordjes leren en begrippen oefenen | StudyQ", "url": "https://studyq-nu.vercel.app/vocab/", "inLanguage": "nl-NL", "applicationCategory": "EducationalApplication", "operatingSystem": "Web", "isAccessibleForFree": true, "description": "Oefen woordjes en begrippen met een slimme leermethode in drie stappen. Gratis woordtrainer voor scholieren, zonder account.", "publisher": {"@type": "Organization", "name": "StudyQ", "url": "https://studyq-nu.vercel.app/"}}</script>
@@ -859,6 +859,13 @@
         </svg>
         <span data-i18n="vocab.privacy">Alles blijft in je browser — geen account, geen tracking.</span>
       </div>
+    <section class="seo-guide" aria-labelledby="vocab-guide-title">
+      <h2 id="vocab-guide-title" data-i18n="seo.guideTitle">Zo oefen je woorden stap voor stap</h2>
+      <p data-i18n="seo.guideIntro">Plak of typ één woord en betekenis per regel, bijvoorbeeld <em>le chien = de hond</em>. Gebruik een gelijkteken, streepje, tab of komma als scheiding.</p>
+      <h3 data-i18n="seo.reviewTitle">Van oefenen naar beheersen</h3>
+      <p data-i18n="seo.reviewText">Je oefent eerst met de woorden en beantwoordt ze daarna zelfstandig. De voortgang laat zien wat je nog leert en wat je beheerst; een woord is beheerst nadat je het drie keer goed zelfstandig hebt beantwoord.</p>
+      <p class="seo-related"><span data-i18n="seo.relatedLead">Wil je met kaartjes oefenen of je kennis toetsen?</span><a href="../flashcards/" data-i18n="seo.flashcardsLink">Maak een flashcardset</a><a href="../practice-test/" data-i18n="seo.testLink">Maak een oefentoets</a></p>
+    </section>
     </main>
   </div>
 
@@ -876,6 +883,13 @@
           "vocab.badge": "free & no account",
           "vocab.title": "Woordtrainer",
           "vocab.heroText": "Learn terms and vocabulary fast with a smart 3-step method. Practice together first, then test yourself.",
+          "seo.guideTitle": "Practise vocabulary step by step",
+          "seo.guideIntro": "Paste or type one word and its meaning per line, for example <em>le chien = de hond</em>. Separate them with an equals sign, dash, tab or comma.",
+          "seo.reviewTitle": "From practice to mastery",
+          "seo.reviewText": "Start by practising the words and then answer independently. Progress shows what you are still learning and what you know; a word is mastered after you answer it correctly on your own three times.",
+          "seo.relatedLead": "Want to use cards or test what you know?",
+          "seo.flashcardsLink": "Create a flashcard deck",
+          "seo.testLink": "Make a practice test",
           "vocab.setLabel": "Word set",
           "vocab.masteredLabel": " mastered",
           "vocab.legendUnlearned": "Unlearned",
@@ -925,6 +939,13 @@
           "vocab.badge": "gratis & zonder account",
           "vocab.title": "Woordtrainer",
           "vocab.heroText": "Leer snel begrippen en woordjes met een slimme 3-stappen leermethode. Eerst samen oefenen, dan zelfstandig testen.",
+          "seo.guideTitle": "Zo oefen je woorden stap voor stap",
+          "seo.guideIntro": "Plak of typ één woord en betekenis per regel, bijvoorbeeld <em>le chien = de hond</em>. Gebruik een gelijkteken, streepje, tab of komma als scheiding.",
+          "seo.reviewTitle": "Van oefenen naar beheersen",
+          "seo.reviewText": "Je oefent eerst met de woorden en beantwoordt ze daarna zelfstandig. De voortgang laat zien wat je nog leert en wat je beheerst; een woord is beheerst nadat je het drie keer goed zelfstandig hebt beantwoord.",
+          "seo.relatedLead": "Wil je met kaartjes oefenen of je kennis toetsen?",
+          "seo.flashcardsLink": "Maak een flashcardset",
+          "seo.testLink": "Maak een oefentoets",
           "vocab.setLabel": "Woordset",
           "vocab.masteredLabel": " beheerst",
           "vocab.legendUnlearned": "Ongeleerd",
@@ -1606,7 +1627,7 @@
         document.documentElement.lang = currentLanguage;
         document.querySelectorAll('[data-i18n]').forEach(function(element) {
           const key = element.dataset.i18n;
-          if (key === 'vocab.setupDesc' || key === 'vocab.setupHint') {
+          if (key === 'vocab.setupDesc' || key === 'vocab.setupHint' || key === 'seo.guideIntro') {
             element.innerHTML = t(key);
           } else {
             element.textContent = t(key);

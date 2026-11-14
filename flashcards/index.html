@@ -4,23 +4,23 @@
   <script src="../js/site-navigation-state.js?v=8"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gratis flashcards maken en leren met spaced repetition | StudyQ</title>
+  <title>Gratis flashcards maken en oefenen | StudyQ</title>
   <link rel="canonical" href="https://studyq-nu.vercel.app/flashcards/">
   <link rel="stylesheet" href="../footer.css?v=2">
   <link rel="icon" type="image/png" href="../favicon.png">
   <link rel="apple-touch-icon" href="../favicon.png">
   <link rel="manifest" href="../favicon_io/site.webmanifest">
-  <meta name="description" content="Maak flashcarddecks, importeer kaartjes en onthoud leerstof met het Leitner-systeem. Gratis online flashcards voor scholieren.">
+  <meta name="description" content="Maak kaartensets, voeg kaarten toe of importeer tekst en CSV. Oefen elke kaart in drie stappen en beheers die na drie goede herinneringen.">
   <meta name="robots" content="index,follow,max-image-preview:large">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="StudyQ">
-  <meta property="og:title" content="Gratis flashcards maken en leren met spaced repetition | StudyQ">
-  <meta property="og:description" content="Maak flashcarddecks, importeer kaartjes en onthoud leerstof met het Leitner-systeem. Gratis online flashcards voor scholieren.">
+  <meta property="og:title" content="Gratis flashcards maken en oefenen | StudyQ">
+  <meta property="og:description" content="Maak kaartensets, voeg kaarten toe of importeer tekst en CSV. Oefen elke kaart in drie stappen en beheers die na drie goede herinneringen.">
   <meta property="og:url" content="https://studyq-nu.vercel.app/flashcards/">
   <meta property="og:image" content="https://studyq-nu.vercel.app/assets/homepage.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Gratis flashcards maken en leren met spaced repetition | StudyQ">
-  <meta name="twitter:description" content="Maak flashcarddecks, importeer kaartjes en onthoud leerstof met het Leitner-systeem. Gratis online flashcards voor scholieren.">
+  <meta name="twitter:title" content="Gratis flashcards maken en oefenen | StudyQ">
+  <meta name="twitter:description" content="Maak kaartensets, voeg kaarten toe of importeer tekst en CSV. Oefen elke kaart in drie stappen en beheers die na drie goede herinneringen.">
   <meta name="twitter:image" content="https://studyq-nu.vercel.app/assets/homepage.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1638,10 +1638,10 @@
   <link rel="stylesheet" href="../language-switcher.css">
   <link rel="stylesheet" href="../site-navigation.css?v=14">
   <link rel="stylesheet" href="../page-intro.css?v=5">
-  <link rel="stylesheet" href="../site-ui-consistency.css?v=9">
+  <link rel="stylesheet" href="../site-ui-consistency.css?v=10">
   <script src="../js/site-navigation.js?v=8" defer></script>
   <script src="../page-intro.js?v=8" defer></script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Gratis flashcards maken en leren met spaced repetition | StudyQ", "url": "https://studyq-nu.vercel.app/flashcards/", "inLanguage": "nl-NL", "applicationCategory": "EducationalApplication", "operatingSystem": "Web", "isAccessibleForFree": true, "description": "Maak flashcarddecks, importeer kaartjes en onthoud leerstof met het Leitner-systeem. Gratis online flashcards voor scholieren.", "publisher": {"@type": "Organization", "name": "StudyQ", "url": "https://studyq-nu.vercel.app/"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Gratis flashcards maken en oefenen | StudyQ", "url": "https://studyq-nu.vercel.app/flashcards/", "inLanguage": "nl-NL", "applicationCategory": "EducationalApplication", "operatingSystem": "Web", "isAccessibleForFree": true, "description": "Maak kaartensets, voeg kaarten toe of importeer tekst en CSV. Oefen elke kaart in drie stappen en beheers die na drie goede herinneringen.", "publisher": {"@type": "Organization", "name": "StudyQ", "url": "https://studyq-nu.vercel.app/"}}</script>
   </head>
 <body>
   <svg aria-hidden="true" width="0" height="0" style="position:absolute;overflow:hidden" focusable="false">
@@ -1691,6 +1691,7 @@
         </div>
       </header>
 
+      <main>
       <!-- ==================== HERO ==================== -->
       <section class="hero">
         <div class="badge">
@@ -1699,10 +1700,10 @@
             <path d="M2 10l10-5 10 5-10 5z"></path>
             <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
           </svg>
-          <span data-i18n="fc.badge">spaced repetition · gratis</span>
+          <span data-i18n="fc.badge">3-stappen · gratis</span>
         </div>
         <h1 data-i18n="fc.title">Flashcards</h1>
-        <p class="hero-desc" data-i18n="fc.heroText">Maak decks, importeer je woordjes, en leer met een 5-box Leitner systeem dat zich aanpast aan wat je al kent.</p>
+        <p class="hero-desc" data-i18n="fc.heroText">Maak kaartensets, voeg kaarten toe of importeer ze en oefen in drie stappen: eerst bekijken, jezelf testen en kaarten beheersen.</p>
       </section>
 
       <!-- ==================== DECKS VIEW ==================== -->
@@ -1932,6 +1933,14 @@
         </div>
       </div>
 
+      <section class="seo-guide" aria-labelledby="flashcards-guide-title">
+        <h2 id="flashcards-guide-title" data-i18n="seo.guideTitle">Maak kaartensets en oefen actief</h2>
+        <p data-i18n="seo.guideIntro">Voeg kaarten één voor één toe of importeer meerdere regels tegelijk. Zet de voorkant en achterkant op één regel met bijvoorbeeld <em>=</em>, een tab of een komma ertussen.</p>
+        <h3 data-i18n="seo.reviewTitle">Drie stappen per kaart</h3>
+        <p data-i18n="seo.reviewText">Bekijk eerst beide kanten, test daarna je herinnering door de kaart om te draaien en beoordeel je antwoord. Na drie goede herinneringen is de kaart beheerst; een fout antwoord brengt de kaart terug naar oefenen.</p>
+        <p class="seo-related"><span data-i18n="seo.relatedLead">Verder oefenen met woordjes of lesstof?</span><a href="../vocab/" data-i18n="seo.vocabLink">Gebruik de woordtrainer</a><a href="../practice-test/" data-i18n="seo.testLink">Maak een oefentoets</a></p>
+      </section>
+      </main>
     </div>
   </div>
 

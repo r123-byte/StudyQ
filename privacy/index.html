@@ -221,7 +221,8 @@
   <script src="../js/site-navigation.js?v=8" defer></script>
   <script src="../page-intro.js?v=8" defer></script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "Privacyverklaring van StudyQ", "url": "https://studyq-nu.vercel.app/privacy/", "inLanguage": "nl-NL"}</script>
-  </head>
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="65d3feef-2f1d-4dad-abba-fdacd65f6cae" data-domains="studyq-nu.vercel.app" data-exclude-search="true" data-exclude-hash="true" data-do-not-track="true"></script>
+</head>
 <body>
   <div class="shell">
     <main class="page">
@@ -240,13 +241,12 @@
       </header>
       <div class="privacy-content">
         <h1>Privacyverklaring — StudyQ</h1>
-<p><strong>Vervaldatum:</strong> 18 oktober 2026</p>
-<p><strong>Laatst bijgewerkt:</strong> 19 oktober 2026</p>
+<p><strong>Laatst bijgewerkt:</strong> 14 November 2026</p>
 <h2>1. Introduction</h2>
-<p>Welcome to StudyTools ("we", "us" or "our"), an educational website providing study tools such as flashcards, vocabulary training, grade calculation, study planning and productivity features.</p>
-<p>This Privacy Policy explains how information is stored, used and transmitted when you use StudyTools, including its AI planner, voice dictation, contact form and Magister calendar import feature.</p>
+<p>Welcome to StudyQ ("we", "us" or "our"), an educational website providing study tools such as flashcards, vocabulary training, grade calculation, study planning and productivity features.</p>
+<p>This Privacy Policy explains how information is stored, used and transmitted when you use StudyQ, including its AI planner, voice dictation, contact form and Magister calendar import feature.</p>
 <p>We aim to minimise personal data processing and explain our practices transparently. Where applicable, this policy is intended to address the requirements of the General Data Protection Regulation (EU) 2016/679 ("GDPR") and relevant Dutch privacy laws.</p>
-<p>StudyTools does not require users to create an account. Most saved study information is stored locally in your browser. Some features require information to be transmitted to external service providers.</p>
+<p>StudyQ does not require users to create an account. Most saved study information is stored locally in your browser. Some features require information to be transmitted to external service providers.</p>
 <h2>2. Data Controller and Contact Information</h2>
 <p>The data controller is the person or organisation responsible for determining the purposes and means of processing personal data.</p>
 <p><strong>Data controller:</strong> Reyansh Ghulghule</p>
@@ -254,7 +254,7 @@
 <p><strong>Website:</strong> <a href="https://studyq-nu.vercel.app" target="_blank" rel="noopener noreferrer">https://studyq-nu.vercel.app</a></p>
 <p>For questions about this Privacy Policy or requests concerning your personal data, please use the contact details above.</p>
 <h2>3. Information Stored Locally in Your Browser</h2>
-<p>StudyTools uses browser `localStorage` to save information needed for its features.</p>
+<p>StudyQ uses browser `localStorage` to save information needed for its features.</p>
 <p>Depending on how you use the website, this information may include:</p>
 <ul>
 <li>**Preferences:** Selected language, sound preferences and other settings.</li>
@@ -265,15 +265,15 @@
 <li>**AI-generated schedules:** Schedules and other planner results saved for later use.</li>
 <li>**Temporary application data:** Information used to prepare, transfer or display results.</li>
 </ul>
-<p>This information is generally stored in your browser rather than in a central StudyTools user database.</p>
+<p>This information is generally stored in your browser rather than in a central StudyQ user database.</p>
 <p>Some locally stored information may constitute personal data if it relates to an identifiable person. For example, a study plan may include identifying information entered by a user.</p>
 <h3>Local storage and deletion</h3>
 <p>Locally stored information generally remains on your device until it is removed by a feature, cleared through your browser settings or otherwise deleted.</p>
-<p>Clearing the relevant website data may permanently remove saved flashcards, schedules, preferences and study progress. StudyTools cannot recover locally stored information after deletion unless another copy exists.</p>
+<p>Clearing the relevant website data may permanently remove saved flashcards, schedules, preferences and study progress. StudyQ cannot recover locally stored information after deletion unless another copy exists.</p>
 <p>Browser local storage is not an encrypted vault. Other people who can access your device or browser profile may be able to access it.</p>
-<p>Please avoid storing passwords, confidential information or unnecessary sensitive personal data in StudyTools.</p>
+<p>Please avoid storing passwords, confidential information or unnecessary sensitive personal data in StudyQ.</p>
 <h2>4. Information Processed by External Services</h2>
-<p>Some StudyTools features require information to be sent to external services. This occurs when you actively use the relevant feature or submit information.</p>
+<p>Some StudyQ features require information to be sent to external services. This occurs when you actively use the relevant feature or submit information.</p>
 <h3>4.1 AI study planner — Vercel and Groq</h3>
 <p>When you use the AI study planner, the website sends the relevant prompt and study context to an API proxy hosted on Vercel. The proxy forwards the request to GroqCloud for AI processing with the GPT-OSS 120B model.</p>
 <p>Depending on your request and the feature used, the information transmitted may include:</p>
@@ -285,19 +285,19 @@
 </ul>
 <p>This information is used to generate study-related responses and planning suggestions.</p>
 <p>Vercel hosts the API proxy. Groq processes AI planner requests sent through GroqCloud. These services may process request data and technical information to provide, secure and operate their services.</p>
-<p>StudyTools does not intentionally maintain a central database of AI conversations. This does not guarantee that Vercel or Groq never retains request data or technical logs.</p>
+<p>StudyQ does not intentionally maintain a central database of AI conversations. This does not guarantee that Vercel or Groq never retains request data or technical logs.</p>
 <p>Further information:</p>
 <ul>
 <li><a href="https://vercel.com/legal/privacy-notice">Vercel Privacy Notice</a></li>
 <li><a href="https://groq.com/privacy-policy">Groq Privacy Policy</a></li>
 </ul>
 <h3>4.2 Practice test generation and PDF extraction — local OCR and Groq</h3>
-<p>When you upload a PDF, StudyTools reads selectable text in your browser. For scanned pages, it renders each page locally and uses Tesseract.js in your browser to recognize the text. The page images are not sent to the test-generation model. Tesseract.js and its language data may be downloaded from their CDN when first needed, while OCR processing runs on your device.</p>
-<p>When you generate a practice test, your notes, extracted PDF text and test settings are sent through the Vercel API proxy to Groq for processing with the same OpenAI GPT-OSS 120B model used by the Test Week Planner. These requests are initiated by you. StudyTools stores saved tests in your browser and does not intentionally maintain a central database of uploaded PDFs, extracted text or generated tests. Vercel and Groq may process request data and technical information to provide, secure and operate their services; their retention practices apply.</p>
+<p>When you upload a PDF, StudyQ reads selectable text in your browser. For scanned pages, it renders each page locally and uses Tesseract.js in your browser to recognize the text. The page images are not sent to the test-generation model. Tesseract.js and its language data may be downloaded from their CDN when first needed, while OCR processing runs on your device.</p>
+<p>When you generate a practice test, your notes, extracted PDF text and test settings are sent through the Vercel API proxy to Groq for processing with the same OpenAI GPT-OSS 120B model used by the Test Week Planner. These requests are initiated by you. StudyQ stores saved tests in your browser and does not intentionally maintain a central database of uploaded PDFs, extracted text or generated tests. Vercel and Groq may process request data and technical information to provide, secure and operate their services; their retention practices apply.</p>
 <p>Further information: <a href="https://vercel.com/legal/privacy-notice">Vercel Privacy Notice</a> · <a href="https://groq.com/privacy-policy">Groq Privacy Policy</a> · <a href="https://github.com/naptha/tesseract.js">Tesseract.js</a>.</p>
 <h3>4.3 Voice dictation — Groq</h3>
 <p>When you activate voice dictation, your audio is transmitted to the Groq API for speech-to-text processing using a Whisper model.</p>
-<p>The resulting transcription may then be used by the relevant StudyTools feature. If you submit that transcription to the AI planner, the text and relevant study context may also be sent through the API proxy for AI processing.</p>
+<p>The resulting transcription may then be used by the relevant StudyQ feature. If you submit that transcription to the AI planner, the text and relevant study context may also be sent through the API proxy for AI processing.</p>
 <p>Voice dictation is initiated by the user. Audio is not intentionally transmitted through this feature when it has not been activated.</p>
 <p>The handling and retention of audio, transcriptions and associated technical information depend on Groq's applicable terms, privacy practices and data-handling settings. We do not guarantee that all audio or transcription data is immediately deleted after processing.</p>
 <p>Further information:</p>
@@ -306,18 +306,18 @@
 <li><a href="https://console.groq.com/docs/your-data">Groq Documentation</a></li>
 </ul>
 <h3>4.4 Contact form — Web3Forms</h3>
-<p>If you submit a message through the StudyTools Contact page, the information you provide is transmitted to Web3Forms for processing and delivery to the configured recipient.</p>
+<p>If you submit a message through the StudyQ Contact page, the information you provide is transmitted to Web3Forms for processing and delivery to the configured recipient.</p>
 <p>This may include your name, email address, enquiry category and message.</p>
 <p>The information is used to receive and respond to your enquiry. Web3Forms and the recipient may process or retain submissions in accordance with their applicable policies and arrangements.</p>
 <p>Submitting a contact form is a separate action from using the study tools.</p>
 <p>Further information: <a href="https://web3forms.com/">Web3Forms</a>.</p>
 <h3>4.5 Magister calendar import — iCalendar and `webcal` links</h3>
-<p>StudyTools allows users to paste a personal Magister iCalendar (`iCal`) or `webcal` link to import calendar information into the study planner.</p>
+<p>StudyQ allows users to paste a personal Magister iCalendar (`iCal`) or `webcal` link to import calendar information into the study planner.</p>
 <h4>Information processed</h4>
 <p>The calendar link may provide access to information such as lesson times and schedule entries. The available information depends on the calendar feed provided by Magister.</p>
-<p>Based on the current implementation, the calendar link is processed in the browser and is not sent to the StudyTools API proxy. The browser uses the link to retrieve the calendar feed directly from the relevant calendar service.</p>
+<p>Based on the current implementation, the calendar link is processed in the browser and is not sent to the StudyQ API proxy. The browser uses the link to retrieve the calendar feed directly from the relevant calendar service.</p>
 <p>The calendar service may receive technical information associated with the request, such as the user's IP address and request details.</p>
-<p>Calendar information retrieved by the browser is processed locally by StudyTools unless another feature or network request transmits it elsewhere. StudyTools does not intentionally send the Magister calendar link or imported calendar data to its API proxy.</p>
+<p>Calendar information retrieved by the browser is processed locally by StudyQ unless another feature or network request transmits it elsewhere. StudyQ does not intentionally send the Magister calendar link or imported calendar data to its API proxy.</p>
 <h4>Confidentiality of your calendar link</h4>
 <p>A personal Magister calendar link should be treated as confidential because someone who obtains a functioning link may be able to access the calendar information it exposes.</p>
 <p>Only provide the link if you choose to use the calendar-import feature. Avoid sharing it publicly or sending it to people you do not trust.</p>
@@ -326,13 +326,18 @@
 <p>Magister provides controls for managing calendar sharing. If you believe your calendar link has been exposed, use the available Magister controls to stop sharing or generate a replacement link.</p>
 <p>Revoking or replacing a link may prevent future access through the old link. It does not automatically delete calendar data that may already have been retrieved or retained elsewhere.</p>
 <p>Further information: <a href="https://service.magister.nl/">Magister Support</a>.</p>
+<h3>4.6 Website analytics — Umami Cloud</h3>
+<p>StudyQ loads the Umami Cloud analytics tracker on site pages. The tracker automatically records page views, clicks and navigation paths. It is configured to run only on <code>studyq-nu.vercel.app</code>, omit URL query strings and fragments, and respect the browser's Do Not Track signal when present. No custom user identifiers, event properties, session replay, error tracking or performance monitoring are configured.</p>
+<p>Analytics may include the page URL without query strings or fragments, page title, hostname, referrer, browser, operating system, device and screen details, language, and an anonymous session identifier. Umami states that IP addresses are not stored as a standard analytics record field, but IP address and browser information are processed to derive the session identifier and approximate location; technical or security logs may also exist. This should not be understood as a guarantee of complete anonymity.</p>
+<p>Umami Cloud processes analytics data under its applicable privacy terms and data processing agreement. The selected data region and retention period depend on the Umami Cloud account configuration and plan; these settings have not been independently verified for this site.</p>
+<p>Further information: <a href="https://docs.umami.is/docs/tracker-configuration">Umami tracker configuration</a> · <a href="https://docs.umami.is/docs/metric-definitions">Umami metric definitions</a> · <a href="https://umami.is/privacy">Umami privacy policy</a> · <a href="https://umami.is/umami-dpa.pdf">Umami data processing agreement</a> · <a href="https://docs.umami.is/docs/cloud/faq">Umami Cloud FAQ</a>.</p>
+<p>The analytics tracker currently loads automatically; this implementation does not add a consent gate. The data controller should confirm and document the applicable legal basis and whether consent is required before relying on this setup.</p>
 <h2>5. Cookies, Local Storage and Similar Technologies</h2>
-<p>StudyTools currently does not intentionally use advertising cookies or analytics tracking technologies.</p>
-<p>Based on our current checks, no cookies were visible in the website's Chrome Application panel. However, this does not guarantee that no cookies or similar technologies are ever set by the website, its features or external services.</p>
-<p>StudyTools uses `localStorage` to retain information required by its features. Local storage is technically different from cookies, but laws governing the storage of information on, or access to information from, a user's device may also apply.</p>
+<p>StudyQ uses Umami Cloud for website analytics as described in Section 4.6. Umami states that its tracker does not use cookies or cross-site tracking, but it still transmits analytics and technical information to Umami.</p>
+<p>StudyQ uses `localStorage` to retain information required by its features. Local storage is technically different from cookies, but laws governing the storage of information on, or access to information from, a user's device may also apply.</p>
 <p>We aim to use device storage only for purposes connected to the website's functionality.</p>
-<p>If we introduce cookies or similar technologies that require consent under applicable law, we will implement the required consent mechanism before using them.</p>
-<p>Users can manage or clear locally stored information through their browser settings. Doing so may remove saved StudyTools data.</p>
+<p>If we introduce cookies or similar technologies that require consent under applicable law, we will implement the required consent mechanism before using them. The analytics tracker currently loads automatically without a consent gate, as noted in Section 4.6.</p>
+<p>Users can manage or clear locally stored information through their browser settings. Doing so may remove saved StudyQ data.</p>
 <h2>6. Purposes and Legal Bases for Processing</h2>
 <p>Where the GDPR applies, personal data must be processed on a valid legal basis under Article 6 GDPR.</p>
 <p>The appropriate legal basis depends on the actual processing activity and circumstances. The following table describes potential bases that must be assessed and confirmed by the data controller.</p>
@@ -345,6 +350,7 @@
     <tr><td>Practice test and PDF extraction</td><td>Reading uploaded PDF pages and generating practice questions</td><td>An appropriate basis under Article 6 GDPR</td></tr>
     <tr><td>Voice dictation</td><td>Converting speech into text</td><td>An appropriate basis under Article 6 GDPR</td></tr>
     <tr><td>Magister calendar import</td><td>Retrieving and organising calendar information</td><td>An appropriate basis under Article 6 GDPR</td></tr>
+    <tr><td>Website analytics</td><td>Measuring page views and understanding use of StudyQ</td><td>An appropriate Article 6 GDPR basis; Article 6(1)(f) only where a documented legitimate-interest assessment supports it, otherwise consent where required</td></tr>
     <tr><td>Contact form</td><td>Receiving and responding to enquiries</td><td>Article 6(1)(b) for relevant pre-contractual requests, or Article 6(1)(f) where legitimate interests are appropriate</td></tr>
     <tr><td>Technical security information</td><td>Operating, maintaining and securing the service</td><td>Article 6(1)(f), where a legitimate-interest assessment supports its use</td></tr>
     <tr><td>Legal compliance</td><td>Meeting applicable legal obligations</td><td>Article 6(1)(c), where processing is necessary for a legal obligation</td></tr>
@@ -363,7 +369,7 @@
 </ul>
 <p>The roles of these providers depend on the service and processing involved. A provider may act as a processor or as an independent controller for particular activities.</p>
 <p>Where a provider acts as a processor on behalf of the data controller, the contractual arrangements required by Article 28 GDPR must be in place where applicable.</p>
-<p>StudyTools does not sell personal data.</p>
+<p>StudyQ does not sell personal data.</p>
 <h2>8. International Data Transfers</h2>
 <p>Some service providers may process information outside the European Economic Area (EEA).</p>
 <p>Where a transfer of personal data to a third country is subject to Chapter V GDPR, an appropriate transfer mechanism must be in place. Depending on the circumstances, this may include an adequacy decision under Article 45 or appropriate safeguards under Article 46 GDPR.</p>
@@ -379,10 +385,10 @@
 <li>**Magister calendar links and imported data:** Processed in the browser according to the calendar feature's implementation. The calendar service may retain request logs under its applicable practices.</li>
 <li>**Technical logs:** May be retained by hosting or infrastructure providers for operational, security or legal purposes.</li>
 </ul>
-<p>StudyTools does not guarantee immediate deletion of information from third-party systems after a request has been processed.</p>
+<p>StudyQ does not guarantee immediate deletion of information from third-party systems after a request has been processed.</p>
 <p>Where the data controller determines the retention period for personal data under its control, information will be retained only for as long as necessary for the relevant purpose, unless applicable law requires otherwise.</p>
 <h2>10. Data Security</h2>
-<p>We aim to protect information processed through StudyTools by minimising unnecessary processing and applying appropriate technical and organisational measures.</p>
+<p>We aim to protect information processed through StudyQ by minimising unnecessary processing and applying appropriate technical and organisational measures.</p>
 <p>Communications with external services should use HTTPS where supported and properly configured. Browser-based storage is not a substitute for encrypted, access-controlled server storage.</p>
 <p>We aim to keep secret API keys on the server side rather than exposing them in public website code. Security depends on the actual implementation and configuration of the services involved.</p>
 <p>No method of transmission or storage can be guaranteed to be completely secure.</p>
@@ -408,21 +414,21 @@
 <p>Website: <a href="https://autoriteitpersoonsgegevens.nl/">https://autoriteitpersoonsgegevens.nl/</a></p>
 <p>You may also have the right to seek an effective judicial remedy under applicable law.</p>
 <h2>13. Children's Privacy</h2>
-<p>StudyTools is intended for educational use and may be used by students, including minors.</p>
+<p>StudyQ is intended for educational use and may be used by students, including minors.</p>
 <p>Users should avoid submitting unnecessary personal data, passwords, confidential school information or sensitive information about other people to AI features and contact forms.</p>
 <p>Personal calendar links should be treated as confidential and provided only when the user chooses to use the calendar-import feature.</p>
 <p>Where applicable law requires parental authorisation, consent or additional safeguards for children, those requirements must be respected.</p>
 <p>Article 8 GDPR establishes specific conditions for consent in relation to certain information society services offered directly to children when processing is based on consent. The applicable age threshold and requirements depend on the circumstances and national law.</p>
 <p>If you believe a child's personal data has been processed inappropriately, please contact the data controller so the matter can be assessed.</p>
 <h2>14. AI and Automated Processing</h2>
-<p>StudyTools uses AI services to generate study-related responses and planning suggestions.</p>
+<p>StudyQ uses AI services to generate study-related responses and planning suggestions.</p>
 <p>AI-generated information may be inaccurate and should be checked before being relied upon.</p>
-<p>StudyTools is not intended to make decisions about users that produce legal effects or similarly significant effects solely through automated processing within the meaning of Article 22 GDPR.</p>
+<p>StudyQ is not intended to make decisions about users that produce legal effects or similarly significant effects solely through automated processing within the meaning of Article 22 GDPR.</p>
 <p>If this changes, the data controller will assess the applicable legal obligations and provide any additional information and safeguards required.</p>
 <h2>15. Data Protection by Design and Default</h2>
 <p>We aim to apply the principles of data minimisation, purpose limitation and data protection by design and by default under Articles 5 and 25 GDPR.</p>
 <p>Where feasible, study information is stored locally in the user's browser rather than in a central database.</p>
-<p>External transmission occurs when users activate features that require external processing, such as AI planning, voice transcription or contact form submission. Calendar import retrieves information directly through the browser, according to the current implementation.</p>
+<p>Analytics data is transmitted automatically when a site page loads on the configured production domain. Other external transmissions occur when users activate features that require external processing, such as AI planning, voice transcription or contact form submission. Calendar import retrieves information directly through the browser, according to the current implementation.</p>
 <p>We aim to provide clear information about these transmissions and limit processing to what is necessary for the relevant feature.</p>
 <h2>16. Changes to This Privacy Policy</h2>
 <p>We may update this Privacy Policy when our website functionality, service providers, data processing activities or legal obligations change.</p>
@@ -430,7 +436,7 @@
 <p>Where required by law, we will provide additional notice or obtain consent before implementing changes that require it.</p>
 <h2>17. Contact</h2>
 <p>For questions about this Privacy Policy or to exercise your data protection rights, contact the data controller using the details provided in Section 2.</p>
-<p>We aim to operate StudyTools with privacy, transparency and data minimisation in mind.</p>
+<p>We aim to operate StudyQ with privacy, transparency and data minimisation in mind.</p>
 <p>---</p>
 <p><strong>End of Privacy Policy</strong></p>
       </div>

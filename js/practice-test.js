@@ -232,37 +232,123 @@ async function requestOpenRouterGrading(openQuestions, answers) {
 }
 
 async function generateTestWithGroq(settings, material, onBatchProgress) {
-  onBatchProgress?.(1, 1, 0);
+  const batchCount = Math.min(Number(settings.count), Math.max(Math.ceil(material.length / 9000), Math.ceil(Number(settings.count) / 5), 1));
+  const chunks = splitPracticeMaterial(material, batchCount);
+  if (!chunks.length) throw new Error("AI_INVALID_RESPONSE");
+  const allocations = allocatePracticeQuestions(Number(settings.count), chunks);
+  const typePlan = Array.from({ length: Number(settings.count) }, (_, index) => settings.types[index % settings.types.length]);
+  const questions = [];
+  let title = settings.title;
+  let subject = settings.subject;
   lastGenerationId ||= crypto.randomUUID().replace(/[^A-Za-z0-9_-]/g, "");
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 65000);
-  let response;
-  try {
-    response = await fetch("/api/practice-test", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "Idempotency-Key": lastGenerationId },
-      cache: "no-store",
-      signal: controller.signal,
-      body: JSON.stringify({ material, settings, language })
-    });
-  } catch (error) {
-    if (error.name === "AbortError") throw new Error("AI_TIMEOUT");
-    throw new Error("AI_PROXY_UNAVAILABLE");
-  } finally { clearTimeout(timeout); }
+  let offset = 0;
+  for (let batchIndex = 0; batchIndex < chunks.length; batchIndex++) {
+    onBatchProgress?.(batchIndex + 1, chunks.length, 0);
+    if (batchIndex > 0) {
+      await new Promise(resolve => setTimeout(resolve, 2100));
+      onBatchProgress?.(batchIndex + 1, chunks.length, 0);
+    }
+    const count = allocations[batchIndex];
+    const batchTypes = typePlan.slice(offset, offset + count);
+    offset += count;
+    const batchTypeSet = [...new Set(batchTypes)];
+    const batchSettings = { ...settings, count, types: batchTypeSet };
+    let retryAttempt = 0;
+    while (true) {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 65000);
+      let response;
+      try {
+        response = await fetch("/api/practice-test", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Idempotency-Key": lastGenerationId },
+          cache: "no-store",
+          signal: controller.signal,
+          body: JSON.stringify({ material: chunks[batchIndex], settings: batchSettings, language, batchIndex, batchCount: chunks.length, totalQuestionCount: Number(settings.count) })
+        });
+      } catch (error) {
+        if (error.name === "AbortError") throw new Error("AI_TIMEOUT");
+        throw new Error("AI_PROXY_UNAVAILABLE");
+      } finally { clearTimeout(timeout); }
 
-  const payload = await response.json().catch(() => ({}));
-  if (!response.ok) {
-    if (payload.usage) renderPracticeTestUsage(payload.usage);
-    else if (response.status >= 500) markPracticeTestUsageUnavailable();
-    const error = new Error(payload.code || `HTTP_${response.status}`);
-    error.resetAt = payload.usage?.resetAt;
-    error.retryAfterSeconds = Number(payload.retryAfterSeconds) || null;
-    if (response.status !== 409 && response.status !== 425 && response.status !== 429) lastGenerationId = null;
-    throw error;
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        if (payload.usage) renderPracticeTestUsage(payload.usage);
+        else if (response.status >= 500) markPracticeTestUsageUnavailable();
+        if (payload.code === "AI_RATE_LIMIT") {
+          const waitSeconds = Math.max(1, Number(payload.retryAfterSeconds) || Math.min(2 ** retryAttempt, 30));
+          retryAttempt++;
+          for (let remaining = waitSeconds; remaining > 0; remaining--) {
+            onBatchProgress?.(batchIndex + 1, chunks.length, remaining);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+          }
+          onBatchProgress?.(batchIndex + 1, chunks.length, 0);
+          continue;
+        }
+        const error = new Error(payload.code || `HTTP_${response.status}`);
+        error.resetAt = payload.usage?.resetAt;
+        error.retryAfterSeconds = Number(payload.retryAfterSeconds) || null;
+        if (!['DUPLICATE_SUBMISSION', 'AI_RATE_LIMIT'].includes(payload.code) && response.status !== 425 && response.status !== 429) lastGenerationId = null;
+        throw error;
+      }
+      renderPracticeTestUsage(payload.usage);
+      const result = payload.batch || payload;
+      if (!Array.isArray(result.questions)) throw new Error("AI_INVALID_RESPONSE");
+      if (batchIndex === 0) {
+        title = typeof result.title === "string" && result.title.trim() ? result.title : title;
+        subject = typeof result.subject === "string" && result.subject.trim() ? result.subject : subject;
+      }
+      questions.push(...result.questions);
+      break;
+    }
   }
   lastGenerationId = null;
-  renderPracticeTestUsage(payload.usage);
-  return validateTestData(payload, settings);
+  const ids = new Set();
+  questions.forEach((question, index) => {
+    let id = String(question.id || `q${index + 1}`).slice(0, 40);
+    if (ids.has(id)) id = `q${index + 1}`;
+    while (ids.has(id)) id = `q${index + 1}-${ids.size}`;
+    ids.add(id);
+    question.id = id;
+  });
+  return validateTestData({ mode: "ai", title, subject, questions }, settings);
+}
+
+function splitPracticeMaterial(material, count) {
+  const chunks = [];
+  let start = 0;
+  for (let index = 0; index < count; index++) {
+    const ideal = Math.round(material.length * (index + 1) / count);
+    let end = ideal;
+    if (index < count - 1) {
+      const lower = start + Math.floor((ideal - start) * 0.7);
+      const paragraph = material.lastIndexOf("\n\n", ideal);
+      if (paragraph >= lower) end = paragraph + 2;
+      else {
+        while (end > lower && !/\s/.test(material[end])) end--;
+        if (end <= lower) end = ideal;
+      }
+    } else end = material.length;
+    const chunk = material.slice(start, end).trim();
+    if (chunk) chunks.push(chunk);
+    start = end;
+  }
+  return chunks;
+}
+
+function allocatePracticeQuestions(total, chunks) {
+  const lengths = chunks.map(chunk => chunk.length);
+  const all = lengths.reduce((sum, length) => sum + length, 0);
+  let assigned = 0;
+  let consumed = 0;
+  return lengths.map((length, index) => {
+    consumed += length;
+    const target = index === lengths.length - 1 ? total : Math.round(total * consumed / all);
+    const remaining = lengths.length - index - 1;
+    const count = Math.max(1, Math.min(total - assigned - remaining, target - assigned));
+    assigned += count;
+    return count;
+  });
 }
 
 async function pdfPageAsBlob(page) {

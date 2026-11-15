@@ -13,33 +13,42 @@ const ALLOWED_TYPES = new Set(['multiple_choice', 'true_false', 'fill_blank', 'o
 const MODEL = 'openai/gpt-oss-120b';
 const UPSTREAM_TIMEOUT_MS = 52000;
 
-const RESERVE_SCRIPT = `
+const RESERVE_OR_RESUME_SCRIPT = `
 local now = tonumber(ARGV[1])
-local cutoff = now - 3600000
-local reservationWindow = tonumber(ARGV[3])
-local pendingCutoff = now
 local member = ARGV[2]
-redis.call('ZREMRANGEBYSCORE', KEYS[1], '-inf', cutoff)
-redis.call('ZREMRANGEBYSCORE', KEYS[2], '-inf', pendingCutoff)
-if redis.call('ZSCORE', KEYS[1], member) or redis.call('ZSCORE', KEYS[2], member) then
-  return {2, 0, now}
+local window = tonumber(ARGV[3])
+local batchCount = tonumber(ARGV[4])
+local batchIndex = tonumber(ARGV[5])
+local totalQuestions = tonumber(ARGV[6])
+local lockId = ARGV[7]
+redis.call('ZREMRANGEBYSCORE', KEYS[1], '-inf', now - 3600000)
+redis.call('ZREMRANGEBYSCORE', KEYS[2], '-inf', now)
+if redis.call('ZSCORE', KEYS[1], member) then return {2, 0, now} end
+if redis.call('ZSCORE', KEYS[2], member) then
+  if redis.call('EXISTS', KEYS[3]) == 0 then return {3, 0, now} end
+  if tonumber(redis.call('HGET', KEYS[3], 'batches')) ~= batchCount or
+     tonumber(redis.call('HGET', KEYS[3], 'total')) ~= totalQuestions or
+     tonumber(redis.call('HGET', KEYS[3], 'next')) ~= batchIndex then return {3, 0, now} end
+  local lockUntil = tonumber(redis.call('HGET', KEYS[3], 'lockUntil') or '0')
+  if lockUntil > now then return {2, 0, lockUntil} end
+  redis.call('HSET', KEYS[3], 'lockId', lockId, 'lockUntil', now + 65000)
+  redis.call('PEXPIRE', KEYS[3], window + 60000)
+  return {1, 0, now}
 end
-local successCount = redis.call('ZCARD', KEYS[1])
-local pendingCount = redis.call('ZCARD', KEYS[2])
-local count = successCount + pendingCount
+if batchIndex ~= 0 then return {3, 0, now} end
+local count = redis.call('ZCARD', KEYS[1]) + redis.call('ZCARD', KEYS[2])
 if count >= 5 then
   local first = redis.call('ZRANGE', KEYS[1], 0, 0, 'WITHSCORES')
   local pending = redis.call('ZRANGE', KEYS[2], 0, 0, 'WITHSCORES')
-  local resetAt = now + reservationWindow
+  local resetAt = now + window
   if first[2] then resetAt = tonumber(first[2]) + 3600000 end
-  if pending[2] then
-    local pendingReset = tonumber(pending[2])
-    if pendingReset < resetAt then resetAt = pendingReset end
-  end
+  if pending[2] and tonumber(pending[2]) < resetAt then resetAt = tonumber(pending[2]) end
   return {0, 0, resetAt}
 end
-redis.call('ZADD', KEYS[2], now + reservationWindow, member)
-redis.call('PEXPIRE', KEYS[2], reservationWindow + 60000)
+redis.call('ZADD', KEYS[2], now + window, member)
+redis.call('PEXPIRE', KEYS[2], window + 60000)
+redis.call('HSET', KEYS[3], 'batches', batchCount, 'total', totalQuestions, 'next', 0, 'done', 0, 'lockId', lockId, 'lockUntil', now + 65000)
+redis.call('PEXPIRE', KEYS[3], window + 60000)
 return {1, 4 - count, now}
 `;
 
@@ -60,34 +69,59 @@ end
 return {math.max(0, 5 - count), resetAt}
 `;
 
-const COMPLETE_SCRIPT = `
-local now = tonumber(ARGV[1])
-local member = ARGV[2]
-local reservationWindow = tonumber(ARGV[3])
-redis.call('ZREM', KEYS[2], member)
-redis.call('ZREMRANGEBYSCORE', KEYS[1], '-inf', now - 3600000)
-redis.call('ZREMRANGEBYSCORE', KEYS[2], '-inf', now)
-redis.call('ZADD', KEYS[1], now, member)
-redis.call('PEXPIRE', KEYS[1], reservationWindow + 60000)
-redis.call('PEXPIRE', KEYS[2], reservationWindow + 60000)
-local count = redis.call('ZCARD', KEYS[1]) + redis.call('ZCARD', KEYS[2])
-local first = redis.call('ZRANGE', KEYS[1], 0, 0, 'WITHSCORES')
-local pending = redis.call('ZRANGE', KEYS[2], 0, 0, 'WITHSCORES')
-local resetAt = now + reservationWindow
-if first[2] then resetAt = tonumber(first[2]) + reservationWindow end
-if pending[2] and tonumber(pending[2]) < resetAt then resetAt = tonumber(pending[2]) end
-return {math.max(0, 5 - count), resetAt}
-`;
-
 const RELEASE_SCRIPT = `
 local now = tonumber(ARGV[1])
 local reservationWindow = tonumber(ARGV[3])
 redis.call('ZREM', KEYS[2], ARGV[2])
+redis.call('DEL', KEYS[3])
 redis.call('ZREMRANGEBYSCORE', KEYS[1], '-inf', now - 3600000)
 redis.call('ZREMRANGEBYSCORE', KEYS[2], '-inf', now)
 redis.call('PEXPIRE', KEYS[1], reservationWindow + 60000)
 redis.call('PEXPIRE', KEYS[2], reservationWindow + 60000)
 return redis.call('ZCARD', KEYS[1]) + redis.call('ZCARD', KEYS[2])
+`;
+
+const UNLOCK_SCRIPT = `
+if redis.call('HGET', KEYS[3], 'lockId') == ARGV[1] then
+  redis.call('HDEL', KEYS[3], 'lockId', 'lockUntil')
+  return 1
+end
+return 0
+`;
+
+const ADVANCE_BATCH_SCRIPT = `
+local now = tonumber(ARGV[1])
+local member = ARGV[2]
+local lockId = ARGV[3]
+local batchIndex = tonumber(ARGV[4])
+local questionCount = tonumber(ARGV[5])
+local finalBatch = ARGV[6] == '1'
+local window = tonumber(ARGV[7])
+if redis.call('HGET', KEYS[3], 'lockId') ~= lockId or tonumber(redis.call('HGET', KEYS[3], 'next')) ~= batchIndex then return {-1, 0, 0} end
+local done = tonumber(redis.call('HGET', KEYS[3], 'done') or '0') + questionCount
+local total = tonumber(redis.call('HGET', KEYS[3], 'total') or '0')
+local batches = tonumber(redis.call('HGET', KEYS[3], 'batches') or '0')
+if done > total or (finalBatch and (batchIndex ~= batches - 1 or done ~= total)) or (not finalBatch and (batchIndex >= batches - 1 or done >= total)) then return {-1, 0, 0} end
+if finalBatch then
+  redis.call('ZREM', KEYS[2], member)
+  redis.call('ZREMRANGEBYSCORE', KEYS[1], '-inf', now - 3600000)
+  redis.call('ZREMRANGEBYSCORE', KEYS[2], '-inf', now)
+  redis.call('ZADD', KEYS[1], now, member)
+  redis.call('PEXPIRE', KEYS[1], window + 60000)
+  redis.call('PEXPIRE', KEYS[2], window + 60000)
+  redis.call('DEL', KEYS[3])
+else
+  redis.call('HSET', KEYS[3], 'next', batchIndex + 1, 'done', done)
+  redis.call('HDEL', KEYS[3], 'lockId', 'lockUntil')
+  redis.call('PEXPIRE', KEYS[3], window + 60000)
+end
+local count = redis.call('ZCARD', KEYS[1]) + redis.call('ZCARD', KEYS[2])
+local first = redis.call('ZRANGE', KEYS[1], 0, 0, 'WITHSCORES')
+local pending = redis.call('ZRANGE', KEYS[2], 0, 0, 'WITHSCORES')
+local resetAt = now + window
+if first[2] then resetAt = tonumber(first[2]) + window end
+if pending[2] and tonumber(pending[2]) < resetAt then resetAt = tonumber(pending[2]) end
+return {finalBatch and 1 or 0, math.max(0, 5 - count), resetAt}
 `;
 
 function json(data, status = 200, extraHeaders = {}) {
@@ -157,55 +191,26 @@ function normalizeQuestionType(type) {
 
 function validateRequest(body) {
   if (!body || typeof body !== 'object' || Array.isArray(body)) return 'INVALID_REQUEST';
-  if (Object.keys(body).some(key => !['material', 'settings', 'language'].includes(key))) return 'INVALID_REQUEST';
+  if (Object.keys(body).some(key => !['material', 'settings', 'language', 'batchIndex', 'batchCount', 'totalQuestionCount'].includes(key))) return 'INVALID_REQUEST';
   if (typeof body.material !== 'string' || !body.material.trim()) return 'INVALID_REQUEST';
   if (body.material.length > MAX_MATERIAL) return 'REQUEST_TOO_LARGE';
   if (!['en', 'nl'].includes(body.language)) return 'INVALID_REQUEST';
+  const batchCount = body.batchCount === undefined ? 1 : Number(body.batchCount);
+  const batchIndex = body.batchIndex === undefined ? 0 : Number(body.batchIndex);
+  const totalQuestionCount = body.totalQuestionCount === undefined ? Number(body.settings?.count) : Number(body.totalQuestionCount);
+  if (!Number.isInteger(batchCount) || batchCount < 1 || batchCount > 20 || !Number.isInteger(batchIndex) || batchIndex < 0 || batchIndex >= batchCount || !ALLOWED_COUNTS.has(totalQuestionCount)) return 'INVALID_REQUEST';
   const s = body.settings;
   if (s && Object.keys(s).some(key => !['subject', 'title', 'difficulty', 'count', 'types', 'timeLimit', 'shuffle', 'showHints', 'showExplanations'].includes(key))) return 'INVALID_REQUEST';
   if (!s || typeof s !== 'object' || typeof s.subject !== 'string' || !s.subject.trim() || s.subject.length > 80 ||
       typeof s.title !== 'string' || s.title.length > 100 || !['easy', 'medium', 'hard', 'mixed'].includes(s.difficulty) ||
-      !ALLOWED_COUNTS.has(Number(s.count)) || !Array.isArray(s.types) || !s.types.length || s.types.length > 4 ||
+      !Number.isInteger(Number(s.count)) || Number(s.count) < 1 || Number(s.count) > 20 || !Array.isArray(s.types) || !s.types.length || s.types.length > 4 ||
       s.types.some(type => !ALLOWED_TYPES.has(type)) || !Number.isFinite(Number(s.timeLimit)) || Number(s.timeLimit) < 0 || Number(s.timeLimit) > 180 ||
       ['shuffle', 'showHints', 'showExplanations'].some(key => key in s && typeof s[key] !== 'boolean')) return 'INVALID_REQUEST';
   return null;
 }
 
-function splitMaterial(material, count) {
-  const chunks = [];
-  let start = 0;
-  for (let index = 0; index < count; index++) {
-    const ideal = Math.round(material.length * (index + 1) / count);
-    let end = ideal;
-    if (index < count - 1) {
-      const lower = start + Math.floor((ideal - start) * 0.7);
-      const paragraph = material.lastIndexOf('\n\n', ideal);
-      if (paragraph >= lower) end = paragraph + 2;
-      else {
-        while (end > lower && !/\s/.test(material[end])) end--;
-        if (end <= lower) end = ideal;
-      }
-    } else end = material.length;
-    const chunk = material.slice(start, end).trim();
-    if (chunk) chunks.push(chunk);
-    start = end;
-  }
-  return chunks;
-}
-
-function allocateQuestions(total, chunks) {
-  const lengths = chunks.map(chunk => chunk.length);
-  const all = lengths.reduce((a, b) => a + b, 0);
-  let assigned = 0;
-  let consumed = 0;
-  return lengths.map((length, index) => {
-    consumed += length;
-    const target = index === lengths.length - 1 ? total : Math.round(total * consumed / all);
-    const remaining = lengths.length - index - 1;
-    const count = Math.max(1, Math.min(total - assigned - remaining, target - assigned));
-    assigned += count;
-    return count;
-  });
+function jobKey(keys, id) {
+  return `${keys[0].replace(/:success$/, '')}:job:${id}`;
 }
 
 function makePrompt(settings, material, language) {
@@ -327,7 +332,11 @@ async function generateBatch(body, settings, material, deadline) {
   for (let attempt = 0; attempt < 3; attempt++) {
     const controller = new AbortController();
     const remainingMs = Math.min(UPSTREAM_TIMEOUT_MS, deadline - Date.now());
-    if (remainingMs <= 1000) throw new Error('AI_TIMEOUT');
+    if (remainingMs <= 6000) {
+      const error = new Error('AI_RATE_LIMIT');
+      error.retryAfterSeconds = 2;
+      throw error;
+    }
     const timeout = setTimeout(() => controller.abort(), remainingMs);
     let response;
     try {
@@ -346,7 +355,7 @@ async function generateBatch(body, settings, material, deadline) {
     if (response.status === 429) {
       const providerDelay = retryDelayFromResponse(response);
       const delaySeconds = providerDelay ?? Math.min(2 ** attempt, 4);
-      if (attempt < 2 && delaySeconds > 0 && Date.now() + delaySeconds * 1000 + 1500 < deadline) {
+      if (attempt < 2 && delaySeconds > 0 && Date.now() + delaySeconds * 1000 + 6000 < deadline) {
         await new Promise(resolve => setTimeout(resolve, delaySeconds * 1000));
         continue;
       }
@@ -367,43 +376,6 @@ async function generateBatch(body, settings, material, deadline) {
     return result;
   }
   throw new Error('AI_RATE_LIMIT');
-}
-
-async function generateTest(body) {
-  const batchCount = Math.min(Number(body.settings.count), Math.max(Math.ceil(body.material.length / 9000), Math.ceil(Number(body.settings.count) / 5), 1));
-  const chunks = batchCount === 1 ? [body.material.trim()] : splitMaterial(body.material.trim(), batchCount);
-  if (!chunks.length) throw new Error('INVALID_REQUEST');
-  const allocations = allocateQuestions(Number(body.settings.count), chunks);
-  const typePlan = Array.from({ length: Number(body.settings.count) }, (_, i) => body.settings.types[i % body.settings.types.length]);
-  const questions = [];
-  let offset = 0;
-  let title = body.settings.title;
-  let subject = body.settings.subject;
-  const deadline = Date.now() + 57000;
-  for (let i = 0; i < chunks.length; i++) {
-    if (i) await new Promise(resolve => setTimeout(resolve, Math.min(2100, Math.max(0, deadline - Date.now() - 1000))));
-    const count = allocations[i];
-    const typeCounts = {};
-    typePlan.slice(offset, offset + count).forEach(type => { typeCounts[type] = (typeCounts[type] || 0) + 1; });
-    offset += count;
-    const settings = { ...body.settings, count, types: body.settings.types.filter(type => typeCounts[type]), typeCounts };
-    const result = await generateBatch(body, settings, chunks[i], deadline);
-    if (i === 0) {
-      title = typeof result.title === 'string' && result.title.trim() ? result.title.trim().slice(0, 100) : title;
-      subject = typeof result.subject === 'string' && result.subject.trim() ? result.subject.trim().slice(0, 80) : subject;
-    }
-    questions.push(...result.questions);
-  }
-  if (questions.length !== Number(body.settings.count)) throw new Error('AI_INVALID_RESPONSE');
-  const ids = new Set();
-  questions.forEach((question, index) => {
-    let id = String(question.id || `q${index + 1}`).slice(0, 40);
-    if (ids.has(id)) id = `q${index + 1}`;
-    while (ids.has(id)) id = `q${index + 1}-${ids.size}`;
-    ids.add(id);
-    question.id = id;
-  });
-  return { mode: 'ai', title, subject, questions };
 }
 
 function isSameOrigin(request) {
@@ -435,9 +407,16 @@ export async function handleRequest(request) {
     if (validationError) return json({ code: validationError }, validationError === 'REQUEST_TOO_LARGE' ? 413 : 400);
     const id = request.headers.get('idempotency-key') || '';
     if (!/^[A-Za-z0-9_-]{16,80}$/.test(id)) return json({ code: 'INVALID_IDEMPOTENCY_KEY' }, 400);
+    const batchIndex = body.batchIndex === undefined ? 0 : Number(body.batchIndex);
+    const batchCount = body.batchCount === undefined ? 1 : Number(body.batchCount);
+    const totalQuestionCount = body.totalQuestionCount === undefined ? Number(body.settings.count) : Number(body.totalQuestionCount);
+    const finalBatch = batchIndex === batchCount - 1;
+    const jobKeys = [...keys, jobKey(keys, id)];
+    const lockId = crypto.randomUUID();
     const now = Date.now();
-    const [reserved, remaining, resetAt] = await redisEval(config, RESERVE_SCRIPT, keys, [now, id, RESERVATION_MS]);
+    const [reserved, remaining, resetAt] = await redisEval(config, RESERVE_OR_RESUME_SCRIPT, jobKeys, [now, id, RESERVATION_MS, batchCount, batchIndex, totalQuestionCount, lockId]);
     if (Number(reserved) === 2) return json({ code: 'DUPLICATE_SUBMISSION', usage: await readQuota(config, keys) }, 409);
+    if (Number(reserved) === 3) return json({ code: 'BATCH_SEQUENCE_INVALID' }, 409);
     if (Number(reserved) !== 1) {
       return json({
         code: 'PRACTICE_TEST_HOURLY_LIMIT',
@@ -447,10 +426,17 @@ export async function handleRequest(request) {
     }
 
     let generated;
-    try { generated = await generateTest(body); }
+    try {
+      const typePlan = Array.from({ length: Number(body.settings.count) }, (_, index) => body.settings.types[index % body.settings.types.length]);
+      const typeCounts = {};
+      typePlan.forEach(type => { typeCounts[type] = (typeCounts[type] || 0) + 1; });
+      const batchSettings = { ...body.settings, typeCounts };
+      generated = await generateBatch(body, batchSettings, body.material.trim(), Date.now() + 57000);
+    }
     catch (error) {
-      await redisEval(config, RELEASE_SCRIPT, keys, [Date.now(), id, RESERVATION_MS]).catch(() => {});
       const code = error?.message || 'AI_UPSTREAM_ERROR';
+      if (code === 'AI_RATE_LIMIT') await redisEval(config, UNLOCK_SCRIPT, jobKeys, [lockId]).catch(() => {});
+      else await redisEval(config, RELEASE_SCRIPT, jobKeys, [Date.now(), id, RESERVATION_MS]).catch(() => {});
       const status = code === 'AI_TIMEOUT' ? 504 : code === 'AI_INVALID_RESPONSE' || code === 'AI_UPSTREAM_ERROR' ? 502 : code === 'INVALID_REQUEST' ? 400 : 503;
       const usage = await readQuota(config, keys).catch(() => null);
       const retryAfterSeconds = code === 'AI_RATE_LIMIT' && Number.isFinite(error?.retryAfterSeconds) ? Math.max(1, Math.ceil(error.retryAfterSeconds)) : null;
@@ -458,8 +444,14 @@ export async function handleRequest(request) {
         retryAfterSeconds ? { 'Retry-After': String(retryAfterSeconds) } : {});
     }
     try {
-      const [updatedRemaining, updatedResetAt] = await redisEval(config, COMPLETE_SCRIPT, keys, [Date.now(), id, RESERVATION_MS]);
-      return json({ ...generated, usage: { remaining: Number(updatedRemaining), resetAt: Number(updatedResetAt) } });
+      const [advanced, updatedRemaining, updatedResetAt] = await redisEval(config, ADVANCE_BATCH_SCRIPT, jobKeys, [Date.now(), id, lockId, batchIndex, generated.questions.length, finalBatch ? 1 : 0, RESERVATION_MS]);
+      if (Number(advanced) < 0) {
+        await redisEval(config, RELEASE_SCRIPT, jobKeys, [Date.now(), id, RESERVATION_MS]).catch(() => {});
+        return json({ code: 'BATCH_SEQUENCE_INVALID' }, 409);
+      }
+      const usage = { remaining: Number(updatedRemaining), resetAt: Number(updatedResetAt) || null };
+      if (!finalBatch) return json({ batch: generated, batchIndex, batchCount, usage });
+      return json({ ...generated, mode: 'ai', usage });
     } catch {
       // Keep the reservation through the quota window if completion cannot be confirmed.
       return json({ code: 'RATE_LIMIT_SERVICE_UNAVAILABLE' }, 503);

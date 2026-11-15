@@ -296,43 +296,77 @@ function parseAiJson(content) {
   catch { throw new Error('AI_INVALID_RESPONSE'); }
 }
 
+function parseRetryDelaySeconds(value) {
+  if (!value) return null;
+  const numeric = Number(value);
+  if (Number.isFinite(numeric) && numeric >= 0) return Math.ceil(numeric);
+  const date = Date.parse(value);
+  if (Number.isFinite(date)) return Math.max(0, Math.ceil((date - Date.now()) / 1000));
+  const duration = value.match(/^(?:(\d+(?:\.\d+)?)h)?(?:(\d+(?:\.\d+)?)m)?(?:(\d+(?:\.\d+)?)s)?$/i);
+  if (!duration || !duration[0]) return null;
+  return Math.ceil((Number(duration[1] || 0) * 3600) + (Number(duration[2] || 0) * 60) + Number(duration[3] || 0));
+}
+
+function retryDelayFromResponse(response) {
+  const retryAfter = parseRetryDelaySeconds(response.headers.get('retry-after'));
+  if (retryAfter !== null) return retryAfter;
+  return parseRetryDelaySeconds(response.headers.get('x-ratelimit-reset-tokens')) ??
+    parseRetryDelaySeconds(response.headers.get('x-ratelimit-reset-requests'));
+}
+
 async function generateBatch(body, settings, material, deadline) {
   if (!process.env.GROQ_API_KEY) throw new Error('AI_PROXY_CONFIG');
-  const controller = new AbortController();
-  const remainingMs = Math.min(UPSTREAM_TIMEOUT_MS, deadline - Date.now());
-  if (remainingMs <= 1000) throw new Error('AI_TIMEOUT');
-  const timeout = setTimeout(() => controller.abort(), remainingMs);
-  let response;
-  try {
-    response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${process.env.GROQ_API_KEY}` },
-      signal: controller.signal,
-      redirect: 'error',
-      body: JSON.stringify({
-        model: MODEL,
-        messages: [{ role: 'user', content: makePrompt(settings, material, body.language) }],
-        reasoning_effort: 'low',
-        max_completion_tokens: Math.min(3500, 500 + settings.count * 350),
-        response_format: { type: 'json_object' }
-      })
-    });
-  } catch (error) {
-    if (error.name === 'AbortError') throw new Error('AI_TIMEOUT');
-    throw new Error('AI_PROXY_UNAVAILABLE');
-  } finally { clearTimeout(timeout); }
+  const requestBody = JSON.stringify({
+    model: MODEL,
+    messages: [{ role: 'user', content: makePrompt(settings, material, body.language) }],
+    reasoning_effort: 'low',
+    max_completion_tokens: Math.min(3500, 500 + settings.count * 350),
+    response_format: { type: 'json_object' }
+  });
 
-  const payload = await response.json().catch(() => ({}));
-  if (!response.ok) {
-    if (response.status === 429) throw new Error('AI_RATE_LIMIT');
-    if ([401, 403].includes(response.status)) throw new Error('AI_PROXY_CONFIG');
-    throw new Error('AI_UPSTREAM_ERROR');
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const controller = new AbortController();
+    const remainingMs = Math.min(UPSTREAM_TIMEOUT_MS, deadline - Date.now());
+    if (remainingMs <= 1000) throw new Error('AI_TIMEOUT');
+    const timeout = setTimeout(() => controller.abort(), remainingMs);
+    let response;
+    try {
+      response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${process.env.GROQ_API_KEY}` },
+        signal: controller.signal,
+        redirect: 'error',
+        body: requestBody
+      });
+    } catch (error) {
+      if (error.name === 'AbortError') throw new Error('AI_TIMEOUT');
+      throw new Error('AI_PROXY_UNAVAILABLE');
+    } finally { clearTimeout(timeout); }
+
+    if (response.status === 429) {
+      const providerDelay = retryDelayFromResponse(response);
+      const delaySeconds = providerDelay ?? Math.min(2 ** attempt, 4);
+      if (attempt < 2 && delaySeconds > 0 && Date.now() + delaySeconds * 1000 + 1500 < deadline) {
+        await new Promise(resolve => setTimeout(resolve, delaySeconds * 1000));
+        continue;
+      }
+      const error = new Error('AI_RATE_LIMIT');
+      error.retryAfterSeconds = providerDelay ?? delaySeconds;
+      throw error;
+    }
+
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      if ([401, 403].includes(response.status)) throw new Error('AI_PROXY_CONFIG');
+      throw new Error('AI_UPSTREAM_ERROR');
+    }
+    const content = payload?.choices?.[0]?.message?.content;
+    if (typeof content !== 'string' || !content.trim()) throw new Error('AI_INVALID_RESPONSE');
+    const result = normalizeAiResult(parseAiJson(content), settings);
+    if (!validateAiResult(result, settings)) throw new Error('AI_INVALID_RESPONSE');
+    return result;
   }
-  const content = payload?.choices?.[0]?.message?.content;
-  if (typeof content !== 'string' || !content.trim()) throw new Error('AI_INVALID_RESPONSE');
-  const result = normalizeAiResult(parseAiJson(content), settings);
-  if (!validateAiResult(result, settings)) throw new Error('AI_INVALID_RESPONSE');
-  return result;
+  throw new Error('AI_RATE_LIMIT');
 }
 
 async function generateTest(body) {
@@ -418,7 +452,10 @@ export async function handleRequest(request) {
       await redisEval(config, RELEASE_SCRIPT, keys, [Date.now(), id, RESERVATION_MS]).catch(() => {});
       const code = error?.message || 'AI_UPSTREAM_ERROR';
       const status = code === 'AI_TIMEOUT' ? 504 : code === 'AI_INVALID_RESPONSE' || code === 'AI_UPSTREAM_ERROR' ? 502 : code === 'INVALID_REQUEST' ? 400 : 503;
-      return json({ code }, status);
+      const usage = await readQuota(config, keys).catch(() => null);
+      const retryAfterSeconds = code === 'AI_RATE_LIMIT' && Number.isFinite(error?.retryAfterSeconds) ? Math.max(1, Math.ceil(error.retryAfterSeconds)) : null;
+      return json({ code, ...(usage ? { usage } : {}), ...(retryAfterSeconds ? { retryAfterSeconds } : {}) }, status,
+        retryAfterSeconds ? { 'Retry-After': String(retryAfterSeconds) } : {});
     }
     try {
       const [updatedRemaining, updatedResetAt] = await redisEval(config, COMPLETE_SCRIPT, keys, [Date.now(), id, RESERVATION_MS]);

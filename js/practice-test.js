@@ -256,6 +256,7 @@ async function generateTestWithGroq(settings, material, onBatchProgress) {
     else if (response.status >= 500) markPracticeTestUsageUnavailable();
     const error = new Error(payload.code || `HTTP_${response.status}`);
     error.resetAt = payload.usage?.resetAt;
+    error.retryAfterSeconds = Number(payload.retryAfterSeconds) || null;
     if (response.status !== 409 && response.status !== 425 && response.status !== 429) lastGenerationId = null;
     throw error;
   }
@@ -616,7 +617,13 @@ function displayError(error) {
   if (error.message === "DUPLICATE_SUBMISSION") return language === "nl" ? "Deze aanvraag is al verwerkt. Wacht even en controleer je toetsgeschiedenis voordat je opnieuw begint." : "This request was already processed. Please check your test history before starting another generation.";
   if (error.message === "RATE_LIMIT_NOT_CONFIGURED" || error.message === "RATE_LIMIT_SERVICE_UNAVAILABLE") return language === "nl" ? "De gebruikslimietservice is tijdelijk niet beschikbaar. Probeer het later opnieuw." : "The usage limit service is temporarily unavailable. Please try again later.";
   if (error.message === "AI_PROXY_CONFIG") return language === "nl" ? "De AI-service is niet ingesteld. Controleer de API-sleutel in Vercel en deploy opnieuw." : "The AI service is not configured. Check its API key in Vercel and redeploy.";
-  if (error.message === "AI_RATE_LIMIT") return language === "nl" ? "De AI-service is nog steeds tijdelijk druk na automatisch wachten. Probeer het later opnieuw." : "The AI service is still rate limited after automatic retries. Please try again later.";
+  if (error.message === "AI_RATE_LIMIT") {
+    const seconds = Number(error.retryAfterSeconds);
+    const wait = seconds > 0 ? (seconds >= 60 ? `${Math.ceil(seconds / 60)} ${language === "nl" ? "minuten" : "minutes"}` : `${seconds} ${language === "nl" ? "seconden" : "seconds"}`) : null;
+    return language === "nl"
+      ? `De AI-provider heeft tijdelijk een limiet bereikt.${wait ? ` Probeer het over ongeveer ${wait} opnieuw.` : " Probeer het over een paar seconden opnieuw."}`
+      : `The AI provider is temporarily rate limited.${wait ? ` Please try again in about ${wait}.` : " Please try again in a few seconds."}`;
+  }
   if (error.message === "AI_DAILY_LIMIT") return language === "nl" ? "De dagelijkse limiet van de AI-service is bereikt. Probeer het later opnieuw." : "The AI service has reached its daily request limit. Please try again later.";
   if (error.message === "AI_REQUEST_TOO_LARGE") return language === "nl" ? "Een deel van de leerstof is te groot voor de AI-service. Kort de leerstof in en probeer het opnieuw." : "A section of the study material is too large for the AI service. Shorten the material and try again.";
   if (error.message === "AI_TIMEOUT") return language === "nl" ? "Het maken van de toets duurde te lang. Probeer minder leerstof of minder vragen." : "Test generation timed out. Try using less material or fewer questions.";

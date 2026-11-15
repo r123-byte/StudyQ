@@ -98,8 +98,11 @@ function json(data, status = 200, extraHeaders = {}) {
 }
 
 function redisConfig() {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  // Vercel's Upstash integration exposes KV_REST_API_* names. Prefer the
+  // explicit names when present, otherwise use that integration's REST pair.
+  const hasExplicitUpstashConfig = Boolean(process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_REST_TOKEN);
+  const url = hasExplicitUpstashConfig ? process.env.UPSTASH_REDIS_REST_URL : process.env.KV_REST_API_URL;
+  const token = hasExplicitUpstashConfig ? process.env.UPSTASH_REDIS_REST_TOKEN : process.env.KV_REST_API_TOKEN;
   const hmacSecret = process.env.STUDYQ_RATE_LIMIT_HMAC_SECRET;
   if (!url || !token || !hmacSecret || hmacSecret.length < 32) return null;
   try {

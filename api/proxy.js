@@ -98,8 +98,11 @@ function fail(status, code, cors) {
 }
 
 function rateLimitConfig(feature) {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  // Vercel's Upstash integration exposes KV_REST_API_* names. Prefer the
+  // explicit names when present, otherwise use that integration's REST pair.
+  const hasExplicitUpstashConfig = Boolean(process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_REST_TOKEN);
+  const url = hasExplicitUpstashConfig ? process.env.UPSTASH_REDIS_REST_URL : process.env.KV_REST_API_URL;
+  const token = hasExplicitUpstashConfig ? process.env.UPSTASH_REDIS_REST_TOKEN : process.env.KV_REST_API_TOKEN;
   const secret = process.env.STUDYQ_RATE_LIMIT_HMAC_SECRET;
   const limitSetting = FEATURE_LIMITS[feature];
   if (!url || !token || !secret || secret.length < 32 || !limitSetting) return null;

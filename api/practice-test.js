@@ -148,10 +148,10 @@ async function readQuota(config, keys) {
 
 function normalizeQuestionType(type) {
   const value = String(type || '').toLowerCase().replace(/[\s-]+/g, '_');
-  if (['multiple_choice', 'multiplechoice', 'mc'].includes(value)) return 'multiple_choice';
-  if (['true_false', 'truefalse', 'tf'].includes(value)) return 'true_false';
-  if (['fill_blank', 'fill_in_the_blank', 'fill_in_blanks', 'fillintheblank'].includes(value)) return 'fill_blank';
-  if (['open', 'open_question', 'short_answer'].includes(value)) return 'open';
+  if (['multiple_choice', 'multiplechoice', 'multiple_choice_question', 'mc', 'mcq'].includes(value)) return 'multiple_choice';
+  if (['true_false', 'truefalse', 'true_or_false', 'boolean', 'tf'].includes(value)) return 'true_false';
+  if (['fill_blank', 'fillblank', 'fill_in_the_blank', 'fill_in_blanks', 'fillintheblank', 'fill_in'].includes(value)) return 'fill_blank';
+  if (['open', 'open_question', 'open_ended', 'short_answer', 'free_response'].includes(value)) return 'open';
   return value;
 }
 
@@ -221,6 +221,55 @@ function makePrompt(settings, material, language) {
   ].join('\n\n');
 }
 
+function inferQuestionType(question) {
+  if (Array.isArray(question.options) || Array.isArray(question.choices)) return 'multiple_choice';
+  if (typeof question.correct_answer === 'boolean' || typeof question.answer === 'boolean') return 'true_false';
+  if (Array.isArray(question.accepted_answers) || Array.isArray(question.acceptedAnswers)) return 'fill_blank';
+  if (Array.isArray(question.marking_criteria) || Array.isArray(question.markingCriteria) || Array.isArray(question.rubric)) return 'open';
+  return '';
+}
+
+function normalizeAiResult(value, settings) {
+  if (!value || typeof value !== 'object' || !Array.isArray(value.questions) || value.questions.length !== settings.count) return null;
+  const questions = value.questions.map(question => {
+    if (!question || typeof question !== 'object' || Array.isArray(question)) return null;
+    const inferredType = inferQuestionType(question);
+    const rawType = normalizeQuestionType(question.type) || inferredType;
+    const type = settings.types.includes(rawType) ? rawType : (!question.type && settings.types.includes(inferredType) ? inferredType : rawType);
+    const normalized = {
+      ...question,
+      type,
+      question: typeof question.question === 'string' ? question.question : typeof question.prompt === 'string' ? question.prompt : ''
+    };
+
+    if (type === 'multiple_choice') {
+      normalized.options = Array.isArray(question.options) ? question.options : question.choices;
+      const answer = question.correct_answer ?? question.correctAnswer ?? question.answer;
+      if (Number.isInteger(answer)) normalized.correct_answer = answer;
+      else if (typeof answer === 'string') {
+        const trimmed = answer.trim();
+        const letter = trimmed.match(/^[A-D]$/i);
+        const numeric = trimmed.match(/^[0-3]$/);
+        if (letter) normalized.correct_answer = letter[0].toUpperCase().charCodeAt(0) - 65;
+        else if (numeric) normalized.correct_answer = Number(trimmed);
+        else if (Array.isArray(normalized.options)) normalized.correct_answer = normalized.options.findIndex(option => typeof option === 'string' && option.trim().toLowerCase() === trimmed.toLowerCase());
+      }
+    } else if (type === 'true_false') {
+      const answer = question.correct_answer ?? question.correctAnswer ?? question.answer;
+      if (typeof answer === 'string' && /^(true|false|yes|no)$/i.test(answer.trim())) normalized.correct_answer = /^(true|yes)$/i.test(answer.trim());
+      else normalized.correct_answer = answer;
+    } else if (type === 'fill_blank') {
+      const answers = question.accepted_answers ?? question.acceptedAnswers ?? question.correct_answer ?? question.answer;
+      normalized.accepted_answers = Array.isArray(answers) ? answers : typeof answers === 'string' ? [answers] : answers;
+    } else if (type === 'open') {
+      normalized.marking_criteria = question.marking_criteria ?? question.markingCriteria ?? question.rubric ?? question.criteria;
+      normalized.max_points = question.max_points ?? question.maxPoints;
+    }
+    return normalized;
+  });
+  return { ...value, questions };
+}
+
 function validateAiResult(value, settings) {
   if (!value || typeof value !== 'object' || !Array.isArray(value.questions) || value.questions.length !== settings.count) return false;
   const counts = {};
@@ -281,7 +330,7 @@ async function generateBatch(body, settings, material, deadline) {
   }
   const content = payload?.choices?.[0]?.message?.content;
   if (typeof content !== 'string' || !content.trim()) throw new Error('AI_INVALID_RESPONSE');
-  const result = parseAiJson(content);
+  const result = normalizeAiResult(parseAiJson(content), settings);
   if (!validateAiResult(result, settings)) throw new Error('AI_INVALID_RESPONSE');
   return result;
 }
@@ -312,7 +361,14 @@ async function generateTest(body) {
     questions.push(...result.questions);
   }
   if (questions.length !== Number(body.settings.count)) throw new Error('AI_INVALID_RESPONSE');
-  questions.forEach((question, index) => { question.id = String(question.id || `q${index + 1}`).slice(0, 40); });
+  const ids = new Set();
+  questions.forEach((question, index) => {
+    let id = String(question.id || `q${index + 1}`).slice(0, 40);
+    if (ids.has(id)) id = `q${index + 1}`;
+    while (ids.has(id)) id = `q${index + 1}-${ids.size}`;
+    ids.add(id);
+    question.id = id;
+  });
   return { mode: 'ai', title, subject, questions };
 }
 

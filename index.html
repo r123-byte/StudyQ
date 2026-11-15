@@ -1731,7 +1731,7 @@
   <script src="js/site-navigation.js?v=8" defer></script>
   <script src="page-intro.js?v=8" defer></script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "StudyQ", "url": "https://studyq-nu.vercel.app/", "inLanguage": "nl-NL"}</script>
-    <script defer src="/stats/script.js" data-website-id="65d3feef-2f1d-4dad-abba-fdacd65f6cae" data-host-url="/stats" data-exclude-search="true" data-exclude-hash="true" data-do-not-track="true"></script>
+  <script defer src="/stats/script.js" data-website-id="65d3feef-2f1d-4dad-abba-fdacd65f6cae" data-host-url="/stats" data-exclude-search="true" data-exclude-hash="true" data-do-not-track="true"></script>
 </head>
 <body>
   <!-- Hidden SVG for Liquid Glass Filter -->
@@ -1876,7 +1876,7 @@
             <div class="hero-perks" aria-label="StudyQ benefits">
               <span><i aria-hidden="true">✓</i><span data-i18n="perks.free">Always free</span></span>
               <span><i aria-hidden="true">✓</i><span data-i18n="perks.account">No account needed</span></span>
-              <span><i aria-hidden="true">✓</i><span data-i18n="perks.private">Your work stays in your browser</span></span>
+              <span><i aria-hidden="true">✓</i><span data-i18n="perks.private">Tools for your study routine</span></span>
             </div>
 
             <a href="#tools" class="hero-cta">
@@ -2075,7 +2075,7 @@
           <span data-i18n="footer.madeBy">· made by students, for students</span>
         </div>
         <div class="footer-right">
-          <span data-i18n="footer.note">No account · your study work stays in your browser</span>
+          <span data-i18n="footer.note">Free tools · no account needed</span>
         </div>
       </footer>
 
@@ -2086,9 +2086,23 @@
     (function() {
       "use strict";
 
-      const SCROLL_KEY = 'homepageScrollPos';
-      const FROM_TOOL_KEY = 'homepageReturningFromTool';
+      const SCROLL_KEY = 'StudyQ-homepage-scroll-pos';
+      const FROM_TOOL_KEY = 'StudyQ-homepage-returning-from-tool';
+      const LEGACY_SCROLL_KEY = 'homepageScrollPos';
+      const LEGACY_FROM_TOOL_KEY = 'homepageReturningFromTool';
       const MAX_AGE_MS = 30 * 60 * 1000;
+
+      // Migrate the old unprefixed navigation keys without touching other site data.
+      try {
+        if (sessionStorage.getItem(SCROLL_KEY) === null && sessionStorage.getItem(LEGACY_SCROLL_KEY) !== null) {
+          sessionStorage.setItem(SCROLL_KEY, sessionStorage.getItem(LEGACY_SCROLL_KEY));
+        }
+        if (sessionStorage.getItem(FROM_TOOL_KEY) === null && sessionStorage.getItem(LEGACY_FROM_TOOL_KEY) !== null) {
+          sessionStorage.setItem(FROM_TOOL_KEY, sessionStorage.getItem(LEGACY_FROM_TOOL_KEY));
+        }
+        sessionStorage.removeItem(LEGACY_SCROLL_KEY);
+        sessionStorage.removeItem(LEGACY_FROM_TOOL_KEY);
+      } catch (e) {}
 
       function saveHomeScrollPos() {
         try {
@@ -2139,7 +2153,7 @@
           "sidebar.note": "Free tools, made for students.",
           "perks.free": "Always free",
           "perks.account": "No account needed",
-          "perks.private": "Your work stays in your browser",
+          "perks.private": "Tools for your study routine",
           "nav.language": "Language",
           "language.english": "English",
           "language.dutch": "Dutch",
@@ -2188,7 +2202,7 @@
           "tools.more3": "And much more coming soon!",
           "footer.made": "StudyQ",
           "footer.madeBy": "· made by students, for students",
-          "footer.note": "No account · your study work stays in your browser"
+          "footer.note": "Free tools · no account needed"
         },
         nl: {
           "meta.description": "Slimmer leren met gratis studietools voor middelbare scholieren: bereken je cijfers, maak een studieplanning, oefen woordjes en focus met de Pomodoro-timer.",
@@ -2378,5 +2392,8 @@
     </div>
   </footer>
   <script src="js/footer-i18n.js"></script>
+
+  
+  
 </body>
 </html>

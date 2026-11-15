@@ -167,6 +167,12 @@
       margin: 0 auto;
       animation: fadeUp 0.6s 0.1s var(--ease-out) both;
     }
+    .contact-honeypot {
+      position:absolute !important; width:1px !important; height:1px !important; padding:0 !important;
+      margin:-1px !important; overflow:hidden !important; clip:rect(0,0,0,0) !important;
+      white-space:nowrap !important; border:0 !important;
+    }
+    .contact-status { min-height:1.5rem; margin-top:.75rem; color:#b42318; font-size:.95rem; }
 
     .form-group {
       margin-bottom: 1.75rem;
@@ -469,7 +475,7 @@
   <script src="../js/site-navigation.js?v=8" defer></script>
   <script src="../page-intro.js?v=8" defer></script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ContactPage", "name": "Contact met StudyQ | Stel je vraag of meld een probleem", "url": "https://studyq-nu.vercel.app/contact/", "inLanguage": "nl-NL"}</script>
-    <script defer src="/stats/script.js" data-website-id="65d3feef-2f1d-4dad-abba-fdacd65f6cae" data-host-url="/stats" data-exclude-search="true" data-exclude-hash="true" data-do-not-track="true"></script>
+  <script defer src="/stats/script.js" data-website-id="65d3feef-2f1d-4dad-abba-fdacd65f6cae" data-host-url="/stats" data-exclude-search="true" data-exclude-hash="true" data-do-not-track="true"></script>
 </head>
 <body>
   <!-- SVG Filter for Liquid Glass Distortion -->
@@ -507,8 +513,11 @@
 
       <!-- Contact Form -->
       <form id="contact-form" action="https://api.web3forms.com/submit" method="POST" class="contact-form" novalidate>
-        
         <input type="hidden" name="access_key" value="d4669d32-cef4-4bce-b8ec-3fd0eb594824">
+        <div class="contact-honeypot" aria-hidden="true">
+          <label for="contact-company">Leave this field empty</label>
+          <input id="contact-company" name="botcheck" type="checkbox" tabindex="-1" autocomplete="off">
+        </div>
         
         <!-- Field 1: Topic (Liquid Glass Segmented Control) -->
         <div class="form-group" id="group-topic">
@@ -538,19 +547,19 @@
         <!-- Field 2: Name -->
         <div class="form-group">
           <label class="form-label" for="name">Je naam <span>(Optioneel)</span></label>
-          <input type="text" id="name" name="name" class="form-control" placeholder="Jan de Vries">
+          <input type="text" id="name" name="name" class="form-control" placeholder="Jan de Vries" maxlength="100">
         </div>
 
         <!-- Field 3: Email -->
         <div class="form-group">
           <label class="form-label" for="email">Je e-mailadres <span>(Optioneel)</span></label>
-          <input type="email" id="email" name="email" class="form-control" placeholder="jan@example.com">
+          <input type="email" id="email" name="email" class="form-control" placeholder="jan@example.com" maxlength="254">
         </div>
 
         <!-- Field 4: Message -->
         <div class="form-group" id="group-message">
           <label class="form-label" for="message">Je bericht *</label>
-          <textarea id="message" name="message" class="form-control" placeholder="Hoe kunnen we helpen?"></textarea>
+          <textarea id="message" name="message" class="form-control" placeholder="Hoe kunnen we helpen?" maxlength="4000"></textarea>
           <div class="error-msg">Vul je bericht in.</div>
         </div>
 
@@ -559,6 +568,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"></path><path d="M22 2 11 13"></path></svg>
           Bericht versturen
         </button>
+        <p id="contact-status" class="contact-status" role="status" aria-live="polite"></p>
       </form>
 
       <!-- Success State -->
@@ -648,5 +658,8 @@
     </div>
   </footer>
   <script src="../js/footer-i18n.js"></script>
+
+  
+  
 </body>
 </html>

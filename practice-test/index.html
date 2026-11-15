@@ -251,7 +251,7 @@
   <script src="../js/site-navigation.js?v=8" defer></script>
   <script src="../page-intro.js?v=8" defer></script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "AI oefentoets maken van je lesstof | StudyQ", "url": "https://studyq-nu.vercel.app/practice-test/", "inLanguage": "nl-NL", "applicationCategory": "EducationalApplication", "operatingSystem": "Web", "isAccessibleForFree": true, "description": "Maak een oefentoets van je lesmateriaal en laat antwoorden automatisch nakijken. Gratis AI-oefentoets voor scholieren.", "publisher": {"@type": "Organization", "name": "StudyQ", "url": "https://studyq-nu.vercel.app/"}}</script>
-    <script defer src="/stats/script.js" data-website-id="65d3feef-2f1d-4dad-abba-fdacd65f6cae" data-host-url="/stats" data-exclude-search="true" data-exclude-hash="true" data-do-not-track="true"></script>
+  <script defer src="/stats/script.js" data-website-id="65d3feef-2f1d-4dad-abba-fdacd65f6cae" data-host-url="/stats" data-exclude-search="true" data-exclude-hash="true" data-do-not-track="true"></script>
 </head>
 <body>
   <svg aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden;">
@@ -414,7 +414,10 @@
           </div>
 
           <div class="pt-actions">
-            <p class="pt-note" data-i18n="generate.notice">Je aantekeningen en uitgelezen pdf-tekst worden naar een AI-service gestuurd om de toets te maken.</p>
+            <div class="pt-generation-info">
+              <p class="pt-note" data-i18n="generate.notice">Je aantekeningen en uitgelezen pdf-tekst worden naar een AI-service gestuurd om de toets te maken.</p>
+              <p class="pt-allowance" id="generation-allowance" aria-live="polite">Resterend dit uur laden…</p>
+            </div>
             <button class="pt-btn pt-btn--primary" type="button" id="generate-btn">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v3M12 18v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M3 12h3M18 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"></path></svg>
               <span data-i18n="generate.btn">Toets genereren</span>
@@ -655,7 +658,7 @@
           "generate.btn": "Generate test",
           "generate.loading": "Generating questions…",
           "history.title": "Previous tests",
-          "history.hint": "Stored locally in this browser.",
+          "history.hint": "Your 25 most recent tests.",
           "history.saved": "Saved tests",
           "generating.title": "Your test is being created…",
           "generating.step1": "Checking study material",
@@ -822,5 +825,8 @@
       applyLanguage(saved);
     })();
   </script>
+
+  
+  
 </body>
 </html>

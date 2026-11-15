@@ -1143,7 +1143,17 @@
       const errorText = err && err.message ? err.message : "Unknown error";
       const isEnglish = currentLanguage() === "en";
       let errMsg;
-      if (errorText === "NO_KEY" || /HTTP 503/.test(errorText) || /API key is not configured/i.test(errorText)) {
+      if (/RATE_LIMIT_SERVICE_UNAVAILABLE/.test(errorText)) {
+        errMsg = isEnglish
+          ? "The usage protection service is temporarily unavailable. Please try again later."
+          : "De gebruikslimietservice is tijdelijk niet beschikbaar. Probeer het later opnieuw.";
+      } else if (/FEATURE_RATE_LIMIT/.test(errorText)) {
+        const retry = Number(err && err.retryAfter);
+        const wait = retry > 0 ? (isEnglish ? ` Try again in about ${Math.max(1, Math.ceil(retry / 60))} minutes.` : ` Probeer het over ongeveer ${Math.max(1, Math.ceil(retry / 60))} minuten opnieuw.`) : "";
+        errMsg = (isEnglish
+          ? "The hourly AI Planner request limit has been reached."
+          : "De uurlimiet voor AI Planner-verzoeken is bereikt.") + wait;
+      } else if (errorText === "NO_KEY" || /HTTP 503 .*SERVICE_UNAVAILABLE/.test(errorText) || /API key is not configured/i.test(errorText)) {
         errMsg = isEnglish
           ? "The Groq API key is missing on the server. Add GROQ_API_KEY to the Vercel project’s environment variables, then redeploy."
           : "De Groq API-sleutel ontbreekt op de server. Voeg GROQ_API_KEY toe aan de omgevingsvariabelen van Vercel en deploy opnieuw.";
@@ -1187,7 +1197,9 @@
     });
     if (!response.ok) {
       const errText = await response.text().catch(function () { return ""; });
-      throw new Error("HTTP " + response.status + " " + errText);
+      const error = new Error("HTTP " + response.status + " " + errText);
+      error.retryAfter = Number(response.headers.get("Retry-After")) || 0;
+      throw error;
     }
     if (!response.body) throw new Error("NO_STREAM");
 

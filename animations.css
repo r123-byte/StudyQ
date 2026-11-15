@@ -49,14 +49,35 @@
 /* ============================================================
    1. GLOBAL TRANSITION BASELINE
    ============================================================ */
-*,
-*::before,
-*::after {
-  transition-property:
-    transform, opacity, box-shadow, border-color,
-    background-color, color, text-shadow, filter !important;
-  transition-duration: var(--dur-hover) !important;
-  transition-timing-function: var(--ease-fluid) !important;
+/* Keep transitions opt-in: applying opacity/transform transitions to every
+   node can create unnecessary compositing work on long-form pages. */
+.tool-card,
+.test-card,
+.plan-card,
+.study-card,
+.timer-card,
+.done-card,
+.setup-card,
+.quick-add-card,
+.result-card,
+.example-card,
+.comparison-card,
+.btn,
+.btn-primary,
+.btn-secondary,
+.btn-ghost,
+.back-link,
+.site-sidebar-link,
+.site-sidebar-toggle,
+.footer-col a {
+  transition: transform var(--dur-hover) var(--ease-fluid),
+    opacity var(--dur-hover) var(--ease-fluid),
+    box-shadow var(--dur-hover) var(--ease-fluid),
+    border-color var(--dur-hover) var(--ease-fluid),
+    background-color var(--dur-hover) var(--ease-fluid),
+    color var(--dur-hover) var(--ease-fluid),
+    text-shadow var(--dur-hover) var(--ease-fluid),
+    filter var(--dur-hover) var(--ease-fluid);
 }
 
 /* Non-visual elements get no transition */
@@ -192,7 +213,6 @@ input[type="file"] {
   transform: translateZ(0);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  will-change: transform, box-shadow, opacity;
 }
 
 /* ============================================================

@@ -27,7 +27,13 @@
     ".comparison-card"
   ].join(",");
 
-  const targets = Array.from(document.querySelectorAll(".page " + selectors))
+  const page = document.querySelector(".page");
+  if (!page) {
+    root.classList.remove("site-intro-pending");
+    return;
+  }
+
+  const targets = Array.from(page.querySelectorAll(selectors))
     .filter(function (element) {
       if (element.matches("[data-no-intro]")) return false;
       if (element.closest(".top-bar, .site-sidebar, .app-sidebar, [aria-hidden='true']")) return false;

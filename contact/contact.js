@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('contact-form');
   const successMessage = document.getElementById('success-message');
   const submitBtn = form.querySelector('.btn-submit');
+  const statusMessage = document.getElementById('contact-status');
+  const honeypot = document.getElementById('contact-company');
   
   const groupTopic = document.getElementById('group-topic');
   const groupMessage = document.getElementById('group-message');
@@ -31,6 +33,10 @@ document.addEventListener('DOMContentLoaded', () => {
       groupMessage.classList.add('has-error');
       isValid = false;
     }
+    if (messageValue.length > 4000 || document.getElementById('name').value.length > 100 || emailInput.value.length > 254) {
+      statusMessage.textContent = 'Je bericht of contactgegevens zijn te lang.';
+      isValid = false;
+    }
 
     // 3. Validate Email format (if provided)
     const emailValue = emailInput.value.trim();
@@ -45,6 +51,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // If invalid, stop here
     if (!isValid) return;
+
+    statusMessage.textContent = '';
+    // A filled honeypot is treated as handled, without forwarding its value.
+    if (honeypot && (honeypot.checked || honeypot.value.trim())) {
+      form.style.display = 'none';
+      successMessage.style.display = 'block';
+      return;
+    }
 
     // --- WEB3FORMS SUBMISSION ---
     
@@ -69,9 +83,9 @@ document.addEventListener('DOMContentLoaded', () => {
         body: json
       });
       
-      const result = await response.json();
+      const result = await response.json().catch(() => ({}));
 
-      if (response.status === 200) {
+      if (response.ok && result.success === true) {
         // Success! Hide form and show success message
         form.style.opacity = '0';
         form.style.transform = 'translate3d(0, -10px, 0)';
@@ -82,15 +96,14 @@ document.addEventListener('DOMContentLoaded', () => {
           successMessage.style.display = 'block';
         }, 300);
       } else {
-        // Web3Forms returned an error (e.g., invalid access key)
-        console.error(result);
-        alert('Something went wrong. Please try again later.');
+        statusMessage.textContent = response.status === 429
+          ? 'Er zijn te veel berichten verstuurd. Probeer het later opnieuw.'
+          : 'Versturen is niet gelukt. Controleer je gegevens en probeer het opnieuw.';
         resetButton();
       }
     } catch (error) {
       // Network error
-      console.error(error);
-      alert('Network error. Please check your connection and try again.');
+      statusMessage.textContent = 'Geen verbinding. Controleer je internetverbinding en probeer het opnieuw.';
       resetButton();
     }
 

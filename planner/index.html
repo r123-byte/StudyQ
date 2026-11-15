@@ -2377,7 +2377,7 @@
   <script src="../js/site-navigation.js?v=8" defer></script>
   <script src="../page-intro.js?v=8" defer></script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Gratis toetsweekplanner en studieplanning | StudyQ", "url": "https://studyq-nu.vercel.app/planner/", "inLanguage": "nl-NL", "applicationCategory": "EducationalApplication", "operatingSystem": "Web", "isAccessibleForFree": true, "description": "Plan je toetsen en huiswerk, importeer je rooster en maak een persoonlijk studieplan met deze gratis toetsweekplanner.", "publisher": {"@type": "Organization", "name": "StudyQ", "url": "https://studyq-nu.vercel.app/"}}</script>
-    <script defer src="/stats/script.js" data-website-id="65d3feef-2f1d-4dad-abba-fdacd65f6cae" data-host-url="/stats" data-exclude-search="true" data-exclude-hash="true" data-do-not-track="true"></script>
+  <script defer src="/stats/script.js" data-website-id="65d3feef-2f1d-4dad-abba-fdacd65f6cae" data-host-url="/stats" data-exclude-search="true" data-exclude-hash="true" data-do-not-track="true"></script>
 </head>
 <body>
   <div class="wrapper">
@@ -2992,7 +2992,7 @@
           "planner.sourceAiPlan": "AI plan",
           "planner.aiPlanReason": "This block comes from your AI-generated study plan. Click start to launch a study session from it.",
           "planner.startSession": "Start study session",
-          "planner.privacy": "Your saved plan stays in your browser — no account needed.",
+          "planner.privacy": "Organise your study plan — no account needed.",
           "planner.tabManual": "Manual",
           "planner.tabUpload": ".ics file",
           "planner.tabLink": "Calendar link",
@@ -3145,9 +3145,12 @@
           "mic.empty": "No speech detected",
           "mic.tooShort": "Recording too short — try speaking for at least one second",
           "mic.tooLong": "Recording too long — try a shorter clip",
-          "mic.noKey": "Groq API key missing — paste your key in planner/",
+          "mic.noKey": "The AI service is not configured on the server. Please try again later.",
+          "mic.limitUnavailable": "The usage protection service is temporarily unavailable. Please try again later.",
           "mic.badKey": "Invalid Groq API key — check console.groq.com/keys",
-          "mic.rateLimit": "Rate limit reached — wait a moment and try again",
+          "mic.rateLimit": "The hourly voice transcription limit was reached. Try again after the wait period.",
+          "mic.rateLimitWait": "The hourly voice transcription limit was reached. Try again in about {minutes} minutes.",
+          "mic.rateLimitWaitNl": "De uurlimiet voor spraaktranscripties is bereikt. Probeer het over ongeveer {minutes} minuten opnieuw.",
           "mic.network": "Network error — check your connection",
           "mic.micDenied": "Microphone permission denied — allow mic access in your browser",
           "mic.noMic": "No microphone found — connect one and try again",
@@ -3365,9 +3368,12 @@
           "mic.empty": "Geen spraak gedetecteerd",
           "mic.tooShort": "Opname te kort — spreek minstens één seconde",
           "mic.tooLong": "Opname te lang — probeer een kortere clip",
-          "mic.noKey": "Groq API-sleutel ontbreekt — plak je sleutel in planner/",
+          "mic.noKey": "De AI-dienst is niet ingesteld op de server. Probeer het later opnieuw.",
+          "mic.limitUnavailable": "De gebruikslimietservice is tijdelijk niet beschikbaar. Probeer het later opnieuw.",
           "mic.badKey": "Ongeldige Groq API-sleutel — controleer console.groq.com/keys",
-          "mic.rateLimit": "Limiet bereikt — wacht even en probeer opnieuw",
+          "mic.rateLimit": "De uurlimiet voor spraaktranscripties is bereikt. Probeer het opnieuw na de wachttijd.",
+          "mic.rateLimitWait": "De uurlimiet voor spraaktranscripties is bereikt. Probeer het over ongeveer {minutes} minuten opnieuw.",
+          "mic.rateLimitWaitNl": "De uurlimiet voor spraaktranscripties is bereikt. Probeer het over ongeveer {minutes} minuten opnieuw.",
           "mic.network": "Netwerkfout — controleer je verbinding",
           "mic.micDenied": "Microfoontoegang geweigerd — sta microfoon toe in je browser",
           "mic.noMic": "Geen microfoon gevonden — sluit er een aan en probeer opnieuw",
@@ -3551,7 +3557,8 @@
       ============================================================ */
       function saveState() {
         try {
-          if (state.tests.length === 0) return;
+          // Persist an empty array too, so a deleted final test cannot be
+          // resurrected from an older non-empty localStorage value.
           localStorage.setItem(STORAGE_KEY, JSON.stringify(state.tests));
         } catch (e) {}
       }
@@ -4578,7 +4585,7 @@
         let current = null, inEvent = false;
         for (let i = 0; i < lines.length; i++) {
           const line = lines[i];
-          if (/^BEGIN:VEVENT\s*$/i.test(line)) { inEvent = true; current = { summary: '', description: '', location: '', dtstart: '', dtend: '' }; continue; }
+          if (/^BEGIN:VEVENT\s*$/i.test(line)) { inEvent = true; current = { summary: '', description: '', location: '', dtstart: '', dtstartTZID: '', dtend: '', status: '', rrule: '' }; continue; }
           if (/^END:VEVENT\s*$/i.test(line)) { if (current) events.push(current); current = null; inEvent = false; continue; }
           if (!inEvent || !current) continue;
           const idx = line.indexOf(':');
@@ -4586,34 +4593,58 @@
           const keyPart = line.substring(0, idx);
           const value = line.substring(idx + 1);
           const key = keyPart.split(';')[0].toUpperCase();
+          const tzidMatch = keyPart.match(/(?:^|;)TZID=(?:"([^"]+)"|([^;:]+))/i);
+          const tzid = tzidMatch ? (tzidMatch[1] || tzidMatch[2]) : '';
           const decoded = value.replace(/\\n/gi, ' ').replace(/\\,/g, ',').replace(/\\;/g, ';').replace(/\\\\/g, '\\');
           if (key === 'SUMMARY') current.summary = decoded;
           else if (key === 'DESCRIPTION') current.description = decoded;
           else if (key === 'LOCATION') current.location = decoded;
-          else if (key === 'DTSTART') current.dtstart = decoded;
+          else if (key === 'DTSTART') { current.dtstart = decoded; current.dtstartTZID = tzid; }
           else if (key === 'DTEND') current.dtend = value;
+          else if (key === 'STATUS') current.status = value.trim().toUpperCase();
+          else if (key === 'RRULE') current.rrule = value.trim();
         }
         return events;
       }
-      function parseICSDate(str) {
+      function parseICSDate(str, tzid) {
         if (!str) return null;
         const m = str.match(/^(\d{4})(\d{2})(\d{2})(?:T(\d{2})(\d{2})(\d{2})?(Z)?)?$/);
         if (!m) return null;
         const year = parseInt(m[1], 10), month = parseInt(m[2], 10) - 1, day = parseInt(m[3], 10);
         const hour = m[4] ? parseInt(m[4], 10) : 9, minute = m[5] ? parseInt(m[5], 10) : 0, second = m[6] ? parseInt(m[6], 10) : 0;
         const isUTC = !!m[7];
-        const dt = isUTC ? new Date(Date.UTC(year, month, day, hour, minute, second)) : new Date(year, month, day, hour, minute, second);
-        if (dt.getFullYear() !== year && !isUTC || (!isUTC && (dt.getMonth() !== month || dt.getDate() !== day))) return null;
+        if (month < 0 || month > 11 || day < 1 || day > 31 || hour > 23 || minute > 59 || second > 59) return null;
+        const utcComponents = new Date(Date.UTC(year, month, day, hour, minute, second));
+        if (utcComponents.getUTCFullYear() !== year || utcComponents.getUTCMonth() !== month || utcComponents.getUTCDate() !== day) return null;
+        if (isUTC) return utcComponents;
+        if (tzid) {
+          try {
+            const formatter = new Intl.DateTimeFormat('en-CA', { timeZone: tzid, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23' });
+            const desired = Date.UTC(year, month, day, hour, minute, second);
+            let instant = desired;
+            for (let i = 0; i < 4; i++) {
+              const parts = Object.fromEntries(formatter.formatToParts(new Date(instant)).map(part => [part.type, part.value]));
+              const represented = Date.UTC(Number(parts.year), Number(parts.month) - 1, Number(parts.day), Number(parts.hour), Number(parts.minute), Number(parts.second));
+              instant = desired - (represented - instant);
+            }
+            const check = Object.fromEntries(formatter.formatToParts(new Date(instant)).map(part => [part.type, part.value]));
+            if (Number(check.year) !== year || Number(check.month) !== month + 1 || Number(check.day) !== day || Number(check.hour) !== hour || Number(check.minute) !== minute || Number(check.second) !== second) return null;
+            return new Date(instant);
+          } catch (e) { return null; }
+        }
+        const dt = new Date(year, month, day, hour, minute, second);
+        if (dt.getFullYear() !== year || dt.getMonth() !== month || dt.getDate() !== day || dt.getHours() !== hour || dt.getMinutes() !== minute) return null;
         return isNaN(dt.getTime()) ? null : dt;
       }
       function detectTests(events) {
         const keywords = ['toets', 'proefwerk', 'pw', 'so', 'tentamen', 'examen', 'test', 'exam', 'repetitie', 'se ', 'schriftelijk'];
         const detected = [];
         events.forEach(function(ev) {
+          if (ev.status === 'CANCELLED') return;
           const text = ((ev.summary || '') + ' ' + (ev.description || '')).toLowerCase();
           const isTest = keywords.some(function(k) { return text.indexOf(k) >= 0; });
           if (!isTest) return;
-          const dt = parseICSDate(ev.dtstart);
+          const dt = parseICSDate(ev.dtstart, ev.dtstartTZID);
           if (!dt) return;
           const rawSubject = (ev.summary || '').replace(/\b(toets|proefwerk|pw|so|tentamen|examen|test|exam|repetitie)\b/gi, '').trim() || (ev.summary || '');
           detected.push({
@@ -4644,7 +4675,7 @@
       });
 
       function handleFile(file) {
-        if (!file || (!/\.ics$/i.test(file.name || '') && file.type !== 'text/calendar')) return;
+        if (!file || file.size > 5 * 1024 * 1024 || (!/\.ics$/i.test(file.name || '') && file.type !== 'text/calendar' && file.type !== 'text/plain')) return;
         const reader = new FileReader();
         reader.onload = function(e) {
           uploadedFileText = e.target.result;
@@ -4696,13 +4727,21 @@
           const normalized = isWebcal(raw) ? raw.replace(/^webcal:/i, 'https:') : raw;
           let parsed;
           try { parsed = new URL(normalized); } catch (_) { return null; }
-          if (parsed.protocol !== 'https:' || !parsed.hostname || parsed.username || parsed.password) return null;
+          if (parsed.protocol !== 'https:' || !parsed.hostname || parsed.username || parsed.password || (parsed.port && parsed.port !== '443')) return null;
+          const host = parsed.hostname.toLowerCase().replace(/^\[|\]$/g, '');
+          if (host === 'localhost' || host.endsWith('.localhost') || host.endsWith('.local') || host.endsWith('.internal') || host.includes(':')) return null;
+          const ipv4 = host.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/);
+          if (ipv4) {
+            const octets = ipv4.slice(1).map(Number);
+            if (octets.some(part => part > 255) || octets[0] === 0 || octets[0] === 10 || octets[0] === 127 || (octets[0] === 169 && octets[1] === 254) || (octets[0] === 172 && octets[1] >= 16 && octets[1] <= 31) || (octets[0] === 192 && octets[1] === 168) || octets[0] >= 224) return null;
+          }
           return parsed.href;
         }
         function updatePill() {
           detectPill.style.display = isWebcal(urlInput.value) ? 'inline-flex' : 'none';
           openCalendarApp.style.display = isWebcal(urlInput.value) ? 'inline-block' : 'none';
-          openCalendarApp.href = isWebcal(urlInput.value) ? String(urlInput.value || '').trim() : '#';
+          const safeUrl = normalizedCalendarUrl(urlInput.value);
+          openCalendarApp.href = isWebcal(urlInput.value) && safeUrl ? safeUrl.replace(/^https:/i, 'webcal:') : '#';
           linkStatus.hidden = true;
           linkStatus.textContent = '';
           importButton.disabled = !urlInput.value.trim();
@@ -4755,10 +4794,29 @@
         }
         importButton.disabled = true;
         status(t('planner.linkLoading'), false);
+        const controller = new AbortController();
+        const timer = setTimeout(function () { controller.abort(); }, 12000);
         try {
-          const response = await fetch(url, { headers: { Accept: 'text/calendar,text/plain;q=0.9,*/*;q=0.1' }, credentials: 'omit', mode: 'cors' });
+          const response = await fetch(url, { headers: { Accept: 'text/calendar,text/plain;q=0.9' }, credentials: 'omit', mode: 'cors', redirect: 'error', signal: controller.signal });
           if (!response.ok) throw new Error('bad-status');
-          const text = await response.text();
+          const contentType = (response.headers.get('content-type') || '').toLowerCase();
+          if (contentType && !/(text\/calendar|text\/plain|application\/octet-stream)/.test(contentType)) throw new Error('bad-content-type');
+          const declaredLength = Number(response.headers.get('content-length') || 0);
+          if (declaredLength > 2 * 1024 * 1024 || !response.body) throw new Error('calendar-response-too-large-or-empty');
+          const reader = response.body.getReader();
+          const chunks = [];
+          let byteLength = 0;
+          while (true) {
+            const part = await reader.read();
+            if (part.done) break;
+            byteLength += part.value.byteLength;
+            if (byteLength > 2 * 1024 * 1024) { await reader.cancel(); throw new Error('calendar-response-too-large'); }
+            chunks.push(part.value);
+          }
+          const bytes = new Uint8Array(byteLength);
+          let offset = 0;
+          chunks.forEach(function (chunk) { bytes.set(chunk, offset); offset += chunk.byteLength; });
+          const text = new TextDecoder('utf-8', { fatal: false }).decode(bytes);
           if (!/BEGIN:VCALENDAR/i.test(text)) throw new Error('not-calendar');
           const events = parseICS(text);
           const result = importCalendarEvents(events);
@@ -4770,6 +4828,8 @@
         } catch (err) {
           importButton.disabled = false;
           status(t('planner.importLinkError') + ' ' + t('planner.importLinkHint'), true);
+        } finally {
+          clearTimeout(timer);
         }
       });
 
@@ -5877,12 +5937,24 @@
 
           if (!response.ok) {
             finishProcessing();
+            const failure = await response.clone().json().catch(function () { return {}; });
             if (response.status === 401 || response.status === 403) {
               showToast('mic.badKey', 'error');
             } else if (response.status === 429) {
               showToast('mic.rateLimit', 'error');
+              const retryAfter = Number(response.headers.get('Retry-After'));
+              if (retryAfter > 0 && toastEl) {
+                const minutes = Math.max(1, Math.ceil(retryAfter / 60));
+                toastEl.textContent = currentLanguage === 'nl'
+                  ? t('mic.rateLimitWaitNl').replace('{minutes}', String(minutes))
+                  : t('mic.rateLimitWait').replace('{minutes}', String(minutes));
+              }
             } else if (response.status === 413) {
               showToast('mic.tooLong', 'error');
+            } else if (response.status === 503 && failure?.error?.code === 'RATE_LIMIT_SERVICE_UNAVAILABLE') {
+              showToast('mic.limitUnavailable', 'error');
+            } else if (response.status === 503 && failure?.error?.code === 'SERVICE_UNAVAILABLE') {
+              showToast('mic.noKey', 'error');
             } else {
               showToast('mic.failed', 'error');
             }
@@ -5980,5 +6052,8 @@
     </div>
   </footer>
   <script src="../js/footer-i18n.js"></script>
+
+  
+  
 </body>
 </html>

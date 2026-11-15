@@ -1,481 +1,419 @@
-<!DOCTYPE html>
-<html lang="nl">
-<head>
-  <script src="../js/site-navigation-state.js?v=8"></script>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Privacyverklaring van StudyQ</title>
-  <link rel="canonical" href="https://studyq-nu.vercel.app/privacy/">
-  <meta name="description" content="Lees hoe StudyQ omgaat met gegevens, browseropslag en externe diensten die onze gratis studietools ondersteunen.">
-  <meta name="robots" content="index,follow">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="StudyQ">
-  <meta property="og:title" content="Privacyverklaring van StudyQ">
-  <meta property="og:description" content="Lees hoe StudyQ omgaat met gegevens, browseropslag en externe diensten die onze gratis studietools ondersteunen.">
-  <meta property="og:url" content="https://studyq-nu.vercel.app/privacy/">
-  <meta property="og:image" content="https://studyq-nu.vercel.app/assets/homepage.png">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Privacyverklaring van StudyQ">
-  <meta name="twitter:description" content="Lees hoe StudyQ omgaat met gegevens, browseropslag en externe diensten die onze gratis studietools ondersteunen.">
-  <meta name="twitter:image" content="https://studyq-nu.vercel.app/assets/homepage.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Sofia+Pro:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
-  <link rel="icon" type="image/png" href="../favicon.png">
-  <link rel="manifest" href="../favicon_io/site.webmanifest">
-  <link rel="stylesheet" href="../theme.css">
-  <link rel="stylesheet" href="../footer.css?v=2">
-  <link rel="stylesheet" href="../animations.css">
-  
-  <style>
-    /* ============================================================
-       PRIVACY PAGE STYLES: Blue & White Theme
-       ============================================================ */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    :root {
-      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-      --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
-      --dur: 0.35s;
-      
-      --accent: #2563EB;
-      --accent-hover: #1D4ED8;
-      --accent-light: #93C5FD;
-      --accent-pale: #BFDBFE;
-      --accent-wash: #EFF6FF;
-      
-      --pop-shadow: 0 18px 36px -10px rgba(37, 99, 235, 0.22), 0 8px 18px -6px rgba(37, 99, 235, 0.12), 0 0 0 1px rgba(147, 197, 253, 0.55);
-      
-      --border-color: #E2E8F0;
-      --bg-color: #FFFFFF;
-      --text-main: #0F172A;
-      --text-muted: #64748B;
-    }
-
-    body {
-      font-family: 'Sofia Pro', system-ui, -apple-system, sans-serif;
-      background-color: #F5F8FE;
-      color: var(--text-main);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-      padding: 3rem 1.5rem;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      overflow-y: auto;
-    }
-
-    .wrapper { max-width: 900px; width: 100%; margin: 0 auto; }
-    
-    .page {
-      background: var(--bg-color);
-      border-radius: 3rem;
-      box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.1);
-      padding: 4rem 4rem 3rem;
-      border: 1px solid var(--border-color);
-      margin-bottom: 2rem;
-    }
-
-    /* --- Header (Standard) --- */
-    .top-bar {
-      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
-      margin-bottom: 3.5rem; padding-bottom: 2rem;
-      border-bottom: 1px solid var(--border-color);
-    }
-    .brand {
-      display: flex; align-items: center; gap: 0.75rem;
-      font-weight: 800; font-size: 1.4rem; color: var(--text-main); text-decoration: none;
-      transition: color var(--dur) var(--ease-out);
-    }
-    .brand:hover { color: var(--accent); }
-    .brand-icon {
-      background: var(--accent); width: 42px; height: 42px;
-      display: flex; align-items: center; justify-content: center; border-radius: 13px;
-      box-shadow: 0 4px 12px -2px rgba(37, 99, 235, 0.4);
-    }
-    .brand-icon img { width: 100%; height: 100%; object-fit: contain; transform: scale(2); transition: transform var(--dur) var(--ease-pop); }
-    .brand:hover .brand-icon img { transform: scale(2.1) rotate(-4deg); }
-    .brand span { color: var(--accent); }
-
-    .back-link {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      font-size: 0.9rem; font-weight: 600; color: var(--text-muted); text-decoration: none;
-      padding: 0.6rem 1.3rem; border-radius: 50px; background: #FFFFFF;
-      border: 1px solid var(--border-color);
-      transition: transform var(--dur) var(--ease-pop), box-shadow var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out), color var(--dur) var(--ease-out);
-    }
-    .back-link svg { width: 16px; height: 16px; }
-    .back-link:hover {
-      transform: translate3d(-3px, 0, 0); box-shadow: var(--pop-shadow);
-      border-color: var(--accent-light); color: var(--accent);
-    }
-
-    /* --- Content Styles --- */
-    .privacy-header {
-      text-align: center;
-      margin-bottom: 3rem;
-      animation: fadeUp 0.6s var(--ease-out) both;
-    }
-    .privacy-title {
-      font-size: clamp(2rem, 4vw, 2.8rem);
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      color: var(--text-main);
-      margin-bottom: 0.75rem;
-      transition: color var(--dur) var(--ease-out);
-    }
-    .privacy-date {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-
-    .privacy-content {
-      animation: fadeUp 0.6s 0.1s var(--ease-out) both;
-    }
-    .privacy-content h2 {
-      font-size: 1.35rem;
-      font-weight: 800;
-      color: var(--text-main);
-      margin: 2rem 0 1rem;
-      letter-spacing: -0.02em;
-    }
-    .privacy-content h2:first-child { margin-top: 0; }
-    .privacy-content p {
-      color: var(--text-muted);
-      margin-bottom: 1.25rem;
-      font-size: 1.05rem;
-      line-height: 1.7;
-    }
-    .privacy-content ul {
-      margin: 0 0 1.5rem 1.5rem;
-      color: var(--text-muted);
-      font-size: 1.05rem;
-      line-height: 1.7;
-    }
-    .privacy-content li {
-      margin-bottom: 0.5rem;
-    }
-    .privacy-content strong {
-      color: var(--text-main);
-      font-weight: 700;
-    }
-    .privacy-content a {
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 600;
-      transition: color var(--dur) var(--ease-out);
-    }
-    .privacy-content a:hover { color: var(--accent-hover); text-decoration: underline; }
-
-    .privacy-highlight {
-      background: var(--accent-wash);
-      border: 1px solid var(--accent-pale);
-      border-radius: 16px;
-      padding: 1.5rem;
-      margin: 1.5rem 0;
-      color: var(--accent-hover);
-      font-weight: 500;
-      display: flex;
-      gap: 1rem;
-      align-items: flex-start;
-    }
-    .privacy-highlight svg {
-      width: 24px; height: 24px; flex-shrink: 0; color: var(--accent);
-    }
-
-    @keyframes fadeUp {
-      0% { opacity: 0; transform: translate3d(0, 20px, 0); }
-      100% { opacity: 1; transform: translate3d(0, 0, 0); }
-    }
-
-    @media (max-width: 768px) {
-      .page { padding: 2.5rem 1.5rem; border-radius: 2rem; }
-      .top-bar { flex-direction: column; align-items: flex-start; gap: 1rem; }
-    }
-  
-    .privacy-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 1.5rem 0;
-      font-size: 0.95rem;
-      border: 1px solid var(--border-color);
-    }
-    .privacy-table th, .privacy-table td {
-      padding: 0.75rem;
-      border: 1px solid var(--border-color);
-      text-align: left;
-    }
-    .privacy-table th {
-      background: var(--accent-wash);
-      color: var(--accent-hover);
-      font-weight: 700;
-    }
-
-</style>
-  <link rel="stylesheet" href="../site-navigation.css?v=14">
-  <link rel="stylesheet" href="../page-intro.css?v=5">
-  <link rel="stylesheet" href="../site-ui-consistency.css?v=11">
-  <script src="../js/site-navigation.js?v=8" defer></script>
-  <script src="../page-intro.js?v=8" defer></script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "Privacyverklaring van StudyQ", "url": "https://studyq-nu.vercel.app/privacy/", "inLanguage": "nl-NL"}</script>
-    <script defer src="/stats/script.js" data-website-id="65d3feef-2f1d-4dad-abba-fdacd65f6cae" data-host-url="/stats" data-exclude-search="true" data-exclude-hash="true" data-do-not-track="true"></script>
-</head>
-<body>
-  <div class="shell">
-    <main class="page">
-      <!-- Standard Header -->
-      <header class="top-bar">
-        <a href="../" class="brand">
-          <div class="brand-icon" aria-hidden="true">
-            <img src="../logo/logo.png" alt="Logo">
-          </div>
-          <span class="brand-wordmark"><img src="../logo/studyq-wordmark.svg" alt="StudyQ"></span>
-        </a>
-        <a href="../" class="back-link">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
-          <span>Terug naar start</span>
-        </a>
-      </header>
-      <div class="privacy-content">
-        <h1>Privacyverklaring — StudyQ</h1>
-<p><strong>Laatst bijgewerkt:</strong> 14 November 2026</p>
-<h2>1. Introduction</h2>
-<p>Welcome to StudyQ ("we", "us" or "our"), an educational website providing study tools such as flashcards, vocabulary training, grade calculation, study planning and productivity features.</p>
-<p>This Privacy Policy explains how information is stored, used and transmitted when you use StudyQ, including its AI planner, voice dictation, contact form and Magister calendar import feature.</p>
-<p>We aim to minimise personal data processing and explain our practices transparently. Where applicable, this policy is intended to address the requirements of the General Data Protection Regulation (EU) 2016/679 ("GDPR") and relevant Dutch privacy laws.</p>
-<p>StudyQ does not require users to create an account. Most saved study information is stored locally in your browser. Some features require information to be transmitted to external service providers.</p>
-<h2>2. Data Controller and Contact Information</h2>
-<p>The data controller is the person or organisation responsible for determining the purposes and means of processing personal data.</p>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f5f1e9"><title>Privacy Policy | StudyQ</title><meta name="description" content="StudyQ privacy policy: personal data, browser storage, analytics, AI providers, GDPR rights and contact details."><link rel="canonical" href="https://studyq-nu.vercel.app/privacy/"><link rel="icon" type="image/png" href="../favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Sofia+Pro:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet"><link rel="stylesheet" href="../theme.css"><link rel="stylesheet" href="../footer.css?v=2"><link rel="stylesheet" href="../site-navigation.css?v=14"><link rel="stylesheet" href="../site-ui-consistency.css?v=11"><script src="../js/site-navigation-state.js?v=8"></script><script src="../js/site-navigation.js?v=8" defer></script><style>
+:root{--privacy-ink:#172033;--privacy-muted:#536178;--privacy-line:#e2e8f0;--privacy-blue:#2563eb}body{min-height:100vh;color:var(--privacy-ink);font-family:'Sofia Pro',system-ui,-apple-system,sans-serif}.privacy-wrap{width:min(920px,calc(100% - 2rem));margin:0 auto;padding:2rem 0 4rem}.privacy-top{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;padding:0 0 1rem;border-bottom:1px solid rgba(148,163,184,.32)}.privacy-brand{color:var(--privacy-ink);font-size:1.25rem;font-weight:800;text-decoration:none;letter-spacing:-.03em}.privacy-brand span{color:var(--privacy-blue)}.privacy-back{color:var(--privacy-blue);font-weight:650;text-decoration:none}.privacy-card{padding:1rem 0 2rem}.privacy-body{color:#354158;font-size:1.04rem;line-height:1.75}.privacy-body h1{margin:0;font-size:clamp(2.2rem,5vw,3.3rem);line-height:1.08;letter-spacing:-.045em;color:var(--privacy-ink)}.privacy-body h2{margin:2.5rem 0 .65rem;padding-top:1rem;border-top:1px solid var(--privacy-line);color:var(--privacy-ink);font-size:1.45rem;line-height:1.25;transition:color .25s ease,transform .25s ease}.privacy-body h2:hover,.privacy-body h3:hover{color:var(--privacy-blue);transform:translateX(3px)}.privacy-body h2:first-child{margin-top:0}.privacy-body h3{margin:1.7rem 0 .45rem;color:var(--privacy-ink);font-size:1.12rem;transition:color .25s ease,transform .25s ease}.privacy-body p,.privacy-body ul,.privacy-body ol{margin:.7rem 0 1rem}.privacy-body li{margin:.35rem 0}.privacy-body a{color:var(--privacy-blue);text-underline-offset:3px;overflow-wrap:anywhere}.privacy-body code{overflow-wrap:anywhere}.privacy-body hr{margin:2rem 0;border:0;border-top:1px solid var(--privacy-line)}.privacy-updated{color:var(--privacy-muted)}.privacy-note{margin-top:2rem;padding-top:1rem;border-top:1px solid var(--privacy-line);color:var(--privacy-muted);font-size:.92rem}.table-scroll{max-width:100%;overflow-x:auto}.privacy-body table{border-collapse:collapse;width:100%;margin:1rem 0}.privacy-body th,.privacy-body td{padding:.65rem .75rem;border:1px solid var(--privacy-line);text-align:left;vertical-align:top}.privacy-body th{background:rgba(239,246,255,.55);color:var(--privacy-ink)}.privacy-contact{margin-top:2.5rem;padding:1.3rem 0;border-top:1px solid var(--privacy-line)}.privacy-data-options{display:grid;gap:.65rem;margin:1rem 0;padding:0;border:0}.privacy-data-options legend{margin-bottom:.5rem;font-weight:700}.privacy-data-options label{display:flex;align-items:flex-start;gap:.55rem}.privacy-clear-button{border:1px solid #2563eb;border-radius:999px;padding:.65rem 1.1rem;background:#2563eb;color:white;font:inherit;font-weight:700;cursor:pointer;transition:transform .2s ease,background .2s ease}.privacy-clear-button:hover{transform:translateY(-1px);background:#1d4ed8}.privacy-footer{margin-top:1.25rem;color:var(--privacy-muted);font-size:.9rem}@media(max-width:600px){.privacy-wrap{width:calc(100% - 1rem);padding:1rem 0 2rem}.privacy-top{padding:0 .25rem 1rem}.privacy-body{font-size:1rem}.privacy-body th,.privacy-body td{padding:.5rem}}@media(prefers-reduced-motion:no-preference){.privacy-card{animation:privacy-enter .55s cubic-bezier(.16,1,.3,1) both}@keyframes privacy-enter{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}}
+</style></head><body><div class="privacy-wrap"><header class="privacy-top"><a class="privacy-brand" href="../"><span>Study</span>Q</a><a class="privacy-back" href="../">← Back to StudyQ</a></header><main class="privacy-card"><article class="privacy-body"><h1>StudyQ – Privacy Policy</h1>
+<p class="privacy-updated"><strong>Last updated:</strong> 15 November 2026</p>
+<p><strong>Website:</strong> <a href="https://studyq-nu.vercel.app/">https://studyq-nu.vercel.app/</a></p>
 <p><strong>Data controller:</strong> Reyansh Ghulghule</p>
-<p><strong>Privacy contact email:</strong> <a href="mailto:hello.studyq@gmail.com">hello.studyq@gmail.com</a></p>
-<p><strong>Website:</strong> <a href="https://studyq-nu.vercel.app" target="_blank" rel="noopener noreferrer">https://studyq-nu.vercel.app</a></p>
-<p>For questions about this Privacy Policy or requests concerning your personal data, please use the contact details above.</p>
-<h2>3. Information Stored Locally in Your Browser</h2>
-<p>StudyQ uses browser `localStorage` to save information needed for its features.</p>
-<p>Depending on how you use the website, this information may include:</p>
+<p><strong>Privacy contact:</strong> hello.studyq@gmail.com</p>
+<h2>1. Introduction</h2>
+<p>StudyQ is a free educational platform providing students with digital tools for studying, revision, learning and organisation.</p>
+<p>This Privacy Policy explains what information StudyQ processes, why it is processed, how it is stored, which third-party services are involved, how long information may be retained, and what rights visitors have under the General Data Protection Regulation (GDPR) and applicable European privacy laws.</p>
+<p>StudyQ aims to minimise the personal information it collects and processes.</p>
+<h2>2. Data Controller</h2>
+<p>The data controller identified for StudyQ is:</p>
+<p><strong>Name:</strong> Reyansh Ghulghule</p>
+<p><strong>Website:</strong> <a href="https://studyq-nu.vercel.app/">https://studyq-nu.vercel.app/</a></p>
+<p><strong>Email:</strong> hello.studyq@gmail.com</p>
+<p>For privacy questions or requests concerning personal data, contact the email address above.</p>
+<h2>3. Personal Data We Process</h2>
+<p>StudyQ does not require visitors to create accounts to access its main study tools.</p>
+<p>Depending on the features used, the following information may be processed.</p>
+<h3>3.1 Browser-stored information</h3>
+<p>StudyQ uses browser storage to save information and preferences on the visitor's device.</p>
+<p>This may include:</p>
 <ul>
-<li>**Preferences:** Selected language, sound preferences and other settings.</li>
-<li>**Flashcards:** Custom decks, vocabulary items and learning progress.</li>
-<li>**Study planning:** Tests, subjects, homework tasks and schedules.</li>
-<li>**Study progress:** Completed tasks, checklists and progress information.</li>
-<li>**Planner history:** A limited history of previous study interactions.</li>
-<li>**AI-generated schedules:** Schedules and other planner results saved for later use.</li>
-<li>**Temporary application data:** Information used to prepare, transfer or display results.</li>
+<li>Language and website preferences.</li>
+<li>Vocabulary decks and learning progress.</li>
+<li>Flashcards and flashcard progress.</li>
+<li>Test-week schedules and school planning information.</li>
+<li>Calculator preferences and related information.</li>
+<li>AI Planner conversation history.</li>
+<li>Practice Test history.</li>
+<li>Temporary navigation and session information.</li>
 </ul>
-<p>This information is generally stored in your browser rather than in a central StudyQ user database.</p>
-<p>Some locally stored information may constitute personal data if it relates to an identifiable person. For example, a study plan may include identifying information entered by a user.</p>
-<h3>Local storage and deletion</h3>
-<p>Locally stored information generally remains on your device until it is removed by a feature, cleared through your browser settings or otherwise deleted.</p>
-<p>Clearing the relevant website data may permanently remove saved flashcards, schedules, preferences and study progress. StudyQ cannot recover locally stored information after deletion unless another copy exists.</p>
-<p>Browser local storage is not an encrypted vault. Other people who can access your device or browser profile may be able to access it.</p>
-<p>Please avoid storing passwords, confidential information or unnecessary sensitive personal data in StudyQ.</p>
-<h2>4. Information Processed by External Services</h2>
-<p>Some StudyQ features require information to be sent to external services. This occurs when you actively use the relevant feature or submit information.</p>
-<h3>4.1 AI study planner — Vercel and Groq</h3>
-<p>When you use the AI study planner, the website sends the relevant prompt and study context to an API proxy hosted on Vercel. The proxy forwards the request to GroqCloud for AI processing with the GPT-OSS 120B model.</p>
-<p>Depending on your request and the feature used, the information transmitted may include:</p>
+<p>This information is generally stored in localStorage or sessionStorage.</p>
+<p>StudyQ does not operate a central user account database for this study information.</p>
+<p>Visitors can remove their stored StudyQ information using the website's deletion controls or their browser settings. Deletion may permanently remove saved study information.</p>
+<h3>3.2 Technical information</h3>
+<p>When visitors access StudyQ, its hosting and infrastructure providers may process technical information required to deliver, secure and maintain the website.</p>
+<p>This may include:</p>
 <ul>
-<li>Instructions and prompts you provide.</li>
-<li>Test dates, subjects and homework information included in the request.</li>
-<li>Relevant study schedules and progress information.</li>
-<li>Previous study interactions included as context.</li>
+<li>IP addresses.</li>
+<li>Browser and device information.</li>
+<li>Requested URLs and resources.</li>
+<li>Request timestamps.</li>
+<li>Error and diagnostic information.</li>
+<li>Security and abuse-prevention information.</li>
 </ul>
-<p>This information is used to generate study-related responses and planning suggestions.</p>
-<p>Vercel hosts the API proxy. Groq processes AI planner requests sent through GroqCloud. These services may process request data and technical information to provide, secure and operate their services.</p>
-<p>StudyQ does not intentionally maintain a central database of AI conversations. This does not guarantee that Vercel or Groq never retains request data or technical logs.</p>
-<p>Further information:</p>
+<p>The exact information and retention depend on the relevant provider and service configuration.</p>
+<h3>3.3 Contact form information</h3>
+<p>When visitors use the StudyQ contact form, information submitted may include:</p>
 <ul>
-<li><a href="https://vercel.com/legal/privacy-notice">Vercel Privacy Notice</a></li>
-<li><a href="https://groq.com/privacy-policy">Groq Privacy Policy</a></li>
+<li>Name, if provided.</li>
+<li>Email address.</li>
+<li>Message.</li>
+<li>Other information voluntarily included.</li>
 </ul>
-<h3>4.2 Practice test generation and PDF extraction — local OCR and Groq</h3>
-<p>When you upload a PDF, StudyQ reads selectable text in your browser. For scanned pages, it renders each page locally and uses Tesseract.js in your browser to recognize the text. The page images are not sent to the test-generation model. Tesseract.js and its language data may be downloaded from their CDN when first needed, while OCR processing runs on your device.</p>
-<p>When you generate a practice test, your notes, extracted PDF text and test settings are sent through the Vercel API proxy to Groq for processing with the same OpenAI GPT-OSS 120B model used by the Test Week Planner. These requests are initiated by you. StudyQ stores saved tests in your browser and does not intentionally maintain a central database of uploaded PDFs, extracted text or generated tests. Vercel and Groq may process request data and technical information to provide, secure and operate their services; their retention practices apply.</p>
-<p>Further information: <a href="https://vercel.com/legal/privacy-notice">Vercel Privacy Notice</a> · <a href="https://groq.com/privacy-policy">Groq Privacy Policy</a> · <a href="https://github.com/naptha/tesseract.js">Tesseract.js</a>.</p>
-<h3>4.3 Voice dictation — Groq</h3>
-<p>When you activate voice dictation, your audio is transmitted to the Groq API for speech-to-text processing using a Whisper model.</p>
-<p>The resulting transcription may then be used by the relevant StudyQ feature. If you submit that transcription to the AI planner, the text and relevant study context may also be sent through the API proxy for AI processing.</p>
-<p>Voice dictation is initiated by the user. Audio is not intentionally transmitted through this feature when it has not been activated.</p>
-<p>The handling and retention of audio, transcriptions and associated technical information depend on Groq's applicable terms, privacy practices and data-handling settings. We do not guarantee that all audio or transcription data is immediately deleted after processing.</p>
-<p>Further information:</p>
+<p>The contact form is processed through Web3Forms.</p>
+<p>Visitors should not include passwords, sensitive personal information or confidential school information in contact messages.</p>
+<h3>3.4 AI feature information</h3>
+<p>When visitors use AI-powered features, information they submit may be transmitted to external AI providers.</p>
+<p>Depending on the feature, this may include:</p>
 <ul>
-<li><a href="https://groq.com/privacy-policy/">Groq Privacy Policy</a></li>
-<li><a href="https://console.groq.com/docs/your-data">Groq Documentation</a></li>
+<li>Questions and prompts.</li>
+<li>Extracted study material.</li>
+<li>Instructions for generating practice tests.</li>
+<li>Conversation context.</li>
+<li>Voice recordings submitted for transcription.</li>
+<li>Answers submitted for AI-assisted grading.</li>
 </ul>
-<h3>4.4 Contact form — Web3Forms</h3>
-<p>If you submit a message through the StudyQ Contact page, the information you provide is transmitted to Web3Forms for processing and delivery to the configured recipient.</p>
-<p>This may include your name, email address, enquiry category and message.</p>
-<p>The information is used to receive and respond to your enquiry. Web3Forms and the recipient may process or retain submissions in accordance with their applicable policies and arrangements.</p>
-<p>Submitting a contact form is a separate action from using the study tools.</p>
-<p>Further information: <a href="https://web3forms.com/">Web3Forms</a>.</p>
-<h3>4.5 Magister calendar import — iCalendar and `webcal` links</h3>
-<p>StudyQ allows users to paste a personal Magister iCalendar (`iCal`) or `webcal` link to import calendar information into the study planner.</p>
-<h4>Information processed</h4>
-<p>The calendar link may provide access to information such as lesson times and schedule entries. The available information depends on the calendar feed provided by Magister.</p>
-<p>Based on the current implementation, the calendar link is processed in the browser and is not sent to the StudyQ API proxy. The browser uses the link to retrieve the calendar feed directly from the relevant calendar service.</p>
-<p>The calendar service may receive technical information associated with the request, such as the user's IP address and request details.</p>
-<p>Calendar information retrieved by the browser is processed locally by StudyQ unless another feature or network request transmits it elsewhere. StudyQ does not intentionally send the Magister calendar link or imported calendar data to its API proxy.</p>
-<h4>Confidentiality of your calendar link</h4>
-<p>A personal Magister calendar link should be treated as confidential because someone who obtains a functioning link may be able to access the calendar information it exposes.</p>
-<p>Only provide the link if you choose to use the calendar-import feature. Avoid sharing it publicly or sending it to people you do not trust.</p>
-<p>If the link is stored in your browser, it may remain there until you remove it or clear the relevant website data.</p>
-<h4>Revoking access</h4>
-<p>Magister provides controls for managing calendar sharing. If you believe your calendar link has been exposed, use the available Magister controls to stop sharing or generate a replacement link.</p>
-<p>Revoking or replacing a link may prevent future access through the old link. It does not automatically delete calendar data that may already have been retrieved or retained elsewhere.</p>
-<p>Further information: <a href="https://service.magister.nl/">Magister Support</a>.</p>
-<h3>4.6 Website analytics — Umami Cloud</h3>
-<p>StudyQ loads the Umami Cloud analytics tracker on site pages. The tracker automatically records page views, clicks and navigation paths. It is configured to run only on <code>studyq-nu.vercel.app</code>, omit URL query strings and fragments, and respect the browser's Do Not Track signal when present. No custom user identifiers, event properties, session replay, error tracking or performance monitoring are configured.</p>
-<p>Analytics may include the page URL without query strings or fragments, page title, hostname, referrer, browser, operating system, device and screen details, language, and an anonymous session identifier. Umami states that IP addresses are not stored as a standard analytics record field, but IP address and browser information are processed to derive the session identifier and approximate location; technical or security logs may also exist. This should not be understood as a guarantee of complete anonymity.</p>
-<p>Umami Cloud processes analytics data under its applicable privacy terms and data processing agreement. The selected data region and retention period depend on the Umami Cloud account configuration and plan; these settings have not been independently verified for this site.</p>
-<p>Further information: <a href="https://docs.umami.is/docs/tracker-configuration">Umami tracker configuration</a> · <a href="https://docs.umami.is/docs/metric-definitions">Umami metric definitions</a> · <a href="https://umami.is/privacy">Umami privacy policy</a> · <a href="https://umami.is/umami-dpa.pdf">Umami data processing agreement</a> · <a href="https://docs.umami.is/docs/cloud/faq">Umami Cloud FAQ</a>.</p>
-<p>The analytics tracker currently loads automatically; this implementation does not add a consent gate. The data controller should confirm and document the applicable legal basis and whether consent is required before relying on this setup.</p>
-<h2>5. Cookies, Local Storage and Similar Technologies</h2>
-<p>StudyQ uses Umami Cloud for website analytics as described in Section 4.6. Umami states that its tracker does not use cookies or cross-site tracking, but it still transmits analytics and technical information to Umami.</p>
-<p>StudyQ uses `localStorage` to retain information required by its features. Local storage is technically different from cookies, but laws governing the storage of information on, or access to information from, a user's device may also apply.</p>
-<p>We aim to use device storage only for purposes connected to the website's functionality.</p>
-<p>If we introduce cookies or similar technologies that require consent under applicable law, we will implement the required consent mechanism before using them. The analytics tracker currently loads automatically without a consent gate, as noted in Section 4.6.</p>
-<p>Users can manage or clear locally stored information through their browser settings. Doing so may remove saved StudyQ data.</p>
-<h2>6. Purposes and Legal Bases for Processing</h2>
-<p>Where the GDPR applies, personal data must be processed on a valid legal basis under Article 6 GDPR.</p>
-<p>The appropriate legal basis depends on the actual processing activity and circumstances. The following table describes potential bases that must be assessed and confirmed by the data controller.</p>
-<p><table class="privacy-table">
-  <thead>
-    <tr><th>Activity</th><th>Purpose</th><th>Potential legal basis</th></tr>
-  </thead>
-  <tbody>
-    <tr><td>AI planner</td><td>Generating study plans and responses</td><td>Article 6(1)(b) where necessary for a contract, or Article 6(1)(a) where valid consent is appropriate</td></tr>
-    <tr><td>Practice test and PDF extraction</td><td>Reading uploaded PDF pages and generating practice questions</td><td>An appropriate basis under Article 6 GDPR</td></tr>
-    <tr><td>Voice dictation</td><td>Converting speech into text</td><td>An appropriate basis under Article 6 GDPR</td></tr>
-    <tr><td>Magister calendar import</td><td>Retrieving and organising calendar information</td><td>An appropriate basis under Article 6 GDPR</td></tr>
-    <tr><td>Website analytics</td><td>Measuring page views and understanding use of StudyQ</td><td>An appropriate Article 6 GDPR basis; Article 6(1)(f) only where a documented legitimate-interest assessment supports it, otherwise consent where required</td></tr>
-    <tr><td>Contact form</td><td>Receiving and responding to enquiries</td><td>Article 6(1)(b) for relevant pre-contractual requests, or Article 6(1)(f) where legitimate interests are appropriate</td></tr>
-    <tr><td>Technical security information</td><td>Operating, maintaining and securing the service</td><td>Article 6(1)(f), where a legitimate-interest assessment supports its use</td></tr>
-    <tr><td>Legal compliance</td><td>Meeting applicable legal obligations</td><td>Article 6(1)(c), where processing is necessary for a legal obligation</td></tr>
-  </tbody>
-</table><h2>7. Data Sharing and Recipients</h2>
-<p>Depending on the features you use, information may be processed by:</p>
+<p>This information is processed to provide the requested AI functionality.</p>
+<p>StudyQ does not intentionally sell submitted study material or use it to create advertising profiles.</p>
+<h3>3.5 Rate-limiting information</h3>
+<p>StudyQ uses Upstash Redis to enforce usage limits and help prevent abuse of AI features.</p>
+<p>This system may process:</p>
 <ul>
-<li>**Vercel:** Hosting the API proxy and processing associated requests and technical information.</li>
-<li>**Groq:** Processing AI prompts and relevant study context through GroqCloud.</li>
-<li>**Groq:** Processing audio for speech-to-text conversion.</li>
-<li>**Groq:** Processing practice-test prompts and extracted PDF text using OpenAI GPT-OSS 120B.</li>
-<li>**Tesseract.js CDN:** Delivering the OCR library, worker and language data to the browser; scanned-page OCR processing itself runs on the user's device.</li>
-<li>**Web3Forms:** Processing contact form submissions for delivery.</li>
-<li>**Magister:** Providing the calendar feed accessed through the user's personal calendar link.</li>
-<li>**Other infrastructure providers:** Supporting the website's hosting, delivery, security and operation.</li>
+<li>Pseudonymous identifiers derived from IP addresses using keyed HMAC.</li>
+<li>Request timestamps.</li>
+<li>Temporary request identifiers.</li>
+<li>Usage counters and reservation information.</li>
 </ul>
-<p>The roles of these providers depend on the service and processing involved. A provider may act as a processor or as an independent controller for particular activities.</p>
-<p>Where a provider acts as a processor on behalf of the data controller, the contractual arrangements required by Article 28 GDPR must be in place where applicable.</p>
+<p>The rate-limiting implementation is designed not to store AI prompts, uploaded documents, extracted study material or voice recordings.</p>
+<h2>4. Purposes of Processing</h2>
+<p>StudyQ processes information for the following purposes:</p>
+<div class="table-scroll"><table>
+<table><thead><tr><th>Purpose</th><th>Examples</th></tr></thead><tbody>
+<tr><td>Website functionality</td><td>Saving settings and preferences</td></tr>
+<tr><td>Study tools</td><td>Calculating grades and managing flashcards</td></tr>
+<tr><td>AI functionality</td><td>Generating practice tests and study plans</td></tr>
+<tr><td>Voice functionality</td><td>Transcribing voice recordings</td></tr>
+<tr><td>AI grading</td><td>Evaluating submitted answers</td></tr>
+<tr><td>Analytics</td><td>Understanding general website usage</td></tr>
+<tr><td>Security</td><td>Preventing abuse and excessive requests</td></tr>
+<tr><td>Contact</td><td>Responding to submitted messages</td></tr>
+</tbody></table></div>
 <p>StudyQ does not sell personal data.</p>
-<h2>8. International Data Transfers</h2>
-<p>Some service providers may process information outside the European Economic Area (EEA).</p>
-<p>Where a transfer of personal data to a third country is subject to Chapter V GDPR, an appropriate transfer mechanism must be in place. Depending on the circumstances, this may include an adequacy decision under Article 45 or appropriate safeguards under Article 46 GDPR.</p>
-<p>Information about applicable safeguards and how to obtain a copy will be provided where required by law.</p>
-<h2>9. Data Retention</h2>
-<p>Retention depends on the type of information, the feature used and the service processing it.</p>
+<h2>5. Legal Bases for Processing</h2>
+<p>Where GDPR applies, personal data must be processed under an appropriate legal basis.</p>
+<p>Depending on the activity, potentially applicable legal bases include:</p>
 <ul>
-<li>**Local browser data:** Generally remains until deleted by the user, removed by a feature or cleared through browser settings.</li>
-<li>**AI planner requests:** May be subject to processing, logging or retention by Vercel and Groq.</li>
-<li>**Practice test requests and extracted PDF text:** May be subject to processing, logging or retention by Vercel and Groq. PDF page images are processed locally for OCR and are not included in the AI request.</li>
-<li>**Voice recordings and transcriptions:** Subject to Groq's applicable data-handling practices and settings, as well as any subsequent processing of the transcription.</li>
-<li>**Contact form submissions:** May be retained by Web3Forms or the configured recipient for as long as necessary to handle the enquiry and meet applicable obligations.</li>
-<li>**Magister calendar links and imported data:** Processed in the browser according to the calendar feature's implementation. The calendar service may retain request logs under its applicable practices.</li>
-<li>**Technical logs:** May be retained by hosting or infrastructure providers for operational, security or legal purposes.</li>
+<li><strong>Consent:</strong> where consent is legally required for a particular processing activity.</li>
+<li><strong>Legitimate interests:</strong> for proportionate website security, abuse prevention and service operation, where the interests of StudyQ do not override the rights and freedoms of visitors.</li>
+<li><strong>Performance of a contract or pre-contractual steps:</strong> where applicable to a service explicitly requested by a visitor.</li>
+<li><strong>Legal obligation:</strong> where processing is required by law.</li>
 </ul>
-<p>StudyQ does not guarantee immediate deletion of information from third-party systems after a request has been processed.</p>
-<p>Where the data controller determines the retention period for personal data under its control, information will be retained only for as long as necessary for the relevant purpose, unless applicable law requires otherwise.</p>
-<h2>10. Data Security</h2>
-<p>We aim to protect information processed through StudyQ by minimising unnecessary processing and applying appropriate technical and organisational measures.</p>
-<p>Communications with external services should use HTTPS where supported and properly configured. Browser-based storage is not a substitute for encrypted, access-controlled server storage.</p>
-<p>We aim to keep secret API keys on the server side rather than exposing them in public website code. Security depends on the actual implementation and configuration of the services involved.</p>
-<p>No method of transmission or storage can be guaranteed to be completely secure.</p>
-<p>Where a personal data breach occurs, the data controller will comply with the notification and communication obligations applicable under Articles 33 and 34 GDPR.</p>
-<h2>11. Your Rights Under the GDPR</h2>
-<p>Where the GDPR applies, you may have the following rights, subject to the conditions and limitations established by law:</p>
+<p>The appropriate legal basis must be assessed for each processing activity. These examples are not a declaration that every activity has already been legally assessed.</p>
+<h2>6. Cookies and Browser Storage</h2>
+<h3>6.1 Cookies</h3>
+<p>StudyQ does not intentionally set traditional cookies for its core website functionality.</p>
+<p>StudyQ does not use advertising cookies or behavioural advertising profiles.</p>
+<p>The Umami analytics tracker used by StudyQ is configured for basic, cookieless analytics.</p>
+<p>Third-party infrastructure may still process technical request information independently of cookies.</p>
+<h3>6.2 localStorage</h3>
+<p>StudyQ uses localStorage to retain information between visits.</p>
+<p>Examples include:</p>
 <ul>
-<li>**Right of access — Article 15:** To obtain confirmation of whether your personal data is being processed and access to that data and relevant information.</li>
-<li>**Right to rectification — Article 16:** To request correction of inaccurate personal data or completion of incomplete data.</li>
-<li>**Right to erasure — Article 17:** To request deletion of personal data where the applicable conditions are met.</li>
-<li>**Right to restriction — Article 18:** To request restriction of processing in the circumstances specified by law.</li>
-<li>**Right to data portability — Article 20:** To receive eligible personal data in a structured, commonly used and machine-readable format and, where applicable, transmit it to another controller.</li>
-<li>**Right to object — Article 21:** To object to processing based on Article 6(1)(e) or Article 6(1)(f) on grounds relating to your particular situation, subject to the applicable legal requirements.</li>
-<li>**Right to withdraw consent:** Where processing is based on consent, to withdraw it at any time without affecting the lawfulness of processing before withdrawal.</li>
+<li>Settings and preferences.</li>
+<li>Vocabulary decks.</li>
+<li>Flashcards.</li>
+<li>Study progress.</li>
+<li>Test-week planning information.</li>
 </ul>
-<p>You may exercise your rights by contacting the data controller using the details in Section 2.</p>
-<p>The data controller will respond within the period required by Article 12 GDPR, normally within one month. Where legally permitted, this period may be extended for complex or multiple requests. You will be informed of any extension and the reasons for it.</p>
-<p>Where information is stored solely in your browser, you can generally delete it yourself through the relevant feature, where available, or through your browser's site-data settings.</p>
-<p>Where information is processed independently by a third-party provider, you may also need to contact that provider directly. Revoking a Magister calendar link can stop future access through that link, but it does not automatically erase copies of information already retrieved.</p>
-<h2>12. Right to Lodge a Complaint</h2>
-<p>If you believe that the processing of your personal data infringes the GDPR, you have the right to lodge a complaint with a competent supervisory authority.</p>
-<p>In the Netherlands, the supervisory authority is the Autoriteit Persoonsgegevens.</p>
-<p>Website: <a href="https://autoriteitpersoonsgegevens.nl/">https://autoriteitpersoonsgegevens.nl/</a></p>
-<p>You may also have the right to seek an effective judicial remedy under applicable law.</p>
-<h2>13. Children's Privacy</h2>
-<p>StudyQ is intended for educational use and may be used by students, including minors.</p>
-<p>Users should avoid submitting unnecessary personal data, passwords, confidential school information or sensitive information about other people to AI features and contact forms.</p>
-<p>Personal calendar links should be treated as confidential and provided only when the user chooses to use the calendar-import feature.</p>
-<p>Where applicable law requires parental authorisation, consent or additional safeguards for children, those requirements must be respected.</p>
-<p>Article 8 GDPR establishes specific conditions for consent in relation to certain information society services offered directly to children when processing is based on consent. The applicable age threshold and requirements depend on the circumstances and national law.</p>
-<p>If you believe a child's personal data has been processed inappropriately, please contact the data controller so the matter can be assessed.</p>
-<h2>14. AI and Automated Processing</h2>
-<p>StudyQ uses AI services to generate study-related responses and planning suggestions.</p>
-<p>AI-generated information may be inaccurate and should be checked before being relied upon.</p>
-<p>StudyQ is not intended to make decisions about users that produce legal effects or similarly significant effects solely through automated processing within the meaning of Article 22 GDPR.</p>
-<p>If this changes, the data controller will assess the applicable legal obligations and provide any additional information and safeguards required.</p>
-<h2>15. Data Protection by Design and Default</h2>
-<p>We aim to apply the principles of data minimisation, purpose limitation and data protection by design and by default under Articles 5 and 25 GDPR.</p>
-<p>Where feasible, study information is stored locally in the user's browser rather than in a central database.</p>
-<p>Analytics data is transmitted automatically when a site page loads on the configured production domain. Other external transmissions occur when users activate features that require external processing, such as AI planning, voice transcription or contact form submission. Calendar import retrieves information directly through the browser, according to the current implementation.</p>
-<p>We aim to provide clear information about these transmissions and limit processing to what is necessary for the relevant feature.</p>
-<h2>16. Changes to This Privacy Policy</h2>
-<p>We may update this Privacy Policy when our website functionality, service providers, data processing activities or legal obligations change.</p>
-<p>The revised version will be published on this page with an updated "Last Updated" date.</p>
-<p>Where required by law, we will provide additional notice or obtain consent before implementing changes that require it.</p>
-<h2>17. Contact</h2>
-<p>For questions about this Privacy Policy or to exercise your data protection rights, contact the data controller using the details provided in Section 2.</p>
-<p>We aim to operate StudyQ with privacy, transparency and data minimisation in mind.</p>
-<p>---</p>
-<p><strong>End of Privacy Policy</strong></p>
-      </div>
-</main>
-  </div>
-
-  <!-- GLOBAL FOOTER (Updated with Privacy Link) -->
-  <footer class="site-footer">
-    <div class="footer-container">
-      <div class="footer-brand">
-        <a href="../" class="footer-logo">
-          <img src="../logo/logo.png" alt="StudyQ Logo">
-          <span class="brand-wordmark"><img src="../logo/studyq-wordmark.svg" alt="StudyQ"></span>
-        </a>
-        <p data-footer-i18n="description">Gemaakt door scholieren, voor scholieren. Gratis hulpmiddelen om slimmer te leren, geconcentreerd te blijven en je toetsen te halen.</p>
-      </div>
-      <div class="footer-links">
-        <div class="footer-col">
-          <h4 data-footer-i18n="tools">Hulpmiddelen</h4>
-          <a href="../calculator/" data-footer-i18n="calculator">Cijfercalculator</a>
-          <a href="../pomodoro/" data-footer-i18n="pomodoro">Pomodoro-timer</a>
-          <a href="../planner/" data-footer-i18n="planner">Toetsweekplanner</a>
-          <a href="../vocab/" data-footer-i18n="vocab">Woordtrainer</a>
-          <a href="../flashcards/" data-footer-i18n="flashcards">Flashcards</a>
-        </div>
-        <div class="footer-col">
-          <h4 data-footer-i18n="support">Ondersteuning</h4>
-          <a href="../" data-footer-i18n="home">Startpagina</a>
-          <a href="../contact/" data-footer-i18n="contact">Contact</a>
-          <a href="../privacy/" data-footer-i18n="privacy">Privacyverklaring</a>
-        </div>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p data-footer-i18n="copyright">&copy; 2026 StudyQ. Alle rechten voorbehouden.</p>
-    </div>
-  </footer>
-
-  <script src="../js/footer-i18n.js"></script>
-</body>
-</html>
+<p>This information generally remains on the visitor's device until deleted by the visitor or browser.</p>
+<h3>6.3 sessionStorage</h3>
+<p>StudyQ uses sessionStorage for temporary information required during a browsing session.</p>
+<p>This information is generally removed when the relevant browser session or tab ends.</p>
+<h3>6.4 Managing browser storage</h3>
+<p>Visitors can clear StudyQ information through the website's deletion controls or browser settings.</p>
+<p>Clearing browser storage may permanently remove saved study information and preferences.</p>
+<p>Browser storage is technically different from cookies. However, EU ePrivacy requirements can apply to both, depending on their purpose and implementation.</p>
+<h2>7. Website Analytics – Umami</h2>
+<p>StudyQ uses Umami Cloud's free Hobby plan to understand general website usage and improve the platform.</p>
+<p>Analytics is loaded on the following pages:</p>
+<ul>
+<li>Homepage.</li>
+<li>About.</li>
+<li>Calculator.</li>
+<li>Contact.</li>
+<li>Cookies.</li>
+<li>Flashcards.</li>
+<li>Planner.</li>
+<li>Pomodoro.</li>
+<li>Practice Test.</li>
+<li>Vocabulary Trainer.</li>
+</ul>
+<p>The analytics integration uses the same-origin <code>/stats/</code> route.</p>
+<p>The implementation is configured to:</p>
+<ul>
+<li>Exclude URL query parameters and fragments.</li>
+<li>Respect the browser's Do Not Track preference where supported.</li>
+<li>Avoid intentionally sending study content or personal form contents to analytics.</li>
+</ul>
+<p>Umami's standard tracker does not use cookies. It generates anonymous visitor identifiers using technical information such as the website identifier, IP address, browser information and a rotating salt.</p>
+<p>The raw IP address is not stored as a field in standard Umami analytics records. However, IP addresses may be processed temporarily and may appear in separate operational or security logs.</p>
+<h3>Analytics retention</h3>
+<p>StudyQ uses the Umami Cloud Hobby plan.</p>
+<p>The published analytics retention period for the Hobby plan is <strong>6 months</strong>.</p>
+<p>Relevant provider information:</p>
+<ul>
+<li>Privacy Policy: <a href="https://umami.is/privacy">https://umami.is/privacy</a></li>
+<li>Cloud FAQ: <a href="https://docs.umami.is/docs/cloud/faq">https://docs.umami.is/docs/cloud/faq</a></li>
+</ul>
+<p>StudyQ does not use analytics to create advertising profiles or sell visitor data.</p>
+<h2>8. Third-Party Services and Data Processors</h2>
+<p>StudyQ uses external providers to host the website, operate APIs, process AI requests, provide analytics and deliver other functionality.</p>
+<p>StudyQ currently uses the free tiers of the services described below. Provider policies, technical practices and retention periods may change.</p>
+<h3>8.1 Vercel – Website hosting and API infrastructure</h3>
+<p><strong>Provider:</strong> Vercel</p>
+<p><strong>Plan:</strong> Hobby</p>
+<p><strong>Website:</strong> <a href="https://vercel.com/">https://vercel.com/</a></p>
+<p>Vercel hosts StudyQ and provides server-side API functionality.</p>
+<p>It may process technical information such as IP addresses, request metadata, timestamps, browser information and diagnostic logs.</p>
+<p>Vercel also operates the server-side endpoints used to communicate with external AI services.</p>
+<p>#### Published retention information</p>
+<p>Vercel publishes a <strong>1-hour runtime log retention period for the Hobby plan</strong>.</p>
+<p>Build logs are stored indefinitely for each deployment, subject to Vercel's applicable storage and deletion arrangements.</p>
+<p>Deployment retention is separately configurable and depends on the project's settings and applicable plan.</p>
+<p>StudyQ does not intentionally log submitted AI prompts or full uploaded study documents in its application endpoints.</p>
+<p>Relevant provider information:</p>
+<ul>
+<li>Privacy Policy: <a href="https://vercel.com/legal/privacy-policy">https://vercel.com/legal/privacy-policy</a></li>
+<li>Data Processing Addendum: <a href="https://vercel.com/legal/dpa">https://vercel.com/legal/dpa</a></li>
+<li>Runtime Logs: <a href="https://vercel.com/docs/logs/runtime">https://vercel.com/docs/logs/runtime</a></li>
+<li>Build Logs: <a href="https://vercel.com/docs/deployments/logs">https://vercel.com/docs/deployments/logs</a></li>
+</ul>
+<h3>8.2 Groq – AI processing</h3>
+<p><strong>Provider:</strong> Groq</p>
+<p><strong>Website:</strong> <a href="https://groq.com/">https://groq.com/</a></p>
+<p>Groq processes information submitted through StudyQ's AI-powered features, including:</p>
+<ul>
+<li>AI Planner.</li>
+<li>Practice Test generation.</li>
+<li>Voice transcription.</li>
+</ul>
+<p>Depending on the feature, submitted information may include prompts, extracted study material, conversation context and audio recordings.</p>
+<p>#### Published retention information</p>
+<p>Groq states that inference inputs and outputs are not retained by default.</p>
+<p>Groq may temporarily retain customer inputs and outputs for system reliability or abuse monitoring for up to 30 days, unless a longer period is legally required.</p>
+<p>Usage metadata is collected for service activity and performance. This metadata does not include customer inputs or outputs.</p>
+<p>Groq provides a Zero Data Retention option in its account Data Controls settings. This is a separate setting and should not be assumed to be enabled.</p>
+<p>StudyQ does not use Groq batch processing or fine-tuning functionality as part of its described active AI flows.</p>
+<p>Relevant provider information:</p>
+<ul>
+<li>Privacy Policy: <a href="https://groq.com/privacy-policy">https://groq.com/privacy-policy</a></li>
+<li>Your Data in GroqCloud: <a href="https://console.groq.com/docs/your-data">https://console.groq.com/docs/your-data</a></li>
+<li>Services Agreement: <a href="https://console.groq.com/docs/legal/services-agreement">https://console.groq.com/docs/legal/services-agreement</a></li>
+</ul>
+<h3>8.3 OpenRouter – AI-assisted grading</h3>
+<p><strong>Provider:</strong> OpenRouter</p>
+<p><strong>Website:</strong> <a href="https://openrouter.ai/">https://openrouter.ai/</a></p>
+<p>OpenRouter is used for AI-assisted grading.</p>
+<p>Information submitted for grading may be transmitted through OpenRouter to the underlying AI model provider.</p>
+<p>#### Published retention information</p>
+<p>OpenRouter states that it does not store prompt and response content by default unless input/output logging is enabled.</p>
+<p>If input/output logging is enabled, OpenRouter's documentation states that logged content is retained for a minimum of three months and may be retained longer unless deletion is requested.</p>
+<p>OpenRouter also stores request metadata, such as token counts, latency and model information. A universal retention period for this metadata is not specified in the cited documentation.</p>
+<p>The underlying model provider may have separate retention and training policies. These policies vary by provider and model endpoint.</p>
+<p>OpenRouter provides provider-level data policy controls, including zero-retention and training restrictions. The actual provider selected for a request matters.</p>
+<p>Relevant provider information:</p>
+<ul>
+<li>Privacy Policy: <a href="https://openrouter.ai/privacy">https://openrouter.ai/privacy</a></li>
+<li>Data Collection: <a href="https://github.com/OpenRouterTeam/docs/blob/main/guides/privacy/data-collection.mdx">https://github.com/OpenRouterTeam/docs/blob/main/guides/privacy/data-collection.mdx</a></li>
+<li>Provider Data Policies: <a href="https://openrouter.ai/providers">https://openrouter.ai/providers</a></li>
+</ul>
+<p>Visitors should avoid submitting sensitive personal information through AI grading features.</p>
+<h3>8.4 Upstash – Rate limiting and temporary data</h3>
+<p><strong>Provider:</strong> Upstash</p>
+<p><strong>Plan:</strong> Free</p>
+<p><strong>Website:</strong> <a href="https://upstash.com/">https://upstash.com/</a></p>
+<p>StudyQ uses Upstash Redis for server-side rate limiting and abuse prevention.</p>
+<p>The system processes pseudonymous identifiers, temporary request information, timestamps and usage counters.</p>
+<p>The application is designed not to store AI prompts, uploaded documents, extracted study material or voice recordings in the rate-limiting database.</p>
+<p>#### StudyQ application retention</p>
+<p>StudyQ uses rolling hourly usage limits.</p>
+<p>Rate-limit counters, completed usage records and temporary pending reservations can remain counted for up to the full 60-minute window. A reservation may be released sooner when a generation fails and the storage service is reachable. Reservations whose completion status cannot be confirmed remain counted for the hourly window.</p>
+<p>#### Upstash provider retention</p>
+<p>Upstash states that it retains user personal information for as long as an account is active or as needed to provide its services.</p>
+<p>The published audit-log retention period for the Free plan is <strong>7 days</strong>.</p>
+<p>This is Upstash account audit-log retention, not the expiry period of StudyQ's Redis rate-limit records.</p>
+<p>Relevant provider information:</p>
+<ul>
+<li>Privacy Policy: <a href="https://upstash.com/trust/privacy">https://upstash.com/trust/privacy</a></li>
+<li>Audit Logs: <a href="https://upstash.com/docs/common/account/auditlogs">https://upstash.com/docs/common/account/auditlogs</a></li>
+<li>Backup Documentation: <a href="https://upstash.com/docs/redis/features/backup">https://upstash.com/docs/redis/features/backup</a></li>
+</ul>
+<h3>8.5 Web3Forms – Contact form</h3>
+<p><strong>Provider:</strong> Web3Forms</p>
+<p><strong>Plan:</strong> Free</p>
+<p><strong>Website:</strong> <a href="https://web3forms.com/">https://web3forms.com/</a></p>
+<p>StudyQ uses Web3Forms to process contact form submissions.</p>
+<p>Information submitted may include a name, email address and message.</p>
+<p>#### Published retention information</p>
+<p>The Web3Forms Free plan provides <strong>30 days of dashboard submission history</strong>.</p>
+<p>Web3Forms' published privacy information describes a maximum form-submission retention period of up to three years. Dashboard visibility and underlying data retention are not necessarily the same thing.</p>
+<p>Web3Forms states that server logs are automatically deleted regularly.</p>
+<p>The actual retention of a StudyQ submission depends on the provider's applicable terms and the form's retention configuration.</p>
+<p>Relevant provider information:</p>
+<ul>
+<li>Privacy Policy: <a href="https://web3forms.com/privacy">https://web3forms.com/privacy</a></li>
+<li>Terms: <a href="https://web3forms.com/terms">https://web3forms.com/terms</a></li>
+<li>Pricing: <a href="https://web3forms.com/pricing">https://web3forms.com/pricing</a></li>
+</ul>
+<h3>8.6 Google Fonts</h3>
+<p><strong>Provider:</strong> Google</p>
+<p><strong>Website:</strong> <a href="https://fonts.google.com/">https://fonts.google.com/</a></p>
+<p>StudyQ may load fonts from Google Fonts.</p>
+<p>When a browser requests an externally hosted font, Google may process technical request information, including an IP address and browser-related information, to deliver the requested resource.</p>
+<p>Google's published information explains that Google Fonts requests are not used to create advertising profiles.</p>
+<p>A single universal retention period for all related font delivery request data is not specified in the cited documentation.</p>
+<p>Relevant provider information:</p>
+<p><a href="https://developers.google.com/fonts/faq/privacy">https://developers.google.com/fonts/faq/privacy</a></p>
+<h3>8.7 cdnjs – External libraries</h3>
+<p><strong>Provider:</strong> Cloudflare</p>
+<p><strong>Website:</strong> <a href="https://cdnjs.com/">https://cdnjs.com/</a></p>
+<p>StudyQ uses cdnjs to load certain externally hosted libraries.</p>
+<p>When a browser requests a resource, Cloudflare may process technical request information required to deliver the resource and operate its infrastructure.</p>
+<p>Cloudflare's published documentation states that HTTP request logs are not retained by default through its Logpull retention feature. Enabling that feature changes the handling of those logs.</p>
+<p>This does not mean that all technical information processed by Cloudflare is necessarily deleted immediately. Other operational and security processing may be governed by separate provider arrangements.</p>
+<p>Relevant provider information:</p>
+<ul>
+<li>Privacy Policy: <a href="https://www.cloudflare.com/privacypolicy/">https://www.cloudflare.com/privacypolicy/</a></li>
+<li>Log retention documentation: <a href="https://developers.cloudflare.com/logs/logpull/enabling-log-retention/">https://developers.cloudflare.com/logs/logpull/enabling-log-retention/</a></li>
+</ul>
+<h3>8.8 jsDelivr – Content delivery</h3>
+<p><strong>Provider:</strong> jsDelivr</p>
+<p><strong>Website:</strong> <a href="https://www.jsdelivr.com/">https://www.jsdelivr.com/</a></p>
+<p>StudyQ may use jsDelivr to deliver JavaScript libraries and static resources.</p>
+<p>jsDelivr's published privacy policy states that non-aggregated usage information is retained for a shorter period until it has been analysed and deleted, except where longer retention is necessary for security, service improvement or legal reasons.</p>
+<p>Aggregated usage information that is not associated with individual requests or users may be stored indefinitely.</p>
+<p>A fixed universal retention period for all non-aggregated usage information is not specified.</p>
+<p>Relevant provider information:</p>
+<p><a href="https://github.com/jsdelivr/jsdelivr/blob/master/Privacy%20Policy.md">https://github.com/jsdelivr/jsdelivr/blob/master/Privacy%20Policy.md</a></p>
+<h3>8.9 User-selected calendar providers</h3>
+<p>StudyQ's calendar functionality can retrieve calendar feeds from sources selected by the visitor.</p>
+<p>Calendar requests are made directly from the visitor's browser to the selected calendar provider.</p>
+<p>The selected provider may receive technical request information, including the visitor's IP address.</p>
+<p>StudyQ does not control the privacy practices or retention periods of external calendar providers.</p>
+<p>Visitors should only import calendar feeds from sources they trust.</p>
+<h2>9. AI Features and Study Material</h2>
+<p>StudyQ includes AI-powered functionality to support learning.</p>
+<h3>9.1 Practice Test generator</h3>
+<p>Visitors may submit study material to generate practice tests.</p>
+<p>Where documents are processed in the browser, text extraction or OCR may take place locally before relevant extracted text is sent to Groq.</p>
+<p>The active Practice Test flow is designed to send extracted text rather than the original PDF file.</p>
+<p>Practice Test history may be stored locally in the browser. Source material is excluded from persisted Practice Test history.</p>
+<h3>9.2 AI Planner</h3>
+<p>The AI Planner may process prompts and relevant conversation context to generate study-planning suggestions.</p>
+<p>Conversation history may be stored locally in the browser.</p>
+<h3>9.3 Voice transcription</h3>
+<p>Voice recordings submitted through the voice functionality are transmitted to Groq for transcription.</p>
+<h3>9.4 AI grading</h3>
+<p>Submitted answers may be transmitted through OpenRouter to an underlying model provider for grading.</p>
+<h3>9.5 AI limitations</h3>
+<p>AI-generated information may be inaccurate, incomplete or misleading.</p>
+<p>Visitors should independently check important educational information.</p>
+<p>Sensitive personal information, passwords and confidential information should not be submitted through AI features.</p>
+<h2>10. Data Retention Summary</h2>
+<p>StudyQ aims to retain information only for as long as reasonably necessary for its intended purpose.</p>
+<div class="table-scroll"><table>
+<tr><th>Data category</th><th>Retention</th></tr>
+<tr><td>Local study information</td><td>Until deleted by the visitor or browser</td></tr>
+<tr><td>Session information</td><td>Generally until the browsing session ends</td></tr>
+<tr><td>Practice Test history</td><td>Most recent 25 tests, stored locally</td></tr>
+<tr><td>AI Planner history</td><td>Application limits and pruning rules apply</td></tr>
+<tr><td>StudyQ rate-limit counters</td><td>Rolling 60-minute window</td></tr>
+<tr><td>Temporary rate-limit reservations</td><td>Up to the 60-minute window; released sooner after confirmed failures when possible</td></tr>
+<tr><td>Vercel Hobby runtime logs</td><td>1 hour</td></tr>
+<tr><td>Vercel build logs</td><td>Stored indefinitely per deployment, subject to applicable deletion arrangements</td></tr>
+<tr><td>Groq inference content</td><td>Not retained by default; reliability and abuse-monitoring exceptions may last up to 30 days</td></tr>
+<tr><td>OpenRouter prompt and response content</td><td>Not stored by default unless input/output logging is enabled</td></tr>
+<tr><td>OpenRouter underlying model provider</td><td>Depends on the provider and model endpoint</td></tr>
+<tr><td>Upstash Free audit logs</td><td>7 days</td></tr>
+<tr><td>Upstash account information</td><td>While the account is active or as needed to provide services</td></tr>
+<tr><td>Web3Forms Free dashboard history</td><td>30 days</td></tr>
+<tr><td>Web3Forms underlying form submissions</td><td>Published maximum of up to 3 years; actual retention depends on configuration</td></tr>
+<tr><td>Umami Hobby analytics</td><td>6 months</td></tr>
+<tr><td>jsDelivr non-aggregated usage data</td><td>Shorter period; exact universal duration not specified</td></tr>
+<tr><td>jsDelivr aggregated usage data</td><td>May be stored indefinitely</td></tr>
+<tr><td>Google Fonts and cdnjs requests</td><td>No single universal retention period specified</td></tr>
+<tr><td>External calendar feeds</td><td>Depends on the selected provider</td></tr>
+</table></div>
+<p>Provider retention policies may change.</p>
+<p>Deleting information from a visitor's browser does not automatically delete information already transmitted to an external provider.</p>
+<p>Where appropriate and technically possible, StudyQ can assist with requests to delete information held by its service providers.</p>
+<h2>11. International Data Transfers</h2>
+<p>Some services used by StudyQ may process information outside the European Economic Area (EEA).</p>
+<p>These may include Vercel, Groq, OpenRouter, Upstash, Web3Forms, Google, Cloudflare and other infrastructure providers.</p>
+<p>Where personal data is transferred outside the EEA, the controller must ensure that an appropriate GDPR transfer mechanism is in place.</p>
+<p>Depending on the circumstances, this may include:</p>
+<ul>
+<li>An adequacy decision.</li>
+<li>Standard Contractual Clauses.</li>
+<li>Other legally recognised safeguards.</li>
+</ul>
+<p>Actual processing locations and transfer mechanisms depend on the provider, account configuration and applicable service agreements.</p>
+<h2>12. Data Security</h2>
+<p>StudyQ uses technical measures intended to protect its website and the information it processes.</p>
+<p>These include:</p>
+<ul>
+<li>Server-side API validation.</li>
+<li>Restrictions on permitted API routes and methods.</li>
+<li>Request-size limits.</li>
+<li>Request timeouts.</li>
+<li>Origin restrictions.</li>
+<li>Server-side rate limiting.</li>
+<li>Protection of server-side API credentials through environment variables.</li>
+<li>Input validation and output handling.</li>
+<li>Security response headers.</li>
+<li>Temporary request identifiers and pseudonymous rate-limit identifiers.</li>
+</ul>
+<p>No online service can guarantee absolute security.</p>
+<p>Visitors should avoid sharing sensitive information through StudyQ.</p>
+<h2>13. Your GDPR Rights</h2>
+<p>Where GDPR applies, individuals may have the following rights:</p>
+<ul>
+<li><strong>Right of access:</strong> request access to personal data.</li>
+<li><strong>Right to rectification:</strong> request correction of inaccurate information.</li>
+<li><strong>Right to erasure:</strong> request deletion in applicable circumstances.</li>
+<li><strong>Right to restriction:</strong> request restriction of processing in applicable circumstances.</li>
+<li><strong>Right to data portability:</strong> receive certain personal information in a structured, commonly used format.</li>
+<li><strong>Right to object:</strong> object to certain processing activities.</li>
+<li><strong>Right to withdraw consent:</strong> withdraw consent where processing is based on consent.</li>
+</ul>
+<p>To exercise these rights, contact:</p>
+<p><strong>hello.studyq@gmail.com</strong></p>
+<p>StudyQ may need to verify the identity of the person making a request.</p>
+<p>Requests will be handled within applicable GDPR time limits.</p>
+<p>Visitors may also have the right to lodge a complaint with their relevant data protection supervisory authority.</p>
+<h2>14. Children's Privacy</h2>
+<p>StudyQ is an educational platform that may be used by school-age students, including children.</p>
+<p>StudyQ does not intentionally require visitors to create accounts or provide personal information to access its main study tools.</p>
+<p>Visitors should avoid submitting sensitive personal information through contact forms, AI features or external services.</p>
+<p>Where processing relies on consent, applicable rules concerning children and parental authorisation must be followed.</p>
+<h2>15. Third-Party Websites</h2>
+<p>StudyQ may contain links to external websites and services.</p>
+<p>These websites operate independently and have their own privacy policies.</p>
+<p>StudyQ is not responsible for the privacy practices, content or security of external websites.</p>
+<p>Visitors should review the relevant privacy policies before providing information to third-party services.</p>
+<h2>16. Data Breaches</h2>
+<p>If a personal data breach occurs, StudyQ will assess the incident and take appropriate steps under applicable data-protection law.</p>
+<p>Where legally required, the relevant supervisory authority and affected individuals will be notified.</p>
+<h2>17. Changes to This Privacy Policy</h2>
+<p>This Privacy Policy may be updated when:</p>
+<ul>
+<li>StudyQ introduces new features.</li>
+<li>Existing data-processing practices change.</li>
+<li>Third-party services are added or removed.</li>
+<li>Applicable privacy laws change.</li>
+<li>Security or privacy improvements are introduced.</li>
+</ul>
+<p>The latest version will be published on the StudyQ website with an updated revision date.</p>
+<h2>18. Contact</h2>
+<p>For questions about this Privacy Policy, personal data or privacy requests, contact:</p>
+<p><strong>StudyQ</strong></p>
+<p><strong>Data controller:</strong> Reyansh Ghulghule</p>
+<p><strong>Email:</strong> hello.studyq@gmail.com</p>
+<p><strong>Website:</strong> <a href="https://studyq-nu.vercel.app/">https://studyq-nu.vercel.app/</a></p>
+<hr>
+<p class="privacy-note">This Privacy Policy describes StudyQ's intended and implemented data-processing practices based on available information and published provider documentation. Provider policies and retention periods may change. Account-specific settings, contracts, legal bases, international transfer safeguards and applicable consent requirements should be checked by the controller. This document is not legal advice or a guarantee of GDPR compliance.</p><section class="privacy-contact" aria-labelledby="local-data-title"><h2 id="local-data-title">Manage data saved in this browser</h2><p>StudyQ saves preferences and study content in this browser. This information is not automatically synchronised across devices. Clearing it here does not remove information already sent to an AI or other external provider.</p><fieldset class="privacy-data-options"><legend>Choose what to clear</legend><label><input type="radio" name="privacy-clear-scope" value="study" checked> Study content and history</label><label><input type="radio" name="privacy-clear-scope" value="all"> All StudyQ data, including language and display preferences</label></fieldset><button class="privacy-clear-button" id="privacy-clear-data" type="button">Clear selected data</button><p id="privacy-clear-status" role="status" aria-live="polite"></p></section></article></main><footer class="privacy-footer">© 2026 StudyQ · <a href="../contact/">Contact</a> · <a href="../cookies/">Cookies and browser storage</a> · <a href="../ai/">AI transparency</a> · <a href="../terms/">Terms of Use</a></footer></div><script src="../js/privacy-data-controls.js" defer></script></body></html>

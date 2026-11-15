@@ -22,3 +22,6 @@ html.site-intro-pending .page .comparison-card {
   transform: translate3d(0, 30px, 0) scale(.96);
   filter: blur(5px);
 }
+
+/* Intro effects only apply inside the shared .page layout. Pages without that
+   wrapper are intentionally excluded and stay fully visible. */

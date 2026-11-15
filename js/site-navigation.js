@@ -5,13 +5,6 @@
   if (!script) return;
 
   const siteRoot = new URL("../", script.src);
-  document.getAnimations().forEach(function (animation) {
-    const name = animation.animationName;
-    if (typeof name === "string" && !/(spin|loader|loading|dots)/i.test(name)) {
-      animation.cancel();
-    }
-  });
-
   const icon = function (content) {
     return '<span class="site-sidebar-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + content + "</svg></span>";
   };
